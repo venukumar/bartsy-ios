@@ -1,0 +1,358 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E0410686172A8D6F009F1B1E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0410685172A8D6F009F1B1E /* UIKit.framework */; };
+		E0410688172A8D6F009F1B1E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0410687172A8D6F009F1B1E /* Foundation.framework */; };
+		E041068A172A8D6F009F1B1E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0410689172A8D6F009F1B1E /* CoreGraphics.framework */; };
+		E041068C172A8D6F009F1B1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E041068B172A8D6F009F1B1E /* CoreData.framework */; };
+		E0410692172A8D6F009F1B1E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E0410690172A8D6F009F1B1E /* InfoPlist.strings */; };
+		E0410694172A8D6F009F1B1E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E0410693172A8D6F009F1B1E /* main.m */; };
+		E0410698172A8D6F009F1B1E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E0410697172A8D6F009F1B1E /* AppDelegate.m */; };
+		E041069A172A8D6F009F1B1E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E0410699172A8D6F009F1B1E /* Default.png */; };
+		E041069C172A8D6F009F1B1E /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E041069B172A8D6F009F1B1E /* Default@2x.png */; };
+		E041069E172A8D6F009F1B1E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E041069D172A8D6F009F1B1E /* Default-568h@2x.png */; };
+		E04106A1172A8D70009F1B1E /* Bartsy.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E041069F172A8D6F009F1B1E /* Bartsy.xcdatamodeld */; };
+		E04106A9172A8DC0009F1B1E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E04106A8172A8DC0009F1B1E /* LoginViewController.m */; };
+		E04106AC172A8DE9009F1B1E /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E04106AB172A8DE9009F1B1E /* BaseViewController.m */; };
+		E04106B8172AA6E8009F1B1E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106B7172AA6E8009F1B1E /* FacebookSDK.framework */; };
+		E04106BA172AB4E1009F1B1E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106B9172AB4E1009F1B1E /* AdSupport.framework */; };
+		E04106BC172AB4E6009F1B1E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BB172AB4E6009F1B1E /* Accounts.framework */; };
+		E04106BE172AB4EB009F1B1E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BD172AB4EB009F1B1E /* Security.framework */; };
+		E04106C0172AB4F7009F1B1E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BF172AB4F7009F1B1E /* Social.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E0410682172A8D6F009F1B1E /* Bartsy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bartsy.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0410685172A8D6F009F1B1E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E0410687172A8D6F009F1B1E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E0410689172A8D6F009F1B1E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E041068B172A8D6F009F1B1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		E041068F172A8D6F009F1B1E /* Bartsy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Bartsy-Info.plist"; sourceTree = "<group>"; };
+		E0410691172A8D6F009F1B1E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		E0410693172A8D6F009F1B1E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E0410695172A8D6F009F1B1E /* Bartsy-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bartsy-Prefix.pch"; sourceTree = "<group>"; };
+		E0410696172A8D6F009F1B1E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		E0410697172A8D6F009F1B1E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		E0410699172A8D6F009F1B1E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		E041069B172A8D6F009F1B1E /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		E041069D172A8D6F009F1B1E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		E04106A0172A8D6F009F1B1E /* Bartsy.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Bartsy.xcdatamodel; sourceTree = "<group>"; };
+		E04106A7172A8DC0009F1B1E /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		E04106A8172A8DC0009F1B1E /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		E04106AA172A8DE9009F1B1E /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		E04106AB172A8DE9009F1B1E /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		E04106B7172AA6E8009F1B1E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		E04106B9172AB4E1009F1B1E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		E04106BB172AB4E6009F1B1E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		E04106BD172AB4EB009F1B1E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E04106BF172AB4F7009F1B1E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E041067F172A8D6F009F1B1E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E04106C0172AB4F7009F1B1E /* Social.framework in Frameworks */,
+				E04106BE172AB4EB009F1B1E /* Security.framework in Frameworks */,
+				E04106BC172AB4E6009F1B1E /* Accounts.framework in Frameworks */,
+				E04106BA172AB4E1009F1B1E /* AdSupport.framework in Frameworks */,
+				E0410686172A8D6F009F1B1E /* UIKit.framework in Frameworks */,
+				E0410688172A8D6F009F1B1E /* Foundation.framework in Frameworks */,
+				E041068A172A8D6F009F1B1E /* CoreGraphics.framework in Frameworks */,
+				E041068C172A8D6F009F1B1E /* CoreData.framework in Frameworks */,
+				E04106B8172AA6E8009F1B1E /* FacebookSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E0410679172A8D6E009F1B1E = {
+			isa = PBXGroup;
+			children = (
+				E041068D172A8D6F009F1B1E /* Bartsy */,
+				E0410684172A8D6F009F1B1E /* Frameworks */,
+				E0410683172A8D6F009F1B1E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E0410683172A8D6F009F1B1E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E0410682172A8D6F009F1B1E /* Bartsy.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E0410684172A8D6F009F1B1E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E04106BF172AB4F7009F1B1E /* Social.framework */,
+				E04106BD172AB4EB009F1B1E /* Security.framework */,
+				E04106BB172AB4E6009F1B1E /* Accounts.framework */,
+				E04106B9172AB4E1009F1B1E /* AdSupport.framework */,
+				E04106B7172AA6E8009F1B1E /* FacebookSDK.framework */,
+				E0410685172A8D6F009F1B1E /* UIKit.framework */,
+				E0410687172A8D6F009F1B1E /* Foundation.framework */,
+				E0410689172A8D6F009F1B1E /* CoreGraphics.framework */,
+				E041068B172A8D6F009F1B1E /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E041068D172A8D6F009F1B1E /* Bartsy */ = {
+			isa = PBXGroup;
+			children = (
+				E0410696172A8D6F009F1B1E /* AppDelegate.h */,
+				E0410697172A8D6F009F1B1E /* AppDelegate.m */,
+				E041069F172A8D6F009F1B1E /* Bartsy.xcdatamodeld */,
+				E04106AA172A8DE9009F1B1E /* BaseViewController.h */,
+				E04106AB172A8DE9009F1B1E /* BaseViewController.m */,
+				E04106A7172A8DC0009F1B1E /* LoginViewController.h */,
+				E04106A8172A8DC0009F1B1E /* LoginViewController.m */,
+				E041068E172A8D6F009F1B1E /* Supporting Files */,
+			);
+			path = Bartsy;
+			sourceTree = "<group>";
+		};
+		E041068E172A8D6F009F1B1E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E041068F172A8D6F009F1B1E /* Bartsy-Info.plist */,
+				E0410690172A8D6F009F1B1E /* InfoPlist.strings */,
+				E0410693172A8D6F009F1B1E /* main.m */,
+				E0410695172A8D6F009F1B1E /* Bartsy-Prefix.pch */,
+				E0410699172A8D6F009F1B1E /* Default.png */,
+				E041069B172A8D6F009F1B1E /* Default@2x.png */,
+				E041069D172A8D6F009F1B1E /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E0410681172A8D6F009F1B1E /* Bartsy */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E04106A4172A8D70009F1B1E /* Build configuration list for PBXNativeTarget "Bartsy" */;
+			buildPhases = (
+				E041067E172A8D6F009F1B1E /* Sources */,
+				E041067F172A8D6F009F1B1E /* Frameworks */,
+				E0410680172A8D6F009F1B1E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Bartsy;
+			productName = Bartsy;
+			productReference = E0410682172A8D6F009F1B1E /* Bartsy.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E041067A172A8D6E009F1B1E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "TechVedika Software Pvt Ltd";
+			};
+			buildConfigurationList = E041067D172A8D6E009F1B1E /* Build configuration list for PBXProject "Bartsy" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E0410679172A8D6E009F1B1E;
+			productRefGroup = E0410683172A8D6F009F1B1E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E0410681172A8D6F009F1B1E /* Bartsy */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E0410680172A8D6F009F1B1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0410692172A8D6F009F1B1E /* InfoPlist.strings in Resources */,
+				E041069A172A8D6F009F1B1E /* Default.png in Resources */,
+				E041069C172A8D6F009F1B1E /* Default@2x.png in Resources */,
+				E041069E172A8D6F009F1B1E /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E041067E172A8D6F009F1B1E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0410694172A8D6F009F1B1E /* main.m in Sources */,
+				E0410698172A8D6F009F1B1E /* AppDelegate.m in Sources */,
+				E04106A1172A8D70009F1B1E /* Bartsy.xcdatamodeld in Sources */,
+				E04106A9172A8DC0009F1B1E /* LoginViewController.m in Sources */,
+				E04106AC172A8DE9009F1B1E /* BaseViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E0410690172A8D6F009F1B1E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0410691172A8D6F009F1B1E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E04106A2172A8D70009F1B1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		E04106A3172A8D70009F1B1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E04106A5172A8D70009F1B1E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					/Users/saisridhar/Desktop/SudheerWork/Projects/Bartsy/Apr26/Bartsy/FacebookSDK.framework,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Bartsy/Bartsy-Prefix.pch";
+				INFOPLIST_FILE = "Bartsy/Bartsy-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lsqlite3.0",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E04106A6172A8D70009F1B1E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					/Users/saisridhar/Desktop/SudheerWork/Projects/Bartsy/Apr26/Bartsy/FacebookSDK.framework,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Bartsy/Bartsy-Prefix.pch";
+				INFOPLIST_FILE = "Bartsy/Bartsy-Info.plist";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lsqlite3.0",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E041067D172A8D6E009F1B1E /* Build configuration list for PBXProject "Bartsy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E04106A2172A8D70009F1B1E /* Debug */,
+				E04106A3172A8D70009F1B1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E04106A4172A8D70009F1B1E /* Build configuration list for PBXNativeTarget "Bartsy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E04106A5172A8D70009F1B1E /* Debug */,
+				E04106A6172A8D70009F1B1E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E041069F172A8D6F009F1B1E /* Bartsy.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E04106A0172A8D6F009F1B1E /* Bartsy.xcdatamodel */,
+			);
+			currentVersion = E04106A0172A8D6F009F1B1E /* Bartsy.xcdatamodel */;
+			path = Bartsy.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = E041067A172A8D6E009F1B1E /* Project object */;
+}
