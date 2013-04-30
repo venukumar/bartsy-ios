@@ -8,12 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-
+#import "SharedController.h"
 @interface BaseViewController : UIViewController
 {
     AppDelegate *appDelegate;
+    UIAlertView *progressView;
+    SharedController *sharedController;
+
 }
+@property (nonatomic, retain) UIAlertView *progressView;
+@property (nonatomic, assign) SharedController *sharedController;
+
 -(UIButton*)createUIButtonWithTitle:(NSString*)strTitle image:(UIImage*)image frame:(CGRect)frame tag:(NSInteger)intTage selector:(SEL)btnSelector target:(id)target;
 -(UILabel*)createLabelWithTitle:(NSString*)strTitle frame:(CGRect)frame tag:(NSInteger)intTag font:(UIFont*)font color:(UIColor*)color numberOfLines:(NSInteger)intNoOflines;
 -(UIImageView*)createImageViewWithImage:(UIImage*)image frame:(CGRect)frame tag:(NSInteger)intTag;
+
+- (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title;
+- (void)hideProgressView:(UIAlertView *)inProgressView;
 @end

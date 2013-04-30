@@ -13,6 +13,7 @@
 @end
 
 @implementation BaseViewController
+@synthesize progressView,sharedController;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -61,6 +62,43 @@
     return imgView;
     
 }
+
+//Creating Progreessview wth label
+- (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title
+{
+    if(progressView !=nil)
+	{
+		[progressView dismissWithClickedButtonIndex:0 animated:YES];
+		progressView = nil;
+		[progressView release];
+		
+	}
+    
+	progressView = [[UIAlertView alloc] initWithTitle:@"" message:title delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+	[progressView show];
+	
+	UIActivityIndicatorView *loaderView = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(130, 60, 25, 25)];
+	loaderView.tag = 3333;
+	loaderView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+	loaderView.backgroundColor = [UIColor clearColor];
+	[progressView addSubview:loaderView];
+	[loaderView startAnimating];
+    [loaderView release];
+	return progressView;
+}
+
+- (void)hideProgressView:(UIAlertView *)inProgressView
+{
+    
+	if(progressView !=nil)
+	{
+		[progressView dismissWithClickedButtonIndex:0 animated:YES];
+		progressView = nil;
+		[progressView release];
+	}
+}
+
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

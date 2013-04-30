@@ -33,10 +33,6 @@
     self.navigationController.navigationBarHidden=YES;
     self.view.backgroundColor=[UIColor blackColor];
     
-    //UIButton *btnFb=[self createUIButtonWithTitle:@"Login" image:nil frame:CGRectMake(110, 100, 100, 40) tag:111 selector:@selector(buttonClickHandler:) target:self];
-    //[self.view addSubview:btnFb];
-    
-    
     [self updateView];
     
     if (!appDelegate.session.isOpen) {
@@ -162,7 +158,7 @@
     btnGoogle.backgroundColor=[UIColor darkGrayColor];
     [scrollView addSubview:btnGoogle];
     
-    UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(buttonClickHandler:) target:self];
+    UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(btnFBLogin) target:self];
     btnfb.backgroundColor=[UIColor darkGrayColor];
     [scrollView addSubview:btnfb];
     
@@ -232,6 +228,45 @@
     
 }
 
+// FBSample logic
+// handler for button click, logs sessions in or out
+- (void)btnFBLogin
+{
+    // get the app delegate so that we can access the session property
+    
+    // this button's job is to flip-flop the session from open to closed
+    if (appDelegate.session.isOpen)
+    {
+        // if a user logs out explicitly, we delete any cached token information, and next
+        // time they run the applicaiton they will be presented with log in UX again; most
+        // users will simply close the app or switch away, without logging out; this will
+        // cause the implicit cached-token login to occur on next launch of the application
+        [appDelegate.session closeAndClearTokenInformation];
+        
+    }
+    else
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Connecting to Facebook..."];
+        if (appDelegate.session.state != FBSessionStateCreated)
+        {
+            // Create a new, logged out session.
+            appDelegate.session = [[FBSession alloc] init];
+        }
+        
+        // if the session isn't open, let's open it now and present the login UX to the user
+        [appDelegate.session openWithCompletionHandler:^(FBSession *session,
+                                                         FBSessionState status,
+                                                         NSError *error)
+         {
+             // and here we make sure to update our UX according to the new session state
+             [self updateView];
+             [self hideProgressView:nil];
+
+         }];
+    }
+}
+
+
 -(void)pgControl_ValueChanged:(UIPageControl*)pageControl
 {
     int intCurrentPage=pageControl.currentPage;    
@@ -257,10 +292,13 @@
     //UIButton *btnFb=(UIButton*)[self.view viewWithTag:111];
     if (appDelegate.session.isOpen)
     {
-        // valid account UI is shown whenever the session is open
-       // [btnFb setTitle:@"Log out" forState:UIControlStateNormal];
        // [btnFb setText:[NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",
                                      // appDelegate.session.accessTokenData.accessToken]];
+        ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+        [self.navigationController pushViewController:profileScreen animated:YES];
+        [profileScreen release];
+        
+        
     } else
     {
         // login-needed account UI is shown whenever the session is closed
@@ -269,37 +307,7 @@
     }
 }
 
-// FBSample logic
-// handler for button click, logs sessions in or out
-- (IBAction)buttonClickHandler:(id)sender {
-    // get the app delegate so that we can access the session property
-    
-    // this button's job is to flip-flop the session from open to closed
-    if (appDelegate.session.isOpen) {
-        // if a user logs out explicitly, we delete any cached token information, and next
-        // time they run the applicaiton they will be presented with log in UX again; most
-        // users will simply close the app or switch away, without logging out; this will
-        // cause the implicit cached-token login to occur on next launch of the application
-        [appDelegate.session closeAndClearTokenInformation];
-        
-    } else
-    {
-        if (appDelegate.session.state != FBSessionStateCreated)
-        {
-            // Create a new, logged out session.
-            appDelegate.session = [[FBSession alloc] init];
-        }
-        
-        // if the session isn't open, let's open it now and present the login UX to the user
-        [appDelegate.session openWithCompletionHandler:^(FBSession *session,
-                                                         FBSessionState status,
-                                                         NSError *error)
-         {
-             // and here we make sure to update our UX according to the new session state
-             [self updateView];
-         }];
-    }
-}
+
 
 - (void)didReceiveMemoryWarning
 {
