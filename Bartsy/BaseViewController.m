@@ -34,13 +34,24 @@
 {
     UIButton *btnCustom=[UIButton buttonWithType:UIButtonTypeCustom];
     [btnCustom setTitle:strTitle forState:UIControlStateNormal];
+    [btnCustom setBackgroundImage:image forState:UIControlStateNormal];
     [btnCustom addTarget:target action:btnSelector forControlEvents:UIControlEventTouchUpInside];
     btnCustom.tag=intTag;
     btnCustom.frame=frame;
-    btnCustom.backgroundColor=[UIColor redColor];
+    btnCustom.backgroundColor=[UIColor clearColor];
     return btnCustom;
 }
 
+-(UILabel*)createLabelWithTitle:(NSString*)strTitle frame:(CGRect)frame tag:(NSInteger)intTag font:(UIFont*)font color:(UIColor*)color numberOfLines:(NSInteger)intNoOflines
+{
+    UILabel *lbl=[[[UILabel alloc]initWithFrame:frame] autorelease];
+    lbl.text=strTitle;
+    lbl.font=font;
+    lbl.backgroundColor=[UIColor clearColor];
+    lbl.textColor=color;
+    lbl.numberOfLines=intNoOflines;
+    return lbl;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
