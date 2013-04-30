@@ -52,6 +52,15 @@
     lbl.numberOfLines=intNoOflines;
     return lbl;
 }
+
+-(UIImageView*)createImageViewWithImage:(UIImage*)image frame:(CGRect)frame tag:(NSInteger)intTag
+{
+    UIImageView *imgView=[[[UIImageView alloc]initWithFrame:frame] autorelease];
+    imgView.image=image;
+    imgView.tag=intTag;
+    return imgView;
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

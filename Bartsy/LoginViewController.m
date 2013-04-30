@@ -31,9 +31,9 @@
 	// Do any additional setup after loading the view.
     
     self.navigationController.navigationBarHidden=YES;
-    self.view.backgroundColor=[UIColor darkGrayColor];
+    self.view.backgroundColor=[UIColor blackColor];
     
-    UIButton *btnFb=[self createUIButtonWithTitle:@"Login" image:nil frame:CGRectMake(110, 100, 100, 40) tag:111 selector:@selector(buttonClickHandler:) target:self];
+    //UIButton *btnFb=[self createUIButtonWithTitle:@"Login" image:nil frame:CGRectMake(110, 100, 100, 40) tag:111 selector:@selector(buttonClickHandler:) target:self];
     //[self.view addSubview:btnFb];
     
     
@@ -83,6 +83,10 @@
     [scrollView addSubview:lblHeader];
     
     UIButton *btnMap=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"mapicon.png"] frame:CGRectMake(20, 45, 120, 120) tag:0 selector:@selector(buttonMap_TouchUpInside) target:self];
+    [[btnMap layer] setShadowOffset:CGSizeMake(0, 1)];
+    [[btnMap layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+    [[btnMap layer] setShadowRadius:3.0];
+    [[btnMap layer] setShadowOpacity:0.8];
     [scrollView addSubview:btnMap];
     
     UILabel *lblMapText=[self createLabelWithTitle:@"See how busy Bartsy bars are and see who's there for unlocked bars" frame:CGRectMake(10, 165, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
@@ -91,6 +95,10 @@
 
     
     UIButton *btnDrinks=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drinks.png"] frame:CGRectMake(180, 45, 120, 120) tag:0 selector:@selector(buttonDrinks_TouchUpInside) target:self];
+    [[btnDrinks layer] setShadowOffset:CGSizeMake(0, 1)];
+    [[btnDrinks layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+    [[btnDrinks layer] setShadowRadius:3.0];
+    [[btnDrinks layer] setShadowOpacity:0.8];
     [scrollView addSubview:btnDrinks];
     
     UILabel *lblDrinksText=[self createLabelWithTitle:@"Order drink for yourself, your friends or other singles at the bar" frame:CGRectMake(170, 165, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
@@ -98,6 +106,10 @@
     [scrollView addSubview:lblDrinksText];
     
     UIButton *btnCreditCard=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"no_cards.png"] frame:CGRectMake(20, 230, 120, 120) tag:0 selector:@selector(btnCreditCard_TouchUpInside) target:self];
+    [[btnCreditCard layer] setShadowOffset:CGSizeMake(0, 1)];
+    [[btnCreditCard layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+    [[btnCreditCard layer] setShadowRadius:3.0];
+    [[btnCreditCard layer] setShadowOpacity:0.8];
     [scrollView addSubview:btnCreditCard];
     
     UILabel *lblCreditCardText=[self createLabelWithTitle:@"Pay direclty within the app, never risking your credit card" frame:CGRectMake(10, 350, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
@@ -107,6 +119,10 @@
     
     
     UIButton *btnLoyalityCard=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"loyalty_card.png"] frame:CGRectMake(180, 230, 120, 120) tag:0 selector:@selector(btnLoyalityCard_TouchUpInside) target:self];
+    [[btnLoyalityCard layer] setShadowOffset:CGSizeMake(0, 1)];
+    [[btnLoyalityCard layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+    [[btnLoyalityCard layer] setShadowRadius:3.0];
+    [[btnLoyalityCard layer] setShadowOpacity:0.8];
     [scrollView addSubview:btnLoyalityCard];
     
     UILabel *lblLoyalityCardText=[self createLabelWithTitle:@"Build loyalty and reap rewards like skipping the outside line priviledges, free drinks, etc." frame:CGRectMake(170, 350, 140, 60) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:4];
@@ -128,12 +144,51 @@
     pgControl.tag=222;
     [pgControl release];
 
-    UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor whiteColor] numberOfLines:1];
+    UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(-8, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor whiteColor] numberOfLines:1];
     lblCopyRight.textAlignment=NSTextAlignmentCenter;
     [scrollView addSubview:lblCopyRight];
     
     UIButton *btnRefresh=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"arrow.png"] frame:CGRectMake(285, 415, 30, 40) tag:0 selector:@selector(btnRefresh_TouchUpInside) target:self];
     [scrollView addSubview:btnRefresh];
+    
+    UIImageView *imgViewLogo=[self createImageViewWithImage:[UIImage imageNamed:@"ic_launcher.png"] frame:CGRectMake(320+80, 10, 124, 124) tag:0];
+    [scrollView addSubview:imgViewLogo];
+    
+    UILabel *lblBartsy=[self createLabelWithTitle:@"Bartsy" frame:CGRectMake(320, 140, 320, 35) tag:0 font:[UIFont boldSystemFontOfSize:30] color:[UIColor whiteColor] numberOfLines:1];
+    lblBartsy.textAlignment=NSTextAlignmentCenter;
+    [scrollView addSubview:lblBartsy];
+    
+    UIButton *btnGoogle=[self createUIButtonWithTitle:@"Sign in with Google" image:nil frame:CGRectMake(320+38, 185, 243, 40) tag:0 selector:@selector(btnGoogle_TouchUpInside) target:self];
+    btnGoogle.backgroundColor=[UIColor darkGrayColor];
+    [scrollView addSubview:btnGoogle];
+    
+    UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(buttonClickHandler:) target:self];
+    btnfb.backgroundColor=[UIColor darkGrayColor];
+    [scrollView addSubview:btnfb];
+    
+    UIButton *btnTwitter=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_twitter.png"] frame:CGRectMake(320+38, 285, 243, 40) tag:0 selector:@selector(btnTwitter_TouchUpInside) target:self];
+    btnTwitter.backgroundColor=[UIColor darkGrayColor];
+    [scrollView addSubview:btnTwitter];
+    
+    UIButton *btnGetStarted=[self createUIButtonWithTitle:@"Get Started" image:nil frame:CGRectMake(320+5, 340, 100, 40) tag:0 selector:@selector(btnGetStarted_TouchUpInside) target:self];
+    btnGetStarted.titleLabel.font=[UIFont boldSystemFontOfSize:15];
+    [scrollView addSubview:btnGetStarted];
+    
+    UILabel *lblCreateBartsy=[self createLabelWithTitle:@"Create Bartsy Account" frame:CGRectMake(320+14, 370, 180, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:1];
+    [scrollView addSubview:lblCreateBartsy];
+    
+    
+    UIButton *btnSignIn=[self createUIButtonWithTitle:@"Sign In" image:nil frame:CGRectMake(320+180, 340, 50, 40) tag:0 selector:@selector(btnGetStarted_TouchUpInside) target:self];
+    btnSignIn.titleLabel.font=[UIFont boldSystemFontOfSize:15];
+    [scrollView addSubview:btnSignIn];
+    
+    UILabel *lblExistingBartsy=[self createLabelWithTitle:@"Existing Bartsy Account" frame:CGRectMake(320+180, 370, 180, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:1];
+    [scrollView addSubview:lblExistingBartsy];
+
+    UILabel *lblCopyRight2=[self createLabelWithTitle:@"Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(320+0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor whiteColor] numberOfLines:1];
+    lblCopyRight2.textAlignment=NSTextAlignmentCenter;
+    [scrollView addSubview:lblCopyRight2];
+
 }
 
 
@@ -162,6 +217,20 @@
     
 }
 
+-(void)btnGoogle_TouchUpInside
+{
+    
+}
+
+-(void)btnTwitter_TouchUpInside
+{
+    
+}
+
+-(void)btnGetStarted_TouchUpInside
+{
+    
+}
 
 -(void)pgControl_ValueChanged:(UIPageControl*)pageControl
 {
@@ -185,17 +254,17 @@
 - (void)updateView {
     // get the app delegate, so that we can reference the session property
 
-    UIButton *btnFb=(UIButton*)[self.view viewWithTag:111];
+    //UIButton *btnFb=(UIButton*)[self.view viewWithTag:111];
     if (appDelegate.session.isOpen)
     {
         // valid account UI is shown whenever the session is open
-        [btnFb setTitle:@"Log out" forState:UIControlStateNormal];
+       // [btnFb setTitle:@"Log out" forState:UIControlStateNormal];
        // [btnFb setText:[NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",
                                      // appDelegate.session.accessTokenData.accessToken]];
     } else
     {
         // login-needed account UI is shown whenever the session is closed
-        [btnFb setTitle:@"Log in" forState:UIControlStateNormal];
+        //[btnFb setTitle:@"Log in" forState:UIControlStateNormal];
         //[btnFb setText:@"Login to create a link to fetch account data"];
     }
 }
