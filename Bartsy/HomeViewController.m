@@ -27,6 +27,22 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.sharedController=[SharedController sharedController];
+    
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    [self.sharedController getMenuListWithDelegate:self];
+}
+
+-(void)controllerDidFinishLoadingWithResult:(id)result
+{
+    
+    [self hideProgressView:nil];
+}
+
+-(void)controllerDidFailLoadingWithError:(NSError*)error
+{
+    [self hideProgressView:nil];
+
 }
 
 - (void)didReceiveMemoryWarning

@@ -99,7 +99,7 @@
 
 -(void)controllerDidFailLoadingWithError:(NSError*)error
 {
-    
+    [self hideProgressView:nil];
 }
 - (void)didReceiveMemoryWarning
 {

@@ -39,5 +39,5 @@
 
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)aDelegate;
-
+-(void)getMenuListWithDelegate:(id)aDelegate;
 @end

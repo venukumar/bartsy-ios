@@ -96,13 +96,26 @@ static SharedController *sharedController;
     [request release];
 }
 
+-(void)getMenuListWithDelegate:(id)aDelegate
+{
+    self.delegate=aDelegate;    
+    NSString *strURL=[NSString stringWithFormat:@"http://192.168.0.109:8080/Bartsy/venue/getMenu"];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
+
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
-	reach = [Reachability reachabilityWithHostName:@"www.google.co.in"];
+    
+	reach = [Reachability reachabilityWithHostName:[urlRequest.URL host]];
 	
-	if (reach != nil)
+    if (reach != nil)
 	{
 		NetworkStatus internetStatus = [reach currentReachabilityStatus];
 		

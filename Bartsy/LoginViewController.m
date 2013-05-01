@@ -297,9 +297,8 @@
         ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
         [self.navigationController pushViewController:profileScreen animated:YES];
         [profileScreen release];
-        
-        
-    } else
+    }
+    else
     {
         // login-needed account UI is shown whenever the session is closed
         //[btnFb setTitle:@"Log in" forState:UIControlStateNormal];
