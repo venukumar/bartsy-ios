@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "QuartzCore/QuartzCore.h"
-@interface ProfileViewController : BaseViewController
 
+@interface ProfileViewController : BaseViewController
+{
+    
+}
+-(void)saveProfileData:(NSDictionary*)dict;
 @end

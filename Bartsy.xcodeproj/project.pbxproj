@@ -25,6 +25,7 @@
 		E04106BC172AB4E6009F1B1E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BB172AB4E6009F1B1E /* Accounts.framework */; };
 		E04106BE172AB4EB009F1B1E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BD172AB4EB009F1B1E /* Security.framework */; };
 		E04106C0172AB4F7009F1B1E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BF172AB4F7009F1B1E /* Social.framework */; };
+		E062565E173116ED005C7027 /* Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = E062565D173116ED005C7027 /* Profile.m */; };
 		E092F965173049CC00E1CC15 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F958173049CC00E1CC15 /* SBJsonParser.m */; };
 		E092F966173049CC00E1CC15 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F95B173049CC00E1CC15 /* NSObject+SBJSON.m */; };
 		E092F967173049CC00E1CC15 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F95D173049CC00E1CC15 /* NSString+SBJSON.m */; };
@@ -150,6 +151,8 @@
 		E04106BB172AB4E6009F1B1E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		E04106BD172AB4EB009F1B1E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E04106BF172AB4F7009F1B1E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		E062565C173116ED005C7027 /* Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Profile.h; sourceTree = "<group>"; };
+		E062565D173116ED005C7027 /* Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Profile.m; sourceTree = "<group>"; };
 		E092F958173049CC00E1CC15 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		E092F959173049CC00E1CC15 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		E092F95A173049CC00E1CC15 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -408,6 +411,8 @@
 			isa = PBXGroup;
 			children = (
 				E041069F172A8D6F009F1B1E /* Bartsy.xcdatamodeld */,
+				E062565C173116ED005C7027 /* Profile.h */,
+				E062565D173116ED005C7027 /* Profile.m */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -716,6 +721,7 @@
 				E092F98B17304E9F00E1CC15 /* UIButton+WebCache.m in Sources */,
 				E092F98C17304E9F00E1CC15 /* UIImageView+WebCache.m in Sources */,
 				E092F990173054F200E1CC15 /* HomeViewController.m in Sources */,
+				E062565E173116ED005C7027 /* Profile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

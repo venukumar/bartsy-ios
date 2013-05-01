@@ -10,11 +10,14 @@
 #import "UIImageView+WebCache.h"
 #import "HomeViewController.h"
 @interface ProfileViewController ()
-
+{
+    NSDictionary *dictResult;
+}
+@property (nonatomic,retain)NSDictionary *dictResult;
 @end
 
 @implementation ProfileViewController
-
+@synthesize dictResult;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -86,15 +89,42 @@
 
 -(void)btnContinue_TouchUpInside
 {
+    [self saveProfileData:dictResult];
     HomeViewController *obj=[[HomeViewController alloc]init];
     [self.navigationController pushViewController:obj animated:YES];
     [obj release];
+}
+
+-(void)saveProfileData:(NSDictionary*)dict
+{
+    NSManagedObjectContext *context=[appDelegate managedObjectContext];
+    
+    NSManagedObject *mngObjProfile=[NSEntityDescription insertNewObjectForEntityForName:@"Profile" inManagedObjectContext:context];
+    [mngObjProfile setValue:[dict objectForKey:@"name"] forKey:@"name"];
+    
+    NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSData *dataPhoto=[NSData dataWithContentsOfURL:url];
+    [mngObjProfile setValue:dataPhoto forKey:@"photo"];
+    
+    [context save:nil];
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
     [self loadProfileDetails:result];
+    
+    if(dictResult==nil)
+    {
+        dictResult=[[NSDictionary alloc] initWithDictionary:result];
+    }
+    else
+    {
+        [dictResult release];
+        dictResult=nil;
+        dictResult=[[NSDictionary alloc] initWithDictionary:result];
+    }
 }
 
 -(void)controllerDidFailLoadingWithError:(NSError*)error
