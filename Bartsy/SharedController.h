@@ -23,7 +23,7 @@
 {
     id<SharedControllerDelegate> delegate;
     Reachability *reach;
-    NSMutableData *data;    
+    NSMutableData *data;
     AppDelegate *appDelegate;
     BOOL isMyWebservice;
 }
@@ -40,4 +40,5 @@
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)aDelegate;
 -(void)getMenuListWithDelegate:(id)aDelegate;
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType delegate:(id)aDelegate;
 @end

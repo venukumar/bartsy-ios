@@ -2,7 +2,7 @@
 //  Profile.h
 //  Bartsy
 //
-//  Created by Sudheer Palchuri on 01/05/13.
+//  Created by Sudheer Palchuri on 03/05/13.
 //  Copyright (c) 2013 TechVedika Software Pvt Ltd. All rights reserved.
 //
 
@@ -14,5 +14,6 @@
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSData * photo;
+@property (nonatomic, retain) NSNumber * bartsyId;
 
 @end

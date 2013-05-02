@@ -12,6 +12,7 @@
 @interface ProfileViewController ()
 {
     NSDictionary *dictResult;
+    BOOL isRequestForSavingProfile;
 }
 @property (nonatomic,retain)NSDictionary *dictResult;
 @end
@@ -74,11 +75,11 @@
     UIButton *btnCancel=[self createUIButtonWithTitle:@"Cancel" image:nil frame:CGRectMake(10, 350, 100, 40) tag:0 selector:@selector(btnCancel_TouchUpInside) target:self];
     btnCancel.backgroundColor=[UIColor darkGrayColor];
     [self.view addSubview:btnCancel];
-
+    
     UIButton *btnContinue=[self createUIButtonWithTitle:@"Save&Continue" image:nil frame:CGRectMake(150, 350, 150, 40) tag:0 selector:@selector(btnContinue_TouchUpInside) target:self];
     btnContinue.backgroundColor=[UIColor darkGrayColor];
     [self.view addSubview:btnContinue];
-
+    
 }
 
 -(void)btnCancel_TouchUpInside
@@ -89,41 +90,60 @@
 
 -(void)btnContinue_TouchUpInside
 {
-    [self saveProfileData:dictResult];
     HomeViewController *obj=[[HomeViewController alloc]init];
     [self.navigationController pushViewController:obj animated:YES];
     [obj release];
+    // [self saveProfileData:dictResult];
+    
 }
 
 -(void)saveProfileData:(NSDictionary*)dict
 {
-    NSManagedObjectContext *context=[appDelegate managedObjectContext];
+    isRequestForSavingProfile=YES;
+    self.sharedController=[SharedController sharedController];
+    NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
+    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" delegate:self];
     
-    NSManagedObject *mngObjProfile=[NSEntityDescription insertNewObjectForEntityForName:@"Profile" inManagedObjectContext:context];
-    [mngObjProfile setValue:[dict objectForKey:@"name"] forKey:@"name"];
-    
-    NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
-    NSURL *url=[[NSURL alloc]initWithString:strURL];
-    NSData *dataPhoto=[NSData dataWithContentsOfURL:url];
-    [mngObjProfile setValue:dataPhoto forKey:@"photo"];
-    
-    [context save:nil];
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
-    [self loadProfileDetails:result];
     
-    if(dictResult==nil)
+    if(isRequestForSavingProfile==NO)
     {
-        dictResult=[[NSDictionary alloc] initWithDictionary:result];
+        [self loadProfileDetails:result];
+        if(dictResult==nil)
+        {
+            dictResult=[[NSDictionary alloc] initWithDictionary:result];
+        }
+        else
+        {
+            [dictResult release];
+            dictResult=nil;
+            dictResult=[[NSDictionary alloc] initWithDictionary:result];
+        }
+        
     }
     else
     {
-        [dictResult release];
-        dictResult=nil;
-        dictResult=[[NSDictionary alloc] initWithDictionary:result];
+        isRequestForSavingProfile=NO;
+        
+        NSManagedObjectContext *context=[appDelegate managedObjectContext];
+        
+        NSManagedObject *mngObjProfile=[NSEntityDescription insertNewObjectForEntityForName:@"Profile" inManagedObjectContext:context];
+        [mngObjProfile setValue:[dictResult objectForKey:@"name"] forKey:@"name"];
+        
+        //    NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
+        //    NSURL *url=[[NSURL alloc]initWithString:strURL];
+        //    NSData *dataPhoto=[NSData dataWithContentsOfURL:url];
+        //    [mngObjProfile setValue:dataPhoto forKey:@"photo"];
+        [mngObjProfile setValue:[NSNumber numberWithInteger:[[result objectForKey:@"bartsyId"] integerValue]] forKey:@"bartsyId"];
+        [context save:nil];
+        
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
     }
 }
 

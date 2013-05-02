@@ -98,13 +98,37 @@ static SharedController *sharedController;
 
 -(void)getMenuListWithDelegate:(id)aDelegate
 {
-    self.delegate=aDelegate;    
-    NSString *strURL=[NSString stringWithFormat:@"http://192.168.0.109:8080/Bartsy/venue/getMenu"];
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"http://115.112.122.98:8888/Bartsy/venue/getMenu"];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
     [self sendRequest:request];
     [url release];
     [request release];
+}
+
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"userId",strName,@"userName",strLoginType,@"loginType",appDelegate.session.accessTokenData.accessToken,@"facebookAccessToken", nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *strURL=[NSString stringWithFormat:@"http://192.168.0.109:8080/Bartsy/user/saveUserProfile"];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataProfile];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+    
 }
 
 
@@ -145,52 +169,23 @@ static SharedController *sharedController;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	if(isMyWebservice==YES)
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    
+    SBJSON *jsonParser = [[SBJSON new] autorelease];
+    
+    NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
+    NSError *outError = nil;
+    
+    id result = [jsonParser objectWithString:jsonString error:&outError];
+    if (outError == nil )
     {
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        
-        NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
-        NSError *outError = nil;
-        
-        id result = jsonString;
-        isMyWebservice=NO;
-        
-        if (outError == nil )
-        {
-            NSLog(@" result ----- :%@",result);
-            [delegate controllerDidFinishLoadingWithResult:result];
-        }
-        else
-        {
-            NSLog(@" result :%@ -----  error :%@",result, outError);
-            
-            [self showAlertWithTitle:@"Warning" message:[outError description] delegate:nil];
-            [delegate controllerDidFailLoadingWithError:nil];
-        }
+        NSLog(@" result ----- :%@",result);
+        [delegate controllerDidFinishLoadingWithResult:result];
     }
     else
     {
-        
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        
-        SBJSON *jsonParser = [[SBJSON new] autorelease];
-        
-        NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
-        NSError *outError = nil;
-        
-        id result = [jsonParser objectWithString:jsonString error:&outError];
-        if (outError == nil )
-        {
-            NSLog(@" result ----- :%@",result);
-            [delegate controllerDidFinishLoadingWithResult:result];
-        }
-        else
-        {
-            NSLog(@" result :%@ -----  error :%@",result, outError);
-            
-          //  [self showAlertWithTitle:kAlertTitle message:kServerAlertMessage delegate:nil];
-            [delegate controllerDidFailLoadingWithError:outError];
-        }
+        NSLog(@" result :%@ -----  error :%@",result, outError);
+        [delegate controllerDidFailLoadingWithError:outError];
     }
 }
 
