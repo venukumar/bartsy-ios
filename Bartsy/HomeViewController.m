@@ -107,9 +107,11 @@
             
             for (int j=0; j<[arrSubsections count]; j++)
             {
-                NSMutableDictionary *dictSubsection=[arrSubsections objectAtIndex:j];
+                NSMutableDictionary *dictSubsection=[[NSMutableDictionary alloc]initWithDictionary:[arrSubsections objectAtIndex:j]];
                 [dictSubsection setObject:[dict objectForKey:@"section_name"] forKey:@"section_name"];
+                [dictSubsection setObject:@"0" forKey:@"Arrow"];
                 [arrTemp addObject:dictSubsection];
+                [dictSubsection release];
             }
         }
     }
@@ -129,16 +131,54 @@
     return [arrMenu count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section==0&&[[arrMenu objectAtIndex:section] isKindOfClass:[NSArray class]])
+    {
+        return 0;
+    }
+    return 44;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     id object=[arrMenu objectAtIndex:section];
-    if(section==0&&[object isKindOfClass:[NSArray class]])
+
+    UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
+    [headerView addSubview:headerBg];
+    
+    UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame=CGRectMake(0, 7, 600, 44);
+    button.tag=section +1;
+    [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    if([[object objectForKey:@"Arrow"] integerValue]==0)
     {
-        return @"";
+        [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];
     }
     else
-        return [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
+    {
+        [button setImage:[UIImage imageNamed:@"shrink.png"] forState:UIControlStateNormal];
+    }
+    [headerView addSubview:button];
+    
+    UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 7, 300, 30)];
+    [headerTitle setBackgroundColor:[UIColor clearColor]];
+    [headerTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:16]];
+    [headerTitle setTextColor:[UIColor blackColor]];
+    if(section==0&&[object isKindOfClass:[NSArray class]])
+    {
+        headerTitle.text= @"";
+    }
+    else
+        headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
+    
+    [headerView addSubview:headerTitle];
+    
+    return headerView;
+    
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
@@ -149,7 +189,14 @@
     }
     else
     {
-        return [[object objectForKey:@"contents"] count];
+        if([[object objectForKey:@"Arrow"] integerValue]==0)
+        {
+            return 0;
+        }
+        else
+        {
+            return [[object objectForKey:@"contents"] count]; 
+        }
     }
 }
 
@@ -171,6 +218,7 @@
         cell.textLabel.text=[dict objectForKey:@"name"];
     }
     
+    cell.textLabel.font=[UIFont systemFontOfSize:14];
     return cell;
 }
 
@@ -188,6 +236,19 @@
      */
 }
 
+-(void)buttonClicked:(UIButton*)sender
+{
+    NSInteger intTag=sender.tag-1;
+    NSMutableDictionary *dict=[arrMenu objectAtIndex:intTag];
+    BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
+    NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
+    [dict setObject:strArrow forKey:@"Arrow"];
+    
+    [arrMenu replaceObjectAtIndex:intTag withObject:dict];
+    
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+    [tblView reloadData];
+}
 
 - (void)didReceiveMemoryWarning
 {

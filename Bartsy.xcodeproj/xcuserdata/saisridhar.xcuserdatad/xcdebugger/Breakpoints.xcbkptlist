@@ -7,13 +7,39 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/SharedController.m"
-         timestampString = "389079131.641742"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "389215066.761674"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "100"
-         endingLineNumber = "100"
-         landmarkName = "-getMenuListWithDelegate:"
+         startingLineNumber = "58"
+         endingLineNumber = "58"
+         landmarkName = "-controllerDidFinishLoadingWithResult:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "389215094.453464"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "74"
+         endingLineNumber = "74"
+         landmarkName = "-modifyData"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "389218377.476083"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "240"
+         endingLineNumber = "240"
+         landmarkName = "-buttonClicked:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
