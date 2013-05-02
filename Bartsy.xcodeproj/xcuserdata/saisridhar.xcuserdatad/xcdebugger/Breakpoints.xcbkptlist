@@ -34,11 +34,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "389218377.476083"
+         timestampString = "389219122.134106"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "240"
-         endingLineNumber = "240"
+         startingLineNumber = "259"
+         endingLineNumber = "259"
          landmarkName = "-buttonClicked:"
          landmarkType = "5">
       </FileBreakpoint>

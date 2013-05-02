@@ -200,25 +200,44 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 80;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
+    UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+    imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
+    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
+    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
+    [[imgViewDrink layer] setShadowRadius:3.0];
+    [[imgViewDrink layer] setShadowOpacity:0.8];
+    [cell.contentView addSubview:imgViewDrink];
+    [imgViewDrink release];
+    
+    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 220, 20)];    
     id object=[arrMenu objectAtIndex:indexPath.section];
     if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
     {
         NSDictionary *dict=[object objectAtIndex:indexPath.row];
-        cell.textLabel.text=[dict objectForKey:@"name"];
+        lblName.text=[dict objectForKey:@"name"];
     }
     else
     {
         NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
         NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
-        cell.textLabel.text=[dict objectForKey:@"name"];
+        lblName.text=[dict objectForKey:@"name"];
     }
     
-    cell.textLabel.font=[UIFont systemFontOfSize:14];
+    lblName.font=[UIFont systemFontOfSize:14];
+    [cell.contentView addSubview:lblName];
+    [lblName release];
+    
+    
     return cell;
 }
 
@@ -243,9 +262,7 @@
     BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
     NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
     [dict setObject:strArrow forKey:@"Arrow"];
-    
     [arrMenu replaceObjectAtIndex:intTag withObject:dict];
-    
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
 }
