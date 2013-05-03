@@ -113,7 +113,7 @@ static SharedController *sharedController;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"userId",strName,@"userName",strLoginType,@"loginType",appDelegate.session.accessTokenData.accessToken,@"facebookAccessToken", nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"userName",strLoginType,@"loginType",appDelegate.session.accessTokenData.accessToken,@"facebookAccessToken", nil];
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];

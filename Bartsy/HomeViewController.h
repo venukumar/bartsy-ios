@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import <ZooZSDK/ZooZ.h>
 
-@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
-
+@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,ZooZPaymentCallbackDelegate>
+{
+    
+}
+-(void)orderTheDrink;
 @end

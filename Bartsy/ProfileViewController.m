@@ -93,7 +93,8 @@
     HomeViewController *obj=[[HomeViewController alloc]init];
     [self.navigationController pushViewController:obj animated:YES];
     [obj release];
-    // [self saveProfileData:dictResult];
+    
+   // [self saveProfileData:dictResult];
     
 }
 
