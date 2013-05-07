@@ -117,13 +117,13 @@ static SharedController *sharedController;
     [request release];
 }
 
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender delegate:(id)aDelegate
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"userName",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken", nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",nil];
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];

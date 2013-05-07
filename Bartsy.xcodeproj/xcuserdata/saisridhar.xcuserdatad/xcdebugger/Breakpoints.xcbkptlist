@@ -33,19 +33,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "389604875.130443"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "108"
-         endingLineNumber = "108"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Bartsy/SharedController.m"
          timestampString = "389606112.096833"
          startingColumnNumber = "9223372036854775807"
@@ -66,6 +53,19 @@
          startingLineNumber = "145"
          endingLineNumber = "145"
          landmarkName = "-createOrderWithOrderStatus:basePrice:totalPrice:tipPercentage:itemName:produceId:delegate:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/SharedController.m"
+         timestampString = "389606617.05431"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "121"
+         endingLineNumber = "121"
+         landmarkName = "-saveProfileInfoWithId:name:loginType:gender:userName:delegate:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

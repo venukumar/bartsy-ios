@@ -99,7 +99,7 @@
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
-    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:[dict objectForKey:@"gender"] delegate:self];
+    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:[dict objectForKey:@"gender"] userName:[dict objectForKey:@"username"] delegate:self];
     
 }
 
