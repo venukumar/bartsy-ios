@@ -574,7 +574,10 @@
     
     // Navigation logic may go here. Create and push another view controller.
 }
-
+-(void)btnCustomise_TouchUpInside
+{
+    
+}
 -(void)buttonClicked:(UIButton*)sender
 {
     NSInteger intTag=sender.tag-1;
