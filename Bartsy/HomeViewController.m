@@ -323,6 +323,20 @@
     return cell;
 }
 
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    UIView *viewC=(UIView*)[self.view viewWithTag:444];
+    viewC.frame=CGRectMake(12, 33, 295, 268);
+    
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    UIView *viewC=(UIView*)[self.view viewWithTag:444];
+    viewC.frame=CGRectMake(12, 83, 295, 268);
+    return YES;
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
