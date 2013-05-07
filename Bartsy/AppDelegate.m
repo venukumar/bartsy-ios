@@ -8,8 +8,12 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#define kEnabled                @"enabled"
+#define kSimulator              @"Simulator"
+
 
 @implementation AppDelegate
+@synthesize deviceToken;
 
 - (void)dealloc
 {
@@ -35,10 +39,96 @@
     [self.window addSubview:nav.view];
     
     [self.window makeKeyAndVisible];
+    
+    [[UIApplication sharedApplication]
+     registerForRemoteNotificationTypes:
+     (UIRemoteNotificationTypeAlert |
+      UIRemoteNotificationTypeBadge |
+      UIRemoteNotificationTypeSound)];
     return YES;
 }
 
-
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+{
+    self.deviceToken = [[[[devToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""]
+						stringByReplacingOccurrencesOfString: @" " withString: @""];
+    
+    
+	NSInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+ 	// Set the defaults to disabled unless we find otherwise...
+	NSString *pushBadge = kEnabled;
+	NSString *pushAlert = kEnabled;
+	NSString *pushSound = kEnabled;
+	
+	// Check what Registered Types are turned on. This is a bit tricky since if two are enabled, and one is off, it will return a number 2... not telling you which
+	// one is actually disabled. So we are literally checking to see if rnTypes matches what is turned on, instead of by number. The "tricky" part is that the
+	// single notification types will only match if they are the ONLY one enabled.  Likewise, when we are checking for a pair of notifications, it will only be
+	// true if those two notifications are on.  This is why the code is written this way
+	
+	
+	if(rntypes == ( UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound))
+	{
+		pushBadge = kEnabled;
+		pushAlert = kEnabled;
+		pushSound = kEnabled;
+	}
+	else if(rntypes == ( UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound))
+	{
+		pushAlert = kEnabled;
+		pushSound =kEnabled;
+	}
+	else if(rntypes == ( UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound))
+	{
+		pushBadge = kEnabled;
+		pushSound = kEnabled;
+	}
+	else if(rntypes == ( UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)){
+		pushBadge = kEnabled;
+		pushAlert = kEnabled;
+	}
+	else if(rntypes == UIRemoteNotificationTypeBadge){
+		pushBadge = kEnabled;
+	}
+	else if(rntypes == UIRemoteNotificationTypeAlert){
+		pushAlert = kEnabled;
+	}
+	else if(rntypes == UIRemoteNotificationTypeSound){
+		pushSound = kEnabled;
+	}
+	
+	// Get the users Device Model, Display Name, Unique ID, Token & Version Number
+	
+	// Prepare the Device Token for Registration (remove spaces and < >)
+	
+	
+}
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    UIDevice *device = [UIDevice currentDevice];
+    NSString *strCurrentDevice=[NSString stringWithFormat:@"%@ your",[device model]];
+	int len=[strCurrentDevice length];
+	
+    for(int j =0;j<len;j++)
+    {
+        NSRange range=[strCurrentDevice rangeOfString:kSimulator options:0 range:NSMakeRange(0,len-1)];
+        if(range.location<len)
+        {
+            self.deviceToken=@"42efbf98e0d39862b230428f1b1c9308ab63c19a4e55b0b46015f2061670093d";
+            break;
+        }
+		
+        
+    }
+    
+}
+//application did recive remote notification.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    for (id key in userInfo)
+    {
+        NSLog(@"key: %@, value: %@", key, [userInfo objectForKey:key]);
+    }
+}
 // FBSample logic
 // The native facebook application transitions back to an authenticating application when the user
 // chooses to either log in, or cancel. The url passed to this method contains the token in the
