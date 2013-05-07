@@ -90,20 +90,19 @@
 
 -(void)btnContinue_TouchUpInside
 {
-    HomeViewController *obj=[[HomeViewController alloc]init];
-    [self.navigationController pushViewController:obj animated:YES];
-    [obj release];
-    
-   // [self saveProfileData:dictResult];
-    
+//    HomeViewController *obj=[[HomeViewController alloc]init];
+//    [self.navigationController pushViewController:obj animated:YES];
+//    [obj release];
+    [self saveProfileData:dictResult];
 }
 
 -(void)saveProfileData:(NSDictionary*)dict
 {
     isRequestForSavingProfile=YES;
     self.sharedController=[SharedController sharedController];
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
-    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" delegate:self];
+    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:[dict objectForKey:@"gender"] delegate:self];
     
 }
 
@@ -139,8 +138,11 @@
         //    NSURL *url=[[NSURL alloc]initWithString:strURL];
         //    NSData *dataPhoto=[NSData dataWithContentsOfURL:url];
         //    [mngObjProfile setValue:dataPhoto forKey:@"photo"];
-        [mngObjProfile setValue:[NSNumber numberWithInteger:[[result objectForKey:@"bartsyId"] integerValue]] forKey:@"bartsyId"];
+        [mngObjProfile setValue:[NSNumber numberWithInteger:[[result objectForKey:@"bartsyUserId"] integerValue]] forKey:@"bartsyId"];
         [context save:nil];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyUserId"] forKey:@"bartsyId"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         
         HomeViewController *obj=[[HomeViewController alloc]init];
         [self.navigationController pushViewController:obj animated:YES];
@@ -150,7 +152,10 @@
 
 -(void)controllerDidFailLoadingWithError:(NSError*)error
 {
+    
     [self hideProgressView:nil];
+    [self createAlertViewWithTitle:@"Error" message:[error description] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+    
 }
 - (void)didReceiveMemoryWarning
 {
