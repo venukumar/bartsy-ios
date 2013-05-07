@@ -53,10 +53,6 @@
     [self.view addSubview:tblView];
     [tblView release];
     
-    //optional pre init, so the ZooZ screen will upload immediatly, you can skip this call
-    ZooZ * zooz = [ZooZ sharedInstance];
-    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
-    
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
@@ -287,74 +283,6 @@
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
 }
-
--(void)orderTheDrink
-{
-    ZooZ * zooz = [ZooZ sharedInstance];
-    
-    zooz.sandbox = IS_SANDBOX;
-    
-    zooz.tintColor = [UIColor colorWithRed:1 green:0.8 blue:0 alpha:1];
-    
-    zooz.barButtonTintColor = [UIColor darkGrayColor];
-    
-    //optional image that will be displayed on the NavigationBar as your logo
-    //    zooz.barTitleImage = [UIImage imageNamed:@"MyLogo.png"];
-    
-    ZooZPaymentRequest * req = [zooz createPaymentRequestWithTotal:12.1 invoiceRefNumber:@"test invoice ref-1234" delegate:self];
-    
-    /*
-     //If you want only to allow regsiter cards and not do payment use this instead of the above:
-     ZooZPaymentRequest * req = [zooz createManageFundSourcesRequestWithDelegate:self];
-     */
-    
-    req.currencyCode = @"USD";
-    
-    req.payerDetails.firstName = @"Some";
-    
-    req.payerDetails.email = @"test@zooz.com";
-    
-    req.payerDetails.billingAddress.zipCode=@"01234";
-    
-    req.requireAddress = YES; //set if to ask for zip code or not from the payer.
-    
-    ZooZInvoiceItem * item = [ZooZInvoiceItem invoiceItem:12.1 quantity:1 name:@"Drink"];
-    item.additionalDetails = @"Had a drink with Bartsy";
-    item.itemId = @"refId-12345678"; // optional
-    
-    [req addItem:item];
-    
-    req.invoice.additionalDetails = @"Bartsy Drink";
-    
-    [zooz openPayment:req forAppKey:@"c7659586-f78a-4876-b317-1b617ec8ab40"];
-}
-
-- (void)openPaymentRequestFailed:(ZooZPaymentRequest *)request withErrorCode:(int)errorCode andErrorMessage:(NSString *)errorMessage{
-	NSLog(@"failed: %@", errorMessage);
-    //this is a network / integration failure, not a payment processing failure.
-	
-}
-
-//Called in the background thread - before user closes the payment dialog
-//Do not refresh UI at this callback - see paymentSuccessDialogClosed
-- (void)paymentSuccessWithResponse:(ZooZPaymentResponse *)response{
-    
-	NSLog(@"payment success with payment Id: %@, %@, %@, %f %@", response.transactionDisplayID, response.fundSourceType, response.lastFourDigits, response.paidAmount, response.transactionID);
-}
-
-//called after successful payment and after the user closed the payment dialog
-//Do the UI changes on success at this point
--(void)paymentSuccessDialogClosed{
-    NSLog(@"Payment dialog closed after success");
-    //see paymentSuccessWithResponse: for the response transaction ID.
-}
-
-- (void)paymentCanceled{
-	NSLog(@"payment cancelled");
-    //dialog closed without payment completed
-}
-
-
 
 
 - (void)didReceiveMemoryWarning
