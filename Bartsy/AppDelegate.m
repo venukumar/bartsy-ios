@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "HomeViewController.h"
 #define kEnabled                @"enabled"
 #define kSimulator              @"Simulator"
 
@@ -34,9 +35,18 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    LoginViewController *loginObj=[[LoginViewController alloc]init];
-    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:loginObj];
-    [self.window addSubview:nav.view];
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
+    {
+        HomeViewController *homeObj = [[HomeViewController alloc] init];
+        UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:homeObj];
+        [self.window addSubview:nav.view];
+    }
+    else
+    {
+        LoginViewController *loginObj=[[LoginViewController alloc]init];
+        UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:loginObj];
+        [self.window addSubview:nav.view];
+    }
     
     [self.window makeKeyAndVisible];
     
@@ -53,7 +63,7 @@
     self.deviceToken = [[[[devToken description] stringByReplacingOccurrencesOfString:@"<"withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""]
 						stringByReplacingOccurrencesOfString: @" " withString: @""];
     
-    
+    NSLog(@"device token is %@",deviceToken);
 	NSInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
  	// Set the defaults to disabled unless we find otherwise...
 	NSString *pushBadge = kEnabled;
@@ -126,6 +136,7 @@
 {
     for (id key in userInfo)
     {
+        id result=[userInfo objectForKey:key];
         NSLog(@"key: %@, value: %@", key, [userInfo objectForKey:key]);
     }
 }
