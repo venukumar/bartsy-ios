@@ -14,8 +14,9 @@
     AppDelegate *appDelegate;
     UIAlertView *progressView;
     SharedController *sharedController;
-
+    UIAlertView *alertViewBase;
 }
+@property (nonatomic,retain)UIAlertView *alertViewBase;
 @property (nonatomic, retain) UIAlertView *progressView;
 @property (nonatomic, assign) SharedController *sharedController;
 
@@ -25,4 +26,7 @@
 
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title;
 - (void)hideProgressView:(UIAlertView *)inProgressView;
+
+- (void)createAlertViewWithTitle:(NSString *)strTitle message:(NSString*)strMsg cancelBtnTitle:(NSString*)strCancel otherBtnTitle:(NSString*)strTitle1 delegate:(id)delegate tag:(NSInteger)tag;
+- (void)hideAlertView;
 @end

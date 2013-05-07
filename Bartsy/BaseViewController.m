@@ -13,7 +13,7 @@
 @end
 
 @implementation BaseViewController
-@synthesize progressView,sharedController;
+@synthesize progressView,sharedController,alertViewBase;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -95,6 +95,44 @@
 		[progressView dismissWithClickedButtonIndex:0 animated:YES];
 		progressView = nil;
 		[progressView release];
+	}
+}
+
+//Creating Progreessview wth label
+- (void)createAlertViewWithTitle:(NSString *)strTitle message:(NSString*)strMsg cancelBtnTitle:(NSString*)strCancel otherBtnTitle:(NSString*)strTitle1 delegate:(id)delegate tag:(NSInteger)tag
+{
+    if(alertViewBase !=nil)
+	{
+		[alertViewBase dismissWithClickedButtonIndex:0 animated:YES];
+        [alertViewBase release];
+		alertViewBase = nil;
+		
+	}
+    
+    if(strTitle)
+    {
+        alertViewBase = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:delegate cancelButtonTitle:strCancel otherButtonTitles:strTitle1,nil];
+        alertViewBase.tag=tag;
+        [alertViewBase show];
+    }
+    else
+    {
+        alertViewBase = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:delegate cancelButtonTitle:strCancel otherButtonTitles:nil];
+        alertViewBase.tag=tag;
+        [alertViewBase show];
+    }
+	
+}
+
+-(void)hideAlertView
+{
+    
+	if(alertViewBase !=nil)
+	{
+		[alertViewBase dismissWithClickedButtonIndex:0 animated:YES];
+        [alertViewBase release];
+		alertViewBase = nil;
+		
 	}
 }
 
