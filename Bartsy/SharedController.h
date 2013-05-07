@@ -40,5 +40,6 @@
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest;
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)aDelegate;
 -(void)getMenuListWithDelegate:(id)aDelegate;
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType delegate:(id)aDelegate;
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender delegate:(id)aDelegate;
+-(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId delegate:(id)aDelegate;
 @end

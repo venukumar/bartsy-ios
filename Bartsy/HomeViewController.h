@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
+@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate>
 {
-    
+    NSDictionary *dictSelectedToMakeOrder;
+    BOOL isRequestForOrder;
 }
 -(void)orderTheDrink;
 @end

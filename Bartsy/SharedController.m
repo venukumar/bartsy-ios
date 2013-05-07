@@ -99,26 +99,36 @@ static SharedController *sharedController;
 -(void)getMenuListWithDelegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"http://115.112.122.98:8888/Bartsy/venue/getMenu"];
+    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/venue/getMenu"];
+    
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataProfile];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self sendRequest:request];
     [url release];
     [request release];
 }
 
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType delegate:(id)aDelegate
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"userName",strLoginType,@"loginType",appDelegate.session.accessTokenData.accessToken,@"facebookAccessToken", nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"userName",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken", nil];
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *strURL=[NSString stringWithFormat:@"http://192.168.0.109:8080/Bartsy/user/saveUserProfile"];
+    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/user/saveUserProfile"];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
     [request setHTTPMethod:@"POST"];
@@ -129,6 +139,31 @@ static SharedController *sharedController;
     [url release];
     [request release];
     
+}
+
+-(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",@"100001",@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId", nil];
+    //NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/order/placeOrder"];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataProfile];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
 }
 
 

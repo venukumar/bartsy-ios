@@ -90,9 +90,6 @@
 
 -(void)btnContinue_TouchUpInside
 {
-//    HomeViewController *obj=[[HomeViewController alloc]init];
-//    [self.navigationController pushViewController:obj animated:YES];
-//    [obj release];
     [self saveProfileData:dictResult];
 }
 
@@ -157,6 +154,7 @@
     [self createAlertViewWithTitle:@"Error" message:[error description] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
     
 }
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
