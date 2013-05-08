@@ -148,7 +148,6 @@
 		E0A00991173A4AB90027F7E6 /* ZooZFundTypeSelectView_ipad.nib in Resources */ = {isa = PBXBuildFile; fileRef = E0A00931173A4AB90027F7E6 /* ZooZFundTypeSelectView_ipad.nib */; };
 		E0A00992173A4AB90027F7E6 /* ZooZGenWebController.nib in Resources */ = {isa = PBXBuildFile; fileRef = E0A00932173A4AB90027F7E6 /* ZooZGenWebController.nib */; };
 		E0A00993173A4ABA0027F7E6 /* ZooZGenWebController_ipad.nib in Resources */ = {isa = PBXBuildFile; fileRef = E0A00933173A4AB90027F7E6 /* ZooZGenWebController_ipad.nib */; };
-		E0A00994173A4ABA0027F7E6 /* zoozi18n.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E0A00934173A4AB90027F7E6 /* zoozi18n.bundle */; };
 		E0A00995173A4ABA0027F7E6 /* ZooZNewCardController.nib in Resources */ = {isa = PBXBuildFile; fileRef = E0A00935173A4AB90027F7E6 /* ZooZNewCardController.nib */; };
 		E0A00996173A4ABA0027F7E6 /* ZooZNewCardController_ipad.nib in Resources */ = {isa = PBXBuildFile; fileRef = E0A00936173A4AB90027F7E6 /* ZooZNewCardController_ipad.nib */; };
 		E0A00997173A4ABA0027F7E6 /* ZooZPasscodeSave.nib in Resources */ = {isa = PBXBuildFile; fileRef = E0A00937173A4AB90027F7E6 /* ZooZPasscodeSave.nib */; };
@@ -408,7 +407,6 @@
 		E0A00931173A4AB90027F7E6 /* ZooZFundTypeSelectView_ipad.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = ZooZFundTypeSelectView_ipad.nib; sourceTree = "<group>"; };
 		E0A00932173A4AB90027F7E6 /* ZooZGenWebController.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = ZooZGenWebController.nib; sourceTree = "<group>"; };
 		E0A00933173A4AB90027F7E6 /* ZooZGenWebController_ipad.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = ZooZGenWebController_ipad.nib; sourceTree = "<group>"; };
-		E0A00934173A4AB90027F7E6 /* zoozi18n.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = zoozi18n.bundle; sourceTree = "<group>"; };
 		E0A00935173A4AB90027F7E6 /* ZooZNewCardController.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = ZooZNewCardController.nib; sourceTree = "<group>"; };
 		E0A00936173A4AB90027F7E6 /* ZooZNewCardController_ipad.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = ZooZNewCardController_ipad.nib; sourceTree = "<group>"; };
 		E0A00937173A4AB90027F7E6 /* ZooZPasscodeSave.nib */ = {isa = PBXFileReference; lastKnownFileType = file; path = ZooZPasscodeSave.nib; sourceTree = "<group>"; };
@@ -780,7 +778,6 @@
 				E0A00931173A4AB90027F7E6 /* ZooZFundTypeSelectView_ipad.nib */,
 				E0A00932173A4AB90027F7E6 /* ZooZGenWebController.nib */,
 				E0A00933173A4AB90027F7E6 /* ZooZGenWebController_ipad.nib */,
-				E0A00934173A4AB90027F7E6 /* zoozi18n.bundle */,
 				E0A00935173A4AB90027F7E6 /* ZooZNewCardController.nib */,
 				E0A00936173A4AB90027F7E6 /* ZooZNewCardController_ipad.nib */,
 				E0A00937173A4AB90027F7E6 /* ZooZPasscodeSave.nib */,
@@ -1145,7 +1142,6 @@
 				E0A00991173A4AB90027F7E6 /* ZooZFundTypeSelectView_ipad.nib in Resources */,
 				E0A00992173A4AB90027F7E6 /* ZooZGenWebController.nib in Resources */,
 				E0A00993173A4ABA0027F7E6 /* ZooZGenWebController_ipad.nib in Resources */,
-				E0A00994173A4ABA0027F7E6 /* zoozi18n.bundle in Resources */,
 				E0A00995173A4ABA0027F7E6 /* ZooZNewCardController.nib in Resources */,
 				E0A00996173A4ABA0027F7E6 /* ZooZNewCardController_ipad.nib in Resources */,
 				E0A00997173A4ABA0027F7E6 /* ZooZPasscodeSave.nib in Resources */,
