@@ -161,7 +161,20 @@ static SharedController *sharedController;
     [request setHTTPBody:dataProfile];
     [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [self sendRequest:request];
+    //[self sendRequest:request];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         SBJSON *jsonParser = [[SBJSON new] autorelease];
+         NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+         id result = [jsonParser objectWithString:jsonString error:nil];
+         NSLog(@"Result is %@",result);
+         [delegate controllerDidFinishLoadingWithResult:result];
+     }
+     ];
+    
     [url release];
     [request release];
 }

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import <ZooZSDK/ZooZ.h>
 
-@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate>
+@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,ZooZPaymentCallbackDelegate>
 {
     NSDictionary *dictSelectedToMakeOrder;
     BOOL isRequestForOrder;
