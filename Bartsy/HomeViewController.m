@@ -33,6 +33,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    self.navigationController.navigationBarHidden=NO;
+    
     arrMenu=[[NSMutableArray alloc]init];
     
     self.sharedController=[SharedController sharedController];
@@ -47,7 +49,7 @@
         [self modifyData];
     }
     
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 460)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
@@ -111,7 +113,7 @@
     [self hideProgressView:nil];
     if(isRequestForOrder==NO)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:result forKey:@"MenuList"];
+        [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:@"MenuList"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrMenu addObjectsFromArray:result];
         [self hideProgressView:nil];
@@ -326,14 +328,14 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
     UIView *viewC=(UIView*)[self.view viewWithTag:444];
-    viewC.frame=CGRectMake(12, 33, 295, 268);
+    viewC.frame=CGRectMake(12, -2, 295, 268);
     
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     UIView *viewC=(UIView*)[self.view viewWithTag:444];
-    viewC.frame=CGRectMake(12, 83, 295, 268);
+    viewC.frame=CGRectMake(12, 50, 295, 268);
     return YES;
 }
 
@@ -369,7 +371,7 @@
     viewB.tag=333;
     [viewA addSubview:viewB];
     
-    UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 93, 295, 268)];
+    UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 268)];
     viewC.layer.cornerRadius = 2;
     viewC.layer.borderWidth = 2;
     viewC.backgroundColor = [UIColor redColor];
