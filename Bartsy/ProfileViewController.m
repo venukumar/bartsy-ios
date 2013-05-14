@@ -141,7 +141,7 @@
         [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyUserId"] forKey:@"bartsyId"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         
-        HomeViewController *obj=[[HomeViewController alloc]init];
+        VenueListViewController *obj=[[VenueListViewController alloc]init];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }

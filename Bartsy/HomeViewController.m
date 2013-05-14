@@ -21,6 +21,7 @@
 @end
 
 @implementation HomeViewController
+@synthesize dictVenue;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,8 +38,8 @@
 	// Do any additional setup after loading the view.
     
     self.navigationController.navigationBarHidden=NO;
-    self.navigationItem.leftBarButtonItem=nil;
-    self.navigationItem.hidesBackButton=YES;
+   // self.navigationItem.leftBarButtonItem=nil;
+    //self.navigationItem.hidesBackButton=YES;
     
     self.acceptCreditCards = YES;
     self.environment = PayPalEnvironmentNoNetwork;
@@ -53,10 +54,10 @@
     
     self.sharedController=[SharedController sharedController];
     
-    if([[[NSUserDefaults standardUserDefaults] objectForKey:@"MenuList"]count]==0)
+    if([[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]count]==0)
     {
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-        [self.sharedController getMenuListWithDelegate:self];
+        [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
     }
     else
     {
@@ -74,28 +75,6 @@
 //    ZooZ * zooz = [ZooZ sharedInstance];
 //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
     
-}
-#pragma mark - Proof of payment validation
-
-- (void)sendCompletedPaymentToServer:(PayPalPayment *)completedPayment {
-    // TODO: Send completedPayment.confirmation to server
-    NSLog(@"Here is your proof of payment:\n\n%@\n\nSend this to your server for confirmation and fulfillment.", completedPayment.confirmation);
-}
-
-#pragma mark - PayPalPaymentDelegate methods
-
-- (void)payPalPaymentDidComplete:(PayPalPayment *)completedPayment {
-    NSLog(@"PayPal Payment Success!");
-    self.completedPayment = completedPayment;
-    
-    [self sendCompletedPaymentToServer:completedPayment]; // Payment was processed successfully; send to server for verification and fulfillment
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)payPalPaymentDidCancel {
-    NSLog(@"PayPal Payment Canceled");
-    self.completedPayment = nil;
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)btnOrder_TouchUpInside
@@ -152,7 +131,6 @@
 
 -(void)orderTheDrink
 {
-        
 //    NSString *strBasePrice=[NSString stringWithFormat:@"%f",[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]];
     
     NSString *strTip;
@@ -276,13 +254,36 @@
 }
 */
 
+#pragma mark - Proof of payment validation
+
+- (void)sendCompletedPaymentToServer:(PayPalPayment *)completedPayment {
+    // TODO: Send completedPayment.confirmation to server
+    NSLog(@"Here is your proof of payment:\n\n%@\n\nSend this to your server for confirmation and fulfillment.", completedPayment.confirmation);
+}
+
+#pragma mark - PayPalPaymentDelegate methods
+
+- (void)payPalPaymentDidComplete:(PayPalPayment *)completedPayment {
+    NSLog(@"PayPal Payment Success!");
+    self.completedPayment = completedPayment;
+    [self btnOrder_TouchUpInside];
+    [self sendCompletedPaymentToServer:completedPayment]; // Payment was processed successfully; send to server for verification and fulfillment
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)payPalPaymentDidCancel {
+    NSLog(@"PayPal Payment Canceled");
+    self.completedPayment = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
     if(isRequestForOrder==NO)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:@"MenuList"];
+        [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:[dictVenue objectForKey:@"venueId"]];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrMenu addObjectsFromArray:result];
         [self hideProgressView:nil];
@@ -310,10 +311,10 @@
     NSMutableArray *arrTemp=[[NSMutableArray alloc]init];
     NSMutableArray *arrContents=[[NSMutableArray alloc]init];
     
-    if([[NSUserDefaults standardUserDefaults]objectForKey:@"MenuList"])
+    if([[NSUserDefaults standardUserDefaults]objectForKey:[dictVenue objectForKey:@"venueId"]])
     {
         [arrMenu removeAllObjects];
-        [arrMenu addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"MenuList"]];
+        [arrMenu addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]];
     }
     
     for (int i=0; i<[arrMenu count]; i++)
@@ -472,7 +473,7 @@
     [lblName release];
     
     
-    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 220, 50)];
+    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 180, 50)];
     lblDescription.numberOfLines=2;
     if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
     {
@@ -489,6 +490,23 @@
     lblDescription.font=[UIFont systemFontOfSize:12];
     [cell.contentView addSubview:lblDescription];
     [lblDescription release];
+    
+    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 80)];
+    if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+    {
+        NSDictionary *dict=[object objectAtIndex:indexPath.row];
+        lblPrice.text=[dict objectForKey:@"price"];
+    }
+    else
+    {
+        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+        NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
+        lblPrice.text=[dict objectForKey:@"price"];
+    }
+    
+    lblPrice.font=[UIFont boldSystemFontOfSize:14];
+    [cell.contentView addSubview:lblPrice];
+    [lblPrice release];
     
     
     return cell;

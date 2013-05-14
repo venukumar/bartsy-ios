@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "QuartzCore/QuartzCore.h"
+#import "VenueListViewController.h"
 
 @interface ProfileViewController : BaseViewController
 {

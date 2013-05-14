@@ -96,12 +96,12 @@ static SharedController *sharedController;
     [request release];
 }
 
--(void)getMenuListWithDelegate:(id)aDelegate
+-(void)getMenuListWithVenueID:(NSString*)strVenueId delegate:(id)aDelegate;
 {
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/venue/getMenu"];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -112,6 +112,27 @@ static SharedController *sharedController;
     [request setHTTPBody:dataProfile];
     [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
+-(void)getVenueListWithDelegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/venue/getVenueList"];
+    
+//    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
+//    SBJSON *jsonObj=[SBJSON new];
+//    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+//    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+//    [request setHTTPMethod:@"POST"];
+//    [request setHTTPBody:dataProfile];
+//    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+//    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self sendRequest:request];
     [url release];
     [request release];
