@@ -9,6 +9,9 @@
 #import "HomeViewController.h"
 #define IS_SANDBOX YES
 
+#define kPayPalClientId @"YOUR CLIENT ID HERE"
+#define kPayPalReceiverEmail @"YOUR_PAYPAL_EMAIL@yourdomain.com"
+
 @interface HomeViewController ()
 {
     NSMutableArray *arrMenu;
@@ -34,6 +37,17 @@
 	// Do any additional setup after loading the view.
     
     self.navigationController.navigationBarHidden=NO;
+    self.navigationItem.leftBarButtonItem=nil;
+    self.navigationItem.hidesBackButton=YES;
+    
+    self.acceptCreditCards = YES;
+    self.environment = PayPalEnvironmentNoNetwork;
+    // Do any additional setup after loading the view, typically from a nib.
+        
+    NSLog(@"PayPal iOS SDK version: %@", [PayPalPaymentViewController libraryVersion]);
+    // Optimization: Prepare for display of the payment UI by getting network work done early
+    [PayPalPaymentViewController setEnvironment:self.environment];
+    [PayPalPaymentViewController prepareForPaymentUsingClientId:kPayPalClientId];
     
     arrMenu=[[NSMutableArray alloc]init];
     
@@ -57,9 +71,31 @@
     [tblView release];
     
     //optional pre init, so the ZooZ screen will upload immediatly, you can skip this call
-    ZooZ * zooz = [ZooZ sharedInstance];
-    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
+//    ZooZ * zooz = [ZooZ sharedInstance];
+//    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
     
+}
+#pragma mark - Proof of payment validation
+
+- (void)sendCompletedPaymentToServer:(PayPalPayment *)completedPayment {
+    // TODO: Send completedPayment.confirmation to server
+    NSLog(@"Here is your proof of payment:\n\n%@\n\nSend this to your server for confirmation and fulfillment.", completedPayment.confirmation);
+}
+
+#pragma mark - PayPalPaymentDelegate methods
+
+- (void)payPalPaymentDidComplete:(PayPalPayment *)completedPayment {
+    NSLog(@"PayPal Payment Success!");
+    self.completedPayment = completedPayment;
+    
+    [self sendCompletedPaymentToServer:completedPayment]; // Payment was processed successfully; send to server for verification and fulfillment
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)payPalPaymentDidCancel {
+    NSLog(@"PayPal Payment Canceled");
+    self.completedPayment = nil;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)btnOrder_TouchUpInside
@@ -89,6 +125,8 @@
     [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] delegate:self];
 }
 
+
+
 -(void)btnTip_TouchUpInside:(id)sender
 {
     if(btnValue!=0)
@@ -114,18 +152,8 @@
 
 -(void)orderTheDrink
 {
-    ZooZ * zooz = [ZooZ sharedInstance];
-    
-    zooz.sandbox = IS_SANDBOX;
-    
-    zooz.tintColor = [UIColor colorWithRed:1 green:0.8 blue:0 alpha:1];
-    
-    zooz.barButtonTintColor = [UIColor darkGrayColor];
-    
-    //optional image that will be displayed on the NavigationBar as your logo
-    //    zooz.barTitleImage = [UIImage imageNamed:@"MyLogo.png"];
-    
-    NSString *strBasePrice=[NSString stringWithFormat:@"%f",[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]];
+        
+//    NSString *strBasePrice=[NSString stringWithFormat:@"%f",[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]];
     
     NSString *strTip;
     if(btnValue!=40)
@@ -139,7 +167,56 @@
     
     float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
+    NSString *strTotalPrice=[NSString stringWithFormat:@"%f",totalPrice];
     
+    // Remove our last completed payment, just for demo purposes.
+    self.completedPayment = nil;
+    
+    PayPalPayment *payment = [[PayPalPayment alloc] init];
+    payment.amount = [[NSDecimalNumber alloc] initWithString:strTotalPrice];
+    payment.currencyCode = @"USD";
+    payment.shortDescription = [dictSelectedToMakeOrder objectForKey:@"name"];
+    
+    if (!payment.processable)
+    {
+        // This particular payment will always be processable. If, for
+        // example, the amount was negative or the shortDescription was
+        // empty, this payment wouldn't be processable, and you'd want
+        // to handle that here.
+    }
+    
+    // Any customer identifier that you have will work here. Do NOT use a device- or
+    // hardware-based identifier.
+    NSString *customerId = @"user-11723";
+    
+    // Set the environment:
+    // - For live charges, use PayPalEnvironmentProduction (default).
+    // - To use the PayPal sandbox, use PayPalEnvironmentSandbox.
+    // - For testing, use PayPalEnvironmentNoNetwork.
+    [PayPalPaymentViewController setEnvironment:self.environment];
+    
+    PayPalPaymentViewController *paymentViewController = [[PayPalPaymentViewController alloc] initWithClientId:kPayPalClientId receiverEmail:kPayPalReceiverEmail
+                                                      payerId:customerId
+                                                          payment:payment
+                                                            delegate:self];
+    paymentViewController.title=@"Order";
+    paymentViewController.hideCreditCardButton = !self.acceptCreditCards;
+    
+    [self presentViewController:paymentViewController animated:YES completion:nil];
+
+    
+    /*
+     ZooZ * zooz = [ZooZ sharedInstance];
+     
+     zooz.sandbox = IS_SANDBOX;
+     
+     zooz.tintColor = [UIColor colorWithRed:1 green:0.8 blue:0 alpha:1];
+     
+     zooz.barButtonTintColor = [UIColor darkGrayColor];
+     
+     //optional image that will be displayed on the NavigationBar as your logo
+     //    zooz.barTitleImage = [UIImage imageNamed:@"MyLogo.png"];
+     
     ZooZPaymentRequest * req = [zooz createPaymentRequestWithTotal:totalPrice invoiceRefNumber:@"test invoice ref-1234" delegate:self];
     
     /*
@@ -147,6 +224,7 @@
      ZooZPaymentRequest * req = [zooz createManageFundSourcesRequestWithDelegate:self];
      */
     
+    /*
     req.currencyCode = @"USD";
     
     req.payerDetails.firstName = @"Consumer";
@@ -166,8 +244,11 @@
     req.invoice.additionalDetails = @"Bartsy Drink";
     
     [zooz openPayment:req forAppKey:@"c7659586-f78a-4876-b317-1b617ec8ab40"];
+    
+    */
 }
 
+/*
 - (void)openPaymentRequestFailed:(ZooZPaymentRequest *)request withErrorCode:(int)errorCode andErrorMessage:(NSString *)errorMessage{
 	NSLog(@"failed: %@", errorMessage);
     //this is a network / integration failure, not a payment processing failure.
@@ -193,6 +274,8 @@
 	NSLog(@"payment cancelled");
     //dialog closed without payment completed
 }
+*/
+
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {

@@ -8,12 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-#import <ZooZSDK/ZooZ.h>
+#import "PayPalMobile.h"
 
-@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,ZooZPaymentCallbackDelegate>
+@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,PayPalPaymentDelegate>
 {
     NSDictionary *dictSelectedToMakeOrder;
     BOOL isRequestForOrder;
 }
+@property(nonatomic, strong, readwrite) NSString *environment;
+@property(nonatomic, assign, readwrite) BOOL acceptCreditCards;
+@property(nonatomic, strong, readwrite) PayPalPayment *completedPayment;
+
 -(void)orderTheDrink;
+
 @end
