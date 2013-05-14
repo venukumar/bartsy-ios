@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import "MyAnnotation.h"
+#import "MapKit/MapKit.h"
+#import "CoreLocation/CoreLocation.h"
 
-@interface VenueListViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
+@interface VenueListViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,CLLocationManagerDelegate>
 {
     NSMutableArray *arrVenueList;
+    CLLocationCoordinate2D currentLocaion;
 }
+-(void)reloadMapView;
 @end

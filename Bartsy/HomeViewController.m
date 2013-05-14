@@ -41,6 +41,8 @@
    // self.navigationItem.leftBarButtonItem=nil;
     //self.navigationItem.hidesBackButton=YES;
     
+    self.title=[dictVenue objectForKey:@"venueName"];
+    
     self.acceptCreditCards = YES;
     self.environment = PayPalEnvironmentNoNetwork;
     // Do any additional setup after loading the view, typically from a nib.

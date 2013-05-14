@@ -36,7 +36,23 @@
     
     arrVenueList=[[NSMutableArray alloc]init];
     
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
+    UILabel *lblHeader=[self createLabelWithTitle:@"Check in at a Bartsy venue to order drinks and see who else is there" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
+    lblHeader.backgroundColor=[UIColor lightGrayColor];
+    lblHeader.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblHeader];
+
+    MKMapView *mapView=[[MKMapView alloc]initWithFrame:CGRectMake(0, 40, 320, 200)];
+    mapView.delegate=self;
+    mapView.showsUserLocation=YES;
+    mapView.tag=222;
+    [self.view addSubview:mapView];
+    [mapView release];
+    
+    CLLocationManager *locationManager=[[CLLocationManager alloc]init];
+    locationManager.delegate=self;
+    [locationManager startUpdatingLocation];
+    
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 241, 320, 180)];
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
@@ -87,6 +103,19 @@
     [cell.contentView addSubview:lblDescription];
     [lblDescription release];
     
+    NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
+    UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 15, 60, 50) tag:0 font:[UIFont systemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+    lblDistance.backgroundColor=[UIColor clearColor];
+    lblDistance.textAlignment=NSTextAlignmentCenter;
+    [cell.contentView addSubview:lblDistance];
+    [lblDistance release];
+    
+    UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 40, 60, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+    lblMiles.backgroundColor=[UIColor clearColor];
+    lblMiles.textAlignment=NSTextAlignmentCenter;
+    [cell.contentView addSubview:lblMiles];
+    [lblMiles release];
+
     
     return cell;
 }
@@ -100,6 +129,98 @@
     [obj release];
 }
 
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation
+
+{
+    currentLocaion=newLocation.coordinate;
+    NSLog(@"Lat : %f \n Lon:%f",currentLocaion.latitude,currentLocaion.longitude);
+    
+    [manager stopUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error
+{
+    NSLog(@"Error is %@",[error description]);
+}
+
+-(void)reloadMapView
+{
+    MKMapView *mapView=(MKMapView*)[self.view viewWithTag:222];
+    
+    for (int i=0;i<[arrVenueList count];i++)
+    {
+        NSMutableDictionary *dict=[arrVenueList objectAtIndex:i];
+        CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:currentLocaion.latitude longitude:currentLocaion.longitude];
+        CLLocation *venueLocation = [[CLLocation alloc] initWithLatitude:[[dict objectForKey:@"latitude"] floatValue] longitude:[[dict objectForKey:@"longitude"] floatValue]];
+        
+        CLLocationDistance distance = [currentLocation distanceFromLocation:venueLocation];
+        float distanceInMiles=distance/1609.344;
+        NSNumber *miles=[NSNumber numberWithFloat:distanceInMiles];
+        [dict setObject:miles forKey:@"distance"];
+        [arrVenueList replaceObjectAtIndex:i withObject:dict];
+        
+        MyAnnotation *ann=[[MyAnnotation alloc]initWithCoordinate:venueLocation.coordinate title:[dict objectForKey:@"venueName"] subtitle:[dict objectForKey:@"address"]];
+        ann.tagValue=i;
+        [mapView addAnnotation:ann];
+        
+        [currentLocation release];
+        [venueLocation release];
+    }
+    
+    NSLog(@"Venue List %@",arrVenueList);
+    
+    NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"distance" ascending:YES selector:nil];
+    [arrVenueList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [sortDescriptor release];
+    
+    NSLog(@"Venue List %@",arrVenueList);
+    if([arrVenueList count])
+    {
+        NSDictionary *dictNearBy=[arrVenueList objectAtIndex:0];
+        MKCoordinateRegion region;
+        CLLocation *venueLocation = [[CLLocation alloc] initWithLatitude:[[dictNearBy objectForKey:@"latitude"] floatValue] longitude:[[dictNearBy objectForKey:@"longitude"] floatValue]];
+
+        region.center=venueLocation.coordinate;
+        
+        MKCoordinateSpan span;
+        span.latitudeDelta=0.1;
+        span.longitudeDelta=0.1;
+        region.span=span;
+        
+        [mapView setRegion:region animated:YES];
+    }
+    
+    
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+{
+    MKPinAnnotationView *pinAnn=[[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:nil];
+    pinAnn.pinColor=MKPinAnnotationColorGreen;
+    pinAnn.animatesDrop=YES;
+    pinAnn.canShowCallout=YES;
+    
+    MyAnnotation *ann=(MyAnnotation*)annotation;
+    
+    UIButton *btnDetail=[UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    btnDetail.tag=ann.tagValue;
+    [btnDetail addTarget:self action:@selector(btnDetail_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    pinAnn.rightCalloutAccessoryView=btnDetail;
+    
+    return pinAnn;
+}
+
+-(void)btnDetail_TouchUpInside:(UIButton*)sender
+{
+    HomeViewController *obj=[[HomeViewController alloc]init];
+    obj.dictVenue=[arrVenueList objectAtIndex:sender.tag];
+    [self.navigationController pushViewController:obj animated:YES];
+    [obj release];
+}
+
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
@@ -108,6 +229,7 @@
     
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
+    [self reloadMapView];
     
 }
 

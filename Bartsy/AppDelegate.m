@@ -36,7 +36,7 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
+    if (1)//[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
         VenueListViewController *homeObj = [[VenueListViewController alloc] init];
         UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:homeObj];
