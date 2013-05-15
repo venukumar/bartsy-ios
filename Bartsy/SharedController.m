@@ -13,6 +13,10 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
+#define KServerURL @"http://54.235.76.180:8080"
+//#define KServerURL @"http://192.168.0.109:8080"
+
+
 #pragma mark--- Initialization Methods ---
 
 +(SharedController *)sharedController
@@ -99,7 +103,7 @@ static SharedController *sharedController;
 -(void)getMenuListWithVenueID:(NSString*)strVenueId delegate:(id)aDelegate;
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/venue/getMenu"];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getMenu",KServerURL];
     
     NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
     SBJSON *jsonObj=[SBJSON new];
@@ -120,7 +124,7 @@ static SharedController *sharedController;
 -(void)getVenueListWithDelegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/venue/getVenueList"];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getVenueList",KServerURL];
     
 //    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
 //    SBJSON *jsonObj=[SBJSON new];
@@ -138,24 +142,55 @@ static SharedController *sharedController;
     [request release];
 }
 
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName delegate:(id)aDelegate
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
+    NSData *imageData= UIImagePNGRepresentation(imgProfile);
+
     NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",nil];
-    SBJSON *jsonObj=[SBJSON new];
-    NSString *strJson=[jsonObj stringWithObject:dictProfile];
-    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
-    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/user/saveUserProfile"];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:dataProfile];
-    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+   [request setHTTPMethod:@"POST"];
+    
+    // set Content-Type in HTTP header
+    NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
+
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+    [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
+    
+    // post body
+    NSMutableData *body = [NSMutableData data];
+    
+    // add params (all params are strings)
+    for (NSString *param in dictUserProfile)
+    {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", param] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"%@\r\n", [dictUserProfile objectForKey:param]] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    NSString* FileParamConstant = [NSString stringWithFormat:@"userImage"];
+    
+    // add image data
+    if (imageData) {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"userImage.jpg\"\r\n", FileParamConstant] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithString:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:imageData];
+        [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // setting the body of the post to the reqeust
+    [request setHTTPBody:body];
+    
     [self sendRequest:request];
     [url release];
     [request release];
@@ -175,7 +210,7 @@ static SharedController *sharedController;
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *strURL=[NSString stringWithFormat:@"http://54.235.76.180:8080/Bartsy/order/placeOrder"];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/placeOrder",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
     [request setHTTPMethod:@"POST"];

@@ -41,6 +41,6 @@
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message delegate:(id)aDelegate;
 -(void)getMenuListWithVenueID:(NSString*)strVenueId delegate:(id)aDelegate;
 -(void)getVenueListWithDelegate:(id)aDelegate;
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName delegate:(id)aDelegate;
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile delegate:(id)aDelegate;
 -(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId delegate:(id)aDelegate;
 @end

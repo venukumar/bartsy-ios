@@ -69,6 +69,7 @@
     [[imgViewProfilePicture layer] setShadowColor:[[UIColor whiteColor] CGColor]];
     [[imgViewProfilePicture layer] setShadowRadius:3.0];
     [[imgViewProfilePicture layer] setShadowOpacity:0.8];
+    imgViewProfilePicture.tag=111;
     [self.view addSubview:imgViewProfilePicture];
     
     
@@ -99,7 +100,9 @@
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
-    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:[dict objectForKey:@"gender"] userName:[dict objectForKey:@"username"] delegate:self];
+    UIImageView *imgViewProfilePic=(UIImageView*)[self.view viewWithTag:111];
+    
+    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:[dict objectForKey:@"gender"] userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image delegate:self];
     
 }
 
