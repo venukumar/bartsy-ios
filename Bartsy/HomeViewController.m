@@ -336,6 +336,14 @@
         }
     }
     
+    if([arrTemp count])
+    {
+        [arrTemp removeAllObjects];
+        NSMutableDictionary *dictFirstItem=[[NSMutableDictionary alloc]initWithObjectsAndKeys:arrContents,@"contents",@"Various Items",@"section_name",@"0",@"Arrow", nil];
+        [arrTemp addObject:dictFirstItem];
+        [dictFirstItem release];
+    }
+    
     for (int i=0; i<[arrMenu count]; i++)
     {
         NSDictionary *dict=[arrMenu objectAtIndex:i];
@@ -403,9 +411,9 @@
     [headerTitle setBackgroundColor:[UIColor clearColor]];
     [headerTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:16]];
     [headerTitle setTextColor:[UIColor blackColor]];
-    if(section==0&&[object isKindOfClass:[NSArray class]])
+    if(section==0&&[[object objectForKey:@"subsection_name"] length]==0)
     {
-        headerTitle.text= @"";
+        headerTitle.text= [object objectForKey:@"section_name"];
     }
     else
         headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
