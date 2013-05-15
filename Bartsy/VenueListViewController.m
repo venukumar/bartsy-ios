@@ -10,7 +10,10 @@
 #import "HomeViewController.h"
 
 @interface VenueListViewController ()
-
+{
+    BOOL isRequestForCheckIn;
+    NSInteger intIndex;
+}
 @end
 
 @implementation VenueListViewController
@@ -122,11 +125,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    HomeViewController *obj=[[HomeViewController alloc]init];
-    obj.dictVenue=[arrVenueList objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:obj animated:YES];
-    [obj release];
+    if([[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] integerValue]!=[[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] integerValue])
+    {
+        intIndex=indexPath.row;
+        isRequestForCheckIn=YES;
+        self.sharedController=[SharedController sharedController];
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
+    }
+    else
+    {
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        obj.dictVenue=[arrVenueList objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
+    }
+
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -215,21 +231,55 @@
 
 -(void)btnDetail_TouchUpInside:(UIButton*)sender
 {
-    HomeViewController *obj=[[HomeViewController alloc]init];
-    obj.dictVenue=[arrVenueList objectAtIndex:sender.tag];
-    [self.navigationController pushViewController:obj animated:YES];
-    [obj release];
+    if([[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] integerValue]!=[[[arrVenueList objectAtIndex:sender.tag] objectForKey:@"venueId"] integerValue])
+    {
+        intIndex=sender.tag;
+        isRequestForCheckIn=YES;
+        self.sharedController=[SharedController sharedController];
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:sender.tag] objectForKey:@"venueId"] delegate:self];
+    }
+    else
+    {
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        obj.dictVenue=[arrVenueList objectAtIndex:sender.tag];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
+    }    
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
-    [self hideProgressView:nil];
-    [arrVenueList removeAllObjects];
-    [arrVenueList addObjectsFromArray:result];
     
-    UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-    [tblView reloadData];
-    [self reloadMapView];
+    [self hideProgressView:nil];
+    
+    if(isRequestForCheckIn==NO)
+    {
+        [arrVenueList removeAllObjects];
+        [arrVenueList addObjectsFromArray:result];
+        
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+        [self reloadMapView];
+    }
+    else
+    {
+        if([[result objectForKey:@"errorCode"] integerValue]==0)
+        {
+            isRequestForCheckIn=NO;
+            [[NSUserDefaults standardUserDefaults]setObject:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            HomeViewController *obj=[[HomeViewController alloc]init];
+            obj.dictVenue=[arrVenueList objectAtIndex:intIndex];
+            [self.navigationController pushViewController:obj animated:YES];
+            [obj release];
+        }
+        else
+        {
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
+        
+    }
     
 }
 

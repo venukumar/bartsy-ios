@@ -43,4 +43,5 @@
 -(void)getVenueListWithDelegate:(id)aDelegate;
 -(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile delegate:(id)aDelegate;
 -(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId delegate:(id)aDelegate;
+-(void)checkInAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate;
 @end

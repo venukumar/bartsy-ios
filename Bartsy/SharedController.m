@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-#define KServerURL @"http://54.235.76.180:8080"
-//#define KServerURL @"http://192.168.0.109:8080"
+//#define KServerURL @"http://54.235.76.180:8080"
+#define KServerURL @"http://192.168.0.109:8080"
 
 
 #pragma mark--- Initialization Methods ---
@@ -203,7 +203,7 @@ static SharedController *sharedController;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",@"100001",@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId", nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId", nil];
     //NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
     
     SBJSON *jsonObj=[SBJSON new];
@@ -235,7 +235,26 @@ static SharedController *sharedController;
     [request release];
 }
 
-
+-(void)checkInAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/userCheckIn",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
