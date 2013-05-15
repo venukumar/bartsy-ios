@@ -13,8 +13,10 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-//#define KServerURL @"http://54.235.76.180:8080"
-#define KServerURL @"http://192.168.0.109:8080"
+//#define KServerURL @"http://54.235.76.180:8080/Bartsy"
+#define KServerURL @"http://192.168.0.109:8080/Bartsy"
+#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
+
 
 
 #pragma mark--- Initialization Methods ---
@@ -103,7 +105,7 @@ static SharedController *sharedController;
 -(void)getMenuListWithVenueID:(NSString*)strVenueId delegate:(id)aDelegate;
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getMenu",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/venue/getMenu",KServerURL];
     
     NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
     SBJSON *jsonObj=[SBJSON new];
@@ -124,7 +126,7 @@ static SharedController *sharedController;
 -(void)getVenueListWithDelegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getVenueList",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/venue/getVenueList",KServerURL];
     
 //    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
 //    SBJSON *jsonObj=[SBJSON new];
@@ -153,7 +155,7 @@ static SharedController *sharedController;
     NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",nil];
     NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/user/saveUserProfile",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
    [request setHTTPMethod:@"POST"];
@@ -210,7 +212,7 @@ static SharedController *sharedController;
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/placeOrder",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/order/placeOrder",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
     [request setHTTPMethod:@"POST"];
@@ -238,7 +240,7 @@ static SharedController *sharedController;
 -(void)checkInAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/userCheckIn",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/user/userCheckIn",KServerURL];
     
     NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     SBJSON *jsonObj=[SBJSON new];

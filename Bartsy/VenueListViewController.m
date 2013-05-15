@@ -132,7 +132,7 @@
         intIndex=indexPath.row;
         isRequestForCheckIn=YES;
         self.sharedController=[SharedController sharedController];
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
         [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
     }
     else
@@ -236,7 +236,7 @@
         intIndex=sender.tag;
         isRequestForCheckIn=YES;
         self.sharedController=[SharedController sharedController];
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
         [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:sender.tag] objectForKey:@"venueId"] delegate:self];
     }
     else
