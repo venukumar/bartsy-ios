@@ -9,13 +9,15 @@
 #import "HomeViewController.h"
 #define IS_SANDBOX YES
 
-#define kPayPalClientId @"YOUR CLIENT ID HERE"
-#define kPayPalReceiverEmail @"YOUR_PAYPAL_EMAIL@yourdomain.com"
+#define kPayPalClientId @"Afu5nBAdQ9iV5do2JAGDXRNO0VltOc0BdbQNqmAtYXrugNrw4kkEpgOs8d1J"
+#define kPayPalReceiverEmail @"sridhar@us2guntur.com"
 
 @interface HomeViewController ()
 {
     NSMutableArray *arrMenu;
+    NSMutableArray *arrOrders;
     NSInteger btnValue;
+    BOOL isSelectedForDrinks;
 }
 
 @end
@@ -44,7 +46,7 @@
     self.title=[dictVenue objectForKey:@"venueName"];
     
     self.acceptCreditCards = YES;
-    self.environment = PayPalEnvironmentNoNetwork;
+    self.environment = PayPalEnvironmentSandbox;
     // Do any additional setup after loading the view, typically from a nib.
         
     NSLog(@"PayPal iOS SDK version: %@", [PayPalPaymentViewController libraryVersion]);
@@ -53,6 +55,14 @@
     [PayPalPaymentViewController prepareForPaymentUsingClientId:kPayPalClientId];
     
     arrMenu=[[NSMutableArray alloc]init];
+    arrOrders=[[NSMutableArray alloc]init];
+    
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",@"PEOPLE",@"ORDERS", nil]];
+    segmentControl.frame=CGRectMake(0, 1, 320, 40);
+    segmentControl.segmentedControlStyle=UISegmentedControlStyleBar;
+    segmentControl.selectedSegmentIndex=0;
+    [segmentControl addTarget:self action:@selector(segmentControl_ValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:segmentControl];
     
     self.sharedController=[SharedController sharedController];
     
@@ -66,7 +76,8 @@
         [self modifyData];
     }
     
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416)];
+    isSelectedForDrinks=YES;
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 416)];
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
@@ -77,6 +88,27 @@
 //    ZooZ * zooz = [ZooZ sharedInstance];
 //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
     
+}
+
+-(void)segmentControl_ValueChanged:(UISegmentedControl*)segmentControl
+{
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+    if(segmentControl.selectedSegmentIndex==0)
+    {
+        isSelectedForDrinks=YES;
+        tblView.hidden=NO;
+        [tblView reloadData];
+    }
+    else if(segmentControl.selectedSegmentIndex==1)
+    {
+        tblView.hidden=YES;
+    }
+    else
+    {
+        tblView.hidden=NO;
+        isSelectedForDrinks=NO;
+        [tblView reloadData];
+    }
 }
 
 -(void)btnOrder_TouchUpInside
@@ -373,81 +405,100 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
+    if(isSelectedForDrinks)
     return [arrMenu count];
+    else
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if(section==0&&[[arrMenu objectAtIndex:section] isKindOfClass:[NSArray class]])
-    {
-        return 0;
-    }
+    if(isSelectedForDrinks)
     return 44;
+    else
+        return 0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    id object=[arrMenu objectAtIndex:section];
-
-    UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
-    [headerView addSubview:headerBg];
-    
-    UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame=CGRectMake(0, 7, 600, 44);
-    button.tag=section +1;
-    [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-    if([[object objectForKey:@"Arrow"] integerValue]==0)
+    if(isSelectedForDrinks)
     {
-        [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];
+        id object=[arrMenu objectAtIndex:section];
+        
+        UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
+        [headerView addSubview:headerBg];
+        
+        UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame=CGRectMake(0, 7, 600, 44);
+        button.tag=section +1;
+        [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        if([[object objectForKey:@"Arrow"] integerValue]==0)
+        {
+            [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [button setImage:[UIImage imageNamed:@"shrink.png"] forState:UIControlStateNormal];
+        }
+        [headerView addSubview:button];
+        
+        UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 7, 300, 30)];
+        [headerTitle setBackgroundColor:[UIColor clearColor]];
+        [headerTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:16]];
+        [headerTitle setTextColor:[UIColor blackColor]];
+        if(section==0&&[[object objectForKey:@"subsection_name"] length]==0)
+        {
+            headerTitle.text= [object objectForKey:@"section_name"];
+        }
+        else
+            headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
+        
+        [headerView addSubview:headerTitle];
+        
+        return headerView;
     }
     else
     {
-        [button setImage:[UIImage imageNamed:@"shrink.png"] forState:UIControlStateNormal];
+        return nil;
     }
-    [headerView addSubview:button];
-    
-    UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 7, 300, 30)];
-    [headerTitle setBackgroundColor:[UIColor clearColor]];
-    [headerTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:16]];
-    [headerTitle setTextColor:[UIColor blackColor]];
-    if(section==0&&[[object objectForKey:@"subsection_name"] length]==0)
-    {
-        headerTitle.text= [object objectForKey:@"section_name"];
-    }
-    else
-        headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
-    
-    [headerView addSubview:headerTitle];
-    
-    return headerView;
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    id object=[arrMenu objectAtIndex:section];
-    if(section==0&&[object isKindOfClass:[NSArray class]])
+    if(isSelectedForDrinks)
     {
-        return [object count];
-    }
-    else
-    {
-        if([[object objectForKey:@"Arrow"] integerValue]==0)
+        id object=[arrMenu objectAtIndex:section];
+        if(section==0&&[object isKindOfClass:[NSArray class]])
         {
-            return 0;
+            return [object count];
         }
         else
         {
-            return [[object objectForKey:@"contents"] count]; 
+            if([[object objectForKey:@"Arrow"] integerValue]==0)
+            {
+                return 0;
+            }
+            else
+            {
+                return [[object objectForKey:@"contents"] count];
+            }
         }
+    }
+    else
+    {
+        //return [arrOrders count];
+        return 1;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(isSelectedForDrinks)
     return 80;
+    else
+        return 220;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -455,70 +506,75 @@
     // Configure the cell...
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-    imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
-    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-    [[imgViewDrink layer] setShadowRadius:3.0];
-    [[imgViewDrink layer] setShadowOpacity:0.8];
-    [cell.contentView addSubview:imgViewDrink];
-    [imgViewDrink release];
-    
-    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 220, 20)];
-    id object=[arrMenu objectAtIndex:indexPath.section];
-    if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+    if(isSelectedForDrinks)
     {
-        NSDictionary *dict=[object objectAtIndex:indexPath.row];
-        lblName.text=[dict objectForKey:@"name"];
+        UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+        imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
+        [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
+        [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
+        [[imgViewDrink layer] setShadowRadius:3.0];
+        [[imgViewDrink layer] setShadowOpacity:0.8];
+        [cell.contentView addSubview:imgViewDrink];
+        [imgViewDrink release];
+        
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 220, 20)];
+        id object=[arrMenu objectAtIndex:indexPath.section];
+        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        {
+            NSDictionary *dict=[object objectAtIndex:indexPath.row];
+            lblName.text=[dict objectForKey:@"name"];
+        }
+        else
+        {
+            NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+            NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
+            lblName.text=[dict objectForKey:@"name"];
+        }
+        
+        lblName.font=[UIFont systemFontOfSize:14];
+        [cell.contentView addSubview:lblName];
+        [lblName release];
+        
+        
+        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 180, 50)];
+        lblDescription.numberOfLines=2;
+        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        {
+            NSDictionary *dict=[object objectAtIndex:indexPath.row];
+            lblDescription.text=[dict objectForKey:@"description"];
+        }
+        else
+        {
+            NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+            NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
+            lblDescription.text=[dict objectForKey:@"description"];
+        }
+        
+        lblDescription.font=[UIFont systemFontOfSize:12];
+        [cell.contentView addSubview:lblDescription];
+        [lblDescription release];
+        
+        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 80)];
+        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        {
+            NSDictionary *dict=[object objectAtIndex:indexPath.row];
+            lblPrice.text=[dict objectForKey:@"price"];
+        }
+        else
+        {
+            NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+            NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
+            lblPrice.text=[dict objectForKey:@"price"];
+        }
+        
+        lblPrice.font=[UIFont boldSystemFontOfSize:14];
+        [cell.contentView addSubview:lblPrice];
+        [lblPrice release];
     }
     else
     {
-        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
-        NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
-        lblName.text=[dict objectForKey:@"name"];
+        cell.textLabel.text=@"No Orders";
     }
-    
-    lblName.font=[UIFont systemFontOfSize:14];
-    [cell.contentView addSubview:lblName];
-    [lblName release];
-    
-    
-    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 180, 50)];
-    lblDescription.numberOfLines=2;
-    if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
-    {
-        NSDictionary *dict=[object objectAtIndex:indexPath.row];
-        lblDescription.text=[dict objectForKey:@"description"];
-    }
-    else
-    {
-        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
-        NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
-        lblDescription.text=[dict objectForKey:@"description"];
-    }
-    
-    lblDescription.font=[UIFont systemFontOfSize:12];
-    [cell.contentView addSubview:lblDescription];
-    [lblDescription release];
-    
-    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 80)];
-    if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
-    {
-        NSDictionary *dict=[object objectAtIndex:indexPath.row];
-        lblPrice.text=[dict objectForKey:@"price"];
-    }
-    else
-    {
-        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
-        NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
-        lblPrice.text=[dict objectForKey:@"price"];
-    }
-    
-    lblPrice.font=[UIFont boldSystemFontOfSize:14];
-    [cell.contentView addSubview:lblPrice];
-    [lblPrice release];
-    
-    
     return cell;
 }
 
@@ -541,236 +597,238 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    id object=[arrMenu objectAtIndex:indexPath.section];
-    NSDictionary *dict;
-    if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+    if(isSelectedForDrinks)
     {
-        dict=[object objectAtIndex:indexPath.row];
+        id object=[arrMenu objectAtIndex:indexPath.section];
+        NSDictionary *dict;
+        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        {
+            dict=[object objectAtIndex:indexPath.row];
+        }
+        else
+        {
+            NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+            dict=[arrContents objectAtIndex:indexPath.row];
+        }
+        
+        dictSelectedToMakeOrder=[[NSDictionary alloc]initWithDictionary:dict];
+        
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        UIView *viewA=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        viewA.backgroundColor=[UIColor clearColor];
+        viewA.tag=222;
+        [self.view addSubview:viewA];
+        
+        UIView *viewB=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        viewB.backgroundColor=[UIColor blackColor];
+        viewB.layer.opacity=0.6;
+        viewB.tag=333;
+        [viewA addSubview:viewB];
+        
+        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 268)];
+        viewC.layer.cornerRadius = 2;
+        viewC.layer.borderWidth = 2;
+        viewC.backgroundColor = [UIColor redColor];
+        viewC.layer.borderColor = [UIColor redColor].CGColor;
+        viewC.layer.backgroundColor=[UIColor whiteColor].CGColor;
+        viewC.tag=444;
+        [viewB addSubview:viewC];
+        
+        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 10, 268, 45)];
+        viewHeader.backgroundColor = [UIColor blackColor];
+        viewHeader.layer.cornerRadius = 6;
+        viewHeader.tag = 555;
+        [viewC addSubview:viewHeader];
+        [viewHeader release];
+        
+        UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(7, 7, 250, 30)];
+        lblTitle.font = [UIFont boldSystemFontOfSize:15];
+        lblTitle.text = [dict objectForKey:@"name"];
+        lblTitle.tag = 666;
+        lblTitle.backgroundColor = [UIColor clearColor];
+        lblTitle.textColor = [UIColor whiteColor] ;
+        lblTitle.textAlignment = NSTextAlignmentCenter;
+        [viewHeader addSubview:lblTitle];
+        [lblTitle release];
+        
+        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 63, 200, 100)];
+        viewDetail.backgroundColor = [UIColor whiteColor];
+        viewDetail.layer.borderWidth = 1;
+        viewDetail.layer.borderColor = [UIColor grayColor].CGColor;
+        viewDetail.layer.cornerRadius = 6;
+        viewDetail.tag = 777;
+        [viewC addSubview:viewDetail];
+        [viewDetail release];
+        
+        //    UIImageView *imgViewDrink = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 60, 80)];
+        //    imgViewDrink.image = [UIImage imageNamed:@"drinks.png"];
+        //    imgViewDrink.layer.borderWidth = 1;
+        //    imgViewDrink.layer.cornerRadius = 2;
+        //    imgViewDrink.layer.borderColor = [UIColor grayColor].CGColor;
+        //    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
+        //    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
+        //    [[imgViewDrink layer] setShadowRadius:3.0];
+        //    [[imgViewDrink layer] setShadowOpacity:0.8];
+        //    [viewDetail addSubview:imgViewDrink];
+        //    [imgViewDrink release];
+        
+        UITextView *txtViewNotes = [[UITextView alloc] initWithFrame:CGRectMake(5, 10, 185, 50)];
+        txtViewNotes.delegate = self;
+        txtViewNotes.tag = 1000;
+        txtViewNotes.backgroundColor = [UIColor clearColor];
+        txtViewNotes.editable = NO;
+        txtViewNotes.text = [dict objectForKey:@"description"];
+        txtViewNotes.textColor = [UIColor blackColor];
+        txtViewNotes.font = [UIFont boldSystemFontOfSize:10];
+        [viewDetail addSubview:txtViewNotes];
+        [txtViewNotes release];
+        
+        UIButton *btnCustomise = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnCustomise.frame = CGRectMake(50,65,105,25);
+        btnCustomise.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        [btnCustomise setTitle:@"Customise" forState:UIControlStateNormal];
+        btnCustomise.titleLabel.textColor = [UIColor whiteColor];
+        btnCustomise.backgroundColor=[UIColor blackColor];
+        [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [viewDetail addSubview:btnCustomise];
+        
+        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 63, 63, 100)];
+        viewPrice.backgroundColor = [UIColor whiteColor];
+        viewPrice.layer.borderWidth = 1;
+        viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
+        viewPrice.layer.cornerRadius = 6;
+        viewPrice.tag = 888;
+        [viewC addSubview:viewPrice];
+        [viewPrice release];
+        
+        UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, 63, 30)];
+        lblPrice.font = [UIFont boldSystemFontOfSize:20];
+        lblPrice.text = [dict objectForKey:@"price"];
+        lblPrice.backgroundColor = [UIColor clearColor];
+        lblPrice.textColor = [UIColor brownColor] ;
+        lblPrice.textAlignment = NSTextAlignmentCenter;
+        [viewPrice addSubview:lblPrice];
+        [lblPrice release];
+        
+        //    UILabel *lblPriceOff = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, 63, 30)];
+        //    lblPriceOff.font = [UIFont boldSystemFontOfSize:12];
+        //    lblPriceOff.text = @"($2 off)";
+        //    lblPriceOff.backgroundColor = [UIColor clearColor];
+        //    lblPriceOff.textColor = [UIColor blackColor] ;
+        //    lblPriceOff.textAlignment = NSTextAlignmentCenter;
+        //    [viewPrice addSubview:lblPriceOff];
+        //    [lblPriceOff release];
+        
+        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 171, 268, 45)];
+        viewTip.backgroundColor = [UIColor whiteColor];
+        viewTip.layer.borderWidth = 1;
+        viewTip.layer.borderColor = [UIColor grayColor].CGColor;
+        viewTip.layer.cornerRadius = 6;
+        viewTip.tag = 999;
+        [viewC addSubview:viewTip];
+        [viewTip release];
+        
+        UILabel *lblTip = [[UILabel alloc]initWithFrame:CGRectMake(8, 7, 30, 30)];
+        lblTip.font = [UIFont boldSystemFontOfSize:12];
+        lblTip.text = @"Tip:";
+        lblTip.backgroundColor = [UIColor clearColor];
+        lblTip.textColor = [UIColor blackColor] ;
+        lblTip.textAlignment = NSTextAlignmentCenter;
+        [viewTip addSubview:lblTip];
+        [lblTip release];
+        
+        
+        UIButton *btn10 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn10.frame = CGRectMake(37,10,23,23);
+        btn10.tag = 10;
+        [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+        [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        [viewTip addSubview:btn10];
+        
+        btnValue=btn10.tag;
+        
+        UILabel *lbl10 = [[UILabel alloc]initWithFrame:CGRectMake(60, 7, 30, 30)];
+        lbl10.font = [UIFont boldSystemFontOfSize:12];
+        lbl10.text = @"10%";
+        lbl10.backgroundColor = [UIColor clearColor];
+        lbl10.textColor = [UIColor blackColor] ;
+        lbl10.textAlignment = NSTextAlignmentCenter;
+        [viewTip addSubview:lbl10];
+        [lbl10 release];
+        
+        UIButton *btn20 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn20.frame = CGRectMake(90,10,23,23);
+        btn20.tag = 15;
+        [btn20 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        [btn20 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        [viewTip addSubview:btn20];
+        
+        UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(113, 7, 30, 30)];
+        lbl15.font = [UIFont boldSystemFontOfSize:12];
+        lbl15.text = @"15%";
+        lbl15.backgroundColor = [UIColor clearColor];
+        lbl15.textColor = [UIColor blackColor] ;
+        lbl15.textAlignment = NSTextAlignmentCenter;
+        [viewTip addSubview:lbl15];
+        [lbl15 release];
+        
+        UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn30.frame = CGRectMake(143,10,23,23);
+        [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        btn30.tag = 20;
+        [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        [viewTip addSubview:btn30];
+        
+        UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(170, 7, 30, 30)];
+        lbl20.font = [UIFont boldSystemFontOfSize:12];
+        lbl20.text = @"20%";
+        lbl20.backgroundColor = [UIColor clearColor];
+        lbl20.textColor = [UIColor blackColor] ;
+        lbl20.textAlignment = NSTextAlignmentCenter;
+        [viewTip addSubview:lbl20];
+        [lbl20 release];
+        
+        UIButton *btn40 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn40.frame = CGRectMake(200,10,23,23);
+        [btn40 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        btn40.tag = 40;
+        [btn40 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        [viewTip addSubview:btn40];
+        
+        UITextField *txtFieldTip = [[UITextField alloc] initWithFrame:CGRectMake(223,7, 40, 30)];
+        [txtFieldTip setBackground:[UIImage imageNamed:@"txt-box1.png"]];
+        txtFieldTip.delegate = self;
+        txtFieldTip.tag = 500;
+        txtFieldTip.font = [UIFont boldSystemFontOfSize:12];
+        txtFieldTip.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        txtFieldTip.textAlignment = NSTextAlignmentCenter;
+        txtFieldTip.autocorrectionType = UITextAutocorrectionTypeNo;
+        [viewTip addSubview:txtFieldTip];
+        [txtFieldTip release];
+        
+        UIButton *btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnCancel.frame = CGRectMake(148,227,120,30);
+        btnCancel.titleLabel.textColor = [UIColor whiteColor];
+        [btnCancel setTitle:@"Cancel" forState:UIControlStateNormal];
+        btnCancel.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        btnCancel.backgroundColor=[UIColor blackColor];
+        [btnCancel addTarget:self action:@selector(btnCancel_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [viewC addSubview:btnCancel];
+        
+        UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnOrder.frame = CGRectMake(20,227,115,30);
+        [btnOrder setTitle:@"Order" forState:UIControlStateNormal];
+        btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        btnOrder.titleLabel.textColor = [UIColor whiteColor];
+        btnOrder.backgroundColor=[UIColor blackColor];
+        [btnOrder addTarget:self action:@selector(orderTheDrink) forControlEvents:UIControlEventTouchUpInside];
+        [viewC addSubview:btnOrder];
+        
+        [viewA release];
+        [viewB release];
+        [viewC release];
     }
-    else
-    {
-        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
-        dict=[arrContents objectAtIndex:indexPath.row];
-    }
-    
-    dictSelectedToMakeOrder=[[NSDictionary alloc]initWithDictionary:dict];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    UIView *viewA=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
-    viewA.backgroundColor=[UIColor clearColor];
-    viewA.tag=222;
-    [self.view addSubview:viewA];
-    
-    UIView *viewB=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
-    viewB.backgroundColor=[UIColor blackColor];
-    viewB.layer.opacity=0.6;
-    viewB.tag=333;
-    [viewA addSubview:viewB];
-    
-    UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 268)];
-    viewC.layer.cornerRadius = 2;
-    viewC.layer.borderWidth = 2;
-    viewC.backgroundColor = [UIColor redColor];
-    viewC.layer.borderColor = [UIColor redColor].CGColor;
-    viewC.layer.backgroundColor=[UIColor whiteColor].CGColor;
-    viewC.tag=444;
-    [viewB addSubview:viewC];
-    
-    UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 10, 268, 45)];
-    viewHeader.backgroundColor = [UIColor blackColor];
-    viewHeader.layer.cornerRadius = 6;
-    viewHeader.tag = 555;
-    [viewC addSubview:viewHeader];
-    [viewHeader release];
-    
-    UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(7, 7, 250, 30)];
-    lblTitle.font = [UIFont boldSystemFontOfSize:15];
-    lblTitle.text = [dict objectForKey:@"name"];
-    lblTitle.tag = 666;
-    lblTitle.backgroundColor = [UIColor clearColor];
-    lblTitle.textColor = [UIColor whiteColor] ;
-    lblTitle.textAlignment = NSTextAlignmentCenter;
-    [viewHeader addSubview:lblTitle];
-    [lblTitle release];
-    
-    UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 63, 200, 100)];
-    viewDetail.backgroundColor = [UIColor whiteColor];
-    viewDetail.layer.borderWidth = 1;
-    viewDetail.layer.borderColor = [UIColor grayColor].CGColor;
-    viewDetail.layer.cornerRadius = 6;
-    viewDetail.tag = 777;
-    [viewC addSubview:viewDetail];
-    [viewDetail release];
-    
-    //    UIImageView *imgViewDrink = [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 60, 80)];
-    //    imgViewDrink.image = [UIImage imageNamed:@"drinks.png"];
-    //    imgViewDrink.layer.borderWidth = 1;
-    //    imgViewDrink.layer.cornerRadius = 2;
-    //    imgViewDrink.layer.borderColor = [UIColor grayColor].CGColor;
-    //    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-    //    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-    //    [[imgViewDrink layer] setShadowRadius:3.0];
-    //    [[imgViewDrink layer] setShadowOpacity:0.8];
-    //    [viewDetail addSubview:imgViewDrink];
-    //    [imgViewDrink release];
-    
-    UITextView *txtViewNotes = [[UITextView alloc] initWithFrame:CGRectMake(5, 10, 185, 50)];
-	txtViewNotes.delegate = self;
-    txtViewNotes.tag = 1000;
-    txtViewNotes.backgroundColor = [UIColor clearColor];
-    txtViewNotes.editable = NO;
-    txtViewNotes.text = [dict objectForKey:@"description"];
-    txtViewNotes.textColor = [UIColor blackColor];
-	txtViewNotes.font = [UIFont boldSystemFontOfSize:10];
-	[viewDetail addSubview:txtViewNotes];
-    [txtViewNotes release];
-    
-    UIButton *btnCustomise = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnCustomise.frame = CGRectMake(50,65,105,25);
-    btnCustomise.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [btnCustomise setTitle:@"Customise" forState:UIControlStateNormal];
-    btnCustomise.titleLabel.textColor = [UIColor whiteColor];
-    btnCustomise.backgroundColor=[UIColor blackColor];
-    [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    [viewDetail addSubview:btnCustomise];
-    
-    UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 63, 63, 100)];
-    viewPrice.backgroundColor = [UIColor whiteColor];
-    viewPrice.layer.borderWidth = 1;
-    viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
-    viewPrice.layer.cornerRadius = 6;
-    viewPrice.tag = 888;
-    [viewC addSubview:viewPrice];
-    [viewPrice release];
-    
-    UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, 63, 30)];
-    lblPrice.font = [UIFont boldSystemFontOfSize:20];
-    lblPrice.text = [dict objectForKey:@"price"];
-    lblPrice.backgroundColor = [UIColor clearColor];
-    lblPrice.textColor = [UIColor brownColor] ;
-    lblPrice.textAlignment = NSTextAlignmentCenter;
-    [viewPrice addSubview:lblPrice];
-    [lblPrice release];
-    
-    //    UILabel *lblPriceOff = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, 63, 30)];
-    //    lblPriceOff.font = [UIFont boldSystemFontOfSize:12];
-    //    lblPriceOff.text = @"($2 off)";
-    //    lblPriceOff.backgroundColor = [UIColor clearColor];
-    //    lblPriceOff.textColor = [UIColor blackColor] ;
-    //    lblPriceOff.textAlignment = NSTextAlignmentCenter;
-    //    [viewPrice addSubview:lblPriceOff];
-    //    [lblPriceOff release];
-    
-    UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 171, 268, 45)];
-    viewTip.backgroundColor = [UIColor whiteColor];
-    viewTip.layer.borderWidth = 1;
-    viewTip.layer.borderColor = [UIColor grayColor].CGColor;
-    viewTip.layer.cornerRadius = 6;
-    viewTip.tag = 999;
-    [viewC addSubview:viewTip];
-    [viewTip release];
-    
-    UILabel *lblTip = [[UILabel alloc]initWithFrame:CGRectMake(8, 7, 30, 30)];
-    lblTip.font = [UIFont boldSystemFontOfSize:12];
-    lblTip.text = @"Tip:";
-    lblTip.backgroundColor = [UIColor clearColor];
-    lblTip.textColor = [UIColor blackColor] ;
-    lblTip.textAlignment = NSTextAlignmentCenter;
-    [viewTip addSubview:lblTip];
-    [lblTip release];
-    
-    
-    UIButton *btn10 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn10.frame = CGRectMake(37,10,23,23);
-    btn10.tag = 10;
-    [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
-    [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-    [viewTip addSubview:btn10];
-    
-    btnValue=btn10.tag;
-    
-    UILabel *lbl10 = [[UILabel alloc]initWithFrame:CGRectMake(60, 7, 30, 30)];
-    lbl10.font = [UIFont boldSystemFontOfSize:12];
-    lbl10.text = @"10%";
-    lbl10.backgroundColor = [UIColor clearColor];
-    lbl10.textColor = [UIColor blackColor] ;
-    lbl10.textAlignment = NSTextAlignmentCenter;
-    [viewTip addSubview:lbl10];
-    [lbl10 release];
-    
-    UIButton *btn20 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn20.frame = CGRectMake(90,10,23,23);
-    btn20.tag = 15;
-    [btn20 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
-    [btn20 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-    [viewTip addSubview:btn20];
-    
-    UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(113, 7, 30, 30)];
-    lbl15.font = [UIFont boldSystemFontOfSize:12];
-    lbl15.text = @"15%";
-    lbl15.backgroundColor = [UIColor clearColor];
-    lbl15.textColor = [UIColor blackColor] ;
-    lbl15.textAlignment = NSTextAlignmentCenter;
-    [viewTip addSubview:lbl15];
-    [lbl15 release];
-    
-    UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn30.frame = CGRectMake(143,10,23,23);
-    [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
-    btn30.tag = 20;
-    [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-    [viewTip addSubview:btn30];
-    
-    UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(170, 7, 30, 30)];
-    lbl20.font = [UIFont boldSystemFontOfSize:12];
-    lbl20.text = @"20%";
-    lbl20.backgroundColor = [UIColor clearColor];
-    lbl20.textColor = [UIColor blackColor] ;
-    lbl20.textAlignment = NSTextAlignmentCenter;
-    [viewTip addSubview:lbl20];
-    [lbl20 release];
-    
-    UIButton *btn40 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn40.frame = CGRectMake(200,10,23,23);
-    [btn40 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
-    btn40.tag = 40;
-    [btn40 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-    [viewTip addSubview:btn40];
-    
-    UITextField *txtFieldTip = [[UITextField alloc] initWithFrame:CGRectMake(223,7, 40, 30)];
-    [txtFieldTip setBackground:[UIImage imageNamed:@"txt-box1.png"]];
-    txtFieldTip.delegate = self;
-    txtFieldTip.tag = 500;
-    txtFieldTip.font = [UIFont boldSystemFontOfSize:12];
-    txtFieldTip.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    txtFieldTip.textAlignment = NSTextAlignmentCenter;
-    txtFieldTip.autocorrectionType = UITextAutocorrectionTypeNo;
-    [viewTip addSubview:txtFieldTip];
-    [txtFieldTip release];
-    
-    UIButton *btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnCancel.frame = CGRectMake(148,227,120,30);
-    btnCancel.titleLabel.textColor = [UIColor whiteColor];
-    [btnCancel setTitle:@"Cancel" forState:UIControlStateNormal];
-    btnCancel.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    btnCancel.backgroundColor=[UIColor blackColor];
-    [btnCancel addTarget:self action:@selector(btnCancel_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    [viewC addSubview:btnCancel];
-    
-    UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnOrder.frame = CGRectMake(20,227,115,30);
-    [btnOrder setTitle:@"Order" forState:UIControlStateNormal];
-    btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    btnOrder.titleLabel.textColor = [UIColor whiteColor];
-    btnOrder.backgroundColor=[UIColor blackColor];
-    [btnOrder addTarget:self action:@selector(orderTheDrink) forControlEvents:UIControlEventTouchUpInside];
-    [viewC addSubview:btnOrder];
-    
-    [viewA release];
-    [viewB release];
-    [viewC release];
-    
     // Navigation logic may go here. Create and push another view controller.
 }
 -(void)btnCustomise_TouchUpInside

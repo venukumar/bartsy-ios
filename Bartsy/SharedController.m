@@ -13,9 +13,9 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-//#define KServerURL @"http://54.235.76.180:8080/Bartsy"
-#define KServerURL @"http://192.168.0.109:8080/Bartsy"
-#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
+#define KServerURL @"http://54.235.76.180:8080/Bartsy"
+//#define KServerURL @"http://192.168.0.109:8080/Bartsy"
+//#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
 
@@ -257,6 +257,29 @@ static SharedController *sharedController;
     [url release];
     [request release];
 }
+
+-(void)checkOutAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/user/userCheckOut",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
+
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
+		E005DE371743D71C00EDDCFB /* welcomebartsy.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE361743D71000EDDCFB /* welcomebartsy.png */; };
+		E005DE391743FCC900EDDCFB /* box.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE381743FCBB00EDDCFB /* box.png */; };
+		E005DE3D174400B500EDDCFB /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE3C1744001600EDDCFB /* close.png */; };
+		E005DE3F174403AF00EDDCFB /* account.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE3E174403A100EDDCFB /* account.png */; };
+		E005DE41174403D500EDDCFB /* creditcard.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE40174403C500EDDCFB /* creditcard.png */; };
+		E005DE43174406FA00EDDCFB /* smile.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE421744068C00EDDCFB /* smile.png */; };
+		E005DE45174409D100EDDCFB /* bigbox.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE44174409C100EDDCFB /* bigbox.png */; };
+		E005DE4917440B9000EDDCFB /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE4617440B5500EDDCFB /* profile.png */; };
+		E005DE4A17440B9000EDDCFB /* myrewards.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE4717440B6300EDDCFB /* myrewards.png */; };
+		E005DE4B17440B9000EDDCFB /* nearby.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE4817440B7700EDDCFB /* nearby.png */; };
+		E005DE4D17440BAC00EDDCFB /* mynotifications.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE4C17440BA000EDDCFB /* mynotifications.png */; };
 		E00E4B6F1742761100749466 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E00E4B6E1742761100749466 /* MapKit.framework */; };
 		E00E4B721742765400749466 /* MyAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E00E4B711742765400749466 /* MyAnnotation.m */; };
 		E038AF5A1733BA7E00098779 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E038AF591733BA7D00098779 /* libz.dylib */; };
@@ -149,6 +161,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E005DE331743D2B200EDDCFB /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
+		E005DE341743D2B300EDDCFB /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
+		E005DE361743D71000EDDCFB /* welcomebartsy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcomebartsy.png; sourceTree = "<group>"; };
+		E005DE381743FCBB00EDDCFB /* box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box.png; sourceTree = "<group>"; };
+		E005DE3C1744001600EDDCFB /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		E005DE3E174403A100EDDCFB /* account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account.png; sourceTree = "<group>"; };
+		E005DE40174403C500EDDCFB /* creditcard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = creditcard.png; sourceTree = "<group>"; };
+		E005DE421744068C00EDDCFB /* smile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smile.png; sourceTree = "<group>"; };
+		E005DE44174409C100EDDCFB /* bigbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bigbox.png; sourceTree = "<group>"; };
+		E005DE4617440B5500EDDCFB /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile.png; sourceTree = "<group>"; };
+		E005DE4717440B6300EDDCFB /* myrewards.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myrewards.png; sourceTree = "<group>"; };
+		E005DE4817440B7700EDDCFB /* nearby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nearby.png; sourceTree = "<group>"; };
+		E005DE4C17440BA000EDDCFB /* mynotifications.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mynotifications.png; sourceTree = "<group>"; };
 		E00E4B6E1742761100749466 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E00E4B701742765400749466 /* MyAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAnnotation.h; sourceTree = "<group>"; };
 		E00E4B711742765400749466 /* MyAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAnnotation.m; sourceTree = "<group>"; };
@@ -505,6 +530,8 @@
 				E04106A8172A8DC0009F1B1E /* LoginViewController.m */,
 				E0FD86CF17300376006CB0A8 /* ProfileViewController.h */,
 				E0FD86D01730037B006CB0A8 /* ProfileViewController.m */,
+				E005DE331743D2B200EDDCFB /* WelcomeViewController.h */,
+				E005DE341743D2B300EDDCFB /* WelcomeViewController.m */,
 				E0D56E7517424B6A00257870 /* VenueListViewController.h */,
 				E0D56E7617424B6A00257870 /* VenueListViewController.m */,
 				E092F98E173054E800E1CC15 /* HomeViewController.h */,
@@ -538,6 +565,17 @@
 		E0FD86BA172FD9C6006CB0A8 /* 1 */ = {
 			isa = PBXGroup;
 			children = (
+				E005DE4C17440BA000EDDCFB /* mynotifications.png */,
+				E005DE4617440B5500EDDCFB /* profile.png */,
+				E005DE4717440B6300EDDCFB /* myrewards.png */,
+				E005DE4817440B7700EDDCFB /* nearby.png */,
+				E005DE44174409C100EDDCFB /* bigbox.png */,
+				E005DE421744068C00EDDCFB /* smile.png */,
+				E005DE40174403C500EDDCFB /* creditcard.png */,
+				E005DE3E174403A100EDDCFB /* account.png */,
+				E005DE3C1744001600EDDCFB /* close.png */,
+				E005DE381743FCBB00EDDCFB /* box.png */,
+				E005DE361743D71000EDDCFB /* welcomebartsy.png */,
 				E0A008D51738EB3B0027F7E6 /* radio_button_selected1.png */,
 				E0A008D61738EB3B0027F7E6 /* radio_button1.png */,
 				E038AF6D1733BE4300098779 /* ic_launcher.png */,
@@ -792,6 +830,17 @@
 				E038AF6E1733BE4500098779 /* ic_launcher.png in Resources */,
 				E0A008D71738EB3B0027F7E6 /* radio_button_selected1.png in Resources */,
 				E0A008D81738EB3B0027F7E6 /* radio_button1.png in Resources */,
+				E005DE371743D71C00EDDCFB /* welcomebartsy.png in Resources */,
+				E005DE391743FCC900EDDCFB /* box.png in Resources */,
+				E005DE3D174400B500EDDCFB /* close.png in Resources */,
+				E005DE3F174403AF00EDDCFB /* account.png in Resources */,
+				E005DE41174403D500EDDCFB /* creditcard.png in Resources */,
+				E005DE43174406FA00EDDCFB /* smile.png in Resources */,
+				E005DE45174409D100EDDCFB /* bigbox.png in Resources */,
+				E005DE4917440B9000EDDCFB /* profile.png in Resources */,
+				E005DE4A17440B9000EDDCFB /* myrewards.png in Resources */,
+				E005DE4B17440B9000EDDCFB /* nearby.png in Resources */,
+				E005DE4D17440BAC00EDDCFB /* mynotifications.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -828,6 +877,7 @@
 				E06256641732F076005C7027 /* Profile.m in Sources */,
 				E0D56E7717424B6A00257870 /* VenueListViewController.m in Sources */,
 				E00E4B721742765400749466 /* MyAnnotation.m in Sources */,
+				E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,6 +10,7 @@
 #import "LoginViewController.h"
 #import "HomeViewController.h"
 #import "VenueListViewController.h"
+#import "WelcomeViewController.h"
 #define kEnabled                @"enabled"
 #define kSimulator              @"Simulator"
 
@@ -38,7 +39,7 @@
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
-        VenueListViewController *homeObj = [[VenueListViewController alloc] init];
+        WelcomeViewController *homeObj = [[WelcomeViewController alloc] init];
         UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:homeObj];
         [self.window addSubview:nav.view];
     }

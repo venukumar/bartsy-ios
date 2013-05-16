@@ -48,6 +48,7 @@
     UILabel *lbl=[[[UILabel alloc]initWithFrame:frame] autorelease];
     lbl.text=strTitle;
     lbl.font=font;
+    lbl.tag=intTag;
     lbl.backgroundColor=[UIColor clearColor];
     lbl.textColor=color;
     lbl.numberOfLines=intNoOflines;

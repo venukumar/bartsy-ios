@@ -32,8 +32,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden=NO;
-    self.navigationItem.leftBarButtonItem=nil;
-    self.navigationItem.hidesBackButton=YES;
+//    self.navigationItem.leftBarButtonItem=nil;
+//    self.navigationItem.hidesBackButton=YES;
     
     self.title=@"Bartsy Service Stations";
     
@@ -49,7 +49,7 @@
     mapView.showsUserLocation=YES;
     mapView.tag=222;
     [self.view addSubview:mapView];
-    [mapView release];
+    //[mapView release];
     
     CLLocationManager *locationManager=[[CLLocationManager alloc]init];
     locationManager.delegate=self;
@@ -60,7 +60,7 @@
     tblView.delegate=self;
     tblView.tag=111;
     [self.view addSubview:tblView];
-    [tblView release];
+    //[tblView release];
     
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -90,13 +90,13 @@
     [[imgViewDrink layer] setShadowRadius:3.0];
     [[imgViewDrink layer] setShadowOpacity:0.8];
     [cell.contentView addSubview:imgViewDrink];
-    [imgViewDrink release];
+    //[imgViewDrink release];
     
     UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 150, 20)];
     lblName.text=[dict objectForKey:@"venueName"];
     lblName.font=[UIFont boldSystemFontOfSize:14];
     [cell.contentView addSubview:lblName];
-    [lblName release];
+    //[lblName release];
     
     
     UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 150, 50)];
@@ -104,20 +104,20 @@
     lblDescription.text=[dict objectForKey:@"address"];
     lblDescription.font=[UIFont systemFontOfSize:12];
     [cell.contentView addSubview:lblDescription];
-    [lblDescription release];
+    //[lblDescription release];
     
     NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
     UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 15, 60, 50) tag:0 font:[UIFont systemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblDistance.backgroundColor=[UIColor clearColor];
     lblDistance.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblDistance];
-    [lblDistance release];
+    //[lblDistance release];
     
     UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 40, 60, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
     lblMiles.backgroundColor=[UIColor clearColor];
     lblMiles.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblMiles];
-    [lblMiles release];
+   // [lblMiles release];
 
     
     return cell;
@@ -182,15 +182,15 @@
         ann.tagValue=i;
         [mapView addAnnotation:ann];
         
-        [currentLocation release];
-        [venueLocation release];
+//        [currentLocation release];
+//        [venueLocation release];
     }
     
     NSLog(@"Venue List %@",arrVenueList);
     
     NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"distance" ascending:YES selector:nil];
     [arrVenueList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    [sortDescriptor release];
+    //[sortDescriptor release];
     
     NSLog(@"Venue List %@",arrVenueList);
     if([arrVenueList count])
@@ -268,6 +268,7 @@
         {
             isRequestForCheckIn=NO;
             [[NSUserDefaults standardUserDefaults]setObject:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[arrVenueList objectAtIndex:intIndex] forKey:@"VenueDetails"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             HomeViewController *obj=[[HomeViewController alloc]init];
             obj.dictVenue=[arrVenueList objectAtIndex:intIndex];

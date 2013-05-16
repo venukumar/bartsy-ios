@@ -9,6 +9,7 @@
 #import "ProfileViewController.h"
 #import "UIImageView+WebCache.h"
 #import "HomeViewController.h"
+#import "WelcomeViewController.h"
 @interface ProfileViewController ()
 {
     NSDictionary *dictResult;
@@ -144,7 +145,7 @@
         [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyUserId"] forKey:@"bartsyId"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         
-        VenueListViewController *obj=[[VenueListViewController alloc]init];
+        WelcomeViewController *obj=[[WelcomeViewController alloc]init];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }

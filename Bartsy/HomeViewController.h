@@ -15,6 +15,7 @@
     NSDictionary *dictSelectedToMakeOrder;
     BOOL isRequestForOrder;
     NSDictionary *dictVenue;
+    
 }
 @property(nonatomic,retain)NSDictionary *dictVenue;
 @property(nonatomic, strong, readwrite) NSString *environment;
