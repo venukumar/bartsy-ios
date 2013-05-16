@@ -10,7 +10,7 @@
 #define IS_SANDBOX YES
 
 #define kPayPalClientId @"Afu5nBAdQ9iV5do2JAGDXRNO0VltOc0BdbQNqmAtYXrugNrw4kkEpgOs8d1J"
-#define kPayPalReceiverEmail @"sridhar@us2guntur.com"
+#define kPayPalReceiverEmail @"sridhar-fecilitator@us2guntur.com"
 
 @interface HomeViewController ()
 {
@@ -77,7 +77,7 @@
     }
     
     isSelectedForDrinks=YES;
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 416)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 373)];
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
@@ -105,6 +105,10 @@
     }
     else
     {
+        [arrOrders removeAllObjects];
+        [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        NSLog(@"Orders %@",arrOrders);
+        tblView.separatorColor = [UIColor clearColor];
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
         [tblView reloadData];
@@ -326,6 +330,12 @@
     }
     else
     {
+        NSMutableArray *arrOrderHistory=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        [arrOrderHistory addObject:dictSelectedToMakeOrder];
+        [[NSUserDefaults standardUserDefaults]setObject:arrOrderHistory forKey:@"Orders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [arrOrderHistory release];
+        
         UIView *viewA = (UIView*)[self.view viewWithTag:222];
         [viewA removeFromSuperview];
     }
@@ -408,7 +418,7 @@
     if(isSelectedForDrinks)
     return [arrMenu count];
     else
-    return 1;
+    return [arrOrders count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -488,7 +498,6 @@
     }
     else
     {
-        //return [arrOrders count];
         return 1;
     }
 }
@@ -498,7 +507,7 @@
     if(isSelectedForDrinks)
     return 80;
     else
-        return 220;
+        return 250;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -573,7 +582,95 @@
     }
     else
     {
-        cell.textLabel.text=@"No Orders";
+        NSDictionary *dict=[arrOrders objectAtIndex:indexPath.section];
+        cell.textLabel.text=[dict objectForKey:@"name"];
+        
+        UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, 240)];
+        viewBorder.backgroundColor = [UIColor clearColor];
+        viewBorder.layer.borderWidth = 1;
+        viewBorder.layer.cornerRadius = 6;
+        viewBorder.layer.borderColor = [UIColor grayColor].CGColor;
+        viewBorder.layer.backgroundColor=[UIColor whiteColor].CGColor;
+        viewBorder.tag = 101;
+        [cell.contentView addSubview:viewBorder];
+        [viewBorder release];
+        
+        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 43)];
+        viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
+        viewHeader.layer.cornerRadius = 6;
+        viewHeader.tag = 11;
+        [viewBorder addSubview:viewHeader];
+        [viewHeader release];
+        
+        UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
+        lblTitle.font = [UIFont boldSystemFontOfSize:15];
+        lblTitle.text = @"Waiting for bartender to accept(2)";
+        lblTitle.tag = 1234;
+        lblTitle.backgroundColor = [UIColor clearColor];
+        lblTitle.textColor = [UIColor whiteColor] ;
+        lblTitle.textAlignment = NSTextAlignmentCenter;
+        [viewHeader addSubview:lblTitle];
+        [lblTitle release];
+        
+        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 66, 290, 65)];
+        viewPrice.backgroundColor = [UIColor whiteColor];
+        viewPrice.layer.borderWidth = 1;
+        viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
+        viewPrice.layer.cornerRadius = 6;
+        viewPrice.tag = 12;
+        [viewBorder addSubview:viewPrice];
+        [viewPrice release];
+        
+        UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
+        lblTime.font = [UIFont systemFontOfSize:14];
+        lblTime.text = @"Placed at:4:27:01 PM on May15,2013";
+        lblTime.tag = 1234234567;
+        lblTime.backgroundColor = [UIColor clearColor];
+        lblTime.textColor = [UIColor blackColor] ;
+        lblTime.textAlignment = NSTextAlignmentLeft;
+        [viewPrice addSubview:lblTime];
+        [lblTime release];
+        
+        UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(7, 33, 280, 30)];
+        lblPrice.font = [UIFont systemFontOfSize:14];
+        lblPrice.text = [NSString stringWithFormat:@"Price: $%@",[dict objectForKey:@"price"]];
+        lblPrice.tag = 12347890;
+        lblPrice.backgroundColor = [UIColor clearColor];
+        lblTime.textColor = [UIColor blackColor] ;
+        lblPrice.textAlignment = NSTextAlignmentLeft;
+        [viewPrice addSubview:lblPrice];
+        [lblPrice release];
+        
+        UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 140, 290, 90)];
+        viewDescription.backgroundColor = [UIColor whiteColor];
+        viewDescription.layer.borderWidth = 1;
+        viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
+        viewDescription.layer.cornerRadius = 6;
+        viewDescription.tag = 13;
+        [viewBorder addSubview:viewDescription];
+        [viewDescription release];
+        
+        UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1, 280, 40)];
+        lblDescription1.font = [UIFont boldSystemFontOfSize:14];
+        lblDescription1.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
+        lblDescription1.tag = 1234234567;
+        lblDescription1.numberOfLines = 2;
+        lblDescription1.backgroundColor = [UIColor clearColor];
+        lblDescription1.textColor = [UIColor blackColor] ;
+        lblDescription1.textAlignment = NSTextAlignmentLeft;
+        [viewDescription addSubview:lblDescription1];
+        [lblDescription1 release];
+        
+        UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 41, 280, 40)];
+        lblDescription2.font = [UIFont systemFontOfSize:14];
+        lblDescription2.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"description"]];
+        lblDescription2.numberOfLines = 2;
+        lblDescription2.tag = 12347890;
+        lblDescription2.backgroundColor = [UIColor clearColor];
+        lblDescription2.textColor = [UIColor blackColor] ;
+        lblDescription2.textAlignment = NSTextAlignmentLeft;
+        [viewDescription addSubview:lblDescription2];
+        [lblDescription2 release];
     }
     return cell;
 }
@@ -596,7 +693,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if(isSelectedForDrinks)
     {
         id object=[arrMenu objectAtIndex:indexPath.section];
@@ -631,7 +728,7 @@
         viewC.layer.borderWidth = 2;
         viewC.backgroundColor = [UIColor redColor];
         viewC.layer.borderColor = [UIColor redColor].CGColor;
-        viewC.layer.backgroundColor=[UIColor whiteColor].CGColor;
+        viewC.layer.backgroundColor=[UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0].CGColor;
         viewC.tag=444;
         [viewB addSubview:viewC];
         

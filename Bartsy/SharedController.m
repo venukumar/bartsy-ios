@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-#define KServerURL @"http://54.235.76.180:8080/Bartsy"
-//#define KServerURL @"http://192.168.0.109:8080/Bartsy"
+//#define KServerURL @"http://54.235.76.180:8080/Bartsy"
+#define KServerURL @"http://192.168.0.109:8080/Bartsy"
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
