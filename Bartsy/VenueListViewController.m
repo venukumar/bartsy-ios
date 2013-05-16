@@ -46,7 +46,7 @@
 
     MKMapView *mapView=[[MKMapView alloc]initWithFrame:CGRectMake(0, 40, 320, 200)];
     mapView.delegate=self;
-    mapView.showsUserLocation=YES;
+    //mapView.showsUserLocation=YES;
     mapView.tag=222;
     [self.view addSubview:mapView];
     //[mapView release];
@@ -61,6 +61,12 @@
     tblView.tag=111;
     [self.view addSubview:tblView];
     //[tblView release];
+    
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.height == 568)
+    {
+        tblView.frame=CGRectMake(0, 241, 320, 180+108);
+    }
     
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -129,11 +135,21 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if([[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] integerValue]!=[[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] integerValue])
     {
-        intIndex=indexPath.row;
-        isRequestForCheckIn=YES;
-        self.sharedController=[SharedController sharedController];
-        [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
-        [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+        {
+            NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+            NSString *strMsg=[NSString stringWithFormat:@"You are already checked-in to %@.Do you want to checkout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+            [self createAlertViewWithTitle:@"Please Confirm!" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:143225];
+        }
+        else
+        {
+            intIndex=indexPath.row;
+            isRequestForCheckIn=YES;
+            self.sharedController=[SharedController sharedController];
+            [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
+            [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
+        }
+        
     }
     else
     {
@@ -290,6 +306,18 @@
     [self hideProgressView:nil];
     
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag==143225&&buttonIndex==1)
+    {
+        isRequestForCheckIn=YES;
+        self.sharedController=[SharedController sharedController];
+        [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
+        [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] delegate:self];
+    }
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -12,7 +12,10 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     NSString *deviceToken;
+    NSArray *arrStatus;
+    id delegateForCurrentViewController;
 }
+@property (nonatomic,retain)id delegateForCurrentViewController;
 @property (strong, nonatomic) UIWindow *window;
 @property(nonatomic,retain)NSString *deviceToken;
 

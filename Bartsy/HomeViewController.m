@@ -48,7 +48,11 @@
     self.acceptCreditCards = YES;
     self.environment = PayPalEnvironmentSandbox;
     // Do any additional setup after loading the view, typically from a nib.
-        
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
+    
+    
     NSLog(@"PayPal iOS SDK version: %@", [PayPalPaymentViewController libraryVersion]);
     // Optimization: Prepare for display of the payment UI by getting network work done early
     [PayPalPaymentViewController setEnvironment:self.environment];
@@ -57,10 +61,12 @@
     arrMenu=[[NSMutableArray alloc]init];
     arrOrders=[[NSMutableArray alloc]init];
     
-    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",@"PEOPLE",@"ORDERS", nil]];
+    NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"] count]];
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",@"PEOPLE",strOrder, nil]];
     segmentControl.frame=CGRectMake(0, 1, 320, 40);
     segmentControl.segmentedControlStyle=UISegmentedControlStyleBar;
     segmentControl.selectedSegmentIndex=0;
+    segmentControl.tag=1111;
     [segmentControl addTarget:self action:@selector(segmentControl_ValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:segmentControl];
     
@@ -82,11 +88,46 @@
     tblView.delegate=self;
     tblView.tag=111;
     [self.view addSubview:tblView];
+    
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.height == 568)
+    {
+        tblView.frame=CGRectMake(0, 40, 320, 373+90);
+    }
+    
     [tblView release];
     
     //optional pre init, so the ZooZ screen will upload immediatly, you can skip this call
 //    ZooZ * zooz = [ZooZ sharedInstance];
 //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
+    
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    appDelegate.delegateForCurrentViewController=nil;
+}
+
+-(void)reloadData
+{
+    UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+
+    if(segmentControl.selectedSegmentIndex==2)
+    {
+        [arrOrders removeAllObjects];
+        [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        tblView.separatorColor = [UIColor clearColor];
+        tblView.hidden=NO;
+        isSelectedForDrinks=NO;
+        [tblView reloadData];
+        
+        if([arrOrders count]==0)
+        {
+            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
+
+    }
     
 }
 
@@ -107,21 +148,26 @@
     {
         [arrOrders removeAllObjects];
         [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
-        NSLog(@"Orders %@",arrOrders);
         tblView.separatorColor = [UIColor clearColor];
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
         [tblView reloadData];
+        
+        if([arrOrders count]==0)
+        {
+            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
     }
 }
 
 -(void)btnOrder_TouchUpInside
 {
     //[self orderTheDrink];
+    UIView *viewA = (UIView*)[self.view viewWithTag:222];
+    [viewA removeFromSuperview];
     isRequestForOrder=YES;
     self.sharedController=[SharedController sharedController];
-    //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-    
+    [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
     NSString *strBasePrice=[NSString stringWithFormat:@"%f",[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]];
     
     NSString *strTip;
@@ -183,7 +229,7 @@
     
     float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
-    NSString *strTotalPrice=[NSString stringWithFormat:@"%f",totalPrice];
+    NSString *strTotalPrice=[NSString stringWithFormat:@"%.2f",totalPrice];
     
     // Remove our last completed payment, just for demo purposes.
     self.completedPayment = nil;
@@ -319,7 +365,11 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
-    if(isRequestForOrder==NO)
+    if([[result objectForKey:@"errorCode"] integerValue]==1)
+    {
+        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+    }
+    else if(isRequestForOrder==NO)
     {
         [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:[dictVenue objectForKey:@"venueId"]];
         [[NSUserDefaults standardUserDefaults]synchronize];
@@ -331,13 +381,19 @@
     else
     {
         NSMutableArray *arrOrderHistory=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
-        [arrOrderHistory addObject:dictSelectedToMakeOrder];
+        NSMutableDictionary *dictOrderedItem=[[NSMutableDictionary alloc]initWithDictionary:dictSelectedToMakeOrder];
+        [dictOrderedItem setObject:[result objectForKey:@"orderId"] forKey:@"orderId"];
+        [dictOrderedItem setObject:@"Waiting for bartender to accept" forKey:@"orderStatus"];
+        [dictOrderedItem setObject:[NSDate date] forKey:@"Date"];
+        [arrOrderHistory addObject:dictOrderedItem];
         [[NSUserDefaults standardUserDefaults]setObject:arrOrderHistory forKey:@"Orders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrOrderHistory release];
         
-        UIView *viewA = (UIView*)[self.view viewWithTag:222];
-        [viewA removeFromSuperview];
+        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"] count]];
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+
     }
     
     
@@ -604,7 +660,7 @@
         
         UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
         lblTitle.font = [UIFont boldSystemFontOfSize:15];
-        lblTitle.text = @"Waiting for bartender to accept(2)";
+        lblTitle.text = [dict objectForKey:@"orderStatus"];
         lblTitle.tag = 1234;
         lblTitle.backgroundColor = [UIColor clearColor];
         lblTitle.textColor = [UIColor whiteColor] ;
@@ -621,9 +677,14 @@
         [viewBorder addSubview:viewPrice];
         [viewPrice release];
         
+        NSDate *date=[dict objectForKey:@"Date"];
+        NSCalendar * cal = [NSCalendar currentCalendar];
+        NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
+        NSString *strDate=[NSString stringWithFormat:@"Placed at: %i:%i:%i on %i/%i/%i",comps.hour,comps.minute,comps.second,comps.month,comps.day,comps.year];
+        
         UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
         lblTime.font = [UIFont systemFontOfSize:14];
-        lblTime.text = @"Placed at:4:27:01 PM on May15,2013";
+        lblTime.text = strDate;
         lblTime.tag = 1234234567;
         lblTime.backgroundColor = [UIColor clearColor];
         lblTime.textColor = [UIColor blackColor] ;

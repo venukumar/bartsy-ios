@@ -13,10 +13,11 @@
 #import "WelcomeViewController.h"
 #define kEnabled                @"enabled"
 #define kSimulator              @"Simulator"
+#import <AudioToolbox/AudioToolbox.h>
 
 
 @implementation AppDelegate
-@synthesize deviceToken;
+@synthesize deviceToken,delegateForCurrentViewController;
 
 - (void)dealloc
 {
@@ -36,6 +37,8 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
+    
+    arrStatus=[[NSArray alloc]initWithObjects:@"Bartender accepted the order",@"Your drink is ready",@"Your order is completed",@"Your order is completed", nil];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
@@ -136,10 +139,35 @@
 //application did recive remote notification.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    AudioServicesPlaySystemSound(1007);
+
     for (id key in userInfo)
     {
-        id result=[userInfo objectForKey:key];
         NSLog(@"key: %@, value: %@", key, [userInfo objectForKey:key]);
+    }
+    
+    if([[userInfo valueForKey:@"messageType"] isEqualToString:@"updateOrderStatus"])
+    {
+        NSMutableArray *arrOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        NSPredicate *predicate=[NSPredicate predicateWithFormat:@"orderId==%i",[[userInfo valueForKey:@"orderId"] integerValue]];
+        NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrOrders];
+        [arrTemp filterUsingPredicate:predicate];
+        if([arrTemp count])
+        {
+            NSInteger intIndex=[arrOrders indexOfObject:[arrTemp objectAtIndex:0]];
+            NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrOrders objectAtIndex:intIndex]];
+            [dictItem setObject:[arrStatus objectAtIndex:[[userInfo valueForKey:@"orderStatus"] integerValue]-2] forKey:@"orderStatus"];
+            [arrOrders replaceObjectAtIndex:intIndex withObject:dictItem];
+            [[NSUserDefaults standardUserDefaults]setObject:arrOrders forKey:@"Orders"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+        }
+        
+    }
+    
+    NSLog(@"Current VC is %@",delegateForCurrentViewController);
+    if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+    {
+        [delegateForCurrentViewController reloadData];
     }
 }
 // FBSample logic

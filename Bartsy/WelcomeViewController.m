@@ -107,17 +107,16 @@
     [imgViewCheckInBox3 addSubview:lblCreditCard];
     
     
-    
-    UIButton *btnNearBy=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"nearby.png"] frame:CGRectMake(10, 210, 140, 85) tag:222 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnNearBy=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic1.png"] frame:CGRectMake(10, 210, 140, 85) tag:222 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnNearBy];
     
-    UIButton *btnNotifications=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"mynotifications.png"] frame:CGRectMake(10, 302, 140, 85) tag:333 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnNotifications=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic2.png"] frame:CGRectMake(10, 302, 140, 85) tag:333 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnNotifications];
     
-    UIButton *btnMyRewards=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"myrewards.png"] frame:CGRectMake(170, 210, 140, 85) tag:444 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnMyRewards=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic4.png"] frame:CGRectMake(170, 210, 140, 85) tag:444 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnMyRewards];
     
-    UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"profile.png"] frame:CGRectMake(170, 302, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic3.png"] frame:CGRectMake(170, 302, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnProfile];
     
 
@@ -150,9 +149,18 @@
 {
     if(sender.tag==1111)
     {
-        self.sharedController=[SharedController sharedController];
-        [self createProgressViewToParentView:self.view withTitle:@"Checking Out..."];
-        [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+        NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+        NSString *strMsg;
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]==nil)
+        {
+            strMsg=[NSString stringWithFormat:@"Do you want to checkout from %@",[dict objectForKey:@"venueName"]];
+        }
+        else
+        {
+            strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you checkout they will be cancelled and you will still be charged for it.Do you want to checkout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+        }
+        [self createAlertViewWithTitle:@"Please Confirm!" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:143225];
+        
     }
 }
 
@@ -164,6 +172,8 @@
     UIImageView *imgViewBox=(UIImageView*)[self.view viewWithTag:143];
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
     {
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"Orders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         imgViewBox.hidden=YES;
         UIButton *btnClose=(UIButton*)[self.view viewWithTag:1111];
         btnClose.hidden=YES;
@@ -185,7 +195,15 @@
     [self hideProgressView:nil];
 }
 
-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag==143225&&buttonIndex==1)
+    {
+        self.sharedController=[SharedController sharedController];
+        [self createProgressViewToParentView:self.view withTitle:@"Checking Out..."];
+        [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
