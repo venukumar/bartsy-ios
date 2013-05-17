@@ -38,7 +38,7 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Your order is completed",@"Your order is completed", nil];
+    arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
@@ -157,7 +157,17 @@
             NSInteger intIndex=[arrOrders indexOfObject:[arrTemp objectAtIndex:0]];
             NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrOrders objectAtIndex:intIndex]];
             [dictItem setObject:[arrStatus objectAtIndex:[[userInfo valueForKey:@"orderStatus"] integerValue]-2] forKey:@"orderStatus"];
-            [arrOrders replaceObjectAtIndex:intIndex withObject:dictItem];
+            if([[userInfo valueForKey:@"orderStatus"] integerValue]==5)
+            {
+                [arrOrders removeObjectAtIndex:intIndex];
+                NSMutableArray *arrCompletedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersCompleted"]];
+                [arrCompletedOrders addObject:dictItem];
+                [[NSUserDefaults standardUserDefaults]setObject:arrCompletedOrders forKey:@"OrdersCompleted"];
+            }
+            else
+            {
+               [arrOrders replaceObjectAtIndex:intIndex withObject:dictItem]; 
+            }
             [[NSUserDefaults standardUserDefaults]setObject:arrOrders forKey:@"Orders"];
             [[NSUserDefaults standardUserDefaults]synchronize];
         }

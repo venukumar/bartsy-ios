@@ -125,6 +125,10 @@
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
+        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
+
+        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+
         if([arrOrders count]==0)
         {
             [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
