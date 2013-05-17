@@ -18,6 +18,7 @@
     NSMutableArray *arrOrders;
     NSInteger btnValue;
     BOOL isSelectedForDrinks;
+    NSString *strTotalPrice;
 }
 
 @end
@@ -46,7 +47,7 @@
     self.title=[dictVenue objectForKey:@"venueName"];
     
     self.acceptCreditCards = YES;
-    self.environment = PayPalEnvironmentSandbox;
+    self.environment = PayPalEnvironmentNoNetwork;
     // Do any additional setup after loading the view, typically from a nib.
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -117,10 +118,12 @@
         [arrOrders removeAllObjects];
         [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-        tblView.separatorColor = [UIColor clearColor];
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
         [tblView reloadData];
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
+        [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
         if([arrOrders count]==0)
         {
@@ -146,11 +149,18 @@
     }
     else
     {
+        appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+        appDelegate.delegateForCurrentViewController=self;
+        
         [arrOrders removeAllObjects];
         [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
-        tblView.separatorColor = [UIColor clearColor];
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
+        [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+
+        
         [tblView reloadData];
         
         if([arrOrders count]==0)
@@ -183,9 +193,9 @@
     float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
     
-    NSString *strTotalPrice=[NSString stringWithFormat:@"%f",totalPrice];
+    NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
-    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] delegate:self];
+    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] delegate:self];
 }
 
 
@@ -229,7 +239,7 @@
     
     float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
-    NSString *strTotalPrice=[NSString stringWithFormat:@"%.2f",totalPrice];
+    strTotalPrice=[[NSString stringWithFormat:@"%.2f",totalPrice] retain];
     
     // Remove our last completed payment, just for demo purposes.
     self.completedPayment = nil;
@@ -385,6 +395,7 @@
         [dictOrderedItem setObject:[result objectForKey:@"orderId"] forKey:@"orderId"];
         [dictOrderedItem setObject:@"Waiting for bartender to accept" forKey:@"orderStatus"];
         [dictOrderedItem setObject:[NSDate date] forKey:@"Date"];
+        [dictOrderedItem setObject:strTotalPrice forKey:@"TotalPrice"];
         [arrOrderHistory addObject:dictOrderedItem];
         [[NSUserDefaults standardUserDefaults]setObject:arrOrderHistory forKey:@"Orders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
@@ -395,8 +406,6 @@
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
 
     }
-    
-    
 }
 
 
@@ -640,6 +649,7 @@
     {
         NSDictionary *dict=[arrOrders objectAtIndex:indexPath.section];
         cell.textLabel.text=[dict objectForKey:@"name"];
+        [cell setUserInteractionEnabled:NO];
         
         UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, 240)];
         viewBorder.backgroundColor = [UIColor clearColor];
@@ -652,7 +662,13 @@
         [viewBorder release];
         
         UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 43)];
+        if([[dict objectForKey:@"orderStatus"] isEqualToString:@"Waiting for bartender to accept"])
         viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
+        else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"Accepted"])
+            viewHeader.backgroundColor = [UIColor orangeColor];
+        else
+            viewHeader.backgroundColor = [UIColor greenColor];
+
         viewHeader.layer.cornerRadius = 6;
         viewHeader.tag = 11;
         [viewBorder addSubview:viewHeader];
@@ -660,11 +676,16 @@
         
         UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
         lblTitle.font = [UIFont boldSystemFontOfSize:15];
+        if([[dict objectForKey:@"orderStatus"] isEqualToString:@"Waiting for bartender to accept"])
         lblTitle.text = [dict objectForKey:@"orderStatus"];
+        else
+        lblTitle.text = [NSString stringWithFormat:@"%@ with number %i",[dict objectForKey:@"orderStatus"],[[dict objectForKey:@"orderId"] integerValue]];
+
         lblTitle.tag = 1234;
         lblTitle.backgroundColor = [UIColor clearColor];
         lblTitle.textColor = [UIColor whiteColor] ;
         lblTitle.textAlignment = NSTextAlignmentCenter;
+        lblTitle.adjustsFontSizeToFitWidth=YES;
         [viewHeader addSubview:lblTitle];
         [lblTitle release];
         
@@ -694,7 +715,7 @@
         
         UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(7, 33, 280, 30)];
         lblPrice.font = [UIFont systemFontOfSize:14];
-        lblPrice.text = [NSString stringWithFormat:@"Price: $%@",[dict objectForKey:@"price"]];
+        lblPrice.text = [NSString stringWithFormat:@"Price: $%@",[dict objectForKey:@"TotalPrice"]];
         lblPrice.tag = 12347890;
         lblPrice.backgroundColor = [UIColor clearColor];
         lblTime.textColor = [UIColor blackColor] ;

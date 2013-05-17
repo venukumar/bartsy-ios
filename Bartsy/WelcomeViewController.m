@@ -8,6 +8,7 @@
 
 #import "WelcomeViewController.h"
 #import "VenueListViewController.h"
+#import "HomeViewController.h"
 
 @interface WelcomeViewController ()
 
@@ -72,7 +73,11 @@
     [self.view addSubview:btnClose1];
     
     UILabel *lblCheckin=[self createLabelWithTitle:@"CheckIn...." frame:CGRectMake(55, 0, 215, 40) tag:225 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
+    lblCheckin.userInteractionEnabled=YES;
     [imgViewCheckInBox1 addSubview:lblCheckin];
+    
+    UIButton *btnVenue=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(5, 60, 260, 40) tag:0 selector:@selector(btnCheckIn_TouchUpInside) target:self];
+    [self.view addSubview:btnVenue];
     
     UIImageView *imgViewCheckInBox2=[self createImageViewWithImage:[UIImage imageNamed:@"box.png"] frame:CGRectMake(5, 110, 310, 44) tag:0];
     [self.view addSubview:imgViewCheckInBox2];
@@ -133,6 +138,21 @@
     UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
     lblCopyRight.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblCopyRight];
+}
+
+-(void)btnCheckIn_TouchUpInside
+{
+    HomeViewController *obj=[[HomeViewController alloc]init];
+    obj.dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+    [self.navigationController pushViewController:obj animated:YES];
+    [obj release];
+    
+}
+
+// handle method
+- (void)handleTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    
 }
 
 -(void)btn_TouchUpInside:(UIButton*)sender

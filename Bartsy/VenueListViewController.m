@@ -45,8 +45,7 @@
     [self.view addSubview:lblHeader];
 
     MKMapView *mapView=[[MKMapView alloc]initWithFrame:CGRectMake(0, 40, 320, 200)];
-    mapView.delegate=self;
-    //mapView.showsUserLocation=YES;
+    mapView.showsUserLocation=YES;
     mapView.tag=222;
     [self.view addSubview:mapView];
     //[mapView release];
@@ -137,6 +136,7 @@
     {
         if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
         {
+            intIndex=indexPath.row;
             NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
             NSString *strMsg=[NSString stringWithFormat:@"You are already checked-in to %@.Do you want to checkout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
             [self createAlertViewWithTitle:@"Please Confirm!" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:143225];
@@ -181,7 +181,8 @@
 -(void)reloadMapView
 {
     MKMapView *mapView=(MKMapView*)[self.view viewWithTag:222];
-    
+    mapView.delegate=self;
+
     for (int i=0;i<[arrVenueList count];i++)
     {
         NSMutableDictionary *dict=[arrVenueList objectAtIndex:i];
@@ -225,24 +226,36 @@
         [mapView setRegion:region animated:YES];
     }
     
+    mapView.delegate=nil;
+
     
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
 {
-    MKPinAnnotationView *pinAnn=[[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:nil];
-    pinAnn.pinColor=MKPinAnnotationColorGreen;
-    pinAnn.animatesDrop=YES;
-    pinAnn.canShowCallout=YES;
+    if([annotation isKindOfClass:[MyAnnotation class]])
+    {
+        MKPinAnnotationView *pinAnn=[[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:nil];
+        pinAnn.pinColor=MKPinAnnotationColorGreen;
+        pinAnn.animatesDrop=YES;
+        pinAnn.canShowCallout=YES;
+        
+        MyAnnotation *ann=(MyAnnotation*)annotation;
+        
+        UIButton *btnDetail=[UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        btnDetail.tag=ann.tagValue;
+        [btnDetail addTarget:self action:@selector(btnDetail_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        pinAnn.rightCalloutAccessoryView=btnDetail;
+        
+        return pinAnn;
+    }
+//    else
+//    {
+//        MKUserLocation *ann=[[MKPointAnnotation alloc]init];
+//        ann.coordinate=currentLocaion;
+//        return ann;
+//    }
     
-    MyAnnotation *ann=(MyAnnotation*)annotation;
-    
-    UIButton *btnDetail=[UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    btnDetail.tag=ann.tagValue;
-    [btnDetail addTarget:self action:@selector(btnDetail_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-    pinAnn.rightCalloutAccessoryView=btnDetail;
-    
-    return pinAnn;
 }
 
 -(void)btnDetail_TouchUpInside:(UIButton*)sender

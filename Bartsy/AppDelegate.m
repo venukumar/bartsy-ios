@@ -38,7 +38,7 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    arrStatus=[[NSArray alloc]initWithObjects:@"Bartender accepted the order",@"Your drink is ready",@"Your order is completed",@"Your order is completed", nil];
+    arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Your order is completed",@"Your order is completed", nil];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
