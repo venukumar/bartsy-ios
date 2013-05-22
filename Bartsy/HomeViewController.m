@@ -7,10 +7,10 @@
 //
 
 #import "HomeViewController.h"
-#define IS_SANDBOX YES
+#import "UIImageView+WebCache.h"
 
-#define kPayPalClientId @"Afu5nBAdQ9iV5do2JAGDXRNO0VltOc0BdbQNqmAtYXrugNrw4kkEpgOs8d1J"
-#define kPayPalReceiverEmail @"sridhar-fecilitator@us2guntur.com"
+#define KServerURL @"http://54.235.76.180:8080"
+//#define KServerURL @"http://192.168.0.109:8080"
 
 @interface HomeViewController ()
 {
@@ -19,6 +19,9 @@
     NSInteger btnValue;
     BOOL isSelectedForDrinks;
     NSString *strTotalPrice;
+    BOOL isSelectedForPeople;
+    NSMutableArray *arrPeople;
+    BOOL isRequestForGettingsOrders;
 }
 
 @end
@@ -35,32 +38,34 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
     self.navigationController.navigationBarHidden=NO;
-   // self.navigationItem.leftBarButtonItem=nil;
+    // self.navigationItem.leftBarButtonItem=nil;
     //self.navigationItem.hidesBackButton=YES;
     
     self.title=[dictVenue objectForKey:@"venueName"];
     
-    self.acceptCreditCards = YES;
-    self.environment = PayPalEnvironmentNoNetwork;
+   
     // Do any additional setup after loading the view, typically from a nib.
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
     
-    NSLog(@"PayPal iOS SDK version: %@", [PayPalPaymentViewController libraryVersion]);
-    // Optimization: Prepare for display of the payment UI by getting network work done early
-    [PayPalPaymentViewController setEnvironment:self.environment];
-    [PayPalPaymentViewController prepareForPaymentUsingClientId:kPayPalClientId];
-    
     arrMenu=[[NSMutableArray alloc]init];
     arrOrders=[[NSMutableArray alloc]init];
+    arrPeople=[[NSMutableArray alloc]init];
+    arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
     NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"] count]];
     UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",@"PEOPLE",strOrder, nil]];
@@ -73,17 +78,30 @@
     
     self.sharedController=[SharedController sharedController];
     
-    if([[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]count]==0)
+    isSelectedForDrinks=YES;
+    
+    
+    if(appDelegate.isComingForOrders==YES)
     {
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-        [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+        appDelegate.isComingForOrders=NO;
+        [segmentControl setSelectedSegmentIndex:2];
+        [self segmentControl_ValueChanged:segmentControl];
+        
     }
     else
     {
-        [self modifyData];
+        if([[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]count]==0)
+        {
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+        }
+        else
+        {
+            [self modifyData];
+        }
     }
     
-    isSelectedForDrinks=YES;
+    
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 373)];
     tblView.dataSource=self;
     tblView.delegate=self;
@@ -99,21 +117,23 @@
     [tblView release];
     
     //optional pre init, so the ZooZ screen will upload immediatly, you can skip this call
-//    ZooZ * zooz = [ZooZ sharedInstance];
-//    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
+    //    ZooZ * zooz = [ZooZ sharedInstance];
+    //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
     
 }
 
--(void)viewDidDisappear:(BOOL)animated
-{
-    appDelegate.delegateForCurrentViewController=nil;
-}
 
 -(void)reloadData
 {
     UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-
-    if(segmentControl.selectedSegmentIndex==2)
+    
+    if(appDelegate.isComingForOrders==YES)
+    {
+        appDelegate.isComingForOrders=NO;
+        [segmentControl setSelectedSegmentIndex:2];
+        [self segmentControl_ValueChanged:segmentControl];
+    }
+    else if(segmentControl.selectedSegmentIndex==2)
     {
         [arrOrders removeAllObjects];
         [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
@@ -126,16 +146,16 @@
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
         NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
-
+        
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
-
-        if([arrOrders count]==0)
-        {
-            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        }
-
+        
+        //        if([arrOrders count]==0)
+        //        {
+        //            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        //        }
+        
     }
-    
+    appDelegate.isComingForOrders=NO;
 }
 
 -(void)segmentControl_ValueChanged:(UISegmentedControl*)segmentControl
@@ -145,32 +165,44 @@
     {
         isSelectedForDrinks=YES;
         tblView.hidden=NO;
-        [tblView reloadData];
+        [self modifyData];
     }
     else if(segmentControl.selectedSegmentIndex==1)
     {
-        tblView.hidden=YES;
+        isRequestForPeople=YES;
+        tblView.hidden=NO;
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController gettingPeopleListFromVenue:[dictVenue objectForKey:@"venueId"]  delegate:self];
     }
     else
     {
         appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
         appDelegate.delegateForCurrentViewController=self;
         
-        [arrOrders removeAllObjects];
-        [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        isRequestForGettingsOrders=YES;
+        isRequestForPeople=NO;
+        isRequestForOrder=NO;
+        
+        //        [arrOrders removeAllObjects];
+        //        [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
+        isSelectedForPeople=NO;
         
-        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
-        [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-
+        //NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
+        //[arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
-        [tblView reloadData];
+        //NSLog(@"Orders %@",arrOrders);
         
-        if([arrOrders count]==0)
-        {
-            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        }
+        //[tblView reloadData];
+        
+        //        if([arrOrders count]==0)
+        //        {
+        //            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        //        }
+        self.sharedController=[SharedController sharedController];
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController getUserOrdersWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
     }
 }
 
@@ -227,163 +259,43 @@
     [viewA removeFromSuperview];
 }
 
--(void)orderTheDrink
-{
-//    NSString *strBasePrice=[NSString stringWithFormat:@"%f",[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]];
-    
-    NSString *strTip;
-    if(btnValue!=40)
-        strTip=[NSString stringWithFormat:@"%i",btnValue];
-    else
-    {
-        UITextField *txtFld=(UITextField*)[self.view viewWithTag:500];
-        strTip=[NSString stringWithFormat:@"%i",[txtFld.text integerValue]];
-    }
-    
-    
-    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
-    float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
-    strTotalPrice=[[NSString stringWithFormat:@"%.2f",totalPrice] retain];
-    
-    // Remove our last completed payment, just for demo purposes.
-    self.completedPayment = nil;
-    
-    PayPalPayment *payment = [[PayPalPayment alloc] init];
-    payment.amount = [[NSDecimalNumber alloc] initWithString:strTotalPrice];
-    payment.currencyCode = @"USD";
-    payment.shortDescription = [dictSelectedToMakeOrder objectForKey:@"name"];
-    
-    if (!payment.processable)
-    {
-        // This particular payment will always be processable. If, for
-        // example, the amount was negative or the shortDescription was
-        // empty, this payment wouldn't be processable, and you'd want
-        // to handle that here.
-    }
-    
-    // Any customer identifier that you have will work here. Do NOT use a device- or
-    // hardware-based identifier.
-    NSString *customerId = @"user-11723";
-    
-    // Set the environment:
-    // - For live charges, use PayPalEnvironmentProduction (default).
-    // - To use the PayPal sandbox, use PayPalEnvironmentSandbox.
-    // - For testing, use PayPalEnvironmentNoNetwork.
-    [PayPalPaymentViewController setEnvironment:self.environment];
-    
-    PayPalPaymentViewController *paymentViewController = [[PayPalPaymentViewController alloc] initWithClientId:kPayPalClientId receiverEmail:kPayPalReceiverEmail
-                                                      payerId:customerId
-                                                          payment:payment
-                                                            delegate:self];
-    paymentViewController.title=@"Order";
-    paymentViewController.hideCreditCardButton = !self.acceptCreditCards;
-    
-    [self presentViewController:paymentViewController animated:YES completion:nil];
-
-    
-    /*
-     ZooZ * zooz = [ZooZ sharedInstance];
-     
-     zooz.sandbox = IS_SANDBOX;
-     
-     zooz.tintColor = [UIColor colorWithRed:1 green:0.8 blue:0 alpha:1];
-     
-     zooz.barButtonTintColor = [UIColor darkGrayColor];
-     
-     //optional image that will be displayed on the NavigationBar as your logo
-     //    zooz.barTitleImage = [UIImage imageNamed:@"MyLogo.png"];
-     
-    ZooZPaymentRequest * req = [zooz createPaymentRequestWithTotal:totalPrice invoiceRefNumber:@"test invoice ref-1234" delegate:self];
-    
-    /*
-     //If you want only to allow regsiter cards and not do payment use this instead of the above:
-     ZooZPaymentRequest * req = [zooz createManageFundSourcesRequestWithDelegate:self];
-     */
-    
-    /*
-    req.currencyCode = @"USD";
-    
-    req.payerDetails.firstName = @"Consumer";
-    
-    req.payerDetails.email = @"test@zooz.com";
-    
-    req.payerDetails.billingAddress.zipCode=@"01234";
-    
-    req.requireAddress = YES; //set if to ask for zip code or not from the payer.
-    
-    ZooZInvoiceItem * item = [ZooZInvoiceItem invoiceItem:totalPrice quantity:1 name:@"Drink"];
-    item.additionalDetails = @"Had a drink with Bartsy";
-    item.itemId = [dictSelectedToMakeOrder objectForKey:@"id"]; // optional
-    
-    [req addItem:item];
-    
-    req.invoice.additionalDetails = @"Bartsy Drink";
-    
-    [zooz openPayment:req forAppKey:@"c7659586-f78a-4876-b317-1b617ec8ab40"];
-    
-    */
-}
-
 /*
-- (void)openPaymentRequestFailed:(ZooZPaymentRequest *)request withErrorCode:(int)errorCode andErrorMessage:(NSString *)errorMessage{
-	NSLog(@"failed: %@", errorMessage);
-    //this is a network / integration failure, not a payment processing failure.
-	
-}
-
-//Called in the background thread - before user closes the payment dialog
-//Do not refresh UI at this callback - see paymentSuccessDialogClosed
-- (void)paymentSuccessWithResponse:(ZooZPaymentResponse *)response
-{
-	NSLog(@"payment success with payment Id: %@, %@, %@, %f %@", response.transactionDisplayID, response.fundSourceType, response.lastFourDigits, response.paidAmount, response.transactionID);
-    [self btnOrder_TouchUpInside];
-}
-
-//called after successful payment and after the user closed the payment dialog
-//Do the UI changes on success at this point
--(void)paymentSuccessDialogClosed{
-    NSLog(@"Payment dialog closed after success");
-    //see paymentSuccessWithResponse: for the response transaction ID.
-}
-
-- (void)paymentCanceled{
-	NSLog(@"payment cancelled");
-    //dialog closed without payment completed
-}
-*/
-
-#pragma mark - Proof of payment validation
-
-- (void)sendCompletedPaymentToServer:(PayPalPayment *)completedPayment {
-    // TODO: Send completedPayment.confirmation to server
-    NSLog(@"Here is your proof of payment:\n\n%@\n\nSend this to your server for confirmation and fulfillment.", completedPayment.confirmation);
-}
-
-#pragma mark - PayPalPaymentDelegate methods
-
-- (void)payPalPaymentDidComplete:(PayPalPayment *)completedPayment {
-    NSLog(@"PayPal Payment Success!");
-    self.completedPayment = completedPayment;
-    [self btnOrder_TouchUpInside];
-    [self sendCompletedPaymentToServer:completedPayment]; // Payment was processed successfully; send to server for verification and fulfillment
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)payPalPaymentDidCancel {
-    NSLog(@"PayPal Payment Canceled");
-    self.completedPayment = nil;
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
+ - (void)openPaymentRequestFailed:(ZooZPaymentRequest *)request withErrorCode:(int)errorCode andErrorMessage:(NSString *)errorMessage{
+ NSLog(@"failed: %@", errorMessage);
+ //this is a network / integration failure, not a payment processing failure.
+ 
+ }
+ 
+ //Called in the background thread - before user closes the payment dialog
+ //Do not refresh UI at this callback - see paymentSuccessDialogClosed
+ - (void)paymentSuccessWithResponse:(ZooZPaymentResponse *)response
+ {
+ NSLog(@"payment success with payment Id: %@, %@, %@, %f %@", response.transactionDisplayID, response.fundSourceType, response.lastFourDigits, response.paidAmount, response.transactionID);
+ [self btnOrder_TouchUpInside];
+ }
+ 
+ //called after successful payment and after the user closed the payment dialog
+ //Do the UI changes on success at this point
+ -(void)paymentSuccessDialogClosed{
+ NSLog(@"Payment dialog closed after success");
+ //see paymentSuccessWithResponse: for the response transaction ID.
+ }
+ 
+ - (void)paymentCanceled{
+ NSLog(@"payment cancelled");
+ //dialog closed without payment completed
+ }
+ */
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
+    
     if([[result objectForKey:@"errorCode"] integerValue]==1)
     {
         [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
-    else if(isRequestForOrder==NO)
+    else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO)
     {
         [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:[dictVenue objectForKey:@"venueId"]];
         [[NSUserDefaults standardUserDefaults]synchronize];
@@ -392,24 +304,70 @@
         
         [self modifyData];
     }
-    else
+    else if(isRequestForOrder==YES)
     {
-        NSMutableArray *arrOrderHistory=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
-        NSMutableDictionary *dictOrderedItem=[[NSMutableDictionary alloc]initWithDictionary:dictSelectedToMakeOrder];
-        [dictOrderedItem setObject:[result objectForKey:@"orderId"] forKey:@"orderId"];
-        [dictOrderedItem setObject:@"Waiting for bartender to accept" forKey:@"orderStatus"];
-        [dictOrderedItem setObject:[NSDate date] forKey:@"Date"];
-        [dictOrderedItem setObject:strTotalPrice forKey:@"TotalPrice"];
-        [arrOrderHistory addObject:dictOrderedItem];
-        [[NSUserDefaults standardUserDefaults]setObject:arrOrderHistory forKey:@"Orders"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        [arrOrderHistory release];
+        isRequestForOrder=NO;
         
-        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"] count]];
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
-
+        segmentControl.selectedSegmentIndex=2;
+        [self segmentControl_ValueChanged:segmentControl];
     }
+    else if(isRequestForPeople==YES)
+    {
+        isSelectedForDrinks=NO;
+        isSelectedForPeople=YES;
+        [arrPeople removeAllObjects];
+        [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
+        
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        NSString *strOrder=[NSString stringWithFormat:@"PEOPLE (%i)",[arrPeople count]];
+        
+        [segmentControl setTitle:strOrder forSegmentAtIndex:1];
+    }
+    else if(isRequestForGettingsOrders==YES)
+    {
+        [arrOrders removeAllObjects];
+        NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[result objectForKey:@"orders"]];
+        
+        for (int i=0;i<[arrTemp count];i++)
+        {
+            NSMutableDictionary *dictOrder=[[NSMutableDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
+            if(![[dictOrder objectForKey:@"orderStatus"] isEqualToString:@"5"])
+            {
+                NSDateFormatter *dateFormatter = [NSDateFormatter new];
+                dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ss zzz";
+                NSDate *date    = [dateFormatter dateFromString:[dictOrder objectForKey:@"orderTime"]];
+                [dictOrder setObject:date forKey:@"Date"];
+                [arrOrders addObject:dictOrder];
+            }
+            [dictOrder release];
+        }
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
+        [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        
+        NSLog(@"Orders %@",arrOrders);
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+        
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
+        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+        
+        
+        //        if([arrOrders count]==0)
+        //        {
+        //            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        //        }
+    }
+}
+
+-(void)reloadTable
+{
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+    [tblView reloadData];
 }
 
 
@@ -430,6 +388,7 @@
         [arrMenu addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]];
     }
     
+    //Drinks without category name
     for (int i=0; i<[arrMenu count]; i++)
     {
         NSDictionary *dict=[arrMenu objectAtIndex:i];
@@ -442,11 +401,13 @@
                 NSDictionary *dictSubsection=[arrSubsections objectAtIndex:j];
                 [arrContents addObjectsFromArray:[dictSubsection objectForKey:@"contents"]];
             }
-            
+            NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!=''"];
+            [arrContents filterUsingPredicate:predicateName];
             [arrTemp insertObject:arrContents atIndex:0];
         }
     }
     
+    //Making the first drinks array as a dictionary instead of array
     if([arrTemp count])
     {
         [arrTemp removeAllObjects];
@@ -455,6 +416,7 @@
         [dictFirstItem release];
     }
     
+    //Drinks with category name
     for (int i=0; i<[arrMenu count]; i++)
     {
         NSDictionary *dict=[arrMenu objectAtIndex:i];
@@ -465,9 +427,14 @@
             for (int j=0; j<[arrSubsections count]; j++)
             {
                 NSMutableDictionary *dictSubsection=[[NSMutableDictionary alloc]initWithDictionary:[arrSubsections objectAtIndex:j]];
+                NSMutableArray *arrContents2=[[NSMutableArray alloc]initWithArray:[dictSubsection objectForKey:@"contents"]];
+                NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!=''"];
+                [arrContents2 filterUsingPredicate:predicateName];
+                [dictSubsection setObject:arrContents2 forKey:@"contents"];
                 [dictSubsection setObject:[dict objectForKey:@"section_name"] forKey:@"section_name"];
                 [dictSubsection setObject:@"0" forKey:@"Arrow"];
-                [arrTemp addObject:dictSubsection];
+                if([arrContents2 count])
+                    [arrTemp addObject:dictSubsection];
                 [dictSubsection release];
             }
         }
@@ -485,15 +452,27 @@
 {
     // Return the number of sections.
     if(isSelectedForDrinks)
-    return [arrMenu count];
+        return [arrMenu count];
+    else if(isSelectedForPeople)
+        return [arrPeople count];
     else
-    return [arrOrders count];
+    {
+        if([arrOrders count])
+        {
+            return [arrOrders count];
+        }
+        else
+        {
+            return 1;
+        }
+    }
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if(isSelectedForDrinks)
-    return 44;
+        return 44;
     else
         return 0;
 }
@@ -530,8 +509,14 @@
         {
             headerTitle.text= [object objectForKey:@"section_name"];
         }
-        else
+        else if([[object objectForKey:@"subsection_name"] length])
+        {
             headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
+        }
+        else
+        {
+            headerTitle.text= [NSString stringWithFormat:@"%@",[object objectForKey:@"section_name"]];
+        }
         
         [headerView addSubview:headerTitle];
         
@@ -574,9 +559,20 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(isSelectedForDrinks)
-    return 80;
+        return 80;
+    else if(isSelectedForPeople)
+        return 60;
     else
-        return 250;
+    {
+        if([arrOrders count])
+        {
+            return 250;
+        }
+        else
+        {
+            return 100;
+        }
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -584,18 +580,18 @@
     // Configure the cell...
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    if(isSelectedForDrinks)
+    if(isSelectedForDrinks==YES)
     {
-        UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-        imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
-        [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-        [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-        [[imgViewDrink layer] setShadowRadius:3.0];
-        [[imgViewDrink layer] setShadowOpacity:0.8];
-        [cell.contentView addSubview:imgViewDrink];
-        [imgViewDrink release];
+        //        UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+        //        imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
+        //        [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
+        //        [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
+        //        [[imgViewDrink layer] setShadowRadius:3.0];
+        //        [[imgViewDrink layer] setShadowOpacity:0.8];
+        //        [cell.contentView addSubview:imgViewDrink];
+        //        [imgViewDrink release];
         
-        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 220, 20)];
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 295, 20)];
         id object=[arrMenu objectAtIndex:indexPath.section];
         if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
         {
@@ -614,7 +610,7 @@
         [lblName release];
         
         
-        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 180, 50)];
+        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 255, 50)];
         lblDescription.numberOfLines=2;
         if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
         {
@@ -649,115 +645,139 @@
         [cell.contentView addSubview:lblPrice];
         [lblPrice release];
     }
-    else
+    else if(isSelectedForPeople)
     {
-        NSDictionary *dict=[arrOrders objectAtIndex:indexPath.section];
-        cell.textLabel.text=[dict objectForKey:@"name"];
         [cell setUserInteractionEnabled:NO];
         
-        UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, 240)];
-        viewBorder.backgroundColor = [UIColor clearColor];
-        viewBorder.layer.borderWidth = 1;
-        viewBorder.layer.cornerRadius = 6;
-        viewBorder.layer.borderColor = [UIColor grayColor].CGColor;
-        viewBorder.layer.backgroundColor=[UIColor whiteColor].CGColor;
-        viewBorder.tag = 101;
-        [cell.contentView addSubview:viewBorder];
-        [viewBorder release];
+        NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.section];
         
-        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 43)];
-        if([[dict objectForKey:@"orderStatus"] isEqualToString:@"Waiting for bartender to accept"])
-        viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
-        else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"Accepted"])
-            viewHeader.backgroundColor = [UIColor orangeColor];
-        else
-            viewHeader.backgroundColor = [UIColor greenColor];
-
-        viewHeader.layer.cornerRadius = 6;
-        viewHeader.tag = 11;
-        [viewBorder addSubview:viewHeader];
-        [viewHeader release];
+        NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
+        [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
+        [[cell.imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+        [[cell.imageView layer] setShadowRadius:3.0];
+        [[cell.imageView layer] setShadowOpacity:0.8];
         
-        UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
-        lblTitle.font = [UIFont boldSystemFontOfSize:15];
-        if([[dict objectForKey:@"orderStatus"] isEqualToString:@"Waiting for bartender to accept"])
-        lblTitle.text = [dict objectForKey:@"orderStatus"];
-        else
-        lblTitle.text = [NSString stringWithFormat:@"%@ with number %i",[dict objectForKey:@"orderStatus"],[[dict objectForKey:@"orderId"] integerValue]];
-
-        lblTitle.tag = 1234;
-        lblTitle.backgroundColor = [UIColor clearColor];
-        lblTitle.textColor = [UIColor whiteColor] ;
-        lblTitle.textAlignment = NSTextAlignmentCenter;
-        lblTitle.adjustsFontSizeToFitWidth=YES;
-        [viewHeader addSubview:lblTitle];
-        [lblTitle release];
-        
-        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 66, 290, 65)];
-        viewPrice.backgroundColor = [UIColor whiteColor];
-        viewPrice.layer.borderWidth = 1;
-        viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
-        viewPrice.layer.cornerRadius = 6;
-        viewPrice.tag = 12;
-        [viewBorder addSubview:viewPrice];
-        [viewPrice release];
-        
-        NSDate *date=[dict objectForKey:@"Date"];
-        NSCalendar * cal = [NSCalendar currentCalendar];
-        NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
-        NSString *strDate=[NSString stringWithFormat:@"Placed at: %i:%i:%i on %i/%i/%i",comps.hour,comps.minute,comps.second,comps.month,comps.day,comps.year];
-        
-        UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
-        lblTime.font = [UIFont systemFontOfSize:14];
-        lblTime.text = strDate;
-        lblTime.tag = 1234234567;
-        lblTime.backgroundColor = [UIColor clearColor];
-        lblTime.textColor = [UIColor blackColor] ;
-        lblTime.textAlignment = NSTextAlignmentLeft;
-        [viewPrice addSubview:lblTime];
-        [lblTime release];
-        
-        UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(7, 33, 280, 30)];
-        lblPrice.font = [UIFont systemFontOfSize:14];
-        lblPrice.text = [NSString stringWithFormat:@"Price: $%@",[dict objectForKey:@"TotalPrice"]];
-        lblPrice.tag = 12347890;
-        lblPrice.backgroundColor = [UIColor clearColor];
-        lblTime.textColor = [UIColor blackColor] ;
-        lblPrice.textAlignment = NSTextAlignmentLeft;
-        [viewPrice addSubview:lblPrice];
-        [lblPrice release];
-        
-        UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 140, 290, 90)];
-        viewDescription.backgroundColor = [UIColor whiteColor];
-        viewDescription.layer.borderWidth = 1;
-        viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
-        viewDescription.layer.cornerRadius = 6;
-        viewDescription.tag = 13;
-        [viewBorder addSubview:viewDescription];
-        [viewDescription release];
-        
-        UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1, 280, 40)];
-        lblDescription1.font = [UIFont boldSystemFontOfSize:14];
-        lblDescription1.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
-        lblDescription1.tag = 1234234567;
-        lblDescription1.numberOfLines = 2;
-        lblDescription1.backgroundColor = [UIColor clearColor];
-        lblDescription1.textColor = [UIColor blackColor] ;
-        lblDescription1.textAlignment = NSTextAlignmentLeft;
-        [viewDescription addSubview:lblDescription1];
-        [lblDescription1 release];
-        
-        UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 41, 280, 40)];
-        lblDescription2.font = [UIFont systemFontOfSize:14];
-        lblDescription2.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"description"]];
-        lblDescription2.numberOfLines = 2;
-        lblDescription2.tag = 12347890;
-        lblDescription2.backgroundColor = [UIColor clearColor];
-        lblDescription2.textColor = [UIColor blackColor] ;
-        lblDescription2.textAlignment = NSTextAlignmentLeft;
-        [viewDescription addSubview:lblDescription2];
-        [lblDescription2 release];
+        cell.textLabel.text=[dictPeople objectForKey:@"name"];
+        cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
     }
+    else
+    {
+        if([arrOrders count])
+        {
+            NSDictionary *dict=[arrOrders objectAtIndex:indexPath.section];
+            cell.textLabel.text=[dict objectForKey:@"itemName"];
+            [cell setUserInteractionEnabled:NO];
+            
+            UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, 240)];
+            viewBorder.backgroundColor = [UIColor clearColor];
+            viewBorder.layer.borderWidth = 1;
+            viewBorder.layer.cornerRadius = 6;
+            viewBorder.layer.borderColor = [UIColor grayColor].CGColor;
+            viewBorder.layer.backgroundColor=[UIColor whiteColor].CGColor;
+            viewBorder.tag = 101;
+            [cell.contentView addSubview:viewBorder];
+            [viewBorder release];
+            
+            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 43)];
+            if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
+                viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
+            else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"2"])
+                viewHeader.backgroundColor = [UIColor orangeColor];
+            else
+                viewHeader.backgroundColor = [UIColor greenColor];
+            viewHeader.layer.cornerRadius = 6;
+            viewHeader.tag = 11;
+            [viewBorder addSubview:viewHeader];
+            [viewHeader release];
+            
+            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
+            lblTitle.font = [UIFont boldSystemFontOfSize:15];
+            if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
+                lblTitle.text = @"Waiting for bartender to accept";
+            else
+                lblTitle.text = [NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
+            
+            lblTitle.tag = 1234;
+            lblTitle.backgroundColor = [UIColor clearColor];
+            lblTitle.textColor = [UIColor whiteColor] ;
+            lblTitle.textAlignment = NSTextAlignmentCenter;
+            lblTitle.adjustsFontSizeToFitWidth=YES;
+            [viewHeader addSubview:lblTitle];
+            [lblTitle release];
+            
+            UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 66, 290, 65)];
+            viewPrice.backgroundColor = [UIColor whiteColor];
+            viewPrice.layer.borderWidth = 1;
+            viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
+            viewPrice.layer.cornerRadius = 6;
+            viewPrice.tag = 12;
+            [viewBorder addSubview:viewPrice];
+            [viewPrice release];
+            
+            NSDate *date=[dict objectForKey:@"Date"];
+            NSCalendar * cal = [NSCalendar currentCalendar];
+            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
+            NSString *strDate=[NSString stringWithFormat:@"Placed at: %i:%i:%i on %i/%i/%i",comps.hour,comps.minute,comps.second,comps.month,comps.day,comps.year];
+            
+            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
+            lblTime.font = [UIFont systemFontOfSize:14];
+            lblTime.text = strDate;
+            lblTime.tag = 1234234567;
+            lblTime.backgroundColor = [UIColor clearColor];
+            lblTime.textColor = [UIColor blackColor] ;
+            lblTime.textAlignment = NSTextAlignmentLeft;
+            [viewPrice addSubview:lblTime];
+            [lblTime release];
+            
+            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(7, 33, 280, 30)];
+            lblPrice.font = [UIFont systemFontOfSize:14];
+            lblPrice.text = [NSString stringWithFormat:@"Price: $%@",[dict objectForKey:@"totalPrice"]];
+            lblPrice.tag = 12347890;
+            lblPrice.backgroundColor = [UIColor clearColor];
+            lblTime.textColor = [UIColor blackColor] ;
+            lblPrice.textAlignment = NSTextAlignmentLeft;
+            [viewPrice addSubview:lblPrice];
+            [lblPrice release];
+            
+            UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 140, 290, 90)];
+            viewDescription.backgroundColor = [UIColor whiteColor];
+            viewDescription.layer.borderWidth = 1;
+            viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
+            viewDescription.layer.cornerRadius = 6;
+            viewDescription.tag = 13;
+            [viewBorder addSubview:viewDescription];
+            [viewDescription release];
+            
+            UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1, 280, 40)];
+            lblDescription1.font = [UIFont boldSystemFontOfSize:14];
+            lblDescription1.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"itemName"]];
+            lblDescription1.tag = 1234234567;
+            lblDescription1.numberOfLines = 2;
+            lblDescription1.backgroundColor = [UIColor clearColor];
+            lblDescription1.textColor = [UIColor blackColor] ;
+            lblDescription1.textAlignment = NSTextAlignmentLeft;
+            [viewDescription addSubview:lblDescription1];
+            [lblDescription1 release];
+            
+            UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 41, 280, 40)];
+            lblDescription2.font = [UIFont systemFontOfSize:14];
+            lblDescription2.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"description"]];
+            lblDescription2.numberOfLines = 2;
+            lblDescription2.tag = 12347890;
+            lblDescription2.backgroundColor = [UIColor clearColor];
+            lblDescription2.textColor = [UIColor blackColor] ;
+            lblDescription2.textAlignment = NSTextAlignmentLeft;
+            [viewDescription addSubview:lblDescription2];
+            [lblDescription2 release];
+        }
+        else
+        {
+            cell.textLabel.text=@"No open orders\nGo to the drinks tab to place some\nGo to menu for Past Orders...";
+            cell.textLabel.numberOfLines=5;
+        }
+    }
+    
     return cell;
 }
 
@@ -1005,7 +1025,7 @@
         btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
         btnOrder.titleLabel.textColor = [UIColor whiteColor];
         btnOrder.backgroundColor=[UIColor blackColor];
-        [btnOrder addTarget:self action:@selector(orderTheDrink) forControlEvents:UIControlEventTouchUpInside];
+        [btnOrder addTarget:self action:@selector(btnOrder_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [viewC addSubview:btnOrder];
         
         [viewA release];

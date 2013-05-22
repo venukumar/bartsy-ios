@@ -27,13 +27,19 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     self.navigationController.navigationBarHidden=NO;
-//    self.navigationItem.leftBarButtonItem=nil;
-//    self.navigationItem.hidesBackButton=YES;
+    //    self.navigationItem.leftBarButtonItem=nil;
+    //    self.navigationItem.hidesBackButton=YES;
     
     self.title=@"Bartsy Service Stations";
     
@@ -43,7 +49,7 @@
     lblHeader.backgroundColor=[UIColor lightGrayColor];
     lblHeader.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblHeader];
-
+    
     MKMapView *mapView=[[MKMapView alloc]initWithFrame:CGRectMake(0, 40, 320, 200)];
     mapView.showsUserLocation=YES;
     mapView.tag=222;
@@ -122,8 +128,8 @@
     lblMiles.backgroundColor=[UIColor clearColor];
     lblMiles.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblMiles];
-   // [lblMiles release];
-
+    // [lblMiles release];
+    
     
     return cell;
 }
@@ -158,7 +164,7 @@
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }
-
+    
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -182,7 +188,7 @@
 {
     MKMapView *mapView=(MKMapView*)[self.view viewWithTag:222];
     mapView.delegate=self;
-
+    
     for (int i=0;i<[arrVenueList count];i++)
     {
         NSMutableDictionary *dict=[arrVenueList objectAtIndex:i];
@@ -199,8 +205,8 @@
         ann.tagValue=i;
         [mapView addAnnotation:ann];
         
-//        [currentLocation release];
-//        [venueLocation release];
+        //        [currentLocation release];
+        //        [venueLocation release];
     }
     
     NSLog(@"Venue List %@",arrVenueList);
@@ -215,7 +221,7 @@
         NSDictionary *dictNearBy=[arrVenueList objectAtIndex:0];
         MKCoordinateRegion region;
         CLLocation *venueLocation = [[CLLocation alloc] initWithLatitude:[[dictNearBy objectForKey:@"latitude"] floatValue] longitude:[[dictNearBy objectForKey:@"longitude"] floatValue]];
-
+        
         region.center=venueLocation.coordinate;
         
         MKCoordinateSpan span;
@@ -227,7 +233,7 @@
     }
     
     mapView.delegate=nil;
-
+    
     
 }
 
@@ -249,12 +255,12 @@
         
         return pinAnn;
     }
-//    else
-//    {
-//        MKUserLocation *ann=[[MKPointAnnotation alloc]init];
-//        ann.coordinate=currentLocaion;
-//        return ann;
-//    }
+    //    else
+    //    {
+    //        MKUserLocation *ann=[[MKPointAnnotation alloc]init];
+    //        ann.coordinate=currentLocaion;
+    //        return ann;
+    //    }
     
 }
 
@@ -274,7 +280,7 @@
         obj.dictVenue=[arrVenueList objectAtIndex:sender.tag];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
-    }    
+    }
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result

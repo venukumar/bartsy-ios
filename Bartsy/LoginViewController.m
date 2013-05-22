@@ -25,6 +25,12 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -53,10 +59,10 @@
             }];
         }
     }
-
+    
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     
-
+    
     UIScrollView *scrollView=[[UIScrollView alloc]init];
     if (screenBounds.size.height == 568)
     {
@@ -70,7 +76,7 @@
     scrollView.backgroundColor=[UIColor clearColor];
     scrollView.showsHorizontalScrollIndicator=NO;
     [self.view addSubview:scrollView];
-    scrollView.delegate=self; 
+    scrollView.delegate=self;
     scrollView.tag=111;
     scrollView.scrollEnabled=YES;
     
@@ -88,7 +94,7 @@
     UILabel *lblMapText=[self createLabelWithTitle:@"See how busy Bartsy bars are and see who's there for unlocked bars" frame:CGRectMake(10, 165, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
     lblMapText.textAlignment=NSTextAlignmentCenter;
     [scrollView addSubview:lblMapText];
-
+    
     
     UIButton *btnDrinks=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drinks.png"] frame:CGRectMake(180, 45, 120, 120) tag:0 selector:@selector(buttonDrinks_TouchUpInside) target:self];
     [[btnDrinks layer] setShadowOffset:CGSizeMake(0, 1)];
@@ -139,7 +145,7 @@
     [self.view addSubview:pgControl];
     pgControl.tag=222;
     [pgControl release];
-
+    
     UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(-8, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor whiteColor] numberOfLines:1];
     lblCopyRight.textAlignment=NSTextAlignmentCenter;
     [scrollView addSubview:lblCopyRight];
@@ -180,11 +186,11 @@
     
     UILabel *lblExistingBartsy=[self createLabelWithTitle:@"Existing Bartsy Account" frame:CGRectMake(320+180, 370, 180, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:1];
     [scrollView addSubview:lblExistingBartsy];
-
+    
     UILabel *lblCopyRight2=[self createLabelWithTitle:@"Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(320+0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor whiteColor] numberOfLines:1];
     lblCopyRight2.textAlignment=NSTextAlignmentCenter;
     [scrollView addSubview:lblCopyRight2];
-
+    
 }
 
 
@@ -210,7 +216,9 @@
 
 -(void)btnRefresh_TouchUpInside
 {
-    
+    int intCurrentPage=1;
+    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
+    [scrollView setContentOffset:CGPointMake(intCurrentPage*320, 0) animated:YES];
 }
 
 -(void)btnGoogle_TouchUpInside
@@ -261,7 +269,7 @@
              // and here we make sure to update our UX according to the new session state
              [self updateView];
              [self hideProgressView:nil];
-
+             
          }];
     }
 }
@@ -269,7 +277,7 @@
 
 -(void)pgControl_ValueChanged:(UIPageControl*)pageControl
 {
-    int intCurrentPage=pageControl.currentPage;    
+    int intCurrentPage=pageControl.currentPage;
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
     [scrollView setContentOffset:CGPointMake(intCurrentPage*320, 0) animated:YES];
 }
@@ -288,12 +296,12 @@
 // main helper method to update the UI to reflect the current state of the session.
 - (void)updateView {
     // get the app delegate, so that we can reference the session property
-
+    
     //UIButton *btnFb=(UIButton*)[self.view viewWithTag:111];
     if (appDelegate.session.isOpen)
     {
-       // [btnFb setText:[NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",
-                                     // appDelegate.session.accessTokenData.accessToken]];
+        // [btnFb setText:[NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",
+        // appDelegate.session.accessTokenData.accessToken]];
         ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
         [self.navigationController pushViewController:profileScreen animated:YES];
         [profileScreen release];

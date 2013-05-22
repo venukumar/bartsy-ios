@@ -8,20 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-#import "PayPalMobile.h"
 #import "AppDelegate.h"
-@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,PayPalPaymentDelegate>
+@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate>
 {
     NSDictionary *dictSelectedToMakeOrder;
     BOOL isRequestForOrder;
     NSDictionary *dictVenue;
-    
+    BOOL isRequestForPeople;
+    NSArray *arrStatus;
 }
 @property(nonatomic,retain)NSDictionary *dictVenue;
-@property(nonatomic, strong, readwrite) NSString *environment;
-@property(nonatomic, assign, readwrite) BOOL acceptCreditCards;
-@property(nonatomic, strong, readwrite) PayPalPayment *completedPayment;
-
 -(void)orderTheDrink;
 
 @end

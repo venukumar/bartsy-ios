@@ -45,4 +45,6 @@
 -(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId description:(NSString*)strDescription delegate:(id)aDelegate;
 -(void)checkInAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate;
 -(void)checkOutAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate;
+-(void)gettingPeopleListFromVenue:(NSString*)strVenueId delegate:(id)aDelegate;
+-(void)getUserOrdersWithBartsyId:(NSString*)strBartsyId delegate:(id)aDelegate;
 @end

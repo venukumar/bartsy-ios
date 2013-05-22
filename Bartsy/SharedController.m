@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-#define KServerURL @"http://54.235.76.180:8080/Bartsy"
-//#define KServerURL @"http://192.168.0.109:8080/Bartsy"
+#define KServerURL @"http://54.235.76.180:8080"
+//#define KServerURL @"http://192.168.0.109:8080"
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
@@ -104,7 +104,7 @@ static SharedController *sharedController;
 -(void)getMenuListWithVenueID:(NSString*)strVenueId delegate:(id)aDelegate;
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/venue/getMenu",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getMenu",KServerURL];
     
     NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
     SBJSON *jsonObj=[SBJSON new];
@@ -125,19 +125,19 @@ static SharedController *sharedController;
 -(void)getVenueListWithDelegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/venue/getVenueList",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getVenueList",KServerURL];
     
-//    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
-//    SBJSON *jsonObj=[SBJSON new];
-//    NSString *strJson=[jsonObj stringWithObject:dictProfile];
-//    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    //    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
+    //    SBJSON *jsonObj=[SBJSON new];
+    //    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    //    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
     
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
-//    [request setHTTPMethod:@"POST"];
-//    [request setHTTPBody:dataProfile];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    //    [request setHTTPMethod:@"POST"];
+    //    [request setHTTPBody:dataProfile];
+    //    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self sendRequest:request];
     [url release];
     [request release];
@@ -150,18 +150,20 @@ static SharedController *sharedController;
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     NSData *imageData= UIImagePNGRepresentation(imgProfile);
-
+    
     NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",nil];
     NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
-    NSString *strURL=[NSString stringWithFormat:@"%@/user/saveUserProfile",KServerURL];
+    NSLog(@"Profile Info : \n %@",dictUserProfile);
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
-   [request setHTTPMethod:@"POST"];
+    [request setHTTPMethod:@"POST"];
     
     // set Content-Type in HTTP header
     NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
-
+    
     NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
     [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
     
@@ -211,7 +213,7 @@ static SharedController *sharedController;
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *strURL=[NSString stringWithFormat:@"%@/order/placeOrder",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/placeOrder",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
     [request setHTTPMethod:@"POST"];
@@ -239,7 +241,7 @@ static SharedController *sharedController;
 -(void)checkInAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/user/userCheckIn",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/userCheckIn",KServerURL];
     
     NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     SBJSON *jsonObj=[SBJSON new];
@@ -260,7 +262,7 @@ static SharedController *sharedController;
 -(void)checkOutAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/user/userCheckOut",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/userCheckOut",KServerURL];
     
     NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     SBJSON *jsonObj=[SBJSON new];
@@ -278,6 +280,47 @@ static SharedController *sharedController;
     [request release];
 }
 
+-(void)gettingPeopleListFromVenue:(NSString*)strVenueId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/checkedInUsersList",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
+-(void)getUserOrdersWithBartsyId:(NSString*)strBartsyId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strBartsyId,@"bartsyId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
 
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
@@ -322,6 +365,8 @@ static SharedController *sharedController;
     
     NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
     NSError *outError = nil;
+    
+    NSLog(@"JSON String : \n %@",jsonString);
     
     id result = [jsonParser objectWithString:jsonString error:&outError];
     if (outError == nil )

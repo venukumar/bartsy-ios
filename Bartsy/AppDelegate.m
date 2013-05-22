@@ -17,7 +17,7 @@
 
 
 @implementation AppDelegate
-@synthesize deviceToken,delegateForCurrentViewController;
+@synthesize deviceToken,delegateForCurrentViewController,isComingForOrders;
 
 - (void)dealloc
 {
@@ -39,6 +39,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
+    
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
@@ -140,46 +141,56 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     AudioServicesPlaySystemSound(1007);
-
+    
     for (id key in userInfo)
     {
         NSLog(@"key: %@, value: %@", key, [userInfo objectForKey:key]);
     }
     
-    if([[userInfo valueForKey:@"messageType"] isEqualToString:@"updateOrderStatus"])
+    NSLog(@"Current VC is %@",delegateForCurrentViewController);
+    //    if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+    //    {
+    //        [delegateForCurrentViewController reloadData];
+    //    }
+    
+    if([[userInfo valueForKey:@"orderStatus"] integerValue])
     {
-        NSMutableArray *arrOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
-        NSPredicate *predicate=[NSPredicate predicateWithFormat:@"orderId==%i",[[userInfo valueForKey:@"orderId"] integerValue]];
-        NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrOrders];
-        [arrTemp filterUsingPredicate:predicate];
-        if([arrTemp count])
+        if(alertView!=nil)
         {
-            NSInteger intIndex=[arrOrders indexOfObject:[arrTemp objectAtIndex:0]];
-            NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrOrders objectAtIndex:intIndex]];
-            [dictItem setObject:[arrStatus objectAtIndex:[[userInfo valueForKey:@"orderStatus"] integerValue]-2] forKey:@"orderStatus"];
-            if([[userInfo valueForKey:@"orderStatus"] integerValue]==5)
-            {
-                [arrOrders removeObjectAtIndex:intIndex];
-                NSMutableArray *arrCompletedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersCompleted"]];
-                [arrCompletedOrders addObject:dictItem];
-                [[NSUserDefaults standardUserDefaults]setObject:arrCompletedOrders forKey:@"OrdersCompleted"];
-            }
-            else
-            {
-               [arrOrders replaceObjectAtIndex:intIndex withObject:dictItem]; 
-            }
-            [[NSUserDefaults standardUserDefaults]setObject:arrOrders forKey:@"Orders"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
         }
         
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alertView.tag=143225;
+        [alertView show];
     }
     
-    NSLog(@"Current VC is %@",delegateForCurrentViewController);
-    if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+}
+
+- (void)alertView:(UIAlertView *)alertView1 clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView1.tag==143225)
     {
-        [delegateForCurrentViewController reloadData];
+        isComingForOrders=YES;
+        
+        if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+        {
+            [delegateForCurrentViewController reloadData];
+        }
+        else
+        {
+            UIViewController *viewController=(UIViewController*)delegateForCurrentViewController;
+            HomeViewController *obj=[[HomeViewController alloc]init];
+            obj.dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+            [viewController.navigationController pushViewController:obj animated:YES];
+            [obj release];
+            
+        }
     }
 }
+
 // FBSample logic
 // The native facebook application transitions back to an authenticating application when the user
 // chooses to either log in, or cancel. The url passed to this method contains the token in the
@@ -225,7 +236,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
@@ -259,11 +270,11 @@
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-             // Replace this implementation with code to handle the error appropriately.
-             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
 }
 
@@ -313,7 +324,7 @@
         /*
          Replace this implementation with code to handle the error appropriately.
          
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
          
          Typical reasons for an error here include:
          * The persistent store is not accessible;
@@ -335,7 +346,7 @@
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }    
+    }
     
     return _persistentStoreCoordinator;
 }

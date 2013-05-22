@@ -29,6 +29,12 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -82,6 +88,12 @@
     btnContinue.backgroundColor=[UIColor darkGrayColor];
     [self.view addSubview:btnContinue];
     
+    [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(removeLoader) userInfo:nil repeats:NO];
+}
+
+-(void)removeLoader
+{
+    [self hideProgressView:nil];
 }
 
 -(void)btnCancel_TouchUpInside
@@ -104,12 +116,11 @@
     UIImageView *imgViewProfilePic=(UIImageView*)[self.view viewWithTag:111];
     
     [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:[dict objectForKey:@"gender"] userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image delegate:self];
-    
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
-    [self hideProgressView:nil];
+    
     
     if(isRequestForSavingProfile==NO)
     {
@@ -126,8 +137,9 @@
         }
         
     }
-    else
+    else if(isRequestForSavingProfile==YES)
     {
+        [self hideProgressView:nil];
         isRequestForSavingProfile=NO;
         
         NSManagedObjectContext *context=[appDelegate managedObjectContext];
@@ -145,9 +157,25 @@
         [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyUserId"] forKey:@"bartsyId"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         
-        WelcomeViewController *obj=[[WelcomeViewController alloc]init];
-        [self.navigationController pushViewController:obj animated:YES];
-        [obj release];
+        if([[result objectForKey:@"userCheckedIn"] integerValue]==0)
+        {
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+            NSDictionary *dictVenueDetails=[[NSDictionary alloc]initWithObjectsAndKeys:[result objectForKey:@"venueId"],@"venueId",[result objectForKey:@"venueName"],@"venueName", nil];
+            [[NSUserDefaults standardUserDefaults]setObject:dictVenueDetails forKey:@"VenueDetails"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            
+            WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+            [self.navigationController pushViewController:obj animated:YES];
+            [obj release];
+            
+        }
+        else
+        {
+            WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+            [self.navigationController pushViewController:obj animated:YES];
+            [obj release];
+        }
+        
     }
 }
 

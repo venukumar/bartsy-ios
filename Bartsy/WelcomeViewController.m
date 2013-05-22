@@ -22,16 +22,19 @@
     if (self) {
         // Custom initialization
     }
-    return self; 
+    return self;
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
+    
     self.navigationController.navigationBarHidden=YES;
     
     UIImageView *imgViewBox=(UIImageView*)[self.view viewWithTag:143];
     UIButton *btnClose=(UIButton*)[self.view viewWithTag:1111];
-
+    
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
     {
         imgViewBox.hidden=YES;
@@ -124,13 +127,13 @@
     UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic3.png"] frame:CGRectMake(170, 302, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnProfile];
     
-
+    
     UIImageView *imgViewCheckInBox4=[self createImageViewWithImage:[UIImage imageNamed:@"box.png"] frame:CGRectMake(5, 390, 310, 44) tag:0];
     [self.view addSubview:imgViewCheckInBox4];
     
     UIImageView *imgViewCheckInLogo4=[self createImageViewWithImage:[UIImage imageNamed:@"smile.png"] frame:CGRectMake(10, 4, 40, 35) tag:0];
     [imgViewCheckInBox4 addSubview:imgViewCheckInLogo4];
-        
+    
     UILabel *lblComment=[self createLabelWithTitle:@"Send us praise,comments or suggestions" frame:CGRectMake(55, 0, 280, 40) tag:0 font:[UIFont systemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
     [imgViewCheckInBox4 addSubview:lblComment];
     
@@ -187,7 +190,7 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"CheckInVenueId"];
-    [self hideProgressView:nil];    
+    [self hideProgressView:nil];
     
     UIImageView *imgViewBox=(UIImageView*)[self.view viewWithTag:143];
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
@@ -206,7 +209,7 @@
         lblCheckIn.text=[NSString stringWithFormat:@"CheckedIn at %@",[dict objectForKey:@"venueName"]];
         
     }
-
+    
 }
 
 
@@ -219,6 +222,8 @@
 {
     if(alertView.tag==143225&&buttonIndex==1)
     {
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Checking Out..."];
         [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];

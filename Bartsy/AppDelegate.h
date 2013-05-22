@@ -14,6 +14,8 @@
     NSString *deviceToken;
     NSArray *arrStatus;
     id delegateForCurrentViewController;
+    BOOL isComingForOrders;
+    UIAlertView *alertView;
 }
 @property (nonatomic,retain)id delegateForCurrentViewController;
 @property (strong, nonatomic) UIWindow *window;
@@ -23,7 +25,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) FBSession *session;
-
+@property (nonatomic,assign)BOOL isComingForOrders;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
