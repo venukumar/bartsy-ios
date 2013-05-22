@@ -40,6 +40,7 @@
     
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
+     [Crittercism enableWithAppID:@"519b0a0313862004c500000b"];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
