@@ -55,7 +55,7 @@
 		E075A963174512AE0061FBAE /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A95F174512AE0061FBAE /* pic4.png */; };
 		E075A96517465B270061FBAE /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A96417465B250061FBAE /* icon.png */; };
 		E083BCB4174CE55500940A21 /* disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = E083BCB3174CE55500940A21 /* disclosure.png */; };
-		E083BCB9174CFF7F00940A21 /* libCrittercism_v3_5_2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E083BCB8174CFF7F00940A21 /* libCrittercism_v3_5_2.a */; };
+		E088B906174E01640056FF39 /* libCrittercism_v3_5_2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E088B905174E01640056FF39 /* libCrittercism_v3_5_2.a */; };
 		E092F965173049CC00E1CC15 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F958173049CC00E1CC15 /* SBJsonParser.m */; };
 		E092F966173049CC00E1CC15 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F95B173049CC00E1CC15 /* NSObject+SBJSON.m */; };
 		E092F967173049CC00E1CC15 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F95D173049CC00E1CC15 /* NSString+SBJSON.m */; };
@@ -204,7 +204,7 @@
 		E083BCB3174CE55500940A21 /* disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure.png; sourceTree = "<group>"; };
 		E083BCB6174CFF7F00940A21 /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
 		E083BCB7174CFF7F00940A21 /* CrittercismDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismDelegate.h; sourceTree = "<group>"; };
-		E083BCB8174CFF7F00940A21 /* libCrittercism_v3_5_2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v3_5_2.a; sourceTree = "<group>"; };
+		E088B905174E01640056FF39 /* libCrittercism_v3_5_2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v3_5_2.a; sourceTree = "<group>"; };
 		E092F958173049CC00E1CC15 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		E092F959173049CC00E1CC15 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		E092F95A173049CC00E1CC15 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -346,7 +346,7 @@
 				E041068A172A8D6F009F1B1E /* CoreGraphics.framework in Frameworks */,
 				E041068C172A8D6F009F1B1E /* CoreData.framework in Frameworks */,
 				E04106B8172AA6E8009F1B1E /* FacebookSDK.framework in Frameworks */,
-				E083BCB9174CFF7F00940A21 /* libCrittercism_v3_5_2.a in Frameworks */,
+				E088B906174E01640056FF39 /* libCrittercism_v3_5_2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,7 +436,7 @@
 			children = (
 				E083BCB6174CFF7F00940A21 /* Crittercism.h */,
 				E083BCB7174CFF7F00940A21 /* CrittercismDelegate.h */,
-				E083BCB8174CFF7F00940A21 /* libCrittercism_v3_5_2.a */,
+				E088B905174E01640056FF39 /* libCrittercism_v3_5_2.a */,
 			);
 			path = CrittercismSDK;
 			sourceTree = "<group>";
