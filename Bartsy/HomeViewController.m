@@ -660,7 +660,7 @@
         [[cell.imageView layer] setShadowRadius:3.0];
         [[cell.imageView layer] setShadowOpacity:0.8];
         
-        cell.textLabel.text=[dictPeople objectForKey:@"name"];
+        cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
         cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
     }
     else

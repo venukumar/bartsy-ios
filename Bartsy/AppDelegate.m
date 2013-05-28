@@ -170,7 +170,6 @@
 //application did recive remote notification.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    AudioServicesPlaySystemSound(1007);
 
     NSLog(@"PN: %@",userInfo);
     
@@ -182,6 +181,8 @@
     
     if([[userInfo objectForKey:@"messageType"] isEqualToString:@"updateOrderStatus"]&&[[userInfo valueForKey:@"orderStatus"] integerValue])
     {
+        AudioServicesPlaySystemSound(1007);
+
         if(alertView!=nil)
         {
             [alertView dismissWithClickedButtonIndex:0 animated:YES];
@@ -195,6 +196,8 @@
     }
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"orderTimeout"])
     {
+        AudioServicesPlaySystemSound(1007);
+
         alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alertView.tag=143225;
         [alertView show];
