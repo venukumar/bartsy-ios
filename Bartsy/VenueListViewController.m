@@ -33,6 +33,12 @@
     appDelegate.delegateForCurrentViewController=self;
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    MKMapView *mapView=(MKMapView*)[self.view viewWithTag:222];
+    mapView.delegate=nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -61,6 +67,7 @@
     CLLocationManager *locationManager=[[CLLocationManager alloc]init];
     locationManager.delegate=self;
     [locationManager startUpdatingLocation];
+    [locationManager release];
     
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 241, 320, 180)];
     tblView.dataSource=self;
@@ -178,12 +185,16 @@
     NSLog(@"Lat : %f \n Lon:%f",currentLocaion.latitude,currentLocaion.longitude);
     
     [manager stopUpdatingLocation];
+    manager.delegate=nil;
+    
 }
 
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error
 {
     NSLog(@"Error is %@",[error description]);
+    [manager stopUpdatingLocation];
+    manager.delegate=nil;
 }
 
 -(void)reloadMapView

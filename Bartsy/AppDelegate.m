@@ -204,6 +204,8 @@
     }
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"heartBeat"])
     {
+        AudioServicesPlaySystemSound(1007);
+
         [delegateForCurrentViewController heartBeat];
     }
     

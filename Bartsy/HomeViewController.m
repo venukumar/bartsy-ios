@@ -151,11 +151,6 @@
         
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         
-        //        if([arrOrders count]==0)
-        //        {
-        //            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        //        }
-        
     }
     appDelegate.isComingForOrders=NO;
 }
@@ -184,24 +179,11 @@
         isRequestForGettingsOrders=YES;
         isRequestForPeople=NO;
         isRequestForOrder=NO;
-        
-        //        [arrOrders removeAllObjects];
-        //        [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+       
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
         isSelectedForPeople=NO;
         
-        //NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
-        //[arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-        
-        //NSLog(@"Orders %@",arrOrders);
-        
-        //[tblView reloadData];
-        
-        //        if([arrOrders count]==0)
-        //        {
-        //            [self createAlertViewWithTitle:@"" message:@"No open orders\n Go to the drinks tab to place some\n Go to menu for Past Orders..." cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        //        }
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getUserOrdersWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
@@ -376,6 +358,30 @@
 -(void)controllerDidFailLoadingWithError:(NSError*)error
 {
     [self hideProgressView:nil];
+    
+    if(isRequestForPeople==YES)
+    {
+        isSelectedForDrinks=NO;
+        isSelectedForPeople=YES;
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
+        
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        NSString *strOrder=[NSString stringWithFormat:@"PEOPLE (%i)",[arrPeople count]];
+        
+        [segmentControl setTitle:strOrder forSegmentAtIndex:1];
+    }
+    else if(isRequestForGettingsOrders==YES)
+    {
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+        
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
+        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+    }
+
     
 }
 
@@ -1133,7 +1139,7 @@
         btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
         btnOrder.titleLabel.textColor = [UIColor whiteColor];
         btnOrder.backgroundColor=[UIColor blackColor];
-        [btnOrder addTarget:self action:@selector(loginToGateway) forControlEvents:UIControlEventTouchUpInside];
+        [btnOrder addTarget:self action:@selector(btnOrder_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [viewC addSubview:btnOrder];
         
         [viewA release];

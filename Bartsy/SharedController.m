@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-//#define KServerURL @"http://54.235.76.180:8080"
-#define KServerURL @"http://192.168.0.109:8080"
+#define KServerURL @"http://54.235.76.180:8080"
+//#define KServerURL @"http://192.168.0.109:8080"
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
@@ -357,7 +357,7 @@ static SharedController *sharedController;
 		if (( internetStatus != ReachableViaWiFi) && (internetStatus != ReachableViaWWAN))
 		{
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            //	[self showAlertWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" delegate:nil];
+            [self showAlertWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" delegate:nil];
             [delegate controllerDidFailLoadingWithError:nil];
             return;
 		}

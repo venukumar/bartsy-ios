@@ -129,7 +129,7 @@
     [scrollView addSubview:lblDOB];
     
     UITextField *txtFldDOB=[self createTextFieldWithFrame:CGRectMake(95, 225, 200, 30) tag:444 delegate:self];
-    txtFldDOB.text=@"Select D.O.B";
+    txtFldDOB.placeholder=@"Select D.O.B";
     txtFldDOB.font=[UIFont systemFontOfSize:15];
     [scrollView addSubview:txtFldDOB];
     
@@ -458,7 +458,6 @@
 {
     isRequestForSavingProfile=YES;
     self.sharedController=[SharedController sharedController];
-    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
     UIImageView *imgViewProfilePic=(UIImageView*)[self.view viewWithTag:111];
     UITextField *txtFldFirstName=(UITextField*)[self.view viewWithTag:222];
@@ -474,7 +473,13 @@
     NSString *strDOB= [NSString stringWithFormat:@"%@",
                     [df stringFromDate:datePicker.date]];
     
-    [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:txtFldGender.text userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image firstName:txtFldFirstName.text lastName:txtFldLastName.text dob:strDOB orientation:txtFldOrientation.text status:txtFldStatus.text description:txtFldDescription.text nickName:txtFldNickName.text delegate:self];
+    if(imgViewProfilePic.image!=nil&&[txtFldNickName.text length]&&[txtFldLastName.text length]&&[txtFldGender.text length]&&[txtFldOrientation.text length]&&[txtFldStatus.text length]&&[txtFldDescription.text length]&&[txtFldNickName.text length])
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:txtFldGender.text userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image firstName:txtFldFirstName.text lastName:txtFldLastName.text dob:strDOB orientation:txtFldOrientation.text status:txtFldStatus.text description:txtFldDescription.text nickName:txtFldNickName.text delegate:self];
+    }
+    else
+        [self createAlertViewWithTitle:@"" message:@"Fields should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     
 }
 
