@@ -41,6 +41,8 @@
     //    self.navigationItem.leftBarButtonItem=nil;
     //    self.navigationItem.hidesBackButton=YES;
     
+    self.trackedViewName = @"Bartsy Venue List screen";
+
     self.title=@"Bartsy Service Stations";
     
     arrVenueList=[[NSMutableArray alloc]init];

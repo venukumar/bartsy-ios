@@ -36,6 +36,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    self.trackedViewName = @"Login Screen";
+
     self.navigationController.navigationBarHidden=YES;
     self.view.backgroundColor=[UIColor blackColor];
     

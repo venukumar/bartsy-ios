@@ -14,7 +14,7 @@
 #define kEnabled                @"enabled"
 #define kSimulator              @"Simulator"
 #import <AudioToolbox/AudioToolbox.h>
-
+#import "GAI.h"
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders;
@@ -42,6 +42,16 @@
     
      [Crittercism enableWithAppID:@"519b0a0313862004c500000b"];
     
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+    // Optional: set debug to YES for extra debugging information.
+    [GAI sharedInstance].debug = YES;
+    // Create tracker instance.
+    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-40090000-1"];
+
+    
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
         WelcomeViewController *homeObj = [[WelcomeViewController alloc] init];
@@ -57,12 +67,31 @@
     
     [self.window makeKeyAndVisible];
     
+    [self registerMobileDevice];
+    
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:
      (UIRemoteNotificationTypeAlert |
       UIRemoteNotificationTypeBadge |
       UIRemoteNotificationTypeSound)];
     return YES;
+}
+
+-(void)registerMobileDevice
+{
+    MobileDeviceRegistrationRequest *mobileDeviceRegistrationRequest =
+    [MobileDeviceRegistrationRequest mobileDeviceRegistrationRequest];
+    mobileDeviceRegistrationRequest.mobileDevice.mobileDeviceId =
+    @"ABCDEF";
+    mobileDeviceRegistrationRequest.mobileDevice.mobileDescription = @"TestingRegistration";
+    mobileDeviceRegistrationRequest.mobileDevice.phoneNumber = @"1111111111";
+    mobileDeviceRegistrationRequest.anetApiRequest.merchantAuthentication.name = @"sudheerp143";
+    mobileDeviceRegistrationRequest.anetApiRequest.merchantAuthentication.password = @"Techvedika@007";
+    
+    [AuthNet authNetWithEnvironment:ENV_TEST];
+    
+    AuthNet *an = [AuthNet getInstance];
+    [an mobileDeviceRegistrationRequest:mobileDeviceRegistrationRequest];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
@@ -142,11 +171,8 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     AudioServicesPlaySystemSound(1007);
-    
-    for (id key in userInfo)
-    {
-        NSLog(@"key: %@, value: %@", key, [userInfo objectForKey:key]);
-    }
+
+    NSLog(@"PN: %@",userInfo);
     
     NSLog(@"Current VC is %@",delegateForCurrentViewController);
     //    if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
@@ -154,7 +180,7 @@
     //        [delegateForCurrentViewController reloadData];
     //    }
     
-    if([[userInfo valueForKey:@"orderStatus"] integerValue])
+    if([[userInfo objectForKey:@"messageType"] isEqualToString:@"updateOrderStatus"]&&[[userInfo valueForKey:@"orderStatus"] integerValue])
     {
         if(alertView!=nil)
         {
@@ -167,6 +193,17 @@
         alertView.tag=143225;
         [alertView show];
     }
+    else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"orderTimeout"])
+    {
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alertView.tag=143225;
+        [alertView show];
+    }
+    else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"heartBeat"])
+    {
+        [delegateForCurrentViewController heartBeat];
+    }
+    
     
 }
 

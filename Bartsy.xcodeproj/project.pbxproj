@@ -54,8 +54,82 @@
 		E075A962174512AE0061FBAE /* pic3.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A95E174512AE0061FBAE /* pic3.png */; };
 		E075A963174512AE0061FBAE /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A95F174512AE0061FBAE /* pic4.png */; };
 		E075A96517465B270061FBAE /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A96417465B250061FBAE /* icon.png */; };
+		E07716B017533DF3005FD5E1 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E07716AF17533DF3005FD5E1 /* libGoogleAnalytics.a */; };
 		E083BCB4174CE55500940A21 /* disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = E083BCB3174CE55500940A21 /* disclosure.png */; };
 		E088B906174E01640056FF39 /* libCrittercism_v3_5_2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E088B905174E01640056FF39 /* libCrittercism_v3_5_2.a */; };
+		E088B909174E02C20056FF39 /* NSString+stringWithEscapedXMLValue.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B908174E02C20056FF39 /* NSString+stringWithEscapedXMLValue.m */; };
+		E088B911174E02F80056FF39 /* NSString+dataFromFilename.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B90B174E02F80056FF39 /* NSString+dataFromFilename.m */; };
+		E088B912174E02F80056FF39 /* NSString+stringValueOfXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B90D174E02F80056FF39 /* NSString+stringValueOfXMLElement.m */; };
+		E088B913174E02F80056FF39 /* NSString+stringWithXMLTag.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B910174E02F80056FF39 /* NSString+stringWithXMLTag.m */; };
+		E088B917174E032B0056FF39 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B916174E032B0056FF39 /* GDataXMLNode.m */; };
+		E088B91D174E03850056FF39 /* LogoutRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B91A174E03850056FF39 /* LogoutRequest.m */; };
+		E088B91E174E03850056FF39 /* LogoutResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B91C174E03850056FF39 /* LogoutResponse.m */; };
+		E088B924174E039C0056FF39 /* CreateTransactionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B921174E039C0056FF39 /* CreateTransactionRequest.m */; };
+		E088B925174E039C0056FF39 /* CreateTransactionResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B923174E039C0056FF39 /* CreateTransactionResponse.m */; };
+		E088B92B174E03B30056FF39 /* GetBatchStatisticsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B928174E03B30056FF39 /* GetBatchStatisticsRequest.m */; };
+		E088B92C174E03B30056FF39 /* GetBatchStatisticsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B92A174E03B30056FF39 /* GetBatchStatisticsResponse.m */; };
+		E088B932174E0BEE0056FF39 /* GetSettledBatchListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B92F174E0BEE0056FF39 /* GetSettledBatchListRequest.m */; };
+		E088B933174E0BEE0056FF39 /* GetSettledBatchListResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B931174E0BEE0056FF39 /* GetSettledBatchListResponse.m */; };
+		E088B939174E0C0C0056FF39 /* GetTransactionDetailsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B936174E0C0C0056FF39 /* GetTransactionDetailsRequest.m */; };
+		E088B93A174E0C0C0056FF39 /* GetTransactionDetailsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B938174E0C0C0056FF39 /* GetTransactionDetailsResponse.m */; };
+		E088B940174E0C2F0056FF39 /* GetTransactionListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B93D174E0C2E0056FF39 /* GetTransactionListRequest.m */; };
+		E088B941174E0C2F0056FF39 /* GetTransactionListResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B93F174E0C2F0056FF39 /* GetTransactionListResponse.m */; };
+		E088B947174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B944174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.m */; };
+		E088B948174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B946174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.m */; };
+		E088B94E174E0C720056FF39 /* MobileDeviceLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B94B174E0C720056FF39 /* MobileDeviceLoginRequest.m */; };
+		E088B94F174E0C720056FF39 /* MobileDeviceLoginResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B94D174E0C720056FF39 /* MobileDeviceLoginResponse.m */; };
+		E088B955174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B952174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.m */; };
+		E088B956174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B954174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.m */; };
+		E088B95C174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B959174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.m */; };
+		E088B95D174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B95B174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.m */; };
+		E088B964174E0D9A0056FF39 /* ANetApiRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B960174E0D9A0056FF39 /* ANetApiRequest.m */; };
+		E088B965174E0D9A0056FF39 /* ANetApiResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B962174E0D9A0056FF39 /* ANetApiResponse.m */; };
+		E088B967174E0DBF0056FF39 /* AuthNet.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B966174E0DBF0056FF39 /* AuthNet.m */; };
+		E088B96C174E0DE10056FF39 /* AuthNetMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B969174E0DE10056FF39 /* AuthNetMessage.m */; };
+		E088B96D174E0DE10056FF39 /* AuthNetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B96B174E0DE10056FF39 /* AuthNetRequest.m */; };
+		E088B970174E0E040056FF39 /* AuthNetResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B96F174E0E040056FF39 /* AuthNetResponse.m */; };
+		E088B975174E0E130056FF39 /* BankAccountMaskedType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B972174E0E130056FF39 /* BankAccountMaskedType.m */; };
+		E088B976174E0E130056FF39 /* BankAccountType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B974174E0E130056FF39 /* BankAccountType.m */; };
+		E088B979174E0E260056FF39 /* BatchDetailsType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B978174E0E260056FF39 /* BatchDetailsType.m */; };
+		E088B97C174E0E380056FF39 /* BatchStatisticType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B97B174E0E380056FF39 /* BatchStatisticType.m */; };
+		E088B97F174E0E740056FF39 /* CCAuthenticationType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B97E174E0E740056FF39 /* CCAuthenticationType.m */; };
+		E088B984174E0E890056FF39 /* CreditCardMaskedType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B981174E0E890056FF39 /* CreditCardMaskedType.m */; };
+		E088B985174E0E890056FF39 /* CreditCardType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B983174E0E890056FF39 /* CreditCardType.m */; };
+		E088B988174E0EBC0056FF39 /* CreditCardTrackType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B986174E0EBC0056FF39 /* CreditCardTrackType.m */; };
+		E088B991174E0EE90056FF39 /* CustomerAddressType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B98A174E0EE90056FF39 /* CustomerAddressType.m */; };
+		E088B992174E0EE90056FF39 /* CustomerDataType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B98C174E0EE90056FF39 /* CustomerDataType.m */; };
+		E088B993174E0EE90056FF39 /* Error.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B98E174E0EE90056FF39 /* Error.m */; };
+		E088B994174E0EE90056FF39 /* ExtendedAmountType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B990174E0EE90056FF39 /* ExtendedAmountType.m */; };
+		E088B997174E0F000056FF39 /* FDSFilterType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B996174E0F000056FF39 /* FDSFilterType.m */; };
+		E088B99E174E0F280056FF39 /* LineItemType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B999174E0F280056FF39 /* LineItemType.m */; };
+		E088B99F174E0F280056FF39 /* MerchantAuthenticationType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B99B174E0F280056FF39 /* MerchantAuthenticationType.m */; };
+		E088B9A0174E0F280056FF39 /* MerchantContactType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B99D174E0F280056FF39 /* MerchantContactType.m */; };
+		E088B9A3174E0F4E0056FF39 /* Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9A2174E0F4E0056FF39 /* Messages.m */; };
+		E088B9A6174E0F5C0056FF39 /* MobileDeviceType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9A5174E0F5C0056FF39 /* MobileDeviceType.m */; };
+		E088B9AD174E0F890056FF39 /* NameAndAddressType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9A8174E0F890056FF39 /* NameAndAddressType.m */; };
+		E088B9AE174E0F890056FF39 /* OrderExType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9AA174E0F890056FF39 /* OrderExType.m */; };
+		E088B9AF174E0F890056FF39 /* OrderType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9AC174E0F890056FF39 /* OrderType.m */; };
+		E088B9B2174E0FA20056FF39 /* PaymentType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9B0174E0FA20056FF39 /* PaymentType.m */; };
+		E088B9BF174E0FDB0056FF39 /* PaymentMaskedType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9B4174E0FDB0056FF39 /* PaymentMaskedType.m */; };
+		E088B9C0174E0FDB0056FF39 /* PermissionType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9B6174E0FDB0056FF39 /* PermissionType.m */; };
+		E088B9C1174E0FDB0056FF39 /* SplitTenderPayment.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9B8174E0FDB0056FF39 /* SplitTenderPayment.m */; };
+		E088B9C2174E0FDB0056FF39 /* TransactionDetailsType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9BA174E0FDB0056FF39 /* TransactionDetailsType.m */; };
+		E088B9C3174E0FDB0056FF39 /* TransactionRequestType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9BC174E0FDB0056FF39 /* TransactionRequestType.m */; };
+		E088B9C4174E0FDB0056FF39 /* TransactionSummaryType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9BE174E0FDB0056FF39 /* TransactionSummaryType.m */; };
+		E088B9C7174E10020056FF39 /* TransactionResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9C6174E10020056FF39 /* TransactionResponse.m */; };
+		E088B9CE174E10380056FF39 /* TransRetailInfoType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9C9174E10380056FF39 /* TransRetailInfoType.m */; };
+		E088B9CF174E10380056FF39 /* SettingType.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9CB174E10380056FF39 /* SettingType.m */; };
+		E088B9D0174E10380056FF39 /* UserField.m in Sources */ = {isa = PBXBuildFile; fileRef = E088B9CD174E10380056FF39 /* UserField.m */; };
+		E088B9DC174E10660056FF39 /* CreateTransactionResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D2174E10660056FF39 /* CreateTransactionResponse.xml */; };
+		E088B9DD174E10660056FF39 /* GetBatchStatisticsResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D3174E10660056FF39 /* GetBatchStatisticsResponse.xml */; };
+		E088B9DE174E10660056FF39 /* GetSettledBatchListResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D4174E10660056FF39 /* GetSettledBatchListResponse.xml */; };
+		E088B9DF174E10660056FF39 /* GetTransactionDetailsResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D5174E10660056FF39 /* GetTransactionDetailsResponse.xml */; };
+		E088B9E0174E10660056FF39 /* GetTransactionListResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D6174E10660056FF39 /* GetTransactionListResponse.xml */; };
+		E088B9E1174E10660056FF39 /* GetUnsettledTransactionListResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D7174E10660056FF39 /* GetUnsettledTransactionListResponse.xml */; };
+		E088B9E2174E10660056FF39 /* LogoutResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D8174E10660056FF39 /* LogoutResponse.xml */; };
+		E088B9E3174E10660056FF39 /* MobileDeviceLoginResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9D9174E10660056FF39 /* MobileDeviceLoginResponse.xml */; };
+		E088B9E4174E10660056FF39 /* MobileDeviceRegistrationResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9DA174E10660056FF39 /* MobileDeviceRegistrationResponse.xml */; };
+		E088B9E5174E10660056FF39 /* SendCustomerTransactionReceiptResponse.xml in Resources */ = {isa = PBXBuildFile; fileRef = E088B9DB174E10660056FF39 /* SendCustomerTransactionReceiptResponse.xml */; };
 		E092F965173049CC00E1CC15 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F958173049CC00E1CC15 /* SBJsonParser.m */; };
 		E092F966173049CC00E1CC15 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F95B173049CC00E1CC15 /* NSObject+SBJSON.m */; };
 		E092F967173049CC00E1CC15 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = E092F95D173049CC00E1CC15 /* NSString+SBJSON.m */; };
@@ -201,10 +275,152 @@
 		E075A95E174512AE0061FBAE /* pic3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic3.png; sourceTree = "<group>"; };
 		E075A95F174512AE0061FBAE /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		E075A96417465B250061FBAE /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		E07716AA17533DF3005FD5E1 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
+		E07716AB17533DF3005FD5E1 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
+		E07716AC17533DF3005FD5E1 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
+		E07716AD17533DF3005FD5E1 /* GAITransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransaction.h; sourceTree = "<group>"; };
+		E07716AE17533DF3005FD5E1 /* GAITransactionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITransactionItem.h; sourceTree = "<group>"; };
+		E07716AF17533DF3005FD5E1 /* libGoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGoogleAnalytics.a; sourceTree = "<group>"; };
 		E083BCB3174CE55500940A21 /* disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure.png; sourceTree = "<group>"; };
 		E083BCB6174CFF7F00940A21 /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
 		E083BCB7174CFF7F00940A21 /* CrittercismDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismDelegate.h; sourceTree = "<group>"; };
 		E088B905174E01640056FF39 /* libCrittercism_v3_5_2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v3_5_2.a; sourceTree = "<group>"; };
+		E088B908174E02C20056FF39 /* NSString+stringWithEscapedXMLValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+stringWithEscapedXMLValue.m"; sourceTree = "<group>"; };
+		E088B90A174E02F80056FF39 /* NSString+dataFromFilename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+dataFromFilename.h"; sourceTree = "<group>"; };
+		E088B90B174E02F80056FF39 /* NSString+dataFromFilename.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+dataFromFilename.m"; sourceTree = "<group>"; };
+		E088B90C174E02F80056FF39 /* NSString+stringValueOfXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+stringValueOfXMLElement.h"; sourceTree = "<group>"; };
+		E088B90D174E02F80056FF39 /* NSString+stringValueOfXMLElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+stringValueOfXMLElement.m"; sourceTree = "<group>"; };
+		E088B90E174E02F80056FF39 /* NSString+stringWithEscapedXMLValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+stringWithEscapedXMLValue.h"; sourceTree = "<group>"; };
+		E088B90F174E02F80056FF39 /* NSString+stringWithXMLTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+stringWithXMLTag.h"; sourceTree = "<group>"; };
+		E088B910174E02F80056FF39 /* NSString+stringWithXMLTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+stringWithXMLTag.m"; sourceTree = "<group>"; };
+		E088B915174E032B0056FF39 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		E088B916174E032B0056FF39 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		E088B919174E03850056FF39 /* LogoutRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoutRequest.h; sourceTree = "<group>"; };
+		E088B91A174E03850056FF39 /* LogoutRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutRequest.m; sourceTree = "<group>"; };
+		E088B91B174E03850056FF39 /* LogoutResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoutResponse.h; sourceTree = "<group>"; };
+		E088B91C174E03850056FF39 /* LogoutResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutResponse.m; sourceTree = "<group>"; };
+		E088B920174E039C0056FF39 /* CreateTransactionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateTransactionRequest.h; sourceTree = "<group>"; };
+		E088B921174E039C0056FF39 /* CreateTransactionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateTransactionRequest.m; sourceTree = "<group>"; };
+		E088B922174E039C0056FF39 /* CreateTransactionResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateTransactionResponse.h; sourceTree = "<group>"; };
+		E088B923174E039C0056FF39 /* CreateTransactionResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateTransactionResponse.m; sourceTree = "<group>"; };
+		E088B927174E03B30056FF39 /* GetBatchStatisticsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetBatchStatisticsRequest.h; sourceTree = "<group>"; };
+		E088B928174E03B30056FF39 /* GetBatchStatisticsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetBatchStatisticsRequest.m; sourceTree = "<group>"; };
+		E088B929174E03B30056FF39 /* GetBatchStatisticsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetBatchStatisticsResponse.h; sourceTree = "<group>"; };
+		E088B92A174E03B30056FF39 /* GetBatchStatisticsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetBatchStatisticsResponse.m; sourceTree = "<group>"; };
+		E088B92E174E0BEE0056FF39 /* GetSettledBatchListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetSettledBatchListRequest.h; sourceTree = "<group>"; };
+		E088B92F174E0BEE0056FF39 /* GetSettledBatchListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetSettledBatchListRequest.m; sourceTree = "<group>"; };
+		E088B930174E0BEE0056FF39 /* GetSettledBatchListResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetSettledBatchListResponse.h; sourceTree = "<group>"; };
+		E088B931174E0BEE0056FF39 /* GetSettledBatchListResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetSettledBatchListResponse.m; sourceTree = "<group>"; };
+		E088B935174E0C0C0056FF39 /* GetTransactionDetailsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetTransactionDetailsRequest.h; sourceTree = "<group>"; };
+		E088B936174E0C0C0056FF39 /* GetTransactionDetailsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetTransactionDetailsRequest.m; sourceTree = "<group>"; };
+		E088B937174E0C0C0056FF39 /* GetTransactionDetailsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetTransactionDetailsResponse.h; sourceTree = "<group>"; };
+		E088B938174E0C0C0056FF39 /* GetTransactionDetailsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetTransactionDetailsResponse.m; sourceTree = "<group>"; };
+		E088B93C174E0C2E0056FF39 /* GetTransactionListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetTransactionListRequest.h; sourceTree = "<group>"; };
+		E088B93D174E0C2E0056FF39 /* GetTransactionListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetTransactionListRequest.m; sourceTree = "<group>"; };
+		E088B93E174E0C2F0056FF39 /* GetTransactionListResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetTransactionListResponse.h; sourceTree = "<group>"; };
+		E088B93F174E0C2F0056FF39 /* GetTransactionListResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetTransactionListResponse.m; sourceTree = "<group>"; };
+		E088B943174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetUnsettledTransactionListRequest.h; sourceTree = "<group>"; };
+		E088B944174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetUnsettledTransactionListRequest.m; sourceTree = "<group>"; };
+		E088B945174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetUnsettledTransactionListResponse.h; sourceTree = "<group>"; };
+		E088B946174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetUnsettledTransactionListResponse.m; sourceTree = "<group>"; };
+		E088B94A174E0C720056FF39 /* MobileDeviceLoginRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDeviceLoginRequest.h; sourceTree = "<group>"; };
+		E088B94B174E0C720056FF39 /* MobileDeviceLoginRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileDeviceLoginRequest.m; sourceTree = "<group>"; };
+		E088B94C174E0C720056FF39 /* MobileDeviceLoginResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDeviceLoginResponse.h; sourceTree = "<group>"; };
+		E088B94D174E0C720056FF39 /* MobileDeviceLoginResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileDeviceLoginResponse.m; sourceTree = "<group>"; };
+		E088B951174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDeviceRegistrationRequest.h; sourceTree = "<group>"; };
+		E088B952174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileDeviceRegistrationRequest.m; sourceTree = "<group>"; };
+		E088B953174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDeviceRegistrationResponse.h; sourceTree = "<group>"; };
+		E088B954174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileDeviceRegistrationResponse.m; sourceTree = "<group>"; };
+		E088B958174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendCustomerTransactionReceiptRequest.h; sourceTree = "<group>"; };
+		E088B959174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendCustomerTransactionReceiptRequest.m; sourceTree = "<group>"; };
+		E088B95A174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendCustomerTransactionReceiptResponse.h; sourceTree = "<group>"; };
+		E088B95B174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendCustomerTransactionReceiptResponse.m; sourceTree = "<group>"; };
+		E088B95F174E0D9A0056FF39 /* ANetApiRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANetApiRequest.h; sourceTree = "<group>"; };
+		E088B960174E0D9A0056FF39 /* ANetApiRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANetApiRequest.m; sourceTree = "<group>"; };
+		E088B961174E0D9A0056FF39 /* ANetApiResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANetApiResponse.h; sourceTree = "<group>"; };
+		E088B962174E0D9A0056FF39 /* ANetApiResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANetApiResponse.m; sourceTree = "<group>"; };
+		E088B963174E0D9A0056FF39 /* AuthNet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthNet.h; sourceTree = "<group>"; };
+		E088B966174E0DBF0056FF39 /* AuthNet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthNet.m; sourceTree = "<group>"; };
+		E088B968174E0DE10056FF39 /* AuthNetMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthNetMessage.h; sourceTree = "<group>"; };
+		E088B969174E0DE10056FF39 /* AuthNetMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthNetMessage.m; sourceTree = "<group>"; };
+		E088B96A174E0DE10056FF39 /* AuthNetRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthNetRequest.h; sourceTree = "<group>"; };
+		E088B96B174E0DE10056FF39 /* AuthNetRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthNetRequest.m; sourceTree = "<group>"; };
+		E088B96E174E0E040056FF39 /* AuthNetResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthNetResponse.h; sourceTree = "<group>"; };
+		E088B96F174E0E040056FF39 /* AuthNetResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthNetResponse.m; sourceTree = "<group>"; };
+		E088B971174E0E130056FF39 /* BankAccountMaskedType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankAccountMaskedType.h; sourceTree = "<group>"; };
+		E088B972174E0E130056FF39 /* BankAccountMaskedType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankAccountMaskedType.m; sourceTree = "<group>"; };
+		E088B973174E0E130056FF39 /* BankAccountType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankAccountType.h; sourceTree = "<group>"; };
+		E088B974174E0E130056FF39 /* BankAccountType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankAccountType.m; sourceTree = "<group>"; };
+		E088B977174E0E260056FF39 /* BatchDetailsType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatchDetailsType.h; sourceTree = "<group>"; };
+		E088B978174E0E260056FF39 /* BatchDetailsType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatchDetailsType.m; sourceTree = "<group>"; };
+		E088B97A174E0E380056FF39 /* BatchStatisticType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatchStatisticType.h; sourceTree = "<group>"; };
+		E088B97B174E0E380056FF39 /* BatchStatisticType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatchStatisticType.m; sourceTree = "<group>"; };
+		E088B97D174E0E740056FF39 /* CCAuthenticationType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAuthenticationType.h; sourceTree = "<group>"; };
+		E088B97E174E0E740056FF39 /* CCAuthenticationType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCAuthenticationType.m; sourceTree = "<group>"; };
+		E088B980174E0E890056FF39 /* CreditCardMaskedType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreditCardMaskedType.h; sourceTree = "<group>"; };
+		E088B981174E0E890056FF39 /* CreditCardMaskedType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreditCardMaskedType.m; sourceTree = "<group>"; };
+		E088B982174E0E890056FF39 /* CreditCardType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreditCardType.h; sourceTree = "<group>"; };
+		E088B983174E0E890056FF39 /* CreditCardType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreditCardType.m; sourceTree = "<group>"; };
+		E088B986174E0EBC0056FF39 /* CreditCardTrackType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreditCardTrackType.m; sourceTree = "<group>"; };
+		E088B987174E0EBC0056FF39 /* CreditCardTrackType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreditCardTrackType.h; sourceTree = "<group>"; };
+		E088B989174E0EE90056FF39 /* CustomerAddressType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerAddressType.h; sourceTree = "<group>"; };
+		E088B98A174E0EE90056FF39 /* CustomerAddressType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerAddressType.m; sourceTree = "<group>"; };
+		E088B98B174E0EE90056FF39 /* CustomerDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerDataType.h; sourceTree = "<group>"; };
+		E088B98C174E0EE90056FF39 /* CustomerDataType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerDataType.m; sourceTree = "<group>"; };
+		E088B98D174E0EE90056FF39 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		E088B98E174E0EE90056FF39 /* Error.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Error.m; sourceTree = "<group>"; };
+		E088B98F174E0EE90056FF39 /* ExtendedAmountType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtendedAmountType.h; sourceTree = "<group>"; };
+		E088B990174E0EE90056FF39 /* ExtendedAmountType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtendedAmountType.m; sourceTree = "<group>"; };
+		E088B995174E0F000056FF39 /* FDSFilterType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDSFilterType.h; sourceTree = "<group>"; };
+		E088B996174E0F000056FF39 /* FDSFilterType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDSFilterType.m; sourceTree = "<group>"; };
+		E088B998174E0F280056FF39 /* LineItemType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineItemType.h; sourceTree = "<group>"; };
+		E088B999174E0F280056FF39 /* LineItemType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineItemType.m; sourceTree = "<group>"; };
+		E088B99A174E0F280056FF39 /* MerchantAuthenticationType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantAuthenticationType.h; sourceTree = "<group>"; };
+		E088B99B174E0F280056FF39 /* MerchantAuthenticationType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MerchantAuthenticationType.m; sourceTree = "<group>"; };
+		E088B99C174E0F280056FF39 /* MerchantContactType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MerchantContactType.h; sourceTree = "<group>"; };
+		E088B99D174E0F280056FF39 /* MerchantContactType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MerchantContactType.m; sourceTree = "<group>"; };
+		E088B9A1174E0F4E0056FF39 /* Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Messages.h; sourceTree = "<group>"; };
+		E088B9A2174E0F4E0056FF39 /* Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Messages.m; sourceTree = "<group>"; };
+		E088B9A4174E0F5C0056FF39 /* MobileDeviceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobileDeviceType.h; sourceTree = "<group>"; };
+		E088B9A5174E0F5C0056FF39 /* MobileDeviceType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobileDeviceType.m; sourceTree = "<group>"; };
+		E088B9A7174E0F890056FF39 /* NameAndAddressType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameAndAddressType.h; sourceTree = "<group>"; };
+		E088B9A8174E0F890056FF39 /* NameAndAddressType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameAndAddressType.m; sourceTree = "<group>"; };
+		E088B9A9174E0F890056FF39 /* OrderExType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderExType.h; sourceTree = "<group>"; };
+		E088B9AA174E0F890056FF39 /* OrderExType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderExType.m; sourceTree = "<group>"; };
+		E088B9AB174E0F890056FF39 /* OrderType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderType.h; sourceTree = "<group>"; };
+		E088B9AC174E0F890056FF39 /* OrderType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderType.m; sourceTree = "<group>"; };
+		E088B9B0174E0FA20056FF39 /* PaymentType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentType.m; sourceTree = "<group>"; };
+		E088B9B1174E0FA20056FF39 /* PaymentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentType.h; sourceTree = "<group>"; };
+		E088B9B3174E0FDB0056FF39 /* PaymentMaskedType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentMaskedType.h; sourceTree = "<group>"; };
+		E088B9B4174E0FDB0056FF39 /* PaymentMaskedType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentMaskedType.m; sourceTree = "<group>"; };
+		E088B9B5174E0FDB0056FF39 /* PermissionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PermissionType.h; sourceTree = "<group>"; };
+		E088B9B6174E0FDB0056FF39 /* PermissionType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PermissionType.m; sourceTree = "<group>"; };
+		E088B9B7174E0FDB0056FF39 /* SplitTenderPayment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitTenderPayment.h; sourceTree = "<group>"; };
+		E088B9B8174E0FDB0056FF39 /* SplitTenderPayment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitTenderPayment.m; sourceTree = "<group>"; };
+		E088B9B9174E0FDB0056FF39 /* TransactionDetailsType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionDetailsType.h; sourceTree = "<group>"; };
+		E088B9BA174E0FDB0056FF39 /* TransactionDetailsType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailsType.m; sourceTree = "<group>"; };
+		E088B9BB174E0FDB0056FF39 /* TransactionRequestType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionRequestType.h; sourceTree = "<group>"; };
+		E088B9BC174E0FDB0056FF39 /* TransactionRequestType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionRequestType.m; sourceTree = "<group>"; };
+		E088B9BD174E0FDB0056FF39 /* TransactionSummaryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionSummaryType.h; sourceTree = "<group>"; };
+		E088B9BE174E0FDB0056FF39 /* TransactionSummaryType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionSummaryType.m; sourceTree = "<group>"; };
+		E088B9C5174E10020056FF39 /* TransactionResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionResponse.h; sourceTree = "<group>"; };
+		E088B9C6174E10020056FF39 /* TransactionResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionResponse.m; sourceTree = "<group>"; };
+		E088B9C8174E10380056FF39 /* TransRetailInfoType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransRetailInfoType.h; sourceTree = "<group>"; };
+		E088B9C9174E10380056FF39 /* TransRetailInfoType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransRetailInfoType.m; sourceTree = "<group>"; };
+		E088B9CA174E10380056FF39 /* SettingType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingType.h; sourceTree = "<group>"; };
+		E088B9CB174E10380056FF39 /* SettingType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingType.m; sourceTree = "<group>"; };
+		E088B9CC174E10380056FF39 /* UserField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserField.h; sourceTree = "<group>"; };
+		E088B9CD174E10380056FF39 /* UserField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserField.m; sourceTree = "<group>"; };
+		E088B9D2174E10660056FF39 /* CreateTransactionResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CreateTransactionResponse.xml; sourceTree = "<group>"; };
+		E088B9D3174E10660056FF39 /* GetBatchStatisticsResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GetBatchStatisticsResponse.xml; sourceTree = "<group>"; };
+		E088B9D4174E10660056FF39 /* GetSettledBatchListResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GetSettledBatchListResponse.xml; sourceTree = "<group>"; };
+		E088B9D5174E10660056FF39 /* GetTransactionDetailsResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GetTransactionDetailsResponse.xml; sourceTree = "<group>"; };
+		E088B9D6174E10660056FF39 /* GetTransactionListResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GetTransactionListResponse.xml; sourceTree = "<group>"; };
+		E088B9D7174E10660056FF39 /* GetUnsettledTransactionListResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GetUnsettledTransactionListResponse.xml; sourceTree = "<group>"; };
+		E088B9D8174E10660056FF39 /* LogoutResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LogoutResponse.xml; sourceTree = "<group>"; };
+		E088B9D9174E10660056FF39 /* MobileDeviceLoginResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MobileDeviceLoginResponse.xml; sourceTree = "<group>"; };
+		E088B9DA174E10660056FF39 /* MobileDeviceRegistrationResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MobileDeviceRegistrationResponse.xml; sourceTree = "<group>"; };
+		E088B9DB174E10660056FF39 /* SendCustomerTransactionReceiptResponse.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SendCustomerTransactionReceiptResponse.xml; sourceTree = "<group>"; };
 		E092F958173049CC00E1CC15 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		E092F959173049CC00E1CC15 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		E092F95A173049CC00E1CC15 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -347,6 +563,7 @@
 				E041068C172A8D6F009F1B1E /* CoreData.framework in Frameworks */,
 				E04106B8172AA6E8009F1B1E /* FacebookSDK.framework in Frameworks */,
 				E088B906174E01640056FF39 /* libCrittercism_v3_5_2.a in Frameworks */,
+				E07716B017533DF3005FD5E1 /* libGoogleAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +621,9 @@
 		E041068D172A8D6F009F1B1E /* Bartsy */ = {
 			isa = PBXGroup;
 			children = (
+				E07716B117533DFB005FD5E1 /* Google Analytics Library */,
+				E088B9D1174E105B0056FF39 /* Resources */,
+				E088B907174E02AF0056FF39 /* AuthorizeNet */,
 				E092F9921730552900E1CC15 /* Database */,
 				E092F9931730553B00E1CC15 /* View */,
 				E092F9911730550800E1CC15 /* WebServices */,
@@ -431,6 +651,19 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E07716B117533DFB005FD5E1 /* Google Analytics Library */ = {
+			isa = PBXGroup;
+			children = (
+				E07716AA17533DF3005FD5E1 /* GAI.h */,
+				E07716AB17533DF3005FD5E1 /* GAITrackedViewController.h */,
+				E07716AC17533DF3005FD5E1 /* GAITracker.h */,
+				E07716AD17533DF3005FD5E1 /* GAITransaction.h */,
+				E07716AE17533DF3005FD5E1 /* GAITransactionItem.h */,
+				E07716AF17533DF3005FD5E1 /* libGoogleAnalytics.a */,
+			);
+			name = "Google Analytics Library";
+			sourceTree = "<group>";
+		};
 		E083BCB5174CFF7F00940A21 /* CrittercismSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -439,6 +672,252 @@
 				E088B905174E01640056FF39 /* libCrittercism_v3_5_2.a */,
 			);
 			path = CrittercismSDK;
+			sourceTree = "<group>";
+		};
+		E088B907174E02AF0056FF39 /* AuthorizeNet */ = {
+			isa = PBXGroup;
+			children = (
+				E088B95F174E0D9A0056FF39 /* ANetApiRequest.h */,
+				E088B960174E0D9A0056FF39 /* ANetApiRequest.m */,
+				E088B961174E0D9A0056FF39 /* ANetApiResponse.h */,
+				E088B962174E0D9A0056FF39 /* ANetApiResponse.m */,
+				E088B963174E0D9A0056FF39 /* AuthNet.h */,
+				E088B966174E0DBF0056FF39 /* AuthNet.m */,
+				E088B968174E0DE10056FF39 /* AuthNetMessage.h */,
+				E088B969174E0DE10056FF39 /* AuthNetMessage.m */,
+				E088B96A174E0DE10056FF39 /* AuthNetRequest.h */,
+				E088B96B174E0DE10056FF39 /* AuthNetRequest.m */,
+				E088B96E174E0E040056FF39 /* AuthNetResponse.h */,
+				E088B96F174E0E040056FF39 /* AuthNetResponse.m */,
+				E088B971174E0E130056FF39 /* BankAccountMaskedType.h */,
+				E088B972174E0E130056FF39 /* BankAccountMaskedType.m */,
+				E088B973174E0E130056FF39 /* BankAccountType.h */,
+				E088B974174E0E130056FF39 /* BankAccountType.m */,
+				E088B977174E0E260056FF39 /* BatchDetailsType.h */,
+				E088B978174E0E260056FF39 /* BatchDetailsType.m */,
+				E088B97A174E0E380056FF39 /* BatchStatisticType.h */,
+				E088B97B174E0E380056FF39 /* BatchStatisticType.m */,
+				E088B97D174E0E740056FF39 /* CCAuthenticationType.h */,
+				E088B97E174E0E740056FF39 /* CCAuthenticationType.m */,
+				E088B980174E0E890056FF39 /* CreditCardMaskedType.h */,
+				E088B981174E0E890056FF39 /* CreditCardMaskedType.m */,
+				E088B982174E0E890056FF39 /* CreditCardType.h */,
+				E088B983174E0E890056FF39 /* CreditCardType.m */,
+				E088B987174E0EBC0056FF39 /* CreditCardTrackType.h */,
+				E088B986174E0EBC0056FF39 /* CreditCardTrackType.m */,
+				E088B989174E0EE90056FF39 /* CustomerAddressType.h */,
+				E088B98A174E0EE90056FF39 /* CustomerAddressType.m */,
+				E088B98B174E0EE90056FF39 /* CustomerDataType.h */,
+				E088B98C174E0EE90056FF39 /* CustomerDataType.m */,
+				E088B98D174E0EE90056FF39 /* Error.h */,
+				E088B98E174E0EE90056FF39 /* Error.m */,
+				E088B98F174E0EE90056FF39 /* ExtendedAmountType.h */,
+				E088B990174E0EE90056FF39 /* ExtendedAmountType.m */,
+				E088B995174E0F000056FF39 /* FDSFilterType.h */,
+				E088B996174E0F000056FF39 /* FDSFilterType.m */,
+				E088B998174E0F280056FF39 /* LineItemType.h */,
+				E088B999174E0F280056FF39 /* LineItemType.m */,
+				E088B99A174E0F280056FF39 /* MerchantAuthenticationType.h */,
+				E088B99B174E0F280056FF39 /* MerchantAuthenticationType.m */,
+				E088B99C174E0F280056FF39 /* MerchantContactType.h */,
+				E088B99D174E0F280056FF39 /* MerchantContactType.m */,
+				E088B9A1174E0F4E0056FF39 /* Messages.h */,
+				E088B9A2174E0F4E0056FF39 /* Messages.m */,
+				E088B9A4174E0F5C0056FF39 /* MobileDeviceType.h */,
+				E088B9A5174E0F5C0056FF39 /* MobileDeviceType.m */,
+				E088B9A7174E0F890056FF39 /* NameAndAddressType.h */,
+				E088B9A8174E0F890056FF39 /* NameAndAddressType.m */,
+				E088B9A9174E0F890056FF39 /* OrderExType.h */,
+				E088B9AA174E0F890056FF39 /* OrderExType.m */,
+				E088B9AB174E0F890056FF39 /* OrderType.h */,
+				E088B9AC174E0F890056FF39 /* OrderType.m */,
+				E088B9B1174E0FA20056FF39 /* PaymentType.h */,
+				E088B9B0174E0FA20056FF39 /* PaymentType.m */,
+				E088B9B3174E0FDB0056FF39 /* PaymentMaskedType.h */,
+				E088B9B4174E0FDB0056FF39 /* PaymentMaskedType.m */,
+				E088B9B5174E0FDB0056FF39 /* PermissionType.h */,
+				E088B9B6174E0FDB0056FF39 /* PermissionType.m */,
+				E088B9B7174E0FDB0056FF39 /* SplitTenderPayment.h */,
+				E088B9B8174E0FDB0056FF39 /* SplitTenderPayment.m */,
+				E088B9B9174E0FDB0056FF39 /* TransactionDetailsType.h */,
+				E088B9BA174E0FDB0056FF39 /* TransactionDetailsType.m */,
+				E088B9BB174E0FDB0056FF39 /* TransactionRequestType.h */,
+				E088B9BC174E0FDB0056FF39 /* TransactionRequestType.m */,
+				E088B9BD174E0FDB0056FF39 /* TransactionSummaryType.h */,
+				E088B9BE174E0FDB0056FF39 /* TransactionSummaryType.m */,
+				E088B9C5174E10020056FF39 /* TransactionResponse.h */,
+				E088B9C6174E10020056FF39 /* TransactionResponse.m */,
+				E088B9C8174E10380056FF39 /* TransRetailInfoType.h */,
+				E088B9C9174E10380056FF39 /* TransRetailInfoType.m */,
+				E088B9CA174E10380056FF39 /* SettingType.h */,
+				E088B9CB174E10380056FF39 /* SettingType.m */,
+				E088B9CC174E10380056FF39 /* UserField.h */,
+				E088B9CD174E10380056FF39 /* UserField.m */,
+				E088B95E174E0CAD0056FF39 /* SendCustomerTransactionReceipt */,
+				E088B957174E0C8F0056FF39 /* MobileDeviceRegistration */,
+				E088B950174E0C7A0056FF39 /* MobileDeviceLogin */,
+				E088B949174E0C5F0056FF39 /* GetUnsettledTransactionList */,
+				E088B942174E0C360056FF39 /* GetTransactionList */,
+				E088B93B174E0C150056FF39 /* GetTransactionDetails */,
+				E088B934174E0BF80056FF39 /* GetSettledBatchList */,
+				E088B92D174E03BA0056FF39 /* GetBatchStatistics */,
+				E088B926174E03A20056FF39 /* CreateTransaction */,
+				E088B91F174E03870056FF39 /* Logout */,
+				E088B918174E03320056FF39 /* GDataXML */,
+				E088B914174E030F0056FF39 /* Extension */,
+			);
+			name = AuthorizeNet;
+			sourceTree = "<group>";
+		};
+		E088B914174E030F0056FF39 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				E088B90A174E02F80056FF39 /* NSString+dataFromFilename.h */,
+				E088B90B174E02F80056FF39 /* NSString+dataFromFilename.m */,
+				E088B90C174E02F80056FF39 /* NSString+stringValueOfXMLElement.h */,
+				E088B90D174E02F80056FF39 /* NSString+stringValueOfXMLElement.m */,
+				E088B90E174E02F80056FF39 /* NSString+stringWithEscapedXMLValue.h */,
+				E088B908174E02C20056FF39 /* NSString+stringWithEscapedXMLValue.m */,
+				E088B90F174E02F80056FF39 /* NSString+stringWithXMLTag.h */,
+				E088B910174E02F80056FF39 /* NSString+stringWithXMLTag.m */,
+			);
+			name = Extension;
+			sourceTree = "<group>";
+		};
+		E088B918174E03320056FF39 /* GDataXML */ = {
+			isa = PBXGroup;
+			children = (
+				E088B915174E032B0056FF39 /* GDataXMLNode.h */,
+				E088B916174E032B0056FF39 /* GDataXMLNode.m */,
+			);
+			name = GDataXML;
+			sourceTree = "<group>";
+		};
+		E088B91F174E03870056FF39 /* Logout */ = {
+			isa = PBXGroup;
+			children = (
+				E088B919174E03850056FF39 /* LogoutRequest.h */,
+				E088B91A174E03850056FF39 /* LogoutRequest.m */,
+				E088B91B174E03850056FF39 /* LogoutResponse.h */,
+				E088B91C174E03850056FF39 /* LogoutResponse.m */,
+			);
+			name = Logout;
+			sourceTree = "<group>";
+		};
+		E088B926174E03A20056FF39 /* CreateTransaction */ = {
+			isa = PBXGroup;
+			children = (
+				E088B920174E039C0056FF39 /* CreateTransactionRequest.h */,
+				E088B921174E039C0056FF39 /* CreateTransactionRequest.m */,
+				E088B922174E039C0056FF39 /* CreateTransactionResponse.h */,
+				E088B923174E039C0056FF39 /* CreateTransactionResponse.m */,
+			);
+			name = CreateTransaction;
+			sourceTree = "<group>";
+		};
+		E088B92D174E03BA0056FF39 /* GetBatchStatistics */ = {
+			isa = PBXGroup;
+			children = (
+				E088B927174E03B30056FF39 /* GetBatchStatisticsRequest.h */,
+				E088B928174E03B30056FF39 /* GetBatchStatisticsRequest.m */,
+				E088B929174E03B30056FF39 /* GetBatchStatisticsResponse.h */,
+				E088B92A174E03B30056FF39 /* GetBatchStatisticsResponse.m */,
+			);
+			name = GetBatchStatistics;
+			sourceTree = "<group>";
+		};
+		E088B934174E0BF80056FF39 /* GetSettledBatchList */ = {
+			isa = PBXGroup;
+			children = (
+				E088B92E174E0BEE0056FF39 /* GetSettledBatchListRequest.h */,
+				E088B92F174E0BEE0056FF39 /* GetSettledBatchListRequest.m */,
+				E088B930174E0BEE0056FF39 /* GetSettledBatchListResponse.h */,
+				E088B931174E0BEE0056FF39 /* GetSettledBatchListResponse.m */,
+			);
+			name = GetSettledBatchList;
+			sourceTree = "<group>";
+		};
+		E088B93B174E0C150056FF39 /* GetTransactionDetails */ = {
+			isa = PBXGroup;
+			children = (
+				E088B935174E0C0C0056FF39 /* GetTransactionDetailsRequest.h */,
+				E088B936174E0C0C0056FF39 /* GetTransactionDetailsRequest.m */,
+				E088B937174E0C0C0056FF39 /* GetTransactionDetailsResponse.h */,
+				E088B938174E0C0C0056FF39 /* GetTransactionDetailsResponse.m */,
+			);
+			name = GetTransactionDetails;
+			sourceTree = "<group>";
+		};
+		E088B942174E0C360056FF39 /* GetTransactionList */ = {
+			isa = PBXGroup;
+			children = (
+				E088B93C174E0C2E0056FF39 /* GetTransactionListRequest.h */,
+				E088B93D174E0C2E0056FF39 /* GetTransactionListRequest.m */,
+				E088B93E174E0C2F0056FF39 /* GetTransactionListResponse.h */,
+				E088B93F174E0C2F0056FF39 /* GetTransactionListResponse.m */,
+			);
+			name = GetTransactionList;
+			sourceTree = "<group>";
+		};
+		E088B949174E0C5F0056FF39 /* GetUnsettledTransactionList */ = {
+			isa = PBXGroup;
+			children = (
+				E088B943174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.h */,
+				E088B944174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.m */,
+				E088B945174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.h */,
+				E088B946174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.m */,
+			);
+			name = GetUnsettledTransactionList;
+			sourceTree = "<group>";
+		};
+		E088B950174E0C7A0056FF39 /* MobileDeviceLogin */ = {
+			isa = PBXGroup;
+			children = (
+				E088B94A174E0C720056FF39 /* MobileDeviceLoginRequest.h */,
+				E088B94B174E0C720056FF39 /* MobileDeviceLoginRequest.m */,
+				E088B94C174E0C720056FF39 /* MobileDeviceLoginResponse.h */,
+				E088B94D174E0C720056FF39 /* MobileDeviceLoginResponse.m */,
+			);
+			name = MobileDeviceLogin;
+			sourceTree = "<group>";
+		};
+		E088B957174E0C8F0056FF39 /* MobileDeviceRegistration */ = {
+			isa = PBXGroup;
+			children = (
+				E088B951174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.h */,
+				E088B952174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.m */,
+				E088B953174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.h */,
+				E088B954174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.m */,
+			);
+			name = MobileDeviceRegistration;
+			sourceTree = "<group>";
+		};
+		E088B95E174E0CAD0056FF39 /* SendCustomerTransactionReceipt */ = {
+			isa = PBXGroup;
+			children = (
+				E088B958174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.h */,
+				E088B959174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.m */,
+				E088B95A174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.h */,
+				E088B95B174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.m */,
+			);
+			name = SendCustomerTransactionReceipt;
+			sourceTree = "<group>";
+		};
+		E088B9D1174E105B0056FF39 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E088B9D2174E10660056FF39 /* CreateTransactionResponse.xml */,
+				E088B9D3174E10660056FF39 /* GetBatchStatisticsResponse.xml */,
+				E088B9D4174E10660056FF39 /* GetSettledBatchListResponse.xml */,
+				E088B9D5174E10660056FF39 /* GetTransactionDetailsResponse.xml */,
+				E088B9D6174E10660056FF39 /* GetTransactionListResponse.xml */,
+				E088B9D7174E10660056FF39 /* GetUnsettledTransactionListResponse.xml */,
+				E088B9D8174E10660056FF39 /* LogoutResponse.xml */,
+				E088B9D9174E10660056FF39 /* MobileDeviceLoginResponse.xml */,
+				E088B9DA174E10660056FF39 /* MobileDeviceRegistrationResponse.xml */,
+				E088B9DB174E10660056FF39 /* SendCustomerTransactionReceiptResponse.xml */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		E092F971173049F700E1CC15 /* Network */ = {
@@ -775,6 +1254,16 @@
 				E075A963174512AE0061FBAE /* pic4.png in Resources */,
 				E075A96517465B270061FBAE /* icon.png in Resources */,
 				E083BCB4174CE55500940A21 /* disclosure.png in Resources */,
+				E088B9DC174E10660056FF39 /* CreateTransactionResponse.xml in Resources */,
+				E088B9DD174E10660056FF39 /* GetBatchStatisticsResponse.xml in Resources */,
+				E088B9DE174E10660056FF39 /* GetSettledBatchListResponse.xml in Resources */,
+				E088B9DF174E10660056FF39 /* GetTransactionDetailsResponse.xml in Resources */,
+				E088B9E0174E10660056FF39 /* GetTransactionListResponse.xml in Resources */,
+				E088B9E1174E10660056FF39 /* GetUnsettledTransactionListResponse.xml in Resources */,
+				E088B9E2174E10660056FF39 /* LogoutResponse.xml in Resources */,
+				E088B9E3174E10660056FF39 /* MobileDeviceLoginResponse.xml in Resources */,
+				E088B9E4174E10660056FF39 /* MobileDeviceRegistrationResponse.xml in Resources */,
+				E088B9E5174E10660056FF39 /* SendCustomerTransactionReceiptResponse.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -812,6 +1301,69 @@
 				E0D56E7717424B6A00257870 /* VenueListViewController.m in Sources */,
 				E00E4B721742765400749466 /* MyAnnotation.m in Sources */,
 				E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */,
+				E088B909174E02C20056FF39 /* NSString+stringWithEscapedXMLValue.m in Sources */,
+				E088B911174E02F80056FF39 /* NSString+dataFromFilename.m in Sources */,
+				E088B912174E02F80056FF39 /* NSString+stringValueOfXMLElement.m in Sources */,
+				E088B913174E02F80056FF39 /* NSString+stringWithXMLTag.m in Sources */,
+				E088B917174E032B0056FF39 /* GDataXMLNode.m in Sources */,
+				E088B91D174E03850056FF39 /* LogoutRequest.m in Sources */,
+				E088B91E174E03850056FF39 /* LogoutResponse.m in Sources */,
+				E088B924174E039C0056FF39 /* CreateTransactionRequest.m in Sources */,
+				E088B925174E039C0056FF39 /* CreateTransactionResponse.m in Sources */,
+				E088B92B174E03B30056FF39 /* GetBatchStatisticsRequest.m in Sources */,
+				E088B92C174E03B30056FF39 /* GetBatchStatisticsResponse.m in Sources */,
+				E088B932174E0BEE0056FF39 /* GetSettledBatchListRequest.m in Sources */,
+				E088B933174E0BEE0056FF39 /* GetSettledBatchListResponse.m in Sources */,
+				E088B939174E0C0C0056FF39 /* GetTransactionDetailsRequest.m in Sources */,
+				E088B93A174E0C0C0056FF39 /* GetTransactionDetailsResponse.m in Sources */,
+				E088B940174E0C2F0056FF39 /* GetTransactionListRequest.m in Sources */,
+				E088B941174E0C2F0056FF39 /* GetTransactionListResponse.m in Sources */,
+				E088B947174E0C5B0056FF39 /* GetUnsettledTransactionListRequest.m in Sources */,
+				E088B948174E0C5B0056FF39 /* GetUnsettledTransactionListResponse.m in Sources */,
+				E088B94E174E0C720056FF39 /* MobileDeviceLoginRequest.m in Sources */,
+				E088B94F174E0C720056FF39 /* MobileDeviceLoginResponse.m in Sources */,
+				E088B955174E0C8C0056FF39 /* MobileDeviceRegistrationRequest.m in Sources */,
+				E088B956174E0C8C0056FF39 /* MobileDeviceRegistrationResponse.m in Sources */,
+				E088B95C174E0CA70056FF39 /* SendCustomerTransactionReceiptRequest.m in Sources */,
+				E088B95D174E0CA70056FF39 /* SendCustomerTransactionReceiptResponse.m in Sources */,
+				E088B964174E0D9A0056FF39 /* ANetApiRequest.m in Sources */,
+				E088B965174E0D9A0056FF39 /* ANetApiResponse.m in Sources */,
+				E088B967174E0DBF0056FF39 /* AuthNet.m in Sources */,
+				E088B96C174E0DE10056FF39 /* AuthNetMessage.m in Sources */,
+				E088B96D174E0DE10056FF39 /* AuthNetRequest.m in Sources */,
+				E088B970174E0E040056FF39 /* AuthNetResponse.m in Sources */,
+				E088B975174E0E130056FF39 /* BankAccountMaskedType.m in Sources */,
+				E088B976174E0E130056FF39 /* BankAccountType.m in Sources */,
+				E088B979174E0E260056FF39 /* BatchDetailsType.m in Sources */,
+				E088B97C174E0E380056FF39 /* BatchStatisticType.m in Sources */,
+				E088B97F174E0E740056FF39 /* CCAuthenticationType.m in Sources */,
+				E088B984174E0E890056FF39 /* CreditCardMaskedType.m in Sources */,
+				E088B985174E0E890056FF39 /* CreditCardType.m in Sources */,
+				E088B988174E0EBC0056FF39 /* CreditCardTrackType.m in Sources */,
+				E088B991174E0EE90056FF39 /* CustomerAddressType.m in Sources */,
+				E088B992174E0EE90056FF39 /* CustomerDataType.m in Sources */,
+				E088B993174E0EE90056FF39 /* Error.m in Sources */,
+				E088B994174E0EE90056FF39 /* ExtendedAmountType.m in Sources */,
+				E088B997174E0F000056FF39 /* FDSFilterType.m in Sources */,
+				E088B99E174E0F280056FF39 /* LineItemType.m in Sources */,
+				E088B99F174E0F280056FF39 /* MerchantAuthenticationType.m in Sources */,
+				E088B9A0174E0F280056FF39 /* MerchantContactType.m in Sources */,
+				E088B9A3174E0F4E0056FF39 /* Messages.m in Sources */,
+				E088B9A6174E0F5C0056FF39 /* MobileDeviceType.m in Sources */,
+				E088B9AD174E0F890056FF39 /* NameAndAddressType.m in Sources */,
+				E088B9AE174E0F890056FF39 /* OrderExType.m in Sources */,
+				E088B9AF174E0F890056FF39 /* OrderType.m in Sources */,
+				E088B9B2174E0FA20056FF39 /* PaymentType.m in Sources */,
+				E088B9BF174E0FDB0056FF39 /* PaymentMaskedType.m in Sources */,
+				E088B9C0174E0FDB0056FF39 /* PermissionType.m in Sources */,
+				E088B9C1174E0FDB0056FF39 /* SplitTenderPayment.m in Sources */,
+				E088B9C2174E0FDB0056FF39 /* TransactionDetailsType.m in Sources */,
+				E088B9C3174E0FDB0056FF39 /* TransactionRequestType.m in Sources */,
+				E088B9C4174E0FDB0056FF39 /* TransactionSummaryType.m in Sources */,
+				E088B9C7174E10020056FF39 /* TransactionResponse.m in Sources */,
+				E088B9CE174E10380056FF39 /* TransRetailInfoType.m in Sources */,
+				E088B9CF174E10380056FF39 /* SettingType.m in Sources */,
+				E088B9D0174E10380056FF39 /* UserField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -896,18 +1448,22 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Bartsy/Bartsy-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"/usr/include/libxml2\"";
 				INFOPLIST_FILE = "Bartsy/Bartsy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Bartsy/PayPalMobile\"",
 					"\"$(SRCROOT)/Bartsy/CrittercismSDK\"",
+					"\"$(SRCROOT)/ANMobilePaymentLib\"",
+					"\"$(SRCROOT)/Bartsy\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lsqlite3.0",
 					"-ObjC",
 					"-lstdc++",
+					"-lxml2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7BA53F0D-6AAD-4BFB-9BF1-BE417D798765";
@@ -929,18 +1485,22 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Bartsy/Bartsy-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"/usr/include/libxml2\"";
 				INFOPLIST_FILE = "Bartsy/Bartsy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Bartsy/PayPalMobile\"",
 					"\"$(SRCROOT)/Bartsy/CrittercismSDK\"",
+					"\"$(SRCROOT)/ANMobilePaymentLib\"",
+					"\"$(SRCROOT)/Bartsy\"",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lsqlite3.0",
 					"-ObjC",
 					"-lstdc++",
+					"-lxml2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7BA53F0D-6AAD-4BFB-9BF1-BE417D798765";

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "SharedController.h"
-@interface BaseViewController : UIViewController
+#import "GAITrackedViewController.h"
+@interface BaseViewController : GAITrackedViewController
 {
     AppDelegate *appDelegate;
     UIAlertView *progressView;
@@ -24,9 +25,13 @@
 -(UILabel*)createLabelWithTitle:(NSString*)strTitle frame:(CGRect)frame tag:(NSInteger)intTag font:(UIFont*)font color:(UIColor*)color numberOfLines:(NSInteger)intNoOflines;
 -(UIImageView*)createImageViewWithImage:(UIImage*)image frame:(CGRect)frame tag:(NSInteger)intTag;
 
+-(UITextField*)createTextFieldWithFrame:(CGRect)frame tag:(NSInteger)tag delegate:(id)
+delegate;
+
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title;
 - (void)hideProgressView:(UIAlertView *)inProgressView;
 
 - (void)createAlertViewWithTitle:(NSString *)strTitle message:(NSString*)strMsg cancelBtnTitle:(NSString*)strCancel otherBtnTitle:(NSString*)strTitle1 delegate:(id)delegate tag:(NSInteger)tag;
 - (void)hideAlertView;
+-(void)heartBeat;
 @end

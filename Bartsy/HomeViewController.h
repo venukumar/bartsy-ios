@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "AppDelegate.h"
-@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate>
+#import "MobileDeviceLoginRequest.h"
+#import "AuthNet.h"
+
+@interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,AuthNetDelegate>
 {
     NSDictionary *dictSelectedToMakeOrder;
     BOOL isRequestForOrder;

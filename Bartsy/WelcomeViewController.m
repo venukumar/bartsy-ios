@@ -56,6 +56,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    self.trackedViewName = @"Welcome Screen";
+
     self.view.backgroundColor=[UIColor colorWithRed:232.0/255.0 green:232.0/255.0 blue:232.0/255.0 alpha:1.0];
     
     UIImageView *imgViewWelcome=[self createImageViewWithImage:[UIImage imageNamed:@"welcomebartsy.png"] frame:CGRectMake(60, 15, 200, 30) tag:0];

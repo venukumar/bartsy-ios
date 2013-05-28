@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-#define KServerURL @"http://54.235.76.180:8080"
-//#define KServerURL @"http://192.168.0.109:8080"
+//#define KServerURL @"http://54.235.76.180:8080"
+#define KServerURL @"http://192.168.0.109:8080"
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
@@ -143,7 +143,7 @@ static SharedController *sharedController;
     [request release];
 }
 
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile delegate:(id)aDelegate
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB orientation:(NSString*)strOrientation status:(NSString*)strStatus description:(NSString*)strDescription nickName:(NSString*)strNickName delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
     
@@ -151,7 +151,7 @@ static SharedController *sharedController;
     
     NSData *imageData= UIImagePNGRepresentation(imgProfile);
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",strFirstName,@"firstname",strLastName,@"lastname",strDOB,@"dateofbirth",strOrientation,@"orientation",strStatus,@"status",strDescription,@"description",strNickName,@"nickname",nil];
     NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"Profile Info : \n %@",dictUserProfile);
@@ -318,6 +318,27 @@ static SharedController *sharedController;
     [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
+-(void)heartBeatWithBartsyId:(NSString*)strBartsyId venueId:(NSString*)strVenueId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/heartBeat",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",strBartsyId,@"bartsyId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [NSURLConnection connectionWithRequest:request delegate:nil];
     [url release];
     [request release];
 }

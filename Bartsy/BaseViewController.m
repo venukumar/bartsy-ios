@@ -64,6 +64,19 @@
     
 }
 
+-(UITextField*)createTextFieldWithFrame:(CGRect)frame tag:(NSInteger)tag delegate:(id)
+delegate
+{
+    UITextField *txtField=[[UITextField alloc] initWithFrame:frame];
+    txtField.borderStyle = UITextBorderStyleRoundedRect;
+    txtField.delegate=delegate;
+    txtField.tag = tag;
+//    txtField.textAlignment=UITextAlignmentCenter;
+    txtField.contentVerticalAlignment=UIControlContentVerticalAlignmentCenter;
+    txtField.returnKeyType = UIReturnKeyDone;
+    return txtField;
+}
+
 //Creating Progreessview wth label
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title
 {
@@ -99,6 +112,11 @@
 	}
 }
 
+-(void)heartBeat
+{
+    self.sharedController=[SharedController sharedController];
+    [self.sharedController heartBeatWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+}
 //Creating Progreessview wth label
 - (void)createAlertViewWithTitle:(NSString *)strTitle message:(NSString*)strMsg cancelBtnTitle:(NSString*)strCancel otherBtnTitle:(NSString*)strTitle1 delegate:(id)delegate tag:(NSInteger)tag
 {

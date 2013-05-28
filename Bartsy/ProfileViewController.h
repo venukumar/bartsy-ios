@@ -11,9 +11,16 @@
 #import "QuartzCore/QuartzCore.h"
 #import "VenueListViewController.h"
 
-@interface ProfileViewController : BaseViewController
+@interface ProfileViewController : BaseViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
-    
+    UIView *customPickerView;
+    UIBarButtonItem *barButtonPrev;
+    UIBarButtonItem *barButtonNext;
+    UIDatePicker *datePicker;
+    UIPickerView *pickerViewForm;
+    NSInteger intTextFieldTagValue;
+    BOOL isSelectedPicker;
+    NSInteger intIndex;
 }
 -(void)saveProfileData:(NSDictionary*)dict;
 @end
