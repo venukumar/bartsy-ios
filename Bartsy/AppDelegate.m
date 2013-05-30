@@ -17,7 +17,7 @@
 #import "GAI.h"
 
 @implementation AppDelegate
-@synthesize deviceToken,delegateForCurrentViewController,isComingForOrders;
+@synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB;
 
 - (void)dealloc
 {
@@ -208,8 +208,6 @@
 
         [delegateForCurrentViewController heartBeat];
     }
-    
-    
 }
 
 - (void)alertView:(UIAlertView *)alertView1 clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -249,10 +247,19 @@
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation
 {
-    // attempt to extract a token from the url
-    return [FBAppCall handleOpenURL:url
-                  sourceApplication:sourceApplication
-                        withSession:self.session];
+    if(isLoginForFB)
+    {
+        // attempt to extract a token from the url
+        return [FBAppCall handleOpenURL:url
+                      sourceApplication:sourceApplication
+                            withSession:self.session];
+    }
+    else
+    {
+        UIViewController *viewController=(UIViewController*)delegateForCurrentViewController;
+        [viewController createProgressViewToParentView:viewController.view withTitle:@"Loading..."];
+        return [GPPURLHandler handleURL:url sourceApplication:sourceApplication annotation:annotation];
+    }
 }
 
 // FBSample logic

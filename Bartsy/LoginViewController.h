@@ -10,7 +10,12 @@
 #import "BaseViewController.h"
 #import "QuartzCore/QuartzCore.h"
 #import "ProfileViewController.h"
-@interface LoginViewController : BaseViewController<UIScrollViewDelegate>
+#import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GooglePlus/GooglePlus.h>
+#import <QuartzCore/QuartzCore.h>
+
+@interface LoginViewController : BaseViewController<UIScrollViewDelegate,GPPSignInDelegate>
 {
     
 }

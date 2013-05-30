@@ -23,8 +23,13 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.TechVedika.Bartsy</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>com.TechVedika.Bartsy</string>
 				<string>fb394371460678795</string>
 			</array>
 		</dict>

@@ -17,7 +17,9 @@
     id delegateForCurrentViewController;
     BOOL isComingForOrders;
     UIAlertView *alertView;
+    BOOL isLoginForFB;
 }
+@property(nonatomic,assign)BOOL isLoginForFB;
 @property (nonatomic,retain)id delegateForCurrentViewController;
 @property (strong, nonatomic) UIWindow *window;
 @property(nonatomic,retain)NSString *deviceToken;

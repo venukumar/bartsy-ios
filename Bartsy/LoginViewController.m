@@ -16,6 +16,10 @@
 
 @implementation LoginViewController
 
+GPPSignIn *signIn;
+
+static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5sv9.apps.googleusercontent.com";
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -29,6 +33,9 @@
 {
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
+    
+    [[GPPSignIn sharedInstance] signOut];
+
 }
 
 - (void)viewDidLoad
@@ -36,8 +43,25 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+
+    appDelegate.isLoginForFB=NO;
+    
     self.trackedViewName = @"Login Screen";
 
+    signIn= [GPPSignIn sharedInstance];
+
+    signIn.clientID = kClientId;
+    signIn.scopes = [NSArray arrayWithObjects:
+                     kGTLAuthScopePlusLogin,@"https://www.googleapis.com/auth/userinfo.email" ,
+                     nil];
+    signIn.delegate = self;
+    signIn.shouldFetchGoogleUserID=YES;
+    signIn.shouldFetchGoogleUserEmail =YES;
+    
+    //[signIn trySilentAuthentication];
+
+    
     self.navigationController.navigationBarHidden=YES;
     self.view.backgroundColor=[UIColor blackColor];
     
@@ -162,9 +186,13 @@
     lblBartsy.textAlignment=NSTextAlignmentCenter;
     [scrollView addSubview:lblBartsy];
     
-    UIButton *btnGoogle=[self createUIButtonWithTitle:@"Sign in with Google" image:nil frame:CGRectMake(320+38, 185, 243, 40) tag:0 selector:@selector(btnGoogle_TouchUpInside) target:self];
-    btnGoogle.backgroundColor=[UIColor darkGrayColor];
+//    UIButton *btnGoogle=[self createUIButtonWithTitle:@"Sign in with Google" image:nil frame:CGRectMake(320+38, 185, 243, 40) tag:0 selector:@selector(btnGoogle_TouchUpInside) target:self];
+//    btnGoogle.backgroundColor=[UIColor darkGrayColor];
+//    [scrollView addSubview:btnGoogle];
+    
+    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(320+38, 185, 243, 40)];
     [scrollView addSubview:btnGoogle];
+    
     
     UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(btnFBLogin) target:self];
     btnfb.backgroundColor=[UIColor darkGrayColor];
@@ -193,6 +221,22 @@
     lblCopyRight2.textAlignment=NSTextAlignmentCenter;
     [scrollView addSubview:lblCopyRight2];
     
+}
+
+- (void)finishedWithAuth:(GTMOAuth2Authentication *)auth
+                   error:(NSError *)error
+{
+    if (error)
+    {
+        NSLog(@"Status Error %@",error);
+        return;
+    }    
+    
+    [self hideProgressView:nil];
+    ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+    profileScreen.auth=auth;
+    [self.navigationController pushViewController:profileScreen animated:YES];
+    [profileScreen release];
 }
 
 
@@ -244,6 +288,7 @@
 {
     // get the app delegate so that we can access the session property
     
+    appDelegate.isLoginForFB=YES;
     // this button's job is to flip-flop the session from open to closed
     if (appDelegate.session.isOpen)
     {

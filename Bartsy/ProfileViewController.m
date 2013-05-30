@@ -25,7 +25,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult;
+@synthesize dictResult,auth;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -65,10 +65,68 @@
     arrOrientation=[[NSArray alloc]initWithObjects:@"I'm straight",@"I'm gay",@"I'm bisexual", nil];
     arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
     
-    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-    self.sharedController=[SharedController sharedController];
-    [sharedController gettingUserProfileInformationWithAccessToken:appDelegate.session.accessTokenData.accessToken delegate:self];
+    if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        self.sharedController=[SharedController sharedController];
+        [sharedController gettingUserProfileInformationWithAccessToken:appDelegate.session.accessTokenData.accessToken delegate:self];
+    }
+    else
+    {
+        [self googlePlusDetails];
+    }
+   
     
+}
+
+-(void)googlePlusDetails
+{
+    NSMutableDictionary *dictGoogle=[[NSMutableDictionary alloc]init];
+    
+    //GTMOAuth2Authentication *auth=[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"];
+    
+    NSString  *accessTocken = [auth valueForKey:@"accessToken"]; // access tocken pass in .pch file
+    [accessTocken retain];
+    NSString *str =  [NSString stringWithFormat:@"https://www.googleapis.com/oauth2/v1/userinfo?access_token=%@",accessTocken];
+    NSString* escapedUrl = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",escapedUrl]];
+    NSString *jsonData = [[NSString alloc] initWithContentsOfURL:url usedEncoding:nil error:nil];
+    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[jsonData dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
+    NSString *userId=[jsonDictionary objectForKey:@"id"];
+    NSLog(@" user deata %@",jsonData);
+    NSLog(@"Received Access Token:%@",auth);
+    
+    //
+    GTLServicePlus* plusService = [[[GTLServicePlus alloc] init] autorelease];
+    plusService.retryEnabled = YES;
+    [plusService setAuthorizer:auth];
+    GTLQueryPlus *query = [GTLQueryPlus queryForPeopleGetWithUserId:userId];
+    
+    [plusService executeQuery:query completionHandler:^(GTLServiceTicket *ticket,GTLPlusPerson *person,NSError *error)
+     {
+         if (error)
+         {
+             GTMLoggerError(@"Error: %@", error);
+         }
+         else
+         {
+             // Retrieve the display name and "about me" text
+             [person retain];
+             GTLPlusPersonImage *image  =person.image;
+             NSString *strimag=[image valueForKey:@"url"];
+             if(person.displayName!=nil)
+             [dictGoogle setObject:person.displayName forKey:@"first_name"];
+             if(person.gender!=nil)
+             [dictGoogle setObject:person.gender  forKey:@"gender"];
+             if(strimag!=nil)
+             [dictGoogle setObject:strimag forKey:@"url"];
+             if(person.nickname!=nil)
+             [dictGoogle setObject:person.nickname forKey:@"nickname"];
+             [self loadProfileDetails:dictGoogle];
+
+         }
+     }];
+
 }
 
 -(void)loadProfileDetails:(NSDictionary*)dict
@@ -99,6 +157,7 @@
     
     UITextField *txtFldNickName=[self createTextFieldWithFrame:CGRectMake(95, 115, 200, 30) tag:999 delegate:self];
     txtFldNickName.placeholder=@"Nick Name";
+    txtFldNickName.text=[dict objectForKey:@"nickname"];
     txtFldNickName.font=[UIFont systemFontOfSize:15];
     [scrollView addSubview:txtFldNickName];
     
@@ -109,7 +168,12 @@
     NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     UIImageView *imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(95, 155, 60, 60) tag:0];
+   
+    if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
     [imgViewProfilePicture setImageWithURL:url];
+    else
+    [imgViewProfilePicture setImageWithURL:[dict objectForKey:@"url"]];
+
     [url release];
     [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
     [[imgViewProfilePicture layer] setShadowColor:[[UIColor whiteColor] CGColor]];
@@ -189,8 +253,13 @@
         [customPickerView release];
         customPickerView=nil;
     }
-    UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
-    [txtFldData resignFirstResponder];
+    
+    for (int i=2; i<=9; i++)
+    {
+        UITextField *txtFldData=(UITextField*)[self.view viewWithTag:111*i];
+        if(textField.tag!=i*111)
+        [txtFldData resignFirstResponder];
+    }
     
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
 
@@ -214,6 +283,9 @@
     isSelectedPicker=NO;
     customPickerView.center =CGPointMake(160,700);
 
+    UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
+    [txtFldData resignFirstResponder];
+    
     if(customPickerView!=nil)
     {
         [customPickerView removeFromSuperview];
@@ -411,6 +483,15 @@
 
 - (void)photoClicked
 {
+    if(customPickerView!=nil)
+    {
+        [customPickerView removeFromSuperview];
+        [customPickerView release];
+        customPickerView=nil;
+    }
+    UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
+    [txtFldData resignFirstResponder];
+    
     UIActionSheet *actionSheet=[[UIActionSheet alloc]initWithTitle:@"Capturing Photo" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take a Photo",@"Select a Photo from Gallery", nil];
     [actionSheet showInView:self.view];
     [actionSheet release];
@@ -423,12 +504,13 @@
     if(buttonIndex==0)
     {
         picker.sourceType=UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:picker animated:YES completion:nil];
     }
     else if(buttonIndex==1)
     {
         picker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:picker animated:YES completion:nil];
     }
-    [self presentViewController:picker animated:YES completion:nil];
     [picker release];
 }
 

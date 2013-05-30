@@ -10,6 +10,10 @@
 #import "BaseViewController.h"
 #import "QuartzCore/QuartzCore.h"
 #import "VenueListViewController.h"
+#import <GooglePlus/GooglePlus.h>
+#import <GoogleOpenSource/GoogleOpenSource.h>
+#import <GooglePlus/GooglePlus.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface ProfileViewController : BaseViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
@@ -21,6 +25,8 @@
     NSInteger intTextFieldTagValue;
     BOOL isSelectedPicker;
     NSInteger intIndex;
+    GTMOAuth2Authentication *auth;
 }
+@property(nonatomic,retain)GTMOAuth2Authentication *auth;
 -(void)saveProfileData:(NSDictionary*)dict;
 @end
