@@ -343,6 +343,26 @@ static SharedController *sharedController;
     [request release];
 }
 
+-(void)getIngredientsListWithVenueId:(NSString*)strVenueId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getIngredients",KServerURL];
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

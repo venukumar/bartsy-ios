@@ -38,19 +38,21 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
+    [UIApplication sharedApplication].applicationIconBadgeNumber=0;
+    
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
      [Crittercism enableWithAppID:@"519b0a0313862004c500000b"];
     
-    // Optional: automatically send uncaught exceptions to Google Analytics.
-    [GAI sharedInstance].trackUncaughtExceptions = YES;
-    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
-    [GAI sharedInstance].dispatchInterval = 20;
-    // Optional: set debug to YES for extra debugging information.
-    [GAI sharedInstance].debug = YES;
-    // Create tracker instance.
-    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-40090000-1"];
-
+//    // Optional: automatically send uncaught exceptions to Google Analytics.
+//    [GAI sharedInstance].trackUncaughtExceptions = YES;
+//    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+//    [GAI sharedInstance].dispatchInterval = 20;
+//    // Optional: set debug to YES for extra debugging information.
+//    [GAI sharedInstance].debug = YES;
+//    // Create tracker instance.
+//    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-40090000-1"];
+//
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {

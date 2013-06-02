@@ -48,4 +48,5 @@
 -(void)gettingPeopleListFromVenue:(NSString*)strVenueId delegate:(id)aDelegate;
 -(void)getUserOrdersWithBartsyId:(NSString*)strBartsyId delegate:(id)aDelegate;
 -(void)heartBeatWithBartsyId:(NSString*)strBartsyId venueId:(NSString*)strVenueId delegate:(id)aDelegate;
+-(void)getIngredientsListWithVenueId:(NSString*)strVenueId delegate:(id)aDelegate;
 @end

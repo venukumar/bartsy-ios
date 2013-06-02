@@ -8,6 +8,10 @@
 
 #import "HomeViewController.h"
 #import "UIImageView+WebCache.h"
+#import "CustomDrinksViewController.h"
+#import "FrontViewController.h"
+#import "RearViewController.h"
+#import "RevealController.h"
 
 #define KServerURL @"http://54.235.76.180:8080"
 //#define KServerURL @"http://192.168.0.109:8080"
@@ -43,6 +47,8 @@
 {
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
+    self.navigationController.navigationBarHidden=NO;
+
 }
 
 - (void)viewDidLoad
@@ -460,7 +466,7 @@
 {
     // Return the number of sections.
     if(isSelectedForDrinks)
-        return [arrMenu count];
+        return [arrMenu count]+1;
     else if(isSelectedForPeople)
         return [arrPeople count];
     else
@@ -489,7 +495,10 @@
 {
     if(isSelectedForDrinks)
     {
-        id object=[arrMenu objectAtIndex:section];
+        
+        id object;
+        if(section!=0)
+        object=[arrMenu objectAtIndex:section-1];
         
         UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
         UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
@@ -499,7 +508,11 @@
         button.frame=CGRectMake(0, 0, 600, 44);
         button.tag=section +1;
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        if([[object objectForKey:@"Arrow"] integerValue]==0)
+        if(section==0)
+        {
+            [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];   
+        }
+        else if([[object objectForKey:@"Arrow"] integerValue]==0)
         {
             [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];
         }
@@ -513,7 +526,11 @@
         [headerTitle setBackgroundColor:[UIColor clearColor]];
         [headerTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:16]];
         [headerTitle setTextColor:[UIColor blackColor]];
-        if(section==0&&[[object objectForKey:@"subsection_name"] length]==0)
+        if(section==0)
+        {
+            headerTitle.text= @"Custom Drinks";
+        }
+        else if(section==1&&[[object objectForKey:@"subsection_name"] length]==0)
         {
             headerTitle.text= [object objectForKey:@"section_name"];
         }
@@ -541,8 +558,16 @@
     // Return the number of rows in the section.
     if(isSelectedForDrinks)
     {
-        id object=[arrMenu objectAtIndex:section];
-        if(section==0&&[object isKindOfClass:[NSArray class]])
+        id object;
+        if(section!=0)
+        object=[arrMenu objectAtIndex:section-1];
+        
+        
+        if(section==0)
+        {
+            return 0;
+        }
+        else if(section==1&&[object isKindOfClass:[NSArray class]])
         {
             return [object count];
         }
@@ -600,8 +625,8 @@
         //        [imgViewDrink release];
         
         UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 295, 20)];
-        id object=[arrMenu objectAtIndex:indexPath.section];
-        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        id object=[arrMenu objectAtIndex:indexPath.section-1];
+        if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
         {
             NSDictionary *dict=[object objectAtIndex:indexPath.row];
             lblName.text=[dict objectForKey:@"name"];
@@ -916,9 +941,9 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if(isSelectedForDrinks)
     {
-        id object=[arrMenu objectAtIndex:indexPath.section];
+        id object=[arrMenu objectAtIndex:indexPath.section-1];
         NSDictionary *dict;
-        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
         {
             dict=[object objectAtIndex:indexPath.row];
         }
@@ -1154,16 +1179,50 @@
 }
 -(void)buttonClicked:(UIButton*)sender
 {
-    NSInteger intTag=sender.tag-1;
-    NSMutableDictionary *dict=[arrMenu objectAtIndex:intTag];
-    BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
-    NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
-    [dict setObject:strArrow forKey:@"Arrow"];
-    [arrMenu replaceObjectAtIndex:intTag withObject:dict];
-    UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-    [tblView reloadData];
+    NSInteger intTag=sender.tag-2;
+    if(intTag>=0)
+    {
+        NSMutableDictionary *dict=[arrMenu objectAtIndex:intTag];
+        BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
+        NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
+        [dict setObject:strArrow forKey:@"Arrow"];
+        [arrMenu replaceObjectAtIndex:intTag withObject:dict];
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+    }
+    else
+    {
+//        CustomDrinksViewController *obj=[[CustomDrinksViewController alloc]init];
+//        [self.navigationController pushViewController:obj animated:YES];
+//        [obj release];
+        
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:@"Back" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moveBack) name:@"Back" object:nil];
+
+        self.navigationController.navigationBarHidden=YES;
+        
+        FrontViewController *frontViewController = [[FrontViewController alloc] init];
+        RearViewController *rearViewController = [[RearViewController alloc] init];
+        
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frontViewController];
+        
+        RevealController *revealController = [[RevealController alloc] initWithFrontViewController:navigationController rearViewController:rearViewController];
+        [self.navigationController pushViewController:revealController animated:YES];
+        
+    }
+    
 }
 
+-(void)moveBack
+{
+    for (UIViewController *viewController in self.navigationController.viewControllers)
+    {
+        if([viewController isKindOfClass:[HomeViewController class]])
+        {
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+}
 
 - (void)didReceiveMemoryWarning
 {
