@@ -160,9 +160,6 @@
 		E0CDC8D91758BC060070E31D /* RearViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CDC8D61758BC050070E31D /* RearViewController.m */; };
 		E0CDC8DA1758BC060070E31D /* RearViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0CDC8D71758BC050070E31D /* RearViewController~iPad.xib */; };
 		E0CDC8DB1758BC060070E31D /* RearViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0CDC8D81758BC060070E31D /* RearViewController.xib */; };
-		E0CDC8E01758BC170070E31D /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CDC8DD1758BC160070E31D /* MapViewController.m */; };
-		E0CDC8E11758BC170070E31D /* MapViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0CDC8DE1758BC160070E31D /* MapViewController~iPad.xib */; };
-		E0CDC8E21758BC170070E31D /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0CDC8DF1758BC170070E31D /* MapViewController.xib */; };
 		E0CDC8E51758BC380070E31D /* ZUUIRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */; };
 		E0D56E72174239DA00257870 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D56E71174239DA00257870 /* MobileCoreServices.framework */; };
 		E0D56E74174239DF00257870 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D56E73174239DF00257870 /* MessageUI.framework */; };
@@ -493,10 +490,6 @@
 		E0CDC8D61758BC050070E31D /* RearViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RearViewController.m; sourceTree = "<group>"; };
 		E0CDC8D71758BC050070E31D /* RearViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "RearViewController~iPad.xib"; sourceTree = "<group>"; };
 		E0CDC8D81758BC060070E31D /* RearViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RearViewController.xib; sourceTree = "<group>"; };
-		E0CDC8DC1758BC160070E31D /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		E0CDC8DD1758BC160070E31D /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
-		E0CDC8DE1758BC160070E31D /* MapViewController~iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MapViewController~iPad.xib"; sourceTree = "<group>"; };
-		E0CDC8DF1758BC170070E31D /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		E0CDC8E31758BC370070E31D /* ZUUIRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZUUIRevealController.h; sourceTree = "<group>"; };
 		E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZUUIRevealController.m; sourceTree = "<group>"; };
 		E0D56E71174239DA00257870 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
@@ -1051,10 +1044,6 @@
 				E0CDC8D61758BC050070E31D /* RearViewController.m */,
 				E0CDC8D71758BC050070E31D /* RearViewController~iPad.xib */,
 				E0CDC8D81758BC060070E31D /* RearViewController.xib */,
-				E0CDC8DC1758BC160070E31D /* MapViewController.h */,
-				E0CDC8DD1758BC160070E31D /* MapViewController.m */,
-				E0CDC8DE1758BC160070E31D /* MapViewController~iPad.xib */,
-				E0CDC8DF1758BC170070E31D /* MapViewController.xib */,
 				E0CDC8E31758BC370070E31D /* ZUUIRevealController.h */,
 				E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */,
 			);
@@ -1334,8 +1323,6 @@
 				E0CDC8D41758BBF60070E31D /* FrontViewController.xib in Resources */,
 				E0CDC8DA1758BC060070E31D /* RearViewController~iPad.xib in Resources */,
 				E0CDC8DB1758BC060070E31D /* RearViewController.xib in Resources */,
-				E0CDC8E11758BC170070E31D /* MapViewController~iPad.xib in Resources */,
-				E0CDC8E21758BC170070E31D /* MapViewController.xib in Resources */,
 				E0EEC339175B820400292043 /* slider.png in Resources */,
 				E0EEC33B175B889400292043 /* bottle.png in Resources */,
 			);
@@ -1442,7 +1429,6 @@
 				E0CDC8CD1758BBE30070E31D /* RevealController.m in Sources */,
 				E0CDC8D21758BBF60070E31D /* FrontViewController.m in Sources */,
 				E0CDC8D91758BC060070E31D /* RearViewController.m in Sources */,
-				E0CDC8E01758BC170070E31D /* MapViewController.m in Sources */,
 				E0CDC8E51758BC380070E31D /* ZUUIRevealController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
