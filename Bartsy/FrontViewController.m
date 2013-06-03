@@ -75,7 +75,7 @@
 {
 	[super viewDidLoad];
 	
-	self.title = NSLocalizedString(@"Front View", @"FrontView");
+	//self.title = NSLocalizedString(@"Front View", @"FrontView");
     
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -121,7 +121,8 @@
 -(void)loadScrollViewWithDrinks
 {
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
-
+    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    
     for (UIView *subview in scrollView.subviews)
     {
         [subview removeFromSuperview];
@@ -188,6 +189,16 @@
     }
 }
 
+-(void)btnImage_touchUpInside:(UIButton*)sender
+{
+    
+}
+
+
+-(void)addToCart_TouchUpInside:(UIButton*)sender
+{
+    
+}
 
 -(void)CategoriesClicked:(NSNotification*)notification
 {

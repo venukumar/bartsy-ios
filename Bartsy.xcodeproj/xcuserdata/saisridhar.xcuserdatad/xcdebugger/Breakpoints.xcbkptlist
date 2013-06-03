@@ -268,11 +268,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/FrontViewController.m"
-         timestampString = "391876534.065423"
+         timestampString = "391931225.998986"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "193"
-         endingLineNumber = "193"
+         startingLineNumber = "204"
+         endingLineNumber = "204"
          landmarkName = "-CategoriesClicked:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -287,19 +287,6 @@
          startingLineNumber = "122"
          endingLineNumber = "122"
          landmarkName = "-loadScrollViewWithDrinks"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/FrontViewController.m"
-         timestampString = "391876534.065423"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "219"
-         endingLineNumber = "219"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
