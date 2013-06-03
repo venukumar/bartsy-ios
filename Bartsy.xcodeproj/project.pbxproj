@@ -46,6 +46,9 @@
 		E04106BC172AB4E6009F1B1E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BB172AB4E6009F1B1E /* Accounts.framework */; };
 		E04106BE172AB4EB009F1B1E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BD172AB4EB009F1B1E /* Security.framework */; };
 		E04106C0172AB4F7009F1B1E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BF172AB4F7009F1B1E /* Social.framework */; };
+		E05F8083175CB16600937E80 /* radio_btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = E05F8081175CB16600937E80 /* radio_btn_selected.png */; };
+		E05F8084175CB16600937E80 /* radio_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = E05F8082175CB16600937E80 /* radio_btn.png */; };
+		E05F8087175D138B00937E80 /* MixerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E05F8086175D138A00937E80 /* MixerViewController.m */; };
 		E06256641732F076005C7027 /* Profile.m in Sources */ = {isa = PBXBuildFile; fileRef = E06256631732F076005C7027 /* Profile.m */; };
 		E06256681732FBE4005C7027 /* sectionBg.png in Resources */ = {isa = PBXBuildFile; fileRef = E06256671732FBD8005C7027 /* sectionBg.png */; };
 		E062566B1732FC0B005C7027 /* shrink.png in Resources */ = {isa = PBXBuildFile; fileRef = E06256691732FBEC005C7027 /* shrink.png */; };
@@ -280,6 +283,10 @@
 		E04106BB172AB4E6009F1B1E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		E04106BD172AB4EB009F1B1E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E04106BF172AB4F7009F1B1E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		E05F8081175CB16600937E80 /* radio_btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_btn_selected.png; sourceTree = "<group>"; };
+		E05F8082175CB16600937E80 /* radio_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_btn.png; sourceTree = "<group>"; };
+		E05F8085175D138900937E80 /* MixerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixerViewController.h; sourceTree = "<group>"; };
+		E05F8086175D138A00937E80 /* MixerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MixerViewController.m; sourceTree = "<group>"; };
 		E06256621732F076005C7027 /* Profile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Profile.h; sourceTree = "<group>"; };
 		E06256631732F076005C7027 /* Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Profile.m; sourceTree = "<group>"; };
 		E06256671732FBD8005C7027 /* sectionBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionBg.png; sourceTree = "<group>"; };
@@ -1046,6 +1053,8 @@
 				E0CDC8D81758BC060070E31D /* RearViewController.xib */,
 				E0CDC8E31758BC370070E31D /* ZUUIRevealController.h */,
 				E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */,
+				E05F8085175D138900937E80 /* MixerViewController.h */,
+				E05F8086175D138A00937E80 /* MixerViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1062,6 +1071,8 @@
 		E0FD86BA172FD9C6006CB0A8 /* 1 */ = {
 			isa = PBXGroup;
 			children = (
+				E05F8081175CB16600937E80 /* radio_btn_selected.png */,
+				E05F8082175CB16600937E80 /* radio_btn.png */,
 				E0EEC33A175B889400292043 /* bottle.png */,
 				E0EEC338175B820400292043 /* slider.png */,
 				E075A96417465B250061FBAE /* icon.png */,
@@ -1325,6 +1336,8 @@
 				E0CDC8DB1758BC060070E31D /* RearViewController.xib in Resources */,
 				E0EEC339175B820400292043 /* slider.png in Resources */,
 				E0EEC33B175B889400292043 /* bottle.png in Resources */,
+				E05F8083175CB16600937E80 /* radio_btn_selected.png in Resources */,
+				E05F8084175CB16600937E80 /* radio_btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1430,6 +1443,7 @@
 				E0CDC8D21758BBF60070E31D /* FrontViewController.m in Sources */,
 				E0CDC8D91758BC060070E31D /* RearViewController.m in Sources */,
 				E0CDC8E51758BC380070E31D /* ZUUIRevealController.m in Sources */,
+				E05F8087175D138B00937E80 /* MixerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -69,7 +69,7 @@
     
     [self.window makeKeyAndVisible];
     
-    [self registerMobileDevice];
+    //[self registerMobileDevice];
     
     [[UIApplication sharedApplication]
      registerForRemoteNotificationTypes:

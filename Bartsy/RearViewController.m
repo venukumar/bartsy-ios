@@ -34,7 +34,6 @@
 
 #import "RevealController.h"
 #import "FrontViewController.h"
-#import "MapViewController.h"
 
 @interface RearViewController()
 

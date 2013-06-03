@@ -397,7 +397,6 @@ static SharedController *sharedController;
     [self.data appendData:aData];
 }
 
-
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -406,9 +405,7 @@ static SharedController *sharedController;
     
     NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
     NSError *outError = nil;
-    
-    NSLog(@"JSON String : \n %@",jsonString);
-    
+        
     id result = [jsonParser objectWithString:jsonString error:&outError];
     if (outError == nil )
     {

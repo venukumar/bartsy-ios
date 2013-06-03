@@ -32,9 +32,12 @@
 
 #import "FrontViewController.h"
 #import "AppDelegate.h"
+#import "MixerViewController.h"
 
 @interface FrontViewController()
-
+{
+    UIBarButtonItem *btnAddMixer;
+}
 // Private Methods:
 - (IBAction)pushExample:(id)sender;
 
@@ -75,9 +78,6 @@
 {
 	[super viewDidLoad];
 	
-	//self.title = NSLocalizedString(@"Front View", @"FrontView");
-    
-    
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
@@ -106,10 +106,18 @@
         [btnSlider setBackgroundImage:[UIImage imageNamed:@"slider.png"] forState:UIControlStateNormal];
         UIBarButtonItem *barBtnSlider = [[UIBarButtonItem alloc] initWithCustomView:btnSlider];
 		self.navigationItem.leftBarButtonItem =barBtnSlider;
-        //[[UIBarButtonItem alloc] initWithTitle:@"Spirits" style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController action:@selector(revealToggle:)];
 	}
     
-    self.navigationItem.rightBarButtonItem =[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(pushExample:)];
+    UIBarButtonItem *btnHome=[[UIBarButtonItem alloc]initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(pushExample:)];
+    
+    btnAddMixer=[[UIBarButtonItem alloc]initWithTitle:@"Add Mixer" style:UIBarButtonItemStylePlain target:self action:@selector(addMixer)];
+    btnAddMixer.enabled=NO;
+
+    NSArray *buttonArray = [NSArray arrayWithObjects:btnHome,btnAddMixer, nil];
+    self.navigationItem.rightBarButtonItems = buttonArray;
+    
+    
+    //self.navigationItem.rightBarButtonItem =[[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:self action:@selector(pushExample:)];
     
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 2, 320, 366+50)];
@@ -118,10 +126,18 @@
     [scrollView release];
 }
 
+-(void)addMixer
+{
+    MixerViewController *obj=[[MixerViewController alloc]init];
+    obj.arrMixers=[[[[arrCategories objectAtIndex:1] objectForKey:@"categories"] objectAtIndex:0] objectForKey:@"ingredients"];
+
+    [self.navigationController pushViewController:obj animated:YES];
+    [obj release];
+}
+
 -(void)loadScrollViewWithDrinks
 {
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
-    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
     
     for (UIView *subview in scrollView.subviews)
     {
@@ -130,11 +146,14 @@
     
     if ([arrIngridents count]%2 == 0)
     {
-        scrollView.contentSize=CGSizeMake(320, (([arrIngridents count]/2)+0.1)*200+20);
+        scrollView.contentSize=CGSizeMake(320, (([arrIngridents count]/2)+0.1)*200+10);
     }
     else
-        scrollView.contentSize=CGSizeMake(320, (([arrIngridents count]/2)+1)*200+20);
+        scrollView.contentSize=CGSizeMake(320, (([arrIngridents count]/2)+1)*200+10);
+    
     scrollView.scrollEnabled = YES;
+    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+
     for (int i=0; i<[arrIngridents count]; i++)
     {
         NSDictionary *dictIngrident = [arrIngridents objectAtIndex:i];
@@ -182,8 +201,8 @@
         [btnAddToCart setFrame:CGRectMake(125,110,25,25)];
         btnAddToCart.tag = 9*(i+1);
         [btnAddToCart addTarget:self action:@selector(addToCart_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-        [btnAddToCart setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
-        [btnAddToCart setBackgroundColor:[UIColor redColor]];
+        [btnAddToCart setBackgroundImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
+        [btnAddToCart setBackgroundColor:[UIColor clearColor]];
         [viewBg addSubview:btnAddToCart];
         [viewBg release];
     }
@@ -197,7 +216,34 @@
 
 -(void)addToCart_TouchUpInside:(UIButton*)sender
 {
+    NSInteger intTag=(sender.tag/9)-1;
     
+    NSMutableDictionary *dictIngrident=[arrIngridents objectAtIndex:intTag];
+    [dictIngrident setValue:[NSNumber numberWithBool:![[dictIngrident objectForKey:@"Checked"] boolValue]] forKey:@"Checked"];
+    
+    [arrIngridents replaceObjectAtIndex:intTag withObject:dictIngrident];
+
+    if([[dictIngrident objectForKey:@"Checked"] boolValue])
+    {
+        [sender setBackgroundImage:[UIImage imageNamed:@"radio_btn_selected.png"] forState:UIControlStateNormal]; 
+    }
+    else
+    {
+        [sender setBackgroundImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
+    }
+    
+    NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrIngridents];
+    [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
+
+    if([arrTemp count])
+    {
+        btnAddMixer.enabled=YES;
+    }
+    else
+    {
+        btnAddMixer.enabled=NO;
+    }
+
 }
 
 -(void)CategoriesClicked:(NSNotification*)notification
@@ -208,10 +254,14 @@
     
     [arrIngridents addObjectsFromArray:[[[[arrCategories objectAtIndex:0] objectForKey:@"categories"] objectAtIndex:intIndex] objectForKey:@"ingredients"]];
     
+    
+    
     NSPredicate *pred=[NSPredicate predicateWithFormat:@"available ==[c] 'true'"];
     
     [arrIngridents filterUsingPredicate:pred];
-        
+    
+    [arrIngridents setValue:@"NO" forKey:@"Checked"];
+    
     self.title=[[[[arrCategories objectAtIndex:0] objectForKey:@"categories"] objectAtIndex:intIndex] objectForKey:@"categoryName"];
     
     [self loadScrollViewWithDrinks];
