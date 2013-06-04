@@ -1,9 +1,9 @@
 //
 //  SharedController.h
-//  DriverAnyWhere
+//  Bartsy
 //
-//  Created by Sai Sridhar on 13/12/11.
-//  Copyright 2011 Tech Vedika Software. All rights reserved.
+//  Created by Sudheer Palchuri on 26/04/13.
+//  Copyright (c) 2013 TechVedika Software Pvt Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
