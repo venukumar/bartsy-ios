@@ -7,10 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "QuartzCore/QuartzCore.h"
+#import "BaseViewController.h"
 
-@interface MixerViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface MixerViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 {
     NSMutableArray *arrMixers;
+    NSDictionary *dictIngrident;
+    NSDictionary *dictSelectedToMakeOrder;
+    NSInteger btnValue;
 }
+@property(nonatomic,retain)NSDictionary *dictIngrident;
 @property(nonatomic,retain)NSMutableArray *arrMixers;
+@property(nonatomic,retain)NSDictionary *dictSelectedToMakeOrder;
 @end

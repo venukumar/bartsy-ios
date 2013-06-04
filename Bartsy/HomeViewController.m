@@ -928,7 +928,8 @@
         
         UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, 63, 30)];
         lblPrice.font = [UIFont boldSystemFontOfSize:20];
-        lblPrice.text = [dict objectForKey:@"price"];
+        lblPrice.text = [NSString
+                         stringWithFormat:@"$%@",[dict objectForKey:@"price"]];
         lblPrice.backgroundColor = [UIColor clearColor];
         lblPrice.textColor = [UIColor brownColor] ;
         lblPrice.textAlignment = NSTextAlignmentCenter;
@@ -1055,6 +1056,8 @@
     }
     // Navigation logic may go here. Create and push another view controller.
 }
+
+#pragma mark - TextFields Delegate
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {

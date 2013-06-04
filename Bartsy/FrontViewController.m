@@ -130,7 +130,9 @@
 {
     MixerViewController *obj=[[MixerViewController alloc]init];
     obj.arrMixers=[[[[arrCategories objectAtIndex:1] objectForKey:@"categories"] objectAtIndex:0] objectForKey:@"ingredients"];
-
+    NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrIngridents];
+    [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
+    obj.dictIngrident=[arrTemp objectAtIndex:0];
     [self.navigationController pushViewController:obj animated:YES];
     [obj release];
 }
@@ -138,6 +140,11 @@
 -(void)loadScrollViewWithDrinks
 {
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
+    
+    for (UIView *subview in scrollView.subviews)
+    {
+        [subview removeFromSuperview];
+    }
     
     if ([arrIngridents count]%2 == 0)
     {
@@ -196,7 +203,14 @@
         [btnAddToCart setFrame:CGRectMake(125,110,25,25)];
         btnAddToCart.tag = 9*(i+1);
         [btnAddToCart addTarget:self action:@selector(addToCart_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-        [btnAddToCart setBackgroundImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
+        if([[dictIngrident objectForKey:@"Checked"] boolValue])
+        {
+            [btnAddToCart setBackgroundImage:[UIImage imageNamed:@"radio_btn_selected.png"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [btnAddToCart setBackgroundImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
+        }
         [btnAddToCart setBackgroundColor:[UIColor clearColor]];
         [viewBg addSubview:btnAddToCart];
         [viewBg release];
@@ -213,20 +227,16 @@
 {
     NSInteger intTag=(sender.tag/9)-1;
     
-    NSMutableDictionary *dictIngrident=[arrIngridents objectAtIndex:intTag];
+    NSMutableDictionary *dictIngrident=[[NSMutableDictionary alloc]initWithDictionary:[arrIngridents objectAtIndex:intTag]];
+    
+    [arrIngridents setValue:@"0" forKey:@"Checked"];
+    
     [dictIngrident setValue:[NSNumber numberWithBool:![[dictIngrident objectForKey:@"Checked"] boolValue]] forKey:@"Checked"];
     
     [arrIngridents replaceObjectAtIndex:intTag withObject:dictIngrident];
 
-    if([[dictIngrident objectForKey:@"Checked"] boolValue])
-    {
-        [sender setBackgroundImage:[UIImage imageNamed:@"radio_btn_selected.png"] forState:UIControlStateNormal]; 
-    }
-    else
-    {
-        [sender setBackgroundImage:[UIImage imageNamed:@"radio_btn.png"] forState:UIControlStateNormal];
-    }
-    
+    [dictIngrident release];
+
     NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrIngridents];
     [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
 
@@ -238,6 +248,10 @@
     {
         btnAddMixer.enabled=NO;
     }
+    
+    
+
+    [self loadScrollViewWithDrinks];
 
 }
 
@@ -257,7 +271,7 @@
     
     NSLog(@"Ingridents %@",arrIngridents);
     
-    [arrIngridents setValue:@"NO" forKey:@"Checked"];
+    [arrIngridents setValue:@"0" forKey:@"Checked"];
     
     self.title=[[[[arrCategories objectAtIndex:0] objectForKey:@"categories"] objectAtIndex:intIndex] objectForKey:@"categoryName"];
     

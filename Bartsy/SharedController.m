@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-#define KServerURL @"http://54.235.76.180:8080"
-//#define KServerURL @"http://192.168.0.109:8080"
+//#define KServerURL @"http://54.235.76.180:8080"
+#define KServerURL @"http://192.168.0.109:8080"
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
@@ -226,11 +226,20 @@ static SharedController *sharedController;
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
      {
-         SBJSON *jsonParser = [[SBJSON new] autorelease];
-         NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
-         id result = [jsonParser objectWithString:jsonString error:nil];
-         NSLog(@"Result is %@",result);
-         [delegate controllerDidFinishLoadingWithResult:result];
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             NSLog(@"Result is %@",result);
+             [delegate controllerDidFinishLoadingWithResult:result];
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+             [delegate controllerDidFinishLoadingWithResult:error];
+         }
+         
      }
      ];
     
@@ -363,11 +372,58 @@ static SharedController *sharedController;
     [request release];
 }
 
+-(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId description:(NSString*)strDescription ingredients:(NSArray*)arrIngredients delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type", nil];
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    
+    NSLog(@"JSON string \n %@",strJson);
+    
+    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/placeOrder",KServerURL];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataProfile];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             NSLog(@"Result is %@",result);
+             [delegate controllerDidFinishLoadingWithResult:result];
+         }
+         else
+         {
+             NSLog(@"Error is %@",[error description]);
+             [delegate controllerDidFinishLoadingWithResult:error];
+         }
+         
+     }
+     ];
+    
+    [url release];
+    [request release];
+}
+
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 	
-    
 	reach = [Reachability reachabilityWithHostName:[urlRequest.URL host]];
 	
     if (reach != nil)
@@ -404,6 +460,9 @@ static SharedController *sharedController;
     SBJSON *jsonParser = [[SBJSON new] autorelease];
     
     NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
+    
+    NSLog(@" JSON String ----- :%@",jsonString);
+
     NSError *outError = nil;
         
     id result = [jsonParser objectWithString:jsonString error:&outError];
