@@ -13,8 +13,8 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-//#define KServerURL @"http://54.235.76.180:8080"
-#define KServerURL @"http://192.168.0.109:8080"
+#define KServerURL @"http://54.235.76.180:8080"
+//#define KServerURL @"http://192.168.0.109:8080"
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 
@@ -403,6 +403,8 @@ static SharedController *sharedController;
          {
              SBJSON *jsonParser = [[SBJSON new] autorelease];
              NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             NSLog(@"JSON response is %@",jsonString);
+
              id result = [jsonParser objectWithString:jsonString error:nil];
              NSLog(@"Result is %@",result);
              [delegate controllerDidFinishLoadingWithResult:result];

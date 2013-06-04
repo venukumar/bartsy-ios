@@ -729,7 +729,7 @@
             UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
             lblTitle.font = [UIFont boldSystemFontOfSize:15];
             if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
-                lblTitle.text = @"Waiting for bartender to accept";
+                lblTitle.text = [NSString stringWithFormat:@"Waiting for bartender to accept (%i)",[[dict objectForKey:@"orderId"] integerValue]];
             else
                 lblTitle.text = [NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
             
