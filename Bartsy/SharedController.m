@@ -143,7 +143,7 @@ static SharedController *sharedController;
     [request release];
 }
 
--(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB orientation:(NSString*)strOrientation status:(NSString*)strStatus description:(NSString*)strDescription nickName:(NSString*)strNickName delegate:(id)aDelegate
+-(void)saveProfileInfoWithId:(NSString*)strId name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB orientation:(NSString*)strOrientation status:(NSString*)strStatus description:(NSString*)strDescription nickName:(NSString*)strNickName emailId:(NSString*)strEmailId delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
     
@@ -151,7 +151,7 @@ static SharedController *sharedController;
     
     NSData *imageData= UIImagePNGRepresentation(imgProfile);
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",strFirstName,@"firstname",strLastName,@"lastname",strDOB,@"dateofbirth",strOrientation,@"orientation",strStatus,@"status",strDescription,@"description",strNickName,@"nickname",nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",strFirstName,@"firstname",strLastName,@"lastname",strDOB,@"dateofbirth",strOrientation,@"orientation",strStatus,@"status",strDescription,@"description",strNickName,@"nickname",strEmailId,@"emailId",nil];
     NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"Profile Info : \n %@",dictUserProfile);

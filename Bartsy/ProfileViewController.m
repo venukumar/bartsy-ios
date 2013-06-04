@@ -50,8 +50,9 @@
 
     self.view.backgroundColor=[UIColor blackColor];
     
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 460)];
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 405)];
     scrollView.tag=143225;
+    scrollView.scrollEnabled=YES;
     [self.view addSubview:scrollView];
     
     
@@ -65,7 +66,8 @@
     arrOrientation=[[NSArray alloc]initWithObjects:@"I'm straight",@"I'm gay",@"I'm bisexual", nil];
     arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
     
-    if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
+    
+    if(appDelegate.isLoginForFB||[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
     {
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         self.sharedController=[SharedController sharedController];
@@ -157,7 +159,7 @@
     
     UITextField *txtFldNickName=[self createTextFieldWithFrame:CGRectMake(95, 115, 200, 30) tag:999 delegate:self];
     txtFldNickName.placeholder=@"Nick Name";
-    txtFldNickName.text=[dict objectForKey:@"nickname"];
+    txtFldNickName.text=[NSString stringWithFormat:@"%@ %@",[dict objectForKey:@"first_name"],[[dict objectForKey:@"last_name"] substringToIndex:1]];
     txtFldNickName.font=[UIFont systemFontOfSize:15];
     [scrollView addSubview:txtFldNickName];
     
@@ -166,6 +168,7 @@
     [scrollView addSubview:lblPicture];
     
     NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
+    NSLog(@"Pic URL is %@",strURL);
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     UIImageView *imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(95, 155, 60, 60) tag:0];
    
@@ -232,6 +235,15 @@
     txtFldDescription.placeholder=@"Description";
     txtFldDescription.font=[UIFont systemFontOfSize:14];
     [scrollView addSubview:txtFldDescription];
+    
+    UILabel *lblEmailId=[self createLabelWithTitle:@"Email Id:" frame:CGRectMake(10, 375, 80, 30) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor whiteColor] numberOfLines:1];
+    lblEmailId.textAlignment=NSTextAlignmentLeft;
+    [scrollView addSubview:lblEmailId];
+    
+    UITextField *txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(95, 375, 200, 30) tag:1110 delegate:self];
+    txtFldEmailId.placeholder=@"Email Id";
+    txtFldEmailId.font=[UIFont systemFontOfSize:14];
+    [scrollView addSubview:txtFldEmailId];
 
     
     UIButton *btnCancel=[self createUIButtonWithTitle:@"Cancel" image:nil frame:CGRectMake(10, 420, 100, 40) tag:0 selector:@selector(btnCancel_TouchUpInside) target:self];
@@ -254,7 +266,7 @@
         customPickerView=nil;
     }
     
-    for (int i=2; i<=9; i++)
+    for (int i=2; i<=10; i++)
     {
         UITextField *txtFldData=(UITextField*)[self.view viewWithTag:111*i];
         if(textField.tag!=i*111)
@@ -262,7 +274,9 @@
     }
     
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
-
+    scrollView.contentSize=CGSizeMake(320, 600);
+    scrollView.scrollEnabled=YES;
+    
     intTextFieldTagValue=textField.tag;
     
     if(textField.tag==444||textField.tag==555||textField.tag==666||textField.tag==777)
@@ -271,11 +285,21 @@
         [self showPickerView];
 
     }
-    else if(textField.tag==888)
+    else if(textField.tag==888||textField.tag==1110)
     {
         NSInteger index=intTextFieldTagValue/111;
         [scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
     }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField*)textField
+{
+    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
+    scrollView.contentSize=CGSizeMake(320, 405);
+    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+    scrollView.scrollEnabled=NO;
+    [textField resignFirstResponder];
+    return YES;
 }
 
 -(void)showPickerView
@@ -283,8 +307,14 @@
     isSelectedPicker=NO;
     customPickerView.center =CGPointMake(160,700);
 
+    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
+
     UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
     [txtFldData resignFirstResponder];
+    
+    UITextField *txtFldData1=(UITextField*)[scrollView viewWithTag:intTextFieldTagValue];
+    [txtFldData1 resignFirstResponder];
+
     
     if(customPickerView!=nil)
     {
@@ -292,7 +322,6 @@
         [customPickerView release];
         customPickerView=nil;
     }
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];    
     NSInteger index=intTextFieldTagValue/111;
     
     [scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
@@ -378,7 +407,10 @@
 {
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
     scrollView.userInteractionEnabled = YES;
+    scrollView.contentSize=CGSizeMake(320, 405);
     [scrollView setContentOffset:CGPointMake(0,0) animated:YES];
+    scrollView.scrollEnabled=NO;
+    
     UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
 
     if(intTextFieldTagValue==444)
@@ -468,13 +500,7 @@
     }
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField*)textField
-{
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
-    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-    [textField resignFirstResponder];
-    return YES;
-}
+
 -(void)removeLoader
 {
     [self hideProgressView:nil];
@@ -549,20 +575,34 @@
     UITextField *txtFldStatus=(UITextField*)[self.view viewWithTag:777];
     UITextField *txtFldDescription=(UITextField*)[self.view viewWithTag:888];
     UITextField *txtFldNickName=(UITextField*)[self.view viewWithTag:999];
+    UITextField *txtFldEmailId=(UITextField*)[self.view viewWithTag:1110];
 
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:kDateMMDDYYYY];
     NSString *strDOB= [NSString stringWithFormat:@"%@",
                     [df stringFromDate:datePicker.date]];
     
-    if(imgViewProfilePic.image!=nil&&[txtFldNickName.text length]&&[txtFldLastName.text length]&&[txtFldGender.text length]&&[txtFldOrientation.text length]&&[txtFldStatus.text length]&&[txtFldDescription.text length]&&[txtFldNickName.text length])
+    if(imgViewProfilePic.image!=nil&&[txtFldFirstName.text length]&&[txtFldLastName.text length]&&[txtFldNickName.text length]&&[txtFldEmailId.text length])
     {
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-        [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:txtFldGender.text userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image firstName:txtFldFirstName.text lastName:txtFldLastName.text dob:strDOB orientation:txtFldOrientation.text status:txtFldStatus.text description:txtFldDescription.text nickName:txtFldNickName.text delegate:self];
+        if([self validemail:txtFldEmailId.text])
+        {
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:txtFldGender.text userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image firstName:txtFldFirstName.text lastName:txtFldLastName.text dob:strDOB orientation:txtFldOrientation.text status:txtFldStatus.text description:txtFldDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text delegate:self];
+        }
+        else
+            [self createAlertViewWithTitle:@"" message:@"Please enter a valid Email ID" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
     else
-        [self createAlertViewWithTitle:@"" message:@"Fields should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:@"" message:@"Name,Picture,Email Id should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     
+}
+
+-(BOOL)validemail:(NSString *)candidate
+{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+	
+    return [emailTest evaluateWithObject:candidate];
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
