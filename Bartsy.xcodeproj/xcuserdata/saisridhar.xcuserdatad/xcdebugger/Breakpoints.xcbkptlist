@@ -202,13 +202,26 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/SharedController.m"
-         timestampString = "391960175.15729"
+         filePath = "Bartsy/FrontViewController.m"
+         timestampString = "392021154.510188"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "214"
-         endingLineNumber = "214"
-         landmarkName = "-createOrderWithOrderStatus:basePrice:totalPrice:tipPercentage:itemName:produceId:description:delegate:"
+         startingLineNumber = "245"
+         endingLineNumber = "245"
+         landmarkName = "-CategoriesClicked:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/RearViewController.m"
+         timestampString = "392021005.438474"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "100"
+         endingLineNumber = "100"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

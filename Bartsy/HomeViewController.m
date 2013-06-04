@@ -462,6 +462,8 @@
     [tblView reloadData];
 }
 
+#pragma mark - Table view Datasource
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -814,126 +816,6 @@
     return cell;
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    UIView *viewC=(UIView*)[self.view viewWithTag:444];
-    viewC.frame=CGRectMake(12, -2, 295, 268);
-    
-}
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    UIView *viewC=(UIView*)[self.view viewWithTag:444];
-    viewC.frame=CGRectMake(12, 50, 295, 268);
-    return YES;
-}
-
-- (void)loginToGateway
-{
-    [self createProgressViewToParentView:self.view withTitle:@"Payment is processing..."];
-   
-    MobileDeviceLoginRequest *mobileDeviceLoginRequest =
-    [MobileDeviceLoginRequest mobileDeviceLoginRequest];
-    
-    mobileDeviceLoginRequest.anetApiRequest.merchantAuthentication.name = @"sudheerp143";
-    mobileDeviceLoginRequest.anetApiRequest.merchantAuthentication.password =@"Techvedika@007";
-    mobileDeviceLoginRequest.anetApiRequest.merchantAuthentication.mobileDeviceId =@"ABCDEF";
-    
-    //[[[UIDevice currentDevice] uniqueIdentifier]
-     //stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-    
-    [AuthNet authNetWithEnvironment:ENV_TEST];
-    
-    AuthNet *an = [AuthNet getInstance];    
-    [an setDelegate:self];
-
-    [an mobileDeviceLoginRequest: mobileDeviceLoginRequest];
-}
-
-- (void) createTransaction
-{
-    AuthNet *an = [AuthNet getInstance];
-    
-    [an setDelegate:self];
-    
-    CreditCardType *creditCardType = [CreditCardType creditCardType];
-    creditCardType.cardNumber = @"4111111111111111";
-    creditCardType.cardCode = @"100";
-    creditCardType.expirationDate = @"1213";
-    
-    PaymentType *paymentType = [PaymentType paymentType];
-    paymentType.creditCard = creditCardType;
-    
-    ExtendedAmountType *extendedAmountTypeTax = [ExtendedAmountType extendedAmountType];
-    extendedAmountTypeTax.amount = @"0";
-    extendedAmountTypeTax.name = @"Tax";
-    
-    ExtendedAmountType *extendedAmountTypeShipping = [ExtendedAmountType extendedAmountType];
-    extendedAmountTypeShipping.amount = @"0";
-    extendedAmountTypeShipping.name = @"Shipping";
-    
-    NSString *strTip;
-    if(btnValue!=40)
-        strTip=[NSString stringWithFormat:@"%i",btnValue];
-    else
-    {
-        UITextField *txtFld=(UITextField*)[self.view viewWithTag:500];
-        strTip=[NSString stringWithFormat:@"%i",[txtFld.text integerValue]];
-    }    
-    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
-    float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
-    NSString *strPrice=[NSString stringWithFormat:@"%.2f",totalPrice];
-    
-    LineItemType *lineItem = [LineItemType lineItem];
-    lineItem.itemName = [dictSelectedToMakeOrder objectForKey:@"name"];
-    lineItem.itemDescription = [dictSelectedToMakeOrder objectForKey:@"description"];
-    lineItem.itemQuantity = @"1";
-    lineItem.itemPrice = strPrice;
-    lineItem.itemID = [dictSelectedToMakeOrder objectForKey:@"id"];
-    
-    TransactionRequestType *requestType = [TransactionRequestType transactionRequest];
-    requestType.lineItems = [NSArray arrayWithObject:lineItem];
-    requestType.amount = strPrice;
-    requestType.payment = paymentType;
-    requestType.tax = extendedAmountTypeTax;
-    requestType.shipping = extendedAmountTypeShipping;
-    
-    CreateTransactionRequest *request = [CreateTransactionRequest createTransactionRequest];
-    request.transactionRequest = requestType;
-    request.transactionType = AUTH_ONLY;
-    request.anetApiRequest.merchantAuthentication.mobileDeviceId =
-    [[[UIDevice currentDevice] uniqueIdentifier]
-     stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
-    request.anetApiRequest.merchantAuthentication.sessionToken = sessionToken;
-    [an purchaseWithRequest:request];
-}
-
-- (void) requestFailed:(AuthNetResponse *)response
-{
-    // Handle a failed request
-}
-
-- (void) connectionFailed:(AuthNetResponse *)response
-{
-    // Handle a failed connection
-}
-
-- (void) paymentSucceeded:(CreateTransactionResponse *) response
-{
-    // Handle payment success
-    [self hideProgressView:nil];
-    [self btnOrder_TouchUpInside];
-    
-}
-
-- (void) mobileDeviceLoginSucceeded:(MobileDeviceLoginResponse *)response
-{
-    sessionToken = [response.sessionToken retain];
-    NSLog(@"Token is %@",sessionToken);
-    [self createTransaction];
-};
-
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1173,6 +1055,128 @@
     }
     // Navigation logic may go here. Create and push another view controller.
 }
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    UIView *viewC=(UIView*)[self.view viewWithTag:444];
+    viewC.frame=CGRectMake(12, -2, 295, 268);
+    
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    UIView *viewC=(UIView*)[self.view viewWithTag:444];
+    viewC.frame=CGRectMake(12, 50, 295, 268);
+    return YES;
+}
+
+- (void)loginToGateway
+{
+    [self createProgressViewToParentView:self.view withTitle:@"Payment is processing..."];
+   
+    MobileDeviceLoginRequest *mobileDeviceLoginRequest =
+    [MobileDeviceLoginRequest mobileDeviceLoginRequest];
+    
+    mobileDeviceLoginRequest.anetApiRequest.merchantAuthentication.name = @"sudheerp143";
+    mobileDeviceLoginRequest.anetApiRequest.merchantAuthentication.password =@"Techvedika@007";
+    mobileDeviceLoginRequest.anetApiRequest.merchantAuthentication.mobileDeviceId =@"ABCDEF";
+    
+    //[[[UIDevice currentDevice] uniqueIdentifier]
+     //stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+    
+    [AuthNet authNetWithEnvironment:ENV_TEST];
+    
+    AuthNet *an = [AuthNet getInstance];    
+    [an setDelegate:self];
+
+    [an mobileDeviceLoginRequest: mobileDeviceLoginRequest];
+}
+
+- (void) createTransaction
+{
+    AuthNet *an = [AuthNet getInstance];
+    
+    [an setDelegate:self];
+    
+    CreditCardType *creditCardType = [CreditCardType creditCardType];
+    creditCardType.cardNumber = @"4111111111111111";
+    creditCardType.cardCode = @"100";
+    creditCardType.expirationDate = @"1213";
+    
+    PaymentType *paymentType = [PaymentType paymentType];
+    paymentType.creditCard = creditCardType;
+    
+    ExtendedAmountType *extendedAmountTypeTax = [ExtendedAmountType extendedAmountType];
+    extendedAmountTypeTax.amount = @"0";
+    extendedAmountTypeTax.name = @"Tax";
+    
+    ExtendedAmountType *extendedAmountTypeShipping = [ExtendedAmountType extendedAmountType];
+    extendedAmountTypeShipping.amount = @"0";
+    extendedAmountTypeShipping.name = @"Shipping";
+    
+    NSString *strTip;
+    if(btnValue!=40)
+        strTip=[NSString stringWithFormat:@"%i",btnValue];
+    else
+    {
+        UITextField *txtFld=(UITextField*)[self.view viewWithTag:500];
+        strTip=[NSString stringWithFormat:@"%i",[txtFld.text integerValue]];
+    }    
+    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
+    float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
+    NSString *strPrice=[NSString stringWithFormat:@"%.2f",totalPrice];
+    
+    LineItemType *lineItem = [LineItemType lineItem];
+    lineItem.itemName = [dictSelectedToMakeOrder objectForKey:@"name"];
+    lineItem.itemDescription = [dictSelectedToMakeOrder objectForKey:@"description"];
+    lineItem.itemQuantity = @"1";
+    lineItem.itemPrice = strPrice;
+    lineItem.itemID = [dictSelectedToMakeOrder objectForKey:@"id"];
+    
+    TransactionRequestType *requestType = [TransactionRequestType transactionRequest];
+    requestType.lineItems = [NSArray arrayWithObject:lineItem];
+    requestType.amount = strPrice;
+    requestType.payment = paymentType;
+    requestType.tax = extendedAmountTypeTax;
+    requestType.shipping = extendedAmountTypeShipping;
+    
+    CreateTransactionRequest *request = [CreateTransactionRequest createTransactionRequest];
+    request.transactionRequest = requestType;
+    request.transactionType = AUTH_ONLY;
+    request.anetApiRequest.merchantAuthentication.mobileDeviceId =
+    [[[UIDevice currentDevice] uniqueIdentifier]
+     stringByReplacingOccurrencesOfString:@"-" withString:@"_"];
+    request.anetApiRequest.merchantAuthentication.sessionToken = sessionToken;
+    [an purchaseWithRequest:request];
+}
+
+- (void) requestFailed:(AuthNetResponse *)response
+{
+    // Handle a failed request
+}
+
+- (void) connectionFailed:(AuthNetResponse *)response
+{
+    // Handle a failed connection
+}
+
+- (void) paymentSucceeded:(CreateTransactionResponse *) response
+{
+    // Handle payment success
+    [self hideProgressView:nil];
+    [self btnOrder_TouchUpInside];
+    
+}
+
+- (void) mobileDeviceLoginSucceeded:(MobileDeviceLoginResponse *)response
+{
+    sessionToken = [response.sessionToken retain];
+    NSLog(@"Token is %@",sessionToken);
+    [self createTransaction];
+};
+
+
+
 -(void)btnCustomise_TouchUpInside
 {
     

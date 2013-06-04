@@ -139,11 +139,6 @@
 {
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
     
-    for (UIView *subview in scrollView.subviews)
-    {
-        [subview removeFromSuperview];
-    }
-    
     if ([arrIngridents count]%2 == 0)
     {
         scrollView.contentSize=CGSizeMake(320, (([arrIngridents count]/2)+0.1)*200+10);
@@ -260,10 +255,20 @@
     
     [arrIngridents filterUsingPredicate:pred];
     
+    NSLog(@"Ingridents %@",arrIngridents);
+    
     [arrIngridents setValue:@"NO" forKey:@"Checked"];
     
     self.title=[[[[arrCategories objectAtIndex:0] objectForKey:@"categories"] objectAtIndex:intIndex] objectForKey:@"categoryName"];
     
+    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
+    
+    for (UIView *subview in scrollView.subviews)
+    {
+        [subview removeFromSuperview];
+    }
+    
+    if([arrIngridents count])
     [self loadScrollViewWithDrinks];
 
 }
