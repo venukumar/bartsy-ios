@@ -582,6 +582,8 @@
     NSString *strDOB= [NSString stringWithFormat:@"%@",
                     [df stringFromDate:datePicker.date]];
     
+    if([strDOB length]==0||strDOB==nil||strDOB==(id)[NSNull null])
+    strDOB=@"";
     
     
     if(imgViewProfilePic.image!=nil&&[txtFldFirstName.text length]&&[txtFldLastName.text length]&&[txtFldNickName.text length]&&[txtFldEmailId.text length])
@@ -647,6 +649,10 @@
                 NSDictionary *dictVenueDetails=[[NSDictionary alloc]initWithObjectsAndKeys:[result objectForKey:@"venueId"],@"venueId",[result objectForKey:@"venueName"],@"venueName", nil];
                 [[NSUserDefaults standardUserDefaults]setObject:dictVenueDetails forKey:@"VenueDetails"];
                 [[NSUserDefaults standardUserDefaults]synchronize];
+                
+                appDelegate.intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
+                appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+                
                 
                 WelcomeViewController *obj=[[WelcomeViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];

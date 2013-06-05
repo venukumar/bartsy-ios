@@ -146,6 +146,29 @@
     [self.view addSubview:lblCopyRight];
 }
 
+
+-(void)reloadWelcomeScreen
+{
+    UIImageView *imgViewBox=(UIImageView*)[self.view viewWithTag:143];
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
+    {
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"Orders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        imgViewBox.hidden=YES;
+        UIButton *btnClose=(UIButton*)[self.view viewWithTag:1111];
+        btnClose.hidden=YES;
+    }
+    else
+    {
+        NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+        imgViewBox.hidden=NO;
+        UILabel *lblCheckIn=(UILabel*)[self.view viewWithTag:225];
+        lblCheckIn.text=[NSString stringWithFormat:@"CheckedIn at %@",[dict objectForKey:@"venueName"]];
+        
+    }
+
+}
+
 -(void)btnCheckIn_TouchUpInside
 {
     HomeViewController *obj=[[HomeViewController alloc]init];

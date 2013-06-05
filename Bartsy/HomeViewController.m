@@ -12,9 +12,10 @@
 #import "FrontViewController.h"
 #import "RearViewController.h"
 #import "RevealController.h"
+#import "Constants.h"
 
-#define KServerURL @"http://54.235.76.180:8080"
-//#define KServerURL @"http://192.168.0.109:8080"
+
+
 
 @interface HomeViewController ()
 {
@@ -75,8 +76,10 @@
     arrPeople=[[NSMutableArray alloc]init];
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
-    NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"] count]];
-    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",@"PEOPLE",strOrder, nil]];
+    NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
+    NSString *strPeopleCount=[NSString stringWithFormat:@"PEOPLE (%i)",appDelegate.intPeopleCount];
+
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",strPeopleCount,strOrder, nil]];
     segmentControl.frame=CGRectMake(0, 1, 320, 40);
     segmentControl.segmentedControlStyle=UISegmentedControlStyleBar;
     segmentControl.selectedSegmentIndex=0;
@@ -159,6 +162,18 @@
         
     }
     appDelegate.isComingForOrders=NO;
+}
+
+-(void)reloadDataPeopleAndOrderCount
+{
+    UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+    NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
+    
+    [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+    
+    NSString *strPeopleCount=[NSString stringWithFormat:@"PEOPLE (%i)",appDelegate.intPeopleCount];
+    
+    [segmentControl setTitle:strPeopleCount forSegmentAtIndex:1];
 }
 
 -(void)segmentControl_ValueChanged:(UISegmentedControl*)segmentControl
@@ -301,6 +316,11 @@
 //        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
 //        segmentControl.selectedSegmentIndex=2;
 //        [self segmentControl_ValueChanged:segmentControl];
+        
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[result objectForKey:@"orderCount"] integerValue]];
+        appDelegate.intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
+        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
     }
     else if(isRequestForPeople==YES)
     {
@@ -345,6 +365,7 @@
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+        appDelegate.intOrderCount=[arrOrders count];
         
         
         //        if([arrOrders count]==0)

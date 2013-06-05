@@ -10,4 +10,5 @@
 #import "BaseViewController.h"
 @interface WelcomeViewController : BaseViewController
 
+-(void)reloadWelcomeScreen;
 @end

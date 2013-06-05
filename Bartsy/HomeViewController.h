@@ -22,5 +22,5 @@
 }
 @property(nonatomic,retain)NSDictionary *dictVenue;
 -(void)orderTheDrink;
-
+-(void)reloadDataPeopleAndOrderCount;
 @end

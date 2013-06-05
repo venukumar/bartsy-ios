@@ -12,6 +12,8 @@
 #import "NSNetwork.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
+#import "Constants.h"
+
 @protocol SharedControllerDelegate <NSObject>
 
 -(void)controllerDidFinishLoadingWithResult:(id)result;

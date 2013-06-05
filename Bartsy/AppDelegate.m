@@ -16,8 +16,10 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "GAI.h"
 
+
 @implementation AppDelegate
-@synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB;
+@synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
+@synthesize internetActive, hostActive;
 
 - (void)dealloc
 {
@@ -76,9 +78,83 @@
      (UIRemoteNotificationTypeAlert |
       UIRemoteNotificationTypeBadge |
       UIRemoteNotificationTypeSound)];
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    
+    internetReachable = [[Reachability reachabilityForInternetConnection] retain];
+    [internetReachable startNotifier];
+    
+    //hostReachable = [[Reachability reachabilityWithHostName:KServerURL] retain];
+    //[hostReachable startNotifier];
+
     return YES;
 }
 
+
+- (void) checkNetworkStatus:(NSNotification *)notice
+{
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    switch (internetStatus)
+    
+    {
+        case NotReachable:
+        {
+            NSLog(@"The internet is down.");
+            self.internetActive = NO;
+            
+            break;
+            
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"The internet is working via WIFI.");
+            self.internetActive = YES;
+            [self checkUserCheckInStatus];
+            break;
+            
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"The internet is working via WWAN.");
+            self.internetActive = YES;
+            [self checkUserCheckInStatus];
+            break;
+            
+        }
+    }
+    
+    NetworkStatus hostStatus = [hostReachable currentReachabilityStatus];
+    switch (hostStatus)
+    
+    {
+        case NotReachable:
+        {
+            NSLog(@"A gateway to the host server is down.");
+            self.hostActive = NO;
+            
+            break;
+            
+        }
+        case ReachableViaWiFi:
+        {
+            NSLog(@"A gateway to the host server is working via WIFI.");
+            self.hostActive = YES;
+            
+            break;
+            
+        }
+        case ReachableViaWWAN:
+        {
+            NSLog(@"A gateway to the host server is working via WWAN.");
+            self.hostActive = YES;
+            
+            break;
+            
+        }
+    }
+    
+}
 -(void)registerMobileDevice
 {
     MobileDeviceRegistrationRequest *mobileDeviceRegistrationRequest =
@@ -195,11 +271,24 @@
         alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alertView.tag=143225;
         [alertView show];
+        
+        intOrderCount=[[userInfo objectForKey:@"orderCount"] integerValue];
+        
+        if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+            [delegateForCurrentViewController reloadDataPeopleAndOrderCount];
+
     }
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"orderTimeout"])
     {
         AudioServicesPlaySystemSound(1007);
 
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
         alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alertView.tag=143225;
         [alertView show];
@@ -209,6 +298,14 @@
         AudioServicesPlaySystemSound(1007);
 
         [delegateForCurrentViewController heartBeat];
+        
+        intOrderCount=[[userInfo objectForKey:@"orderCount"] integerValue];
+        intPeopleCount=[[userInfo objectForKey:@"userCount"] integerValue];
+       
+        if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+        [delegateForCurrentViewController reloadDataPeopleAndOrderCount];
+
+        
     }
 }
 
@@ -312,9 +409,83 @@
     // We need to properly handle activation of the application with regards to SSO
     //  (e.g., returning from iOS 6.0 authorization dialog or from fast app switching).
     [FBAppCall handleDidBecomeActiveWithSession:self.session];
+    
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(checkUserCheckInStatus) userInfo:nil repeats:NO];
+    
 }
 
 
+-(void)checkUserCheckInStatus
+{
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil&&[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]!=nil)
+    {
+        NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
+        NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:@"checkin",@"type",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",@"",@"userName",nil];
+        SBJSON *jsonObj=[SBJSON new];
+        NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+        NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSURL *url=[[NSURL alloc]initWithString:strURL];
+        NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:dataCheckIn];
+        [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+
+        
+        [NSURLConnection sendAsynchronousRequest:request
+                                           queue:[NSOperationQueue mainQueue]
+                               completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+         {
+             if(error==nil)
+             {
+                 SBJSON *jsonParser = [[SBJSON new] autorelease];
+                 NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+                 id result = [jsonParser objectWithString:jsonString error:nil];
+                 NSLog(@"Result is %@",result);
+                 
+                 if([[result objectForKey:@"venueId"] integerValue]==0)
+                 {
+                     [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"CheckInVenueId"];
+                     [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"VenueDetails"];
+                     [[NSUserDefaults standardUserDefaults]synchronize];
+                     
+                     intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
+                     intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+                     
+                     if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
+                     {
+                         [delegateForCurrentViewController reloadWelcomeScreen];
+                     }
+                     else
+                     {
+                         UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
+                         for (UIViewController *viewController in viewCont.navigationController.viewControllers)
+                         {
+                             if([viewController isKindOfClass:[HomeViewController class]])
+                             {
+                                 [delegateForCurrentViewController popToViewController:viewController animated:YES];
+                             }
+                         }
+                     }
+                 }
+                 
+                 
+             }
+             else
+             {
+                 NSLog(@"Error is %@",error);
+             }
+             
+         }
+         ];
+
+        
+        [url release];
+        [request release];
+         
+    }
+}
 
 - (void)saveContext
 {

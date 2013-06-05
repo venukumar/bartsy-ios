@@ -291,6 +291,7 @@
 		E06256631732F076005C7027 /* Profile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Profile.m; sourceTree = "<group>"; };
 		E06256671732FBD8005C7027 /* sectionBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sectionBg.png; sourceTree = "<group>"; };
 		E06256691732FBEC005C7027 /* shrink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shrink.png; sourceTree = "<group>"; };
+		E0710346175F696700DF2E47 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		E075A95C174512AE0061FBAE /* pic1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic1.png; sourceTree = "<group>"; };
 		E075A95D174512AE0061FBAE /* pic2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic2.png; sourceTree = "<group>"; };
 		E075A95E174512AE0061FBAE /* pic3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic3.png; sourceTree = "<group>"; };
@@ -1006,6 +1007,7 @@
 			children = (
 				E0FD86D217300528006CB0A8 /* SharedController.h */,
 				E0FD86D31730052E006CB0A8 /* SharedController.m */,
+				E0710346175F696700DF2E47 /* Constants.h */,
 			);
 			name = WebServices;
 			sourceTree = "<group>";

@@ -13,10 +13,7 @@ static SharedController *sharedController;
 @implementation SharedController
 @synthesize delegate,data;
 
-//#define KServerURL @"http://54.235.76.180:8080" //Amazon Server
-//#define KServerURL @"http://192.168.0.172:8080" //Srikanth
-#define KServerURL @"http://192.168.0.109:8080" //Swetha
-//#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
+
 
 
 #pragma mark--- Initialization Methods ---
@@ -152,7 +149,7 @@ static SharedController *sharedController;
     
     NSData *imageData= UIImagePNGRepresentation(imgProfile);
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",strFirstName,@"firstname",strLastName,@"lastname",strDOB,@"dateofbirth",strOrientation,@"orientation",strStatus,@"status",strDescription,@"description",strNickName,@"nickname",strEmailId,@"emailId",nil];
+    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strFirstName,@"firstname",strLastName,@"lastname",strNickName,@"nickname",strId,@"loginId",strName,@"name",@"facebook",@"loginType",strGender,@"gender",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strUserName,@"userName",strOrientation,@"orientation",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",nil];
     NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"Profile Info : \n %@",dictUserProfile);
@@ -426,8 +423,14 @@ static SharedController *sharedController;
 -(void)syncUserDetailsWithUserName:(NSString*)strUserName type:(NSString*)strType bartsyId:(NSString*)strBartsyId delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strType,@"type",strUserName,@"userName",strBartsyId,@"bartsyId",nil];
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strType,@"type",strUserName,@"userName",appDelegate.deviceToken,@"deviceToken",@"1",@"deviceType",strBartsyId,@"bartsyId",nil];
+    
+    NSLog(@"Sync Details %@",dictCheckIn);
+    
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];

@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "Crittercism.h"
+#import "Constants.h"
+#import "Reachability.h"
+#import "NSNetwork.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
@@ -18,6 +21,10 @@
     BOOL isComingForOrders;
     UIAlertView *alertView;
     BOOL isLoginForFB;
+    NSInteger intPeopleCount;
+    NSInteger intOrderCount;
+    Reachability *internetReachable;
+    Reachability *hostReachable;
 }
 @property(nonatomic,assign)BOOL isLoginForFB;
 @property (nonatomic,retain)id delegateForCurrentViewController;
@@ -29,7 +36,14 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) FBSession *session;
 @property (nonatomic,assign)BOOL isComingForOrders;
+@property(nonatomic,assign)NSInteger intPeopleCount;
+@property(nonatomic,assign)NSInteger intOrderCount;
+@property BOOL internetActive;
+@property BOOL hostActive;
+
+- (void) checkNetworkStatus:(NSNotification *)notice;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+-(void)checkUserCheckInStatus;
 
 @end

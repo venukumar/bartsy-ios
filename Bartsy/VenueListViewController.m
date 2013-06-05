@@ -315,6 +315,8 @@
         if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
             isRequestForCheckIn=NO;
+            appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+            appDelegate.intOrderCount=0;
             [[NSUserDefaults standardUserDefaults]setObject:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
             [[NSUserDefaults standardUserDefaults]setObject:[arrVenueList objectAtIndex:intIndex] forKey:@"VenueDetails"];
             [[NSUserDefaults standardUserDefaults]synchronize];
