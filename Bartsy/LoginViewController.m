@@ -349,6 +349,7 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     {
         // [btnFb setText:[NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",
         // appDelegate.session.accessTokenData.accessToken]];
+        
         ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
         [self.navigationController pushViewController:profileScreen animated:YES];
         [profileScreen release];

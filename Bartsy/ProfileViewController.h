@@ -26,6 +26,7 @@
     BOOL isSelectedPicker;
     NSInteger intIndex;
     GTMOAuth2Authentication *auth;
+    BOOL isProfileExistsCheck;
 }
 @property(nonatomic,retain)GTMOAuth2Authentication *auth;
 -(void)saveProfileData:(NSDictionary*)dict;

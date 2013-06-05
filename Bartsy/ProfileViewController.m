@@ -582,6 +582,8 @@
     NSString *strDOB= [NSString stringWithFormat:@"%@",
                     [df stringFromDate:datePicker.date]];
     
+    
+    
     if(imgViewProfilePic.image!=nil&&[txtFldFirstName.text length]&&[txtFldLastName.text length]&&[txtFldNickName.text length]&&[txtFldEmailId.text length])
     {
         if([self validemail:txtFldEmailId.text])
@@ -607,9 +609,10 @@
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
-    if(isRequestForSavingProfile==NO)
+    [self hideProgressView:nil];
+    
+    if(isRequestForSavingProfile==NO&&isProfileExistsCheck==NO)
     {
-        [self loadProfileDetails:result];
         if(dictResult==nil)
         {
             dictResult=[[NSDictionary alloc] initWithDictionary:result];
@@ -621,46 +624,93 @@
             dictResult=[[NSDictionary alloc] initWithDictionary:result];
         }
         
+        isProfileExistsCheck=YES;
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        self.sharedController=[SharedController sharedController];
+        [sharedController syncUserDetailsWithUserName:[result objectForKey:@"username"] type:@"login" bartsyId:@"" delegate:self];
+    }
+    else if(isProfileExistsCheck==YES)
+    {
+        isProfileExistsCheck=NO;
+        if([[result objectForKey:@"errorCode"] integerValue]==1)
+        {
+            [self loadProfileDetails:dictResult];
+        }
+        else
+        {
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            
+            if([[result objectForKey:@"venueId"] integerValue]&&[result objectForKey:@"venueId"]!=nil)
+            {
+                [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+                NSDictionary *dictVenueDetails=[[NSDictionary alloc]initWithObjectsAndKeys:[result objectForKey:@"venueId"],@"venueId",[result objectForKey:@"venueName"],@"venueName", nil];
+                [[NSUserDefaults standardUserDefaults]setObject:dictVenueDetails forKey:@"VenueDetails"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                
+                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                [self.navigationController pushViewController:obj animated:YES];
+                [obj release];
+                
+            }
+            else
+            {
+                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                [self.navigationController pushViewController:obj animated:YES];
+                [obj release];
+            }
+
+        }
+        
     }
     else if(isRequestForSavingProfile==YES)
     {
         [self hideProgressView:nil];
         isRequestForSavingProfile=NO;
         
-        NSManagedObjectContext *context=[appDelegate managedObjectContext];
         
-        NSManagedObject *mngObjProfile=[NSEntityDescription insertNewObjectForEntityForName:@"Profile" inManagedObjectContext:context];
-        [mngObjProfile setValue:[dictResult objectForKey:@"name"] forKey:@"name"];
-        
-        //    NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
-        //    NSURL *url=[[NSURL alloc]initWithString:strURL];
-        //    NSData *dataPhoto=[NSData dataWithContentsOfURL:url];
-        //    [mngObjProfile setValue:dataPhoto forKey:@"photo"];
-        [mngObjProfile setValue:[NSNumber numberWithInteger:[[result objectForKey:@"bartsyUserId"] integerValue]] forKey:@"bartsyId"];
-        [context save:nil];
-        
-        [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyUserId"] forKey:@"bartsyId"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        
-        if([[result objectForKey:@"userCheckedIn"] integerValue]==0)
+        if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
-            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
-            NSDictionary *dictVenueDetails=[[NSDictionary alloc]initWithObjectsAndKeys:[result objectForKey:@"venueId"],@"venueId",[result objectForKey:@"venueName"],@"venueName", nil];
-            [[NSUserDefaults standardUserDefaults]setObject:dictVenueDetails forKey:@"VenueDetails"];
+            NSManagedObjectContext *context=[appDelegate managedObjectContext];
+            
+            NSManagedObject *mngObjProfile=[NSEntityDescription insertNewObjectForEntityForName:@"Profile" inManagedObjectContext:context];
+            [mngObjProfile setValue:[dictResult objectForKey:@"name"] forKey:@"name"];
+            
+            //    NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture",[dict objectForKey:@"id"]];
+            //    NSURL *url=[[NSURL alloc]initWithString:strURL];
+            //    NSData *dataPhoto=[NSData dataWithContentsOfURL:url];
+            //    [mngObjProfile setValue:dataPhoto forKey:@"photo"];
+            [mngObjProfile setValue:[NSNumber numberWithInteger:[[result objectForKey:@"bartsyUserId"] integerValue]] forKey:@"bartsyId"];
+            [context save:nil];
+            
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyId"] forKey:@"bartsyId"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             
-            WelcomeViewController *obj=[[WelcomeViewController alloc]init];
-            [self.navigationController pushViewController:obj animated:YES];
-            [obj release];
-            
+            if([[result objectForKey:@"userCheckedIn"] integerValue]==0&&[result objectForKey:@"userCheckedIn"]!=nil)
+            {
+                [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+                NSDictionary *dictVenueDetails=[[NSDictionary alloc]initWithObjectsAndKeys:[result objectForKey:@"venueId"],@"venueId",[result objectForKey:@"venueName"],@"venueName", nil];
+                [[NSUserDefaults standardUserDefaults]setObject:dictVenueDetails forKey:@"VenueDetails"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                
+                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                [self.navigationController pushViewController:obj animated:YES];
+                [obj release];
+                
+            }
+            else
+            {
+                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                [self.navigationController pushViewController:obj animated:YES];
+                [obj release];
+            }
+
         }
         else
         {
-            WelcomeViewController *obj=[[WelcomeViewController alloc]init];
-            [self.navigationController pushViewController:obj animated:YES];
-            [obj release];
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
         }
-        
+            
     }
 }
 

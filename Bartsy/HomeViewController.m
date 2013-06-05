@@ -298,9 +298,9 @@
     {
         isRequestForOrder=NO;
         
-        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        segmentControl.selectedSegmentIndex=2;
-        [self segmentControl_ValueChanged:segmentControl];
+//        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+//        segmentControl.selectedSegmentIndex=2;
+//        [self segmentControl_ValueChanged:segmentControl];
     }
     else if(isRequestForPeople==YES)
     {
