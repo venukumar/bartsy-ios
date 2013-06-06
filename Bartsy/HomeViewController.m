@@ -743,7 +743,7 @@
     {
         if([arrBundledOrders count])
         {
-            NSDictionary *dict=[[arrBundledOrders objectAtIndex:indexPath.section] objectAtIndex:0];
+            NSDictionary *dict=[[arrBundledOrders objectAtIndex:indexPath.section] lastObject];
             //cell.textLabel.text=[dict objectForKey:@"itemName"];
             [cell setUserInteractionEnabled:NO];
             
@@ -794,9 +794,22 @@
             [viewDate release];
             
             NSDate *date=[dict objectForKey:@"Date"];
+            
+            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
+            
+            NSString *newDateString = [outputFormatter stringFromDate:date];
+            
+            NSArray *arrDateComps=[newDateString componentsSeparatedByString:@" "];
+            NSLog(@"newDateString %@", newDateString);
+            
             NSCalendar * cal = [NSCalendar currentCalendar];
             NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
-            NSString *strDate=[NSString stringWithFormat:@"Placed at: %i:%i:%i on %i/%i/%i",comps.hour,comps.minute,comps.second,comps.month,comps.day,comps.year];
+            
+            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
+                comps.hour-=12;
+            
+            NSString *strDate=[NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
             
             UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
             lblTime.font = [UIFont systemFontOfSize:14];
@@ -831,15 +844,19 @@
             
             NSArray *arrSubSectionOrders=[arrBundledOrders objectAtIndex:indexPath.section] ;
             
+            float floatPrice=0;
             float floatTotalPrice=0;
+            float floatTipTaxFee=0;
             
             for (int i=0; i<[arrSubSectionOrders count]; i++)
             {
                 NSDictionary *dictTemp=[arrSubSectionOrders objectAtIndex:i];
                 
-                floatTotalPrice+=[[dictTemp objectForKey:@"totalPrice"] floatValue];
+                floatPrice+=[[dictTemp objectForKey:@"basePrice"] floatValue];
+                floatTotalPrice+=[[dictTemp objectForKey:@"totalPrice"]floatValue];
+                floatTipTaxFee+=[[dictTemp objectForKey:@"totalPrice"]floatValue]-[[dictTemp objectForKey:@"basePrice"]floatValue];
                 
-                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 290, 20)];
+                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 245, 20)];
                 lblDescription1.font = [UIFont boldSystemFontOfSize:14];
                 lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTemp objectForKey:@"itemName"]];
                 lblDescription1.tag = 1234234567;
@@ -861,9 +878,9 @@
                 [viewDescription addSubview:lblDescription2];
                 [lblDescription2 release];
                 
-                UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(250, 21+(i*70), 40, 15)];
+                UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
                 lblPrice.font = [UIFont systemFontOfSize:12];
-                lblPrice.text = [NSString stringWithFormat:@"$%@",[dictTemp objectForKey:@"totalPrice"]];
+                lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTemp objectForKey:@"basePrice"] floatValue]];
                 lblPrice.numberOfLines = 1;
                 lblPrice.backgroundColor = [UIColor clearColor];
                 lblPrice.textColor = [UIColor blackColor] ;
@@ -882,15 +899,35 @@
             [viewBorder addSubview:viewPrice];
             
             
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(7, 0, 280, 30)];
-            lblPrice.font = [UIFont systemFontOfSize:14];
-            lblPrice.text = [NSString stringWithFormat:@"Total Price: $%.2f",floatTotalPrice];
+            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(3, 0, 82, 30)];
+            lblPrice.font = [UIFont systemFontOfSize:11];
+            lblPrice.text = [NSString stringWithFormat:@"Price: $%.2f",floatPrice];
             lblPrice.tag = 12347890;
             lblPrice.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor blackColor] ;
+            lblPrice.textColor = [UIColor blackColor] ;
             lblPrice.textAlignment = NSTextAlignmentLeft;
             [viewPrice addSubview:lblPrice];
             [lblPrice release];
+            
+            UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(80, 0, 130, 30)];
+            lblTipTaxFee.font = [UIFont systemFontOfSize:11];
+            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
+            lblTipTaxFee.tag = 12347890;
+            lblTipTaxFee.backgroundColor = [UIColor clearColor];
+            lblTipTaxFee.textColor = [UIColor blackColor] ;
+            lblTipTaxFee.textAlignment = NSTextAlignmentLeft;
+            [viewPrice addSubview:lblTipTaxFee];
+            [lblTipTaxFee release];
+            
+            UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(215, 0, 100, 30)];
+            lblTotalPrice.font = [UIFont systemFontOfSize:11];
+            lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
+            lblTotalPrice.tag = 12347890;
+            lblTotalPrice.backgroundColor = [UIColor clearColor];
+            lblTotalPrice.textColor = [UIColor blackColor] ;
+            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+            [viewPrice addSubview:lblTotalPrice];
+            [lblTotalPrice release];
             
             [viewPrice release];
 
