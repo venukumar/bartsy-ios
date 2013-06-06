@@ -19,6 +19,7 @@
     NSDictionary *dictVenue;
     BOOL isRequestForPeople;
     NSArray *arrStatus;
+    NSMutableArray *arrBundledOrders;
 }
 @property(nonatomic,retain)NSDictionary *dictVenue;
 -(void)orderTheDrink;

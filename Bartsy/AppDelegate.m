@@ -295,7 +295,7 @@
     }
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"heartBeat"])
     {
-        AudioServicesPlaySystemSound(1007);
+        //AudioServicesPlaySystemSound(1007);
 
         [delegateForCurrentViewController heartBeat];
         
@@ -450,9 +450,6 @@
                      [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"VenueDetails"];
                      [[NSUserDefaults standardUserDefaults]synchronize];
                      
-                     intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
-                     intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
-                     
                      if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
                      {
                          [delegateForCurrentViewController reloadWelcomeScreen];
@@ -469,7 +466,17 @@
                          }
                      }
                  }
-                 
+                 else
+                 {
+                     intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
+                     intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+                     UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
+                     if([viewCont isKindOfClass:[HomeViewController class]])
+                     {
+                         [viewCont  reloadDataPeopleAndOrderCount];
+                     }
+                     
+                 }
                  
              }
              else
