@@ -1326,10 +1326,11 @@
     }
     else
     {
-//        CustomDrinksViewController *obj=[[CustomDrinksViewController alloc]init];
-//        [self.navigationController pushViewController:obj animated:YES];
-//        [obj release];
+        CustomDrinksViewController *obj=[[CustomDrinksViewController alloc]init];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
         
+        /*
         [[NSNotificationCenter defaultCenter]removeObserver:self name:@"Back" object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moveBack) name:@"Back" object:nil];
 
@@ -1342,6 +1343,7 @@
         
         RevealController *revealController = [[RevealController alloc] initWithFrontViewController:navigationController rearViewController:rearViewController];
         [self.navigationController pushViewController:revealController animated:YES];
+         */
         
     }
     

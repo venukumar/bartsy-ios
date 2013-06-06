@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface CustomDrinksViewController : BaseViewController
-
+@interface CustomDrinksViewController : BaseViewController<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate>
+{
+    NSInteger intCurrentPosition;
+    NSMutableArray *arrCategories;
+    NSMutableArray *arrIngridents;
+}
+@property(nonatomic,assign)NSInteger intCurrentPosition;
+-(void)loadScreenWithCategories;
 @end
