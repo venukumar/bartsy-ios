@@ -181,7 +181,6 @@
 		E0FD867D172FD9BA006CB0A8 /* div_light_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8637172FD9BA006CB0A8 /* div_light_grey.png */; };
 		E0FD867E172FD9BA006CB0A8 /* drink.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8638172FD9BA006CB0A8 /* drink.jpg */; };
 		E0FD867F172FD9BA006CB0A8 /* drinks.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8639172FD9BA006CB0A8 /* drinks.png */; };
-		E0FD8680172FD9BA006CB0A8 /* emily.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E0FD863A172FD9BA006CB0A8 /* emily.jpg */; };
 		E0FD8681172FD9BA006CB0A8 /* facebook.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E0FD863B172FD9BA006CB0A8 /* facebook.jpg */; };
 		E0FD8682172FD9BA006CB0A8 /* filter.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD863C172FD9BA006CB0A8 /* filter.png */; };
 		E0FD8683172FD9BA006CB0A8 /* frame_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD863D172FD9BA006CB0A8 /* frame_grey.png */; };
@@ -518,7 +517,6 @@
 		E0FD8637172FD9BA006CB0A8 /* div_light_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = div_light_grey.png; sourceTree = "<group>"; };
 		E0FD8638172FD9BA006CB0A8 /* drink.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = drink.jpg; sourceTree = "<group>"; };
 		E0FD8639172FD9BA006CB0A8 /* drinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drinks.png; sourceTree = "<group>"; };
-		E0FD863A172FD9BA006CB0A8 /* emily.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = emily.jpg; sourceTree = "<group>"; };
 		E0FD863B172FD9BA006CB0A8 /* facebook.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = facebook.jpg; sourceTree = "<group>"; };
 		E0FD863C172FD9BA006CB0A8 /* filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filter.png; sourceTree = "<group>"; };
 		E0FD863D172FD9BA006CB0A8 /* frame_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = frame_grey.png; sourceTree = "<group>"; };
@@ -1108,7 +1106,6 @@
 				E0FD8637172FD9BA006CB0A8 /* div_light_grey.png */,
 				E0FD8638172FD9BA006CB0A8 /* drink.jpg */,
 				E0FD8639172FD9BA006CB0A8 /* drinks.png */,
-				E0FD863A172FD9BA006CB0A8 /* emily.jpg */,
 				E0FD863B172FD9BA006CB0A8 /* facebook.jpg */,
 				E0FD863C172FD9BA006CB0A8 /* filter.png */,
 				E0FD863D172FD9BA006CB0A8 /* frame_grey.png */,
@@ -1254,7 +1251,6 @@
 				E0FD867D172FD9BA006CB0A8 /* div_light_grey.png in Resources */,
 				E0FD867E172FD9BA006CB0A8 /* drink.jpg in Resources */,
 				E0FD867F172FD9BA006CB0A8 /* drinks.png in Resources */,
-				E0FD8680172FD9BA006CB0A8 /* emily.jpg in Resources */,
 				E0FD8681172FD9BA006CB0A8 /* facebook.jpg in Resources */,
 				E0FD8682172FD9BA006CB0A8 /* filter.png in Resources */,
 				E0FD8683172FD9BA006CB0A8 /* frame_grey.png in Resources */,

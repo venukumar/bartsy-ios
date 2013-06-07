@@ -190,8 +190,8 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
 //    btnGoogle.backgroundColor=[UIColor darkGrayColor];
 //    [scrollView addSubview:btnGoogle];
     
-    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(320+38, 185, 243, 40)];
-    [scrollView addSubview:btnGoogle];
+    //GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(320+38, 185, 243, 40)];
+    //[scrollView addSubview:btnGoogle];
     
     
     UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(btnFBLogin) target:self];

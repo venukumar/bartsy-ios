@@ -15,7 +15,7 @@
 #define kSimulator              @"Simulator"
 #import <AudioToolbox/AudioToolbox.h>
 #import "GAI.h"
-
+#import "FrontViewController.h"
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
@@ -44,7 +44,7 @@
     
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
-     [Crittercism enableWithAppID:@"519b0a0313862004c500000b"];
+    [Crittercism enableWithAppID:@"51b196e597c8f25177000005"];
     
     arrOrders=[[NSMutableArray alloc]init];
     
@@ -177,9 +177,9 @@
 
 -(void)startTimerToCheckOrderStatusUpdate
 {
-    if(timerForOrderStatusUpdate==nil)
+    if(self.timerForOrderStatusUpdate==nil)
     {
-        timerForOrderStatusUpdate = [[NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkOrderStatusUpdate) userInfo:nil repeats:YES] retain];
+        self.timerForOrderStatusUpdate = [[NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkOrderStatusUpdate) userInfo:nil repeats:YES] retain];
     }
     
 }
@@ -440,8 +440,13 @@
         {
             [delegateForCurrentViewController reloadData];
         }
+        else if([delegateForCurrentViewController isKindOfClass:[FrontViewController class]])
+        {
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"Back" object:nil];
+        }
         else
         {
+            
             UIViewController *viewController=(UIViewController*)delegateForCurrentViewController;
             HomeViewController *obj=[[HomeViewController alloc]init];
             obj.dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
@@ -571,14 +576,7 @@
                      [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"VenueDetails"];
                      [[NSUserDefaults standardUserDefaults]synchronize];
                      
-                     
-                     if(timerForOrderStatusUpdate!=nil)
-                     {
-                         [timerForOrderStatusUpdate invalidate];
-                         [timerForOrderStatusUpdate release];
-                         timerForOrderStatusUpdate=nil;
-                         
-                     }
+                     [self stopTimerForOrderStatusUpdate];
                      
                      if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
                      {
