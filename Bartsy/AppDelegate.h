@@ -25,7 +25,14 @@
     NSInteger intOrderCount;
     Reachability *internetReachable;
     Reachability *hostReachable;
+    NSMutableArray *arrOrders;
+    NSMutableArray *arrOrdersTimer;
+    NSTimer *timerForOrderStatusUpdate;
 }
+@property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;
+
+@property(nonatomic,retain)NSMutableArray *arrOrders;
+@property(nonatomic,retain)NSMutableArray *arrOrdersTimer;
 @property(nonatomic,assign)BOOL isLoginForFB;
 @property (nonatomic,retain)id delegateForCurrentViewController;
 @property (strong, nonatomic) UIWindow *window;
@@ -45,5 +52,7 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 -(void)checkUserCheckInStatus;
-
+-(void)startTimerToCheckOrderStatusUpdate;
+-(void)stopTimerForOrderStatusUpdate;
+-(void)checkOrderStatusUpdate;
 @end

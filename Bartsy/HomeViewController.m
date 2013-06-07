@@ -322,6 +322,7 @@
         NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[result objectForKey:@"orderCount"] integerValue]];
         appDelegate.intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+        [appDelegate startTimerToCheckOrderStatusUpdate];
     }
     else if(isRequestForPeople==YES)
     {
@@ -341,6 +342,8 @@
     else if(isRequestForGettingsOrders==YES)
     {
         [arrOrders removeAllObjects];
+        [appDelegate.arrOrders removeAllObjects];
+        [appDelegate.arrOrders addObjectsFromArray:[result objectForKey:@"orders"]];
         NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[result objectForKey:@"orders"]];
         
         for (int i=0;i<[arrTemp count];i++)
@@ -360,7 +363,7 @@
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
         [arrBundledOrders removeAllObjects];
-        for (int i=0; i<=3; i++)
+        for (int i=0; i<=3&&[arrOrders count]; i++)
         {
             if(i==0||i==2||i==3)
             {
@@ -385,6 +388,11 @@
          
         
         NSLog(@"Orders %@",arrBundledOrders);
+        
+        if([arrOrders count])
+            [appDelegate startTimerToCheckOrderStatusUpdate];
+        else
+            [appDelegate stopTimerForOrderStatusUpdate];
         
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
@@ -856,7 +864,7 @@
                 floatTotalPrice+=[[dictTemp objectForKey:@"totalPrice"]floatValue];
                 floatTipTaxFee+=[[dictTemp objectForKey:@"totalPrice"]floatValue]-[[dictTemp objectForKey:@"basePrice"]floatValue];
                 
-                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 245, 20)];
+                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
                 lblDescription1.font = [UIFont boldSystemFontOfSize:14];
                 lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTemp objectForKey:@"itemName"]];
                 lblDescription1.tag = 1234234567;

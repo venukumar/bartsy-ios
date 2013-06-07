@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate;
 
 - (void)dealloc
 {
@@ -45,6 +45,8 @@
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
      [Crittercism enableWithAppID:@"519b0a0313862004c500000b"];
+    
+    arrOrders=[[NSMutableArray alloc]init];
     
 //    // Optional: automatically send uncaught exceptions to Google Analytics.
 //    [GAI sharedInstance].trackUncaughtExceptions = YES;
@@ -171,6 +173,125 @@
     AuthNet *an = [AuthNet getInstance];
     [an mobileDeviceRegistrationRequest:mobileDeviceRegistrationRequest];
 }
+
+
+-(void)startTimerToCheckOrderStatusUpdate
+{
+    if(timerForOrderStatusUpdate==nil)
+    {
+        timerForOrderStatusUpdate = [[NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkOrderStatusUpdate) userInfo:nil repeats:YES] retain];
+    }
+    
+}
+
+-(void)stopTimerForOrderStatusUpdate
+{
+    if(self.timerForOrderStatusUpdate!=nil)
+    {
+        [self.timerForOrderStatusUpdate invalidate];
+        [self.timerForOrderStatusUpdate release];
+        self.timerForOrderStatusUpdate=nil;
+        
+    }
+}
+
+-(void)checkOrderStatusUpdate
+{
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             
+             if(arrOrdersTimer!=nil)
+             {
+                 [arrOrdersTimer removeAllObjects];
+                 [arrOrdersTimer release];
+                 arrOrdersTimer=nil;
+             }
+             
+             arrOrdersTimer=[[NSMutableArray alloc]initWithArray:[result objectForKey:@"orders"]];
+             
+             [arrOrdersTimer removeObjectsInArray:arrOrders];
+             
+             NSLog(@"Updated Orders is %@",arrOrdersTimer);
+             
+             if([arrOrdersTimer count])
+             {
+                 NSDictionary *dict=[arrOrdersTimer objectAtIndex:0];
+                 
+                 NSLog(@"Updated order is %@",dict);
+                 if([[dict objectForKey:@"orderStatus"] integerValue]!=0)
+                 {
+                     UILocalNotification *localNotificationForOrderStatusUpdate = [[UILocalNotification alloc]init];
+                     localNotificationForOrderStatusUpdate.alertBody =[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
+                     localNotificationForOrderStatusUpdate.fireDate = [NSDate date];
+                     localNotificationForOrderStatusUpdate.soundName = UILocalNotificationDefaultSoundName;
+                     localNotificationForOrderStatusUpdate.userInfo = [NSDictionary
+                                              dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]],@"Message", nil];
+
+                     [[UIApplication sharedApplication] scheduleLocalNotification:localNotificationForOrderStatusUpdate];
+                 }
+                 
+                 
+             }
+             
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+    
+    [url release];
+    [request release];
+}
+
+
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif
+{
+    // Handle the notificaton when the app is running
+    NSLog(@"application: didReceiveLocalNotification:");
+    app.applicationIconBadgeNumber = 0;
+    NSDictionary *userInfoCurrent = notif.userInfo;
+    
+    NSLog(@"Info is %@",userInfoCurrent);
+        
+    if(alertView!=nil)
+    {
+        [alertView dismissWithClickedButtonIndex:0 animated:YES];
+        [alertView release];
+        alertView=nil;
+    }
+    
+    alertView=[[UIAlertView alloc]initWithTitle:@"" message:[userInfoCurrent valueForKey:@"Message"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    alertView.tag=143225;
+    [alertView show];
+    
+    NSLog(@"Receive Local Notification while the app is still running...");
+    NSLog(@"current notification is %@",notif);
+}
+
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
 {
@@ -449,6 +570,15 @@
                      [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"CheckInVenueId"];
                      [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"VenueDetails"];
                      [[NSUserDefaults standardUserDefaults]synchronize];
+                     
+                     
+                     if(timerForOrderStatusUpdate!=nil)
+                     {
+                         [timerForOrderStatusUpdate invalidate];
+                         [timerForOrderStatusUpdate release];
+                         timerForOrderStatusUpdate=nil;
+                         
+                     }
                      
                      if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
                      {
