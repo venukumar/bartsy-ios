@@ -67,7 +67,7 @@
     CLLocationManager *locationManager=[[CLLocationManager alloc]init];
     locationManager.delegate=self;
     [locationManager startUpdatingLocation];
-    [locationManager release];
+//    [locationManager release];
     
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 241, 320, 180)];
     tblView.dataSource=self;
@@ -186,6 +186,10 @@
     
     [manager stopUpdatingLocation];
     manager.delegate=nil;
+    
+    [self reloadMapViewa];
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+    [tblView reloadData];
     
 }
 
@@ -306,9 +310,11 @@
         [arrVenueList removeAllObjects];
         [arrVenueList addObjectsFromArray:result];
         
+        [self reloadMapView];
+        
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
-        [self reloadMapView];
+        
     }
     else
     {
