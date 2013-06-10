@@ -28,6 +28,8 @@
     NSMutableArray *arrOrders;
     NSMutableArray *arrOrdersTimer;
     NSTimer *timerForOrderStatusUpdate;
+    UIBackgroundTaskIdentifier bgTask;
+    NSDictionary *dictOfferedDrikDetails;
 }
 @property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;
 
@@ -47,6 +49,7 @@
 @property(nonatomic,assign)NSInteger intOrderCount;
 @property BOOL internetActive;
 @property BOOL hostActive;
+@property(nonatomic,retain)NSDictionary *dictOfferedDrikDetails;
 
 - (void) checkNetworkStatus:(NSNotification *)notice;
 - (void)saveContext;
@@ -55,4 +58,5 @@
 -(void)startTimerToCheckOrderStatusUpdate;
 -(void)stopTimerForOrderStatusUpdate;
 -(void)checkOrderStatusUpdate;
+-(void)updateOrderStatusForaOfferedDrink;
 @end

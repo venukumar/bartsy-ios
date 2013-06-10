@@ -109,10 +109,12 @@
     [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
     [[imgViewDrink layer] setShadowRadius:3.0];
     [[imgViewDrink layer] setShadowOpacity:0.8];
+    imgViewDrink.backgroundColor=[UIColor clearColor];
     [cell.contentView addSubview:imgViewDrink];
     //[imgViewDrink release];
     
     UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 150, 20)];
+    lblName.backgroundColor=[UIColor clearColor];
     lblName.text=[dict objectForKey:@"venueName"];
     lblName.font=[UIFont boldSystemFontOfSize:14];
     [cell.contentView addSubview:lblName];
@@ -123,6 +125,7 @@
     lblDescription.numberOfLines=2;
     lblDescription.text=[dict objectForKey:@"address"];
     lblDescription.font=[UIFont systemFontOfSize:12];
+    lblDescription.backgroundColor=[UIColor clearColor];
     [cell.contentView addSubview:lblDescription];
     //[lblDescription release];
     
@@ -139,6 +142,13 @@
     [cell.contentView addSubview:lblMiles];
     // [lblMiles release];
     
+    if([[dict objectForKey:@"venueStatus"] isEqualToString:@"OFFLINE"])
+    {
+        [cell setUserInteractionEnabled:NO];
+        cell.contentView.backgroundColor=[UIColor grayColor];
+        imgViewDrink.alpha=0.1;
+    }
+
     
     return cell;
 }
@@ -187,7 +197,7 @@
     [manager stopUpdatingLocation];
     manager.delegate=nil;
     
-    [self reloadMapViewa];
+    [self reloadMapView];
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
     

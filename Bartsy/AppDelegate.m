@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails;
 
 - (void)dealloc
 {
@@ -236,6 +236,8 @@
              
              if([arrOrdersTimer count])
              {
+                 NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"orderStatus" ascending:NO selector:nil];
+                 [arrOrdersTimer sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
                  NSDictionary *dict=[arrOrdersTimer objectAtIndex:0];
                  
                  NSLog(@"Updated order is %@",dict);
@@ -428,6 +430,49 @@
 
         
     }
+    else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOffered"])
+    {
+        AudioServicesPlaySystemSound(1007);
+        dictOfferedDrikDetails=[[NSDictionary alloc]initWithDictionary:userInfo];
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES",nil];
+        alertView.tag=225;
+        [alertView show];
+    }
+    else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOfferRejected"])
+    {
+        AudioServicesPlaySystemSound(1007);
+        dictOfferedDrikDetails=[[NSDictionary alloc]initWithDictionary:userInfo];
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+    else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOfferAccepted"])
+    {
+        AudioServicesPlaySystemSound(1007);
+        dictOfferedDrikDetails=[[NSDictionary alloc]initWithDictionary:userInfo];
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
 }
 
 - (void)alertView:(UIAlertView *)alertView1 clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -455,6 +500,60 @@
             
         }
     }
+    else if(alertView1.tag==225)
+    {
+        if(buttonIndex==0)
+        [self updateOrderStatusForaOfferedDrink:@"7"]; //Rejected the Order
+        else
+        [self updateOrderStatusForaOfferedDrink:@"0"]; //Accepted the Order
+
+    }
+}
+
+-(void)updateOrderStatusForaOfferedDrink:(NSString*)strStatus
+{
+    //Updating the Order Status by the Receiver
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateSenderDrink",KServerURL];
+    
+    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",[dictOfferedDrikDetails objectForKey:@"orderId"],@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
+    
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             NSLog(@"Result is %@",result);
+             
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+    
+    
+    [url release];
+    [request release];
+
 }
 
 // FBSample logic
@@ -513,6 +612,23 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    if(self.timerForOrderStatusUpdate!=nil)
+    {
+        UIApplication   *app = [UIApplication sharedApplication];
+        bgTask = [app beginBackgroundTaskWithExpirationHandler:^{
+            [app endBackgroundTask:bgTask];
+            bgTask = UIBackgroundTaskInvalid;
+        }];
+        
+        // Start the long-running task and return immediately.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            // inform others to stop tasks, if you like
+            
+        });
+    }
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

@@ -238,7 +238,10 @@
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
-    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] delegate:self];
+    NSString *strBartsyId=@"100002";
+    
+    
+    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] receiverBartsyId:strBartsyId delegate:self];
 }
 
 
@@ -985,7 +988,7 @@
         viewB.tag=333;
         [viewA addSubview:viewB];
         
-        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 268)];
+        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 328)];
         viewC.layer.cornerRadius = 2;
         viewC.layer.borderWidth = 2;
         viewC.backgroundColor = [UIColor redColor];
@@ -994,7 +997,47 @@
         viewC.tag=444;
         [viewB addSubview:viewC];
         
-        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 10, 268, 45)];
+        UIView *viewHeaderPhoto = [[UIView alloc]initWithFrame:CGRectMake(11, 5, 268, 60)];
+        viewHeaderPhoto.backgroundColor = [UIColor blackColor];
+        viewHeaderPhoto.layer.cornerRadius = 6;
+        viewHeaderPhoto.tag = 11111;
+        [viewC addSubview:viewHeaderPhoto];
+                
+        //NSMutableArray *arrPeopleTemp=[[NSMutableArray alloc]initWithArray:arrPeople];
+        //NSPredicate *predicate=[NSPredicate predicateWithFormat:@"bartsyId == %i",[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] integerValue]];
+        //[arrPeopleTemp filterUsingPredicate:predicate];
+        
+
+        for (int i=0; i<[arrPeople count]; i++)
+        {
+            NSDictionary *dictMember=[arrPeople objectAtIndex:i];
+            if([[dictMember objectForKey:@"bartsyId"] integerValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] integerValue])
+            {
+                dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
+                break;
+            }
+        }
+        
+        
+        
+        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,5,105,50)];
+        NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
+        imgViewPhoto.tag=143225;
+        [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
+        [viewHeaderPhoto addSubview:imgViewPhoto];
+        [imgViewPhoto release];
+        
+        
+        UIButton *btnPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnPhoto.frame = CGRectMake(10,5,105,50);
+        [btnPhoto addTarget:self action:@selector(btnPhoto_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        btnPhoto.backgroundColor=[UIColor clearColor];
+        [viewHeaderPhoto addSubview:btnPhoto];
+        
+        [viewHeaderPhoto release];
+
+        
+        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 70, 268, 45)];
         viewHeader.backgroundColor = [UIColor blackColor];
         viewHeader.layer.cornerRadius = 6;
         viewHeader.tag = 555;
@@ -1011,7 +1054,7 @@
         [viewHeader addSubview:lblTitle];
         [lblTitle release];
         
-        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 63, 200, 100)];
+        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 123, 200, 100)];
         viewDetail.backgroundColor = [UIColor whiteColor];
         viewDetail.layer.borderWidth = 1;
         viewDetail.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1052,7 +1095,7 @@
         [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [viewDetail addSubview:btnCustomise];
         
-        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 63, 63, 100)];
+        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 123, 63, 100)];
         viewPrice.backgroundColor = [UIColor whiteColor];
         viewPrice.layer.borderWidth = 1;
         viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1080,7 +1123,7 @@
         //    [viewPrice addSubview:lblPriceOff];
         //    [lblPriceOff release];
         
-        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 171, 268, 45)];
+        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 231, 268, 45)];
         viewTip.backgroundColor = [UIColor whiteColor];
         viewTip.layer.borderWidth = 1;
         viewTip.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1168,7 +1211,7 @@
         [txtFieldTip release];
         
         UIButton *btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnCancel.frame = CGRectMake(148,227,120,30);
+        btnCancel.frame = CGRectMake(148,287,120,30);
         btnCancel.titleLabel.textColor = [UIColor whiteColor];
         [btnCancel setTitle:@"Cancel" forState:UIControlStateNormal];
         btnCancel.titleLabel.font = [UIFont boldSystemFontOfSize:12];
@@ -1177,7 +1220,7 @@
         [viewC addSubview:btnCancel];
         
         UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnOrder.frame = CGRectMake(20,227,115,30);
+        btnOrder.frame = CGRectMake(20,287,115,30);
         [btnOrder setTitle:@"Order" forState:UIControlStateNormal];
         btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
         btnOrder.titleLabel.textColor = [UIColor whiteColor];
@@ -1190,6 +1233,11 @@
         [viewC release];
     }
     // Navigation logic may go here. Create and push another view controller.
+}
+
+-(void)btnPhoto_TouchUpInside
+{
+    
 }
 
 #pragma mark - TextFields Delegate

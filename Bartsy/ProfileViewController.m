@@ -25,7 +25,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -46,39 +46,466 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    isChecked=YES;
+    intOrientation=1;
+    
     self.trackedViewName = @"Profile Screen";
 
-    self.view.backgroundColor=[UIColor blackColor];
+    self.view.backgroundColor=[UIColor lightGrayColor];
     
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 405)];
-    scrollView.tag=143225;
-    scrollView.scrollEnabled=YES;
-    [self.view addSubview:scrollView];
-    
-    
-    UILabel *lblHeader=[self createLabelWithTitle:@"Profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
+//    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 405)];
+//    scrollView.tag=143225;
+//    scrollView.scrollEnabled=YES;
+//    [self.view addSubview:scrollView];
+//    [scrollView release];
+
+        
+    UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
+    lblHeader.backgroundColor=[UIColor blackColor];
     lblHeader.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblHeader];
+    [self.view addSubview:lblHeader];
     
-    [scrollView release];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 420) style:UITableViewStyleGrouped];
+    tblView.backgroundColor=[UIColor clearColor];
+    tblView.backgroundView=nil;
+    tblView.dataSource=self;
+    tblView.delegate=self;
+    tblView.tag=143225;
+    [self.view addSubview:tblView];
+    [tblView release];
+
 
     arrGender=[[NSArray alloc]initWithObjects:@"Female",@"Male", nil];
     arrOrientation=[[NSArray alloc]initWithObjects:@"I'm straight",@"I'm gay",@"I'm bisexual", nil];
     arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
     
     
-    if(appDelegate.isLoginForFB||[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
+    if(appDelegate.isLoginForFB==YES)
     {
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         self.sharedController=[SharedController sharedController];
         [sharedController gettingUserProfileInformationWithAccessToken:appDelegate.session.accessTokenData.accessToken delegate:self];
     }
-    else
+    else if(isCmgFromGetStarted==NO)
     {
         [self googlePlusDetails];
     }
    
     
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 4;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;    // fixed font style. use custom view (UILabel) if you want something different
+{
+    if(section==0)
+    {
+        return @"Account Information*";
+    }
+    else if(section==1)
+    {
+        return @"How venue staff will see you*";
+    }
+    else if(section==2)
+    {
+        return @"Payment Information";
+    }
+    else
+    {
+        return @"See and be seen";
+    }
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if(section==3)
+    return 50;
+    else
+        return 0;
+}
+
+
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if(section==3)
+    {
+        UIView *viewFooter=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 300, 50)];
+        
+        UIButton *btnCancel=[self createUIButtonWithTitle:@"Cancel" image:nil frame:CGRectMake(50, 5, 100, 40) tag:0 selector:@selector(btnCancel_TouchUpInside) target:self];
+        btnCancel.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+        btnCancel.titleLabel.textColor=[UIColor blackColor];
+        [viewFooter addSubview:btnCancel];
+        
+        UIButton *btnSubmit=[self createUIButtonWithTitle:@"Submit" image:nil frame:CGRectMake(160, 5, 100, 40) tag:0 selector:@selector(btnContinue_TouchUpInside) target:self];
+        btnSubmit.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+        btnSubmit.titleLabel.textColor=[UIColor blackColor];
+        [viewFooter addSubview:btnSubmit];
+        
+        return viewFooter;
+    }
+    else
+        return nil;
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section==0)
+    {
+        return 85;
+    }
+    else if(indexPath.section==1)
+    {
+        return 120;
+    }
+    else if(indexPath.section==2)
+    {
+        return 50;
+    }
+    else
+    {
+        if(isChecked)
+        return 300;
+        else
+            return 50;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    
+    cell.tag=indexPath.section+1;
+
+    if(indexPath.section==0)
+    {
+        UILabel *lblEmailId=[self createLabelWithTitle:@"Email/userId:" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblEmailId.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblEmailId];
+        
+        txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 10, 180, 30) tag:111 delegate:self];
+        txtFldEmailId.text=[dictResult objectForKey:@"username"];
+        txtFldEmailId.placeholder=@"Email/userId";
+        txtFldEmailId.font=[UIFont systemFontOfSize:15];
+        [cell.contentView addSubview:txtFldEmailId];
+        
+        UILabel *lblPassword=[self createLabelWithTitle:@"Password:" frame:CGRectMake(10, 42, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblPassword.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblPassword];
+        
+        txtFldPassword=[self createTextFieldWithFrame:CGRectMake(110, 42, 180, 30) tag:222 delegate:self];
+        txtFldPassword.secureTextEntry=YES;
+        txtFldPassword.placeholder=@"6 or more characters";
+        txtFldPassword.font=[UIFont systemFontOfSize:15];
+        [cell.contentView addSubview:txtFldPassword];
+
+    }
+    else if(indexPath.section==1)
+    {
+        NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=100&height=100",[dictResult objectForKey:@"id"]];
+        NSLog(@"Pic URL is %@",strURL);
+        NSURL *url=[[NSURL alloc]initWithString:strURL];
+        
+        imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(5, 10, 100, 100) tag:0];
+        if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
+            [imgViewProfilePicture setImageWithURL:url];
+        else if([[dictResult objectForKey:@"url"] length])
+            [imgViewProfilePicture setImageWithURL:[dictResult objectForKey:@"url"]];
+        else
+            [imgViewProfilePicture setImage:[UIImage imageNamed:@"DefaultUser.png"]];
+        
+        [url release];
+        [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
+        [[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
+        [[imgViewProfilePicture layer] setShadowRadius:3.0];
+        [[imgViewProfilePicture layer] setShadowOpacity:0.8];
+        imgViewProfilePicture.tag=333;
+        [cell.contentView addSubview:imgViewProfilePicture];
+        [imgViewProfilePicture setUserInteractionEnabled:YES];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoClicked)];
+        [tap setNumberOfTouchesRequired:1];
+        [tap setNumberOfTapsRequired:1];
+        [imgViewProfilePicture addGestureRecognizer:tap];
+        
+        
+        UILabel *lblNickName=[self createLabelWithTitle:@"Nick Name:" frame:CGRectMake(120, 10, 100, 20) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblNickName.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblNickName];
+        
+        txtFldNickName=[self createTextFieldWithFrame:CGRectMake(120, 35, 150, 30) tag:444 delegate:self];
+        txtFldNickName.placeholder=@"Nick Name";
+        if([dictResult count])
+        {
+            if([dictResult objectForKey:@"nickname"]!=(id)[NSNull null]&&[[dictResult objectForKey:@"nickname"] length]&&[dictResult objectForKey:@"nickname"]!=nil)
+                txtFldNickName.text=[NSString stringWithFormat:@"%@",[dictResult objectForKey:@"nickname"]];
+            else if([[dictResult objectForKey:@"last_name"] length])
+                txtFldNickName.text=[NSString stringWithFormat:@"%@ %@",[dictResult objectForKey:@"first_name"],[[dictResult objectForKey:@"last_name"] substringToIndex:1]];
+            else
+                txtFldNickName.text=[NSString stringWithFormat:@"%@",[dictResult objectForKey:@"first_name"]];
+        }
+        txtFldNickName.font=[UIFont systemFontOfSize:15];
+        [cell.contentView addSubview:txtFldNickName];
+        
+        UILabel *lblMessage=[self createLabelWithTitle:@"<- Click on picture to change" frame:CGRectMake(120, 90, 180, 20) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:1];
+        lblMessage.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblMessage];
+
+    }
+    else if(indexPath.section==2)
+    {
+        UIImageView *imgViewCreditCard=[self createImageViewWithImage:[UIImage imageNamed:@"creditcard.png"] frame:CGRectMake(5, 5, 41, 40) tag:0];
+        [cell.contentView addSubview:imgViewCreditCard];
+
+        
+        UILabel *lblCreditCard=[self createLabelWithTitle:@"Add credit card..." frame:CGRectMake(50, 5, 120, 40) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblCreditCard.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblCreditCard];
+        
+        [lblCreditCard setUserInteractionEnabled:YES];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(btnCreditCard_TouchUpInside)];
+        [tap setNumberOfTouchesRequired:1];
+        [tap setNumberOfTapsRequired:1];
+        [lblCreditCard addGestureRecognizer:tap];
+        
+        UIView *viewLine=[[UIView alloc]initWithFrame:CGRectMake(180, 18, 1, 20)];
+        viewLine.backgroundColor=[UIColor lightGrayColor];
+        [cell.contentView addSubview:viewLine];
+        [viewLine release];
+        
+        UILabel *lblPaypal=[self createLabelWithTitle:@"Add PayPal..." frame:CGRectMake(184, 5, 115, 40) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblPaypal.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblPaypal];
+        
+        [lblPaypal setUserInteractionEnabled:YES];
+        
+        UITapGestureRecognizer *tapForPaypal = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(btnPaypal_TouchUpInside)];
+        [tapForPaypal setNumberOfTouchesRequired:1];
+        [tapForPaypal setNumberOfTapsRequired:1];
+        [lblPaypal addGestureRecognizer:tapForPaypal];
+        
+        
+    }
+    else
+    {
+        UILabel *lblCheck=[self createLabelWithTitle:@"Check to see others:" frame:CGRectMake(10, 10, 150, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+        lblCheck.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblCheck];
+        
+        UIButton *btnCheckbox=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(155, 10, 28, 28) tag:0 selector:@selector(btnCheckbox_TouchUpInside) target:self];
+        if(isChecked)
+            [btnCheckbox setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateNormal];
+        else
+            [btnCheckbox setImage:[UIImage imageNamed:@"uncheck.png"] forState:UIControlStateNormal];
+
+        [cell.contentView addSubview:btnCheckbox];
+
+        UILabel *lblProfile=[self createLabelWithTitle:@"Profile Visible" frame:CGRectMake(190, 10, 150, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+        lblProfile.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblProfile];
+        
+        if(isChecked)
+        {
+            UILabel *lblDescription=[self createLabelWithTitle:@"Description:" frame:CGRectMake(10, 50, 200, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblDescription.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblDescription];
+            
+            txtViewDescription=[[UITextView alloc] initWithFrame:CGRectMake(10, 70, 280, 50)];
+            txtViewDescription.tag=555;
+            txtViewDescription.delegate=self;
+            txtViewDescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+            [[txtViewDescription layer]setBorderWidth:1];
+            [[txtViewDescription layer]setBorderColor:[[UIColor blackColor] CGColor]];
+            [[txtViewDescription layer]setCornerRadius:5];
+            txtViewDescription.textColor=[UIColor lightGrayColor];
+            txtViewDescription.font=[UIFont systemFontOfSize:12];
+            [cell.contentView addSubview:txtViewDescription];
+            
+            UILabel *lblGender=[self createLabelWithTitle:@"Gender:" frame:CGRectMake(10, 133, 120, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblGender.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblGender];
+            
+            UIButton *btnMale=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 130, 28, 28) tag:0 selector:@selector(btnGender_TouchUpInside:) target:self];
+            btnMale.tag=143;
+            if([[dictResult objectForKey:@"gender"] isEqualToString:@"male"])
+            {
+                [btnMale setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+                self.strGender=[[NSString stringWithFormat:@"Male"] retain];
+            }
+            else
+                [btnMale setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnMale];
+            
+            
+            UILabel *lblMale=[self createLabelWithTitle:@"Male" frame:CGRectMake(125, 133, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblMale.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblMale];
+            
+            UIButton *btnFeMale=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(180, 130, 28, 28) tag:0 selector:@selector(btnGender_TouchUpInside:) target:self];
+            btnFeMale.tag=225;
+            if([[dictResult objectForKey:@"gender"] isEqualToString:@"female"])
+            {
+                self.strGender=[[NSString stringWithFormat:@"Female"] retain];
+                [btnFeMale setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+            }
+            else 
+                [btnFeMale setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnFeMale];
+            
+            
+            UILabel *lblFeMale=[self createLabelWithTitle:@"Female" frame:CGRectMake(210, 133, 120, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblFeMale.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblFeMale];
+            
+            UILabel *lblDOB=[self createLabelWithTitle:@"Date of birth:" frame:CGRectMake(10, 170, 120, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblDOB.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblDOB];
+            
+            
+            UITextField *txtFldDOB=[self createTextFieldWithFrame:CGRectMake(95, 165, 150, 30) tag:666 delegate:self];
+            txtFldDOB.placeholder=@"MM/DD/YYYY";
+            txtFldDOB.font=[UIFont systemFontOfSize:15];
+            [cell.contentView addSubview:txtFldDOB];
+            
+            
+            UILabel *lblOrientation=[self createLabelWithTitle:@"Orientation:" frame:CGRectMake(10, 205, 80, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblOrientation.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblOrientation];
+            
+            
+            UIButton *btnStraight=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 205, 28, 28) tag:999 selector:@selector(btnOrientation_TouchUpInside:) target:self];
+            if(intOrientation==1)
+                [btnStraight setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+            else
+                [btnStraight setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnStraight];
+            
+            
+            UILabel *lblStraight=[self createLabelWithTitle:@"Straight" frame:CGRectMake(135, 208, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblStraight.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblStraight];
+            
+            
+            UIButton *btnGay=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 235, 28, 28) tag:888 selector:@selector(btnOrientation_TouchUpInside:) target:self];
+            if(intOrientation==2)
+                [btnGay setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+            else
+                [btnGay setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnGay];
+            
+            
+            UILabel *lblGay=[self createLabelWithTitle:@"Gay" frame:CGRectMake(135, 238, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblGay.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblGay];
+            
+            UIButton *btnBisexual=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 265, 28, 28) tag:777 selector:@selector(btnOrientation_TouchUpInside:) target:self];
+            if(intOrientation==3)
+                [btnBisexual setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+            else
+                [btnBisexual setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnBisexual];
+            
+            
+            UILabel *lblBisexual=[self createLabelWithTitle:@"Bisexual" frame:CGRectMake(135, 268, 100, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblBisexual.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblBisexual];
+
+        }
+                
+        
+    }
+    
+    return cell;
+}
+
+-(void)btnCreditCard_TouchUpInside
+{
+    
+}
+
+-(void)btnPaypal_TouchUpInside
+{
+    
+}
+
+-(void)btnCheckbox_TouchUpInside
+{
+    isChecked=!isChecked;
+    isReloadingForProfileVisible=YES;
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+    [tblView reloadData];
+}
+
+-(void)btnGender_TouchUpInside:(UIButton*)sender
+{
+    
+    if([self.strGender length]==0)
+    {
+        [sender setImage:[UIImage imageNamed:@"radio_button_selected1.png"]  forState:UIControlStateNormal];
+        self.strGender=[NSString stringWithFormat:@"%@",(sender.tag==143?@"Male":@"Female")];
+    }
+    else if([self.strGender length]&&sender.tag==143)
+    {
+        [sender setImage:[UIImage imageNamed:@"radio_button_selected1.png"]  forState:UIControlStateNormal];
+        UIButton *btnFemale=(UIButton*)[self.view viewWithTag:225];
+        [btnFemale setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        self.strGender=[NSString stringWithFormat:@"Male"];
+    }
+    else if([self.strGender length]&&sender.tag==225)
+    {
+        [sender setImage:[UIImage imageNamed:@"radio_button_selected1.png"]  forState:UIControlStateNormal];
+        UIButton *btnFemale=(UIButton*)[self.view viewWithTag:143];
+        [btnFemale setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        self.strGender=[NSString stringWithFormat:@"Female"];
+    }
+}
+
+-(void)btnOrientation_TouchUpInside:(UIButton*)sender
+{
+    UIButton *btnStraight=(UIButton*)[self.view viewWithTag:999];
+    UIButton *btnGay=(UIButton*)[self.view viewWithTag:888];
+    UIButton *btnBisexual=(UIButton*)[self.view viewWithTag:777];
+
+    if(sender.tag==999)
+    {
+        intOrientation=1;
+        [btnStraight setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+        [btnGay setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        [btnBisexual setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+
+    }
+    else if(sender.tag==888)
+    {
+        intOrientation=2;
+        [btnGay setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+        [btnStraight setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        [btnBisexual setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    }
+    else if(sender.tag==777)
+    {
+        intOrientation=3;
+        [btnBisexual setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+        [btnStraight setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        [btnGay setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    }
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(void)googlePlusDetails
@@ -95,6 +522,7 @@
     NSString *jsonData = [[NSString alloc] initWithContentsOfURL:url usedEncoding:nil error:nil];
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[jsonData dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     NSString *userId=[jsonDictionary objectForKey:@"id"];
+    [dictGoogle setObject:[jsonDictionary objectForKey:@"email"] forKey:@"username"];
     NSLog(@" user deata %@",jsonData);
     NSLog(@"Received Access Token:%@",auth);
     
@@ -118,14 +546,30 @@
              NSString *strimag=[image valueForKey:@"url"];
              if(person.displayName!=nil)
              [dictGoogle setObject:person.displayName forKey:@"first_name"];
+             
+             [dictGoogle setObject:@"" forKey:@"last_name"];
+
              if(person.gender!=nil)
              [dictGoogle setObject:person.gender  forKey:@"gender"];
              if(strimag!=nil)
              [dictGoogle setObject:strimag forKey:@"url"];
              if(person.nickname!=nil)
              [dictGoogle setObject:person.nickname forKey:@"nickname"];
-             [self loadProfileDetails:dictGoogle];
-
+             if(dictResult==nil)
+             {
+                 dictResult=[[NSDictionary alloc] initWithDictionary:dictGoogle];
+             }
+             else
+             {
+                 [dictResult release];
+                 dictResult=nil;
+                 dictResult=[[NSDictionary alloc] initWithDictionary:dictGoogle];
+             }
+             
+             isProfileExistsCheck=YES;
+             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+             self.sharedController=[SharedController sharedController];
+             [sharedController syncUserDetailsWithUserName:[dictResult objectForKey:@"username"] type:@"login" bartsyId:@"" delegate:self];
          }
      }];
 
@@ -182,7 +626,7 @@
     [[imgViewProfilePicture layer] setShadowColor:[[UIColor whiteColor] CGColor]];
     [[imgViewProfilePicture layer] setShadowRadius:3.0];
     [[imgViewProfilePicture layer] setShadowOpacity:0.8];
-    imgViewProfilePicture.tag=111;
+    imgViewProfilePicture.tag=333;
     [scrollView addSubview:imgViewProfilePicture];
     [imgViewProfilePicture setUserInteractionEnabled:YES];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoClicked)];
@@ -257,6 +701,34 @@
     [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(removeLoader) userInfo:nil repeats:NO];
 }
 
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];    
+    [tblView setContentOffset:CGPointMake(0,400) animated:YES];
+    
+    if([textView.text isEqualToString:@"Enter something about you that you'd like others to see while you're checked in at a venue"])
+    {
+        textView.text=@"";
+        textView.textColor=[UIColor blackColor];
+    }
+    
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    else if([textView.text length]==0&&range.length==1)
+    {
+        textView.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+        textView.textColor=[UIColor lightGrayColor];
+    }
+    return YES;
+}
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     if(customPickerView!=nil)
@@ -266,38 +738,45 @@
         customPickerView=nil;
     }
     
-    for (int i=2; i<=10; i++)
-    {
-        UITextField *txtFldData=(UITextField*)[self.view viewWithTag:111*i];
-        if(textField.tag!=i*111)
-        [txtFldData resignFirstResponder];
-    }
+//    for (int i=2; i<=10; i++)
+//    {
+//        UITextField *txtFldData=(UITextField*)[self.view viewWithTag:111*i];
+//        if(textField.tag!=i*111)
+//        [txtFldData resignFirstResponder];
+//    }
     
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
-    scrollView.contentSize=CGSizeMake(320, 600);
-    scrollView.scrollEnabled=YES;
-    
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     intTextFieldTagValue=textField.tag;
     
-    if(textField.tag==444||textField.tag==555||textField.tag==666||textField.tag==777)
-    {
+    if(textField.tag==444)
+    [tblView setContentOffset:CGPointMake(0,100) animated:YES];
+
+    
+    if(textField.tag==666)    {
         [textField resignFirstResponder];
+        [tblView setContentOffset:CGPointMake(0,480) animated:YES];
         [self showPickerView];
 
     }
+    /*
     else if(textField.tag==888||textField.tag==1110)
     {
         NSInteger index=intTextFieldTagValue/111;
         [scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
     }
+     */
+    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField*)textField
 {
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
-    scrollView.contentSize=CGSizeMake(320, 405);
-    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-    scrollView.scrollEnabled=NO;
+//    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
+//    scrollView.contentSize=CGSizeMake(320, 405);
+//    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+//    scrollView.scrollEnabled=NO;
+    
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+    [tblView setContentOffset:CGPointMake(0,0) animated:YES];
     [textField resignFirstResponder];
     return YES;
 }
@@ -324,7 +803,7 @@
     }
     NSInteger index=intTextFieldTagValue/111;
     
-    [scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
+    //[scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
 
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
@@ -354,7 +833,7 @@
     barButtonNext.enabled=YES;
     
     //Adding picker view
-    if(intTextFieldTagValue==444)
+    if(intTextFieldTagValue==666)
     {
         datePicker=[[UIDatePicker alloc]initWithFrame:CGRectMake(0, 44, 320, 250)];
         datePicker.datePickerMode = UIDatePickerModeDate;
@@ -394,7 +873,7 @@
 
 - (void)changeDateFromLabel:(id)sender
 {    
-    UITextField *lblData=(UITextField*)[self.view viewWithTag:444];
+    UITextField *lblData=(UITextField*)[self.view viewWithTag:666];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:kDateMMDDYYYY];
     lblData.text = [NSString stringWithFormat:@"%@",
@@ -405,15 +884,12 @@
 
 -(void)barButtonDone_onTouchUpInside:(id)sender
 {
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
+    UITableView *scrollView=(UITableView*)[self.view viewWithTag:143225];
     scrollView.userInteractionEnabled = YES;
-    scrollView.contentSize=CGSizeMake(320, 405);
-    [scrollView setContentOffset:CGPointMake(0,0) animated:YES];
-    scrollView.scrollEnabled=NO;
     
     UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
 
-    if(intTextFieldTagValue==444)
+    if(intTextFieldTagValue==666)
     {
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:kDateMMDDYYYY];
@@ -547,7 +1023,7 @@
     
     UIImage *img=[info objectForKey:UIImagePickerControllerOriginalImage];
     
-    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:111];
+    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:333];
     imgView.image=img;
 }
 
@@ -566,16 +1042,10 @@
 {
     isRequestForSavingProfile=YES;
     self.sharedController=[SharedController sharedController];
-    NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
-    UIImageView *imgViewProfilePic=(UIImageView*)[self.view viewWithTag:111];
-    UITextField *txtFldFirstName=(UITextField*)[self.view viewWithTag:222];
-    UITextField *txtFldLastName=(UITextField*)[self.view viewWithTag:333];
-    UITextField *txtFldGender=(UITextField*)[self.view viewWithTag:555];
-    UITextField *txtFldOrientation=(UITextField*)[self.view viewWithTag:666];
-    UITextField *txtFldStatus=(UITextField*)[self.view viewWithTag:777];
-    UITextField *txtFldDescription=(UITextField*)[self.view viewWithTag:888];
-    UITextField *txtFldNickName=(UITextField*)[self.view viewWithTag:999];
-    UITextField *txtFldEmailId=(UITextField*)[self.view viewWithTag:1110];
+    //NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
+    
+   
+
 
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:kDateMMDDYYYY];
@@ -585,19 +1055,17 @@
     if([strDOB length]==0||strDOB==nil||strDOB==(id)[NSNull null])
     strDOB=@"";
     
+    NSString *strOrientation=[NSString stringWithFormat:@"%@",(intOrientation==1?@"Straight":(intOrientation==2?@"Gay":@"Bisexual"))];
     
-    if(imgViewProfilePic.image!=nil&&[txtFldFirstName.text length]&&[txtFldLastName.text length]&&[txtFldNickName.text length]&&[txtFldEmailId.text length])
+    if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
     {
-        if([self validemail:txtFldEmailId.text])
-        {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [sharedController saveProfileInfoWithId:strId name:[dict objectForKey:@"name"] loginType:@"0" gender:txtFldGender.text userName:[dict objectForKey:@"username"] profileImage:imgViewProfilePic.image firstName:txtFldFirstName.text lastName:txtFldLastName.text dob:strDOB orientation:txtFldOrientation.text status:txtFldStatus.text description:txtFldDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text delegate:self];
-        }
-        else
-            [self createAlertViewWithTitle:@"" message:@"Please enter a valid Email ID" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+            [sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:@"" lastName:@"" dob:strDOB orientation:strOrientation status:@"" description:txtViewDescription.text nickName:txtFldNickName.text emailId:@"" delegate:self];
+        
+       
     }
     else
-        [self createAlertViewWithTitle:@"" message:@"Name,Picture,Email Id should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     
 }
 
@@ -636,7 +1104,8 @@
         isProfileExistsCheck=NO;
         if([[result objectForKey:@"errorCode"] integerValue]==1)
         {
-            [self loadProfileDetails:dictResult];
+            UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+            [tblView reloadData];
         }
         else
         {

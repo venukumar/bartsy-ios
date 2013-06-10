@@ -34,8 +34,9 @@
 -(UIButton*)createUIButtonWithTitle:(NSString*)strTitle image:(UIImage*)image frame:(CGRect)frame tag:(NSInteger)intTag selector:(SEL)btnSelector target:(id)target
 {
     UIButton *btnCustom=[UIButton buttonWithType:UIButtonTypeCustom];
+//    [btnCustom setBackgroundImage:image forState:UIControlStateNormal];
+    [btnCustom setImage:image forState:UIControlStateNormal];
     [btnCustom setTitle:strTitle forState:UIControlStateNormal];
-    [btnCustom setBackgroundImage:image forState:UIControlStateNormal];
     [btnCustom addTarget:target action:btnSelector forControlEvents:UIControlEventTouchUpInside];
     btnCustom.tag=intTag;
     btnCustom.frame=frame;

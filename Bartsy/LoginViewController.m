@@ -190,8 +190,8 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
 //    btnGoogle.backgroundColor=[UIColor darkGrayColor];
 //    [scrollView addSubview:btnGoogle];
     
-    //GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(320+38, 185, 243, 40)];
-    //[scrollView addSubview:btnGoogle];
+    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(320+38, 185, 243, 40)];
+    [scrollView addSubview:btnGoogle];
     
     
     UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(btnFBLogin) target:self];
@@ -200,7 +200,7 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     
     UIButton *btnTwitter=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_twitter.png"] frame:CGRectMake(320+38, 285, 243, 40) tag:0 selector:@selector(btnTwitter_TouchUpInside) target:self];
     btnTwitter.backgroundColor=[UIColor darkGrayColor];
-    [scrollView addSubview:btnTwitter];
+    //[scrollView addSubview:btnTwitter];
     
     UIButton *btnGetStarted=[self createUIButtonWithTitle:@"Get Started" image:nil frame:CGRectMake(320+5, 340, 100, 40) tag:0 selector:@selector(btnGetStarted_TouchUpInside) target:self];
     btnGetStarted.titleLabel.font=[UIFont boldSystemFontOfSize:15];
@@ -233,6 +233,7 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     }    
     
     [self hideProgressView:nil];
+    
     ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
     profileScreen.auth=auth;
     [self.navigationController pushViewController:profileScreen animated:YES];
@@ -279,7 +280,10 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
 
 -(void)btnGetStarted_TouchUpInside
 {
-    
+    ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+    profileScreen.isCmgFromGetStarted=YES;
+    [self.navigationController pushViewController:profileScreen animated:YES];
+    [profileScreen release];
 }
 
 // FBSample logic
@@ -349,7 +353,7 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     {
         // [btnFb setText:[NSString stringWithFormat:@"https://graph.facebook.com/me/friends?access_token=%@",
         // appDelegate.session.accessTokenData.accessToken]];
-        
+        appDelegate.isLoginForFB=YES;
         ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
         [self.navigationController pushViewController:profileScreen animated:YES];
         [profileScreen release];

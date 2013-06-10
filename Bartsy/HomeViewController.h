@@ -20,6 +20,7 @@
     BOOL isRequestForPeople;
     NSArray *arrStatus;
     NSMutableArray *arrBundledOrders;
+    NSMutableDictionary *dictTemp;
 }
 @property(nonatomic,retain)NSDictionary *dictVenue;
 -(void)orderTheDrink;
