@@ -11,7 +11,7 @@
 
 #define KServerURL @"http://54.235.76.180:8080" //Amazon Server
 //#define KServerURL @"http://192.168.0.172:8080" //Srikanth
-#define KServerURL @"http://192.168.0.109:8080" //Swetha
+//#define KServerURL @"http://192.168.0.109:8080" //Swetha
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
 #endif

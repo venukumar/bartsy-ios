@@ -226,6 +226,7 @@
         imgViewBox.hidden=YES;
         UIButton *btnClose=(UIButton*)[self.view viewWithTag:1111];
         btnClose.hidden=YES;
+        [appDelegate stopTimerForHeartBeat];
     }
     else
     {

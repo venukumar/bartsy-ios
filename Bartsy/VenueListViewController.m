@@ -336,6 +336,7 @@
             [[NSUserDefaults standardUserDefaults]setObject:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
             [[NSUserDefaults standardUserDefaults]setObject:[arrVenueList objectAtIndex:intIndex] forKey:@"VenueDetails"];
             [[NSUserDefaults standardUserDefaults]synchronize];
+            [appDelegate startTimerToCheckHeartBeat];
             HomeViewController *obj=[[HomeViewController alloc]init];
             obj.dictVenue=[arrVenueList objectAtIndex:intIndex];
             [self.navigationController pushViewController:obj animated:YES];

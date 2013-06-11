@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails,timerForHeartBeat;
 
 - (void)dealloc
 {
@@ -201,7 +201,6 @@
 -(void)checkOrderStatusUpdate
 {
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
-    
     NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -270,6 +269,33 @@
     
     [url release];
     [request release];
+}
+
+
+-(void)startTimerToCheckHeartBeat
+{
+    if(self.timerForHeartBeat==nil)
+    {
+        self.timerForHeartBeat = [[NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(checkHeartBeat) userInfo:nil repeats:YES] retain];
+    }
+    
+}
+
+-(void)stopTimerForHeartBeat
+{
+    if(self.timerForHeartBeat!=nil)
+    {
+        [self.timerForHeartBeat invalidate];
+        [self.timerForHeartBeat release];
+        self.timerForHeartBeat=nil;
+        
+    }
+}
+
+-(void)checkHeartBeat
+{
+    if(delegateForCurrentViewController!=nil)
+    [delegateForCurrentViewController heartBeat];
 }
 
 
@@ -424,7 +450,7 @@
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"heartBeat"])
     {
         //AudioServicesPlaySystemSound(1007);
-
+        [self stopTimerForHeartBeat];
         [delegateForCurrentViewController heartBeat];
         
         intOrderCount=[[userInfo objectForKey:@"orderCount"] integerValue];
@@ -698,6 +724,7 @@
                      [[NSUserDefaults standardUserDefaults]synchronize];
                      
                      [self stopTimerForOrderStatusUpdate];
+                     [self stopTimerForHeartBeat];
                      
                      if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
                      {
@@ -717,6 +744,7 @@
                  }
                  else
                  {
+                     [self startTimerToCheckHeartBeat];
                      intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
                      intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
                      UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;

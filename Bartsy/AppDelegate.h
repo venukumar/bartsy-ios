@@ -30,9 +30,10 @@
     NSTimer *timerForOrderStatusUpdate;
     UIBackgroundTaskIdentifier bgTask;
     NSDictionary *dictOfferedDrikDetails;
+    NSTimer *timerForHeartBeat;
 }
 @property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;
-
+@property(nonatomic,retain)NSTimer *timerForHeartBeat;
 @property(nonatomic,retain)NSMutableArray *arrOrders;
 @property(nonatomic,retain)NSMutableArray *arrOrdersTimer;
 @property(nonatomic,assign)BOOL isLoginForFB;
@@ -59,4 +60,7 @@
 -(void)stopTimerForOrderStatusUpdate;
 -(void)checkOrderStatusUpdate;
 -(void)updateOrderStatusForaOfferedDrink;
+-(void)startTimerToCheckHeartBeat;
+-(void)stopTimerForHeartBeat;
 @end
+

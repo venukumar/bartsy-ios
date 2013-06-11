@@ -1315,6 +1315,8 @@
                 [[NSUserDefaults standardUserDefaults]setObject:dictVenueDetails forKey:@"VenueDetails"];
                 [[NSUserDefaults standardUserDefaults]synchronize];
                 
+                [appDelegate startTimerToCheckHeartBeat];
+                
                 WelcomeViewController *obj=[[WelcomeViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
