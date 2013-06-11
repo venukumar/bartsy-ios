@@ -210,7 +210,7 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     [scrollView addSubview:lblCreateBartsy];
     
     
-    UIButton *btnSignIn=[self createUIButtonWithTitle:@"Sign In" image:nil frame:CGRectMake(320+180, 340, 50, 40) tag:0 selector:@selector(btnGetStarted_TouchUpInside) target:self];
+    UIButton *btnSignIn=[self createUIButtonWithTitle:@"Sign In" image:nil frame:CGRectMake(320+180, 340, 50, 40) tag:0 selector:@selector(btnSignIn_TouchUpInside) target:self];
     btnSignIn.titleLabel.font=[UIFont boldSystemFontOfSize:15];
     [scrollView addSubview:btnSignIn];
     
@@ -283,6 +283,14 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     appDelegate.isLoginForFB=NO;
     ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
     profileScreen.isCmgFromGetStarted=YES;
+    [self.navigationController pushViewController:profileScreen animated:YES];
+    [profileScreen release];
+}
+
+-(void)btnSignIn_TouchUpInside
+{
+    appDelegate.isLoginForFB=NO;
+    ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
     [self.navigationController pushViewController:profileScreen animated:YES];
     [profileScreen release];
 }

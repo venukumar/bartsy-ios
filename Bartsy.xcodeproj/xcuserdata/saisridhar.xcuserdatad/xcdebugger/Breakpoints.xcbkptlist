@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         timestampString = "392641803.106297"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "874"
-         endingLineNumber = "874"
+         startingLineNumber = "922"
+         endingLineNumber = "922"
          landmarkName = "-showPickerView"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         timestampString = "392642054.808558"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1161"
-         endingLineNumber = "1161"
+         startingLineNumber = "1205"
+         endingLineNumber = "1205"
          landmarkName = "-saveProfileData:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         timestampString = "392641803.106297"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "633"
-         endingLineNumber = "633"
+         startingLineNumber = "681"
+         endingLineNumber = "681"
          landmarkName = "-googlePlusDetails"
          landmarkType = "5">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/SharedController.m"
-         timestampString = "392132936.34755"
+         timestampString = "392642054.808558"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "507"
-         endingLineNumber = "507"
+         startingLineNumber = "534"
+         endingLineNumber = "534"
          landmarkName = "-connection:didFailWithError:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -189,25 +189,12 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "392289399.46076"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "398"
-         endingLineNumber = "398"
-         landmarkName = "-application:didReceiveRemoteNotification:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         timestampString = "392642118.083312"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1216"
-         endingLineNumber = "1216"
+         startingLineNumber = "1268"
+         endingLineNumber = "1268"
          landmarkName = "-controllerDidFinishLoadingWithResult:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -268,11 +255,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/AppDelegate.m"
-         timestampString = "392313824.244316"
+         timestampString = "392640651.010505"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "540"
-         endingLineNumber = "540"
+         startingLineNumber = "545"
+         endingLineNumber = "545"
          landmarkName = "-updateOrderStatusForaOfferedDrink:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -307,11 +294,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         timestampString = "392641803.106297"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1112"
-         endingLineNumber = "1112"
+         startingLineNumber = "1160"
+         endingLineNumber = "1160"
          landmarkName = "-btnContinue_TouchUpInside"
          landmarkType = "5">
       </FileBreakpoint>
@@ -320,11 +307,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         timestampString = "392641803.106297"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1117"
-         endingLineNumber = "1117"
+         startingLineNumber = "1165"
+         endingLineNumber = "1165"
          landmarkName = "-saveProfileData:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -372,25 +359,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392634353.723591"
+         timestampString = "392641803.106297"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "188"
-         endingLineNumber = "188"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         startingLineNumber = "514"
+         endingLineNumber = "514"
+         landmarkName = "-btnCheckbox_TouchUpInside"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "392638430.078863"
+         filePath = "Bartsy/LoginViewController.m"
+         timestampString = "392641090.996999"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "466"
-         endingLineNumber = "466"
-         landmarkName = "-btnCheckbox_TouchUpInside"
+         startingLineNumber = "292"
+         endingLineNumber = "292"
+         landmarkName = "-btnSignIn_TouchUpInside"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

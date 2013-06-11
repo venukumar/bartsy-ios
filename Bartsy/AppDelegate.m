@@ -89,6 +89,9 @@
     
     //hostReachable = [[Reachability reachabilityWithHostName:KServerURL] retain];
     //[hostReachable startNotifier];
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
 
     return YES;
 }
@@ -372,6 +375,8 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
 
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     NSLog(@"PN: %@",userInfo);
     
     NSLog(@"Current VC is %@",delegateForCurrentViewController);

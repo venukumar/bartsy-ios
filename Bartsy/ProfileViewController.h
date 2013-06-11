@@ -43,6 +43,7 @@
     BOOL isCmgForLogin;
     
 }
+@property(nonatomic,assign)BOOL isCmgForLogin;
 @property(nonatomic,retain)CardIOCreditCardInfo *creditCardInfo;
 @property(nonatomic,retain)NSMutableDictionary *dictProfileData;
 @property(nonatomic,assign)BOOL isReloadingForProfileVisible;

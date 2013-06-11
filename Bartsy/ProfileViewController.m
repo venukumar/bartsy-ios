@@ -25,7 +25,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -51,48 +51,96 @@
     
     self.trackedViewName = @"Profile Screen";
 
-    dictProfileData=[[NSMutableDictionary alloc]init];
     
     self.view.backgroundColor=[UIColor lightGrayColor];
     
-//    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 405)];
-//    scrollView.tag=143225;
-//    scrollView.scrollEnabled=YES;
-//    [self.view addSubview:scrollView];
-//    [scrollView release];
-
+    NSLog(@"isLoginForFB is %i, auth is %@,isCmgFromGetStarted is %i",appDelegate.isLoginForFB,auth,isCmgFromGetStarted);
+    
+    
+    if(appDelegate.isLoginForFB==YES||auth!=nil||isCmgFromGetStarted==YES)
+    {
+        dictProfileData=[[NSMutableDictionary alloc]init];
         
-    UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
-    lblHeader.backgroundColor=[UIColor blackColor];
-    lblHeader.textAlignment=NSTextAlignmentCenter;
-    [self.view addSubview:lblHeader];
-    
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 420) style:UITableViewStyleGrouped];
-    tblView.backgroundColor=[UIColor clearColor];
-    tblView.backgroundView=nil;
-    tblView.dataSource=self;
-    tblView.delegate=self;
-    tblView.tag=143225;
-    [self.view addSubview:tblView];
-    [tblView release];
+        UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
+        lblHeader.backgroundColor=[UIColor blackColor];
+        lblHeader.textAlignment=NSTextAlignmentCenter;
+        [self.view addSubview:lblHeader];
+        
+        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 420) style:UITableViewStyleGrouped];
+        tblView.backgroundColor=[UIColor clearColor];
+        tblView.backgroundView=nil;
+        tblView.dataSource=self;
+        tblView.delegate=self;
+        tblView.tag=143225;
+        [self.view addSubview:tblView];
+        [tblView release];
+        
+        
+        arrGender=[[NSArray alloc]initWithObjects:@"Female",@"Male", nil];
+        arrOrientation=[[NSArray alloc]initWithObjects:@"I'm straight",@"I'm gay",@"I'm bisexual", nil];
+        arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
+        
+        
+        if(appDelegate.isLoginForFB==YES)
+        {
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            self.sharedController=[SharedController sharedController];
+            [sharedController gettingUserProfileInformationWithAccessToken:appDelegate.session.accessTokenData.accessToken delegate:self];
+        }
+        else if(isCmgFromGetStarted==NO)
+        {
+            [self googlePlusDetails];
+        }
 
-
-    arrGender=[[NSArray alloc]initWithObjects:@"Female",@"Male", nil];
-    arrOrientation=[[NSArray alloc]initWithObjects:@"I'm straight",@"I'm gay",@"I'm bisexual", nil];
-    arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
-    
-    
-    if(appDelegate.isLoginForFB==YES)
-    {
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-        self.sharedController=[SharedController sharedController];
-        [sharedController gettingUserProfileInformationWithAccessToken:appDelegate.session.accessTokenData.accessToken delegate:self];
     }
-    else if(isCmgFromGetStarted==NO)
+    else
     {
-        [self googlePlusDetails];
+        UILabel *lblHeader=[self createLabelWithTitle:@"Login with existing Bartsy account" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
+        lblHeader.backgroundColor=[UIColor blackColor];
+        lblHeader.textAlignment=NSTextAlignmentCenter;
+        [self.view addSubview:lblHeader];
+        
+        
+        UILabel *lblEmailId=[self createLabelWithTitle:@"EmailId:" frame:CGRectMake(20, 150, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblEmailId.textAlignment=NSTextAlignmentLeft;
+        [self.view addSubview:lblEmailId];
+        
+        txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 150, 180, 30) tag:111 delegate:self];
+        if(isReloadingForProfileVisible==NO)
+            txtFldEmailId.text=[dictResult objectForKey:@"username"];
+        else
+            txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
+        txtFldEmailId.placeholder=@"EmailId";
+        txtFldEmailId.font=[UIFont systemFontOfSize:15];
+        [self.view addSubview:txtFldEmailId];
+        
+        UILabel *lblPassword=[self createLabelWithTitle:@"Password:" frame:CGRectMake(20, 200, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblPassword.textAlignment=NSTextAlignmentLeft;
+        [self.view addSubview:lblPassword];
+        
+        txtFldPassword=[self createTextFieldWithFrame:CGRectMake(110, 200, 180, 30) tag:222 delegate:self];
+        txtFldPassword.secureTextEntry=YES;
+        txtFldPassword.placeholder=@"6 or more characters";
+        txtFldPassword.font=[UIFont systemFontOfSize:15];
+        [self.view addSubview:txtFldPassword];
+        
+        UIButton *btnCancel=[self createUIButtonWithTitle:@"Cancel" image:nil frame:CGRectMake(20, 250, 100, 40) tag:0 selector:@selector(btnCancel_TouchUpInside) target:self];
+        btnCancel.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+        btnCancel.titleLabel.textColor=[UIColor blackColor];
+        btnCancel.backgroundColor=[UIColor lightGrayColor];
+        [self.view addSubview:btnCancel];
+        
+        
+        UIButton *btnSubmit=[self createUIButtonWithTitle:@"Login" image:nil frame:CGRectMake(110, 250, 150, 40) tag:0 selector:@selector(btnSubmit_TouchUpInside) target:self];
+        btnSubmit.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+        btnSubmit.titleLabel.textColor=[UIColor blackColor];
+        btnSubmit.backgroundColor=[UIColor lightGrayColor];
+        [self.view addSubview:btnSubmit];
+        
+        
     }
-   
+    
+       
     
 }
 
@@ -1118,10 +1166,6 @@
     isRequestForSavingProfile=YES;
     self.sharedController=[SharedController sharedController];
     //NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
-    
-   
-
-
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:kDateMMDDYYYY];
     NSString *strDOB= [NSString stringWithFormat:@"%@",
@@ -1161,6 +1205,14 @@
     else
         [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     
+}
+
+-(void)btnSubmit_TouchUpInside
+{
+    isRequestForSavingProfile=YES;
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    self.sharedController=[SharedController sharedController];
+    [self.sharedController loginWithEmailID:txtFldEmailId.text password:txtFldPassword.text delegate:self];
 }
 
 -(BOOL)validemail:(NSString *)candidate
