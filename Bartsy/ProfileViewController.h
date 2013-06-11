@@ -41,7 +41,8 @@
     NSMutableDictionary *dictProfileData;
     CardIOCreditCardInfo *creditCardInfo;
     BOOL isCmgForLogin;
-    
+    BOOL isSelectedSingles;
+    BOOL isSelectedFriends;
 }
 @property(nonatomic,assign)BOOL isCmgForLogin;
 @property(nonatomic,retain)CardIOCreditCardInfo *creditCardInfo;

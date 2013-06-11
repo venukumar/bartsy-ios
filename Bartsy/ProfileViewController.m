@@ -226,7 +226,7 @@
     else
     {
         if(isChecked)
-        return 300;
+        return 300+80;
         else
             return 50;
     }
@@ -378,7 +378,7 @@
         lblCheck.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblCheck];
         
-        UIButton *btnCheckbox=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(155, 10, 28, 28) tag:0 selector:@selector(btnCheckbox_TouchUpInside) target:self];
+        UIButton *btnCheckbox=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(150, 14, 20, 20) tag:0 selector:@selector(btnCheckbox_TouchUpInside) target:self];
         if(isChecked)
             [btnCheckbox setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateNormal];
         else
@@ -386,13 +386,13 @@
 
         [cell.contentView addSubview:btnCheckbox];
 
-        UILabel *lblProfile=[self createLabelWithTitle:@"Profile Visible" frame:CGRectMake(190, 10, 150, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+        UILabel *lblProfile=[self createLabelWithTitle:@"Profile Visible" frame:CGRectMake(180, 10, 150, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
         lblProfile.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblProfile];
         
         if(isChecked)
         {
-            UILabel *lblDescription=[self createLabelWithTitle:@"Description:" frame:CGRectMake(10, 50, 200, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblDescription=[self createLabelWithTitle:@"About you:" frame:CGRectMake(10, 50, 200, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblDescription.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblDescription];
             
@@ -453,13 +453,43 @@
             txtFldDOB.font=[UIFont systemFontOfSize:15];
             [cell.contentView addSubview:txtFldDOB];
             
+            UILabel *lblLooking=[self createLabelWithTitle:@"Looking to:" frame:CGRectMake(10, 205, 80, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblLooking.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblLooking];
             
-            UILabel *lblOrientation=[self createLabelWithTitle:@"Orientation:" frame:CGRectMake(10, 205, 80, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            UIButton *btnSingles=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(94, 208, 20, 20) tag:1111 selector:@selector(btnLooking_TouchUpInside:) target:self];
+            if(isSelectedSingles==YES)
+                [btnSingles setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateNormal];
+            else
+                [btnSingles setImage:[UIImage imageNamed:@"uncheck.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnSingles];
+            
+            
+            UILabel *lblSingles=[self createLabelWithTitle:@"Meet singles" frame:CGRectMake(135, 208, 150, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblSingles.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblSingles];
+            
+            
+            UIButton *btnFriends=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(94, 208+28, 20, 20) tag:2222 selector:@selector(btnLooking_TouchUpInside:) target:self];
+            if(isSelectedFriends==YES)
+                [btnFriends setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateNormal];
+            else
+                [btnFriends setImage:[UIImage imageNamed:@"uncheck.png"] forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnFriends];
+            
+            
+            UILabel *lblFriends=[self createLabelWithTitle:@"Make friends" frame:CGRectMake(135, 208+30, 150, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            lblFriends.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblFriends];
+
+            
+            
+            UILabel *lblOrientation=[self createLabelWithTitle:@"Orientation:" frame:CGRectMake(10, 205+70, 80, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblOrientation.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblOrientation];
             
             
-            UIButton *btnStraight=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 205, 28, 28) tag:999 selector:@selector(btnOrientation_TouchUpInside:) target:self];
+            UIButton *btnStraight=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 205+70, 28, 28) tag:999 selector:@selector(btnOrientation_TouchUpInside:) target:self];
             if(intOrientation==1)
                 [btnStraight setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
             else
@@ -467,12 +497,12 @@
             [cell.contentView addSubview:btnStraight];
             
             
-            UILabel *lblStraight=[self createLabelWithTitle:@"Straight" frame:CGRectMake(135, 208, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblStraight=[self createLabelWithTitle:@"Straight" frame:CGRectMake(135, 208+70, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblStraight.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblStraight];
             
             
-            UIButton *btnGay=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 235, 28, 28) tag:888 selector:@selector(btnOrientation_TouchUpInside:) target:self];
+            UIButton *btnGay=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 235+70, 28, 28) tag:888 selector:@selector(btnOrientation_TouchUpInside:) target:self];
             if(intOrientation==2)
                 [btnGay setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
             else
@@ -480,11 +510,11 @@
             [cell.contentView addSubview:btnGay];
             
             
-            UILabel *lblGay=[self createLabelWithTitle:@"Gay" frame:CGRectMake(135, 238, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblGay=[self createLabelWithTitle:@"Gay" frame:CGRectMake(135, 238+70, 50, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblGay.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblGay];
             
-            UIButton *btnBisexual=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 265, 28, 28) tag:777 selector:@selector(btnOrientation_TouchUpInside:) target:self];
+            UIButton *btnBisexual=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 265+70, 28, 28) tag:777 selector:@selector(btnOrientation_TouchUpInside:) target:self];
             if(intOrientation==3)
                 [btnBisexual setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
             else
@@ -492,7 +522,7 @@
             [cell.contentView addSubview:btnBisexual];
             
             
-            UILabel *lblBisexual=[self createLabelWithTitle:@"Bisexual" frame:CGRectMake(135, 268, 100, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblBisexual=[self createLabelWithTitle:@"Bisexual" frame:CGRectMake(135, 268+70, 100, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblBisexual.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblBisexual];
 
@@ -502,6 +532,27 @@
     }
     
     return cell;
+}
+
+
+-(void)btnLooking_TouchUpInside:(UIButton*)sender
+{
+    if(sender.tag==1111)
+    {
+        isSelectedSingles=!isSelectedSingles;
+        if(isSelectedSingles==YES)
+            [sender setImage:[UIImage imageNamed:@"checked.png"] forState:UIControlStateNormal];
+        else
+            [sender setImage:[UIImage imageNamed:@"uncheck.png"] forState:UIControlStateNormal];
+    }
+    else if(sender.tag==2222)
+    {
+        isSelectedFriends=!isSelectedFriends;
+        if(isSelectedFriends==YES)
+            [sender setImage:[UIImage imageNamed:@"checked.png.png"] forState:UIControlStateNormal];
+        else
+            [sender setImage:[UIImage imageNamed:@"uncheck.png"] forState:UIControlStateNormal];
+    }
 }
 
 -(void)btnPaypal_TouchUpInside
@@ -1188,13 +1239,19 @@
     else
     strProfileStatus=[NSString stringWithFormat:@"OFF"];
 
+    NSString *strStatus=@"";
+    if(isSelectedFriends&&isSelectedSingles)
+        strStatus=[NSString stringWithFormat:@"Singles/Friends"];
+    else if(isSelectedSingles||isSelectedFriends)
+        strStatus=[NSString stringWithFormat:@"%@",(isSelectedFriends==1?@"Friends":@"Singles")];
+
     
     if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
     {
         if([self validemail:txtFldEmailId.text])
         {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB orientation:strOrientation status:@"" description:txtViewDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] delegate:self];
+            [sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB orientation:strOrientation status:strStatus description:txtViewDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] delegate:self];
         }
         else
         {

@@ -17,8 +17,6 @@
 		E005DE45174409D100EDDCFB /* bigbox.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE44174409C100EDDCFB /* bigbox.png */; };
 		E00E4B6F1742761100749466 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E00E4B6E1742761100749466 /* MapKit.framework */; };
 		E00E4B721742765400749466 /* MyAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E00E4B711742765400749466 /* MyAnnotation.m */; };
-		E00F872E176651B200E4BE10 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = E00F872C176651B200E4BE10 /* checked.png */; };
-		E00F872F176651B200E4BE10 /* uncheck.png in Resources */ = {isa = PBXBuildFile; fileRef = E00F872D176651B200E4BE10 /* uncheck.png */; };
 		E038AF5A1733BA7E00098779 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E038AF591733BA7D00098779 /* libz.dylib */; };
 		E038AF5C1733BA8B00098779 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E038AF5B1733BA8B00098779 /* libxml2.dylib */; };
 		E038AF5E1733BA9400098779 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E038AF5D1733BA9400098779 /* CoreMedia.framework */; };
@@ -173,6 +171,8 @@
 		E0EEC339175B820400292043 /* slider.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EEC338175B820400292043 /* slider.png */; };
 		E0EEC33B175B889400292043 /* bottle.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EEC33A175B889400292043 /* bottle.png */; };
 		E0EED073176715C50045CA75 /* libCardIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0EED072176715C50045CA75 /* libCardIO.a */; };
+		E0EED07517679DAF0045CA75 /* uncheck.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EED07417679DAE0045CA75 /* uncheck.png */; };
+		E0EED07717679E540045CA75 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EED07617679E540045CA75 /* checked.png */; };
 		E0FD8676172FD9BA006CB0A8 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8630172FD9BA006CB0A8 /* arrow.png */; };
 		E0FD867F172FD9BA006CB0A8 /* drinks.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8639172FD9BA006CB0A8 /* drinks.png */; };
 		E0FD868A172FD9BA006CB0A8 /* ic_checked_in.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8644172FD9BA006CB0A8 /* ic_checked_in.png */; };
@@ -200,8 +200,6 @@
 		E00E4B6E1742761100749466 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E00E4B701742765400749466 /* MyAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAnnotation.h; sourceTree = "<group>"; };
 		E00E4B711742765400749466 /* MyAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAnnotation.m; sourceTree = "<group>"; };
-		E00F872C176651B200E4BE10 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
-		E00F872D176651B200E4BE10 /* uncheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uncheck.png; sourceTree = "<group>"; };
 		E038AF591733BA7D00098779 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E038AF5B1733BA8B00098779 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E038AF5D1733BA9400098779 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -466,6 +464,8 @@
 		E0EED070176715C50045CA75 /* CardIOPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardIOPaymentViewController.h; sourceTree = "<group>"; };
 		E0EED071176715C50045CA75 /* CardIOPaymentViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardIOPaymentViewControllerDelegate.h; sourceTree = "<group>"; };
 		E0EED072176715C50045CA75 /* libCardIO.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCardIO.a; sourceTree = "<group>"; };
+		E0EED07417679DAE0045CA75 /* uncheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uncheck.png; sourceTree = "<group>"; };
+		E0EED07617679E540045CA75 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
 		E0FD8630172FD9BA006CB0A8 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		E0FD8639172FD9BA006CB0A8 /* drinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drinks.png; sourceTree = "<group>"; };
 		E0FD8644172FD9BA006CB0A8 /* ic_checked_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_checked_in.png; sourceTree = "<group>"; };
@@ -986,8 +986,8 @@
 		E0FD862D172FD948006CB0A8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				E00F872C176651B200E4BE10 /* checked.png */,
-				E00F872D176651B200E4BE10 /* uncheck.png */,
+				E0EED07617679E540045CA75 /* checked.png */,
+				E0EED07417679DAE0045CA75 /* uncheck.png */,
 				E0895E8717664B5300498995 /* ic_launcher.png */,
 				E0775300176619B80066FACC /* DefaultUser.png */,
 				E05F8081175CB16600937E80 /* radio_btn_selected.png */,
@@ -1146,8 +1146,8 @@
 				E05F8084175CB16600937E80 /* radio_btn.png in Resources */,
 				E0775301176619B80066FACC /* DefaultUser.png in Resources */,
 				E0895E8817664B5400498995 /* ic_launcher.png in Resources */,
-				E00F872E176651B200E4BE10 /* checked.png in Resources */,
-				E00F872F176651B200E4BE10 /* uncheck.png in Resources */,
+				E0EED07517679DAF0045CA75 /* uncheck.png in Resources */,
+				E0EED07717679E540045CA75 /* checked.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

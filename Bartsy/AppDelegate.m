@@ -694,6 +694,7 @@
     {
         NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
         NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:@"checkin",@"type",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",@"",@"userName",nil];
+        NSLog(@"syncUserDetails Details \n %@",dictCheckIn);
         SBJSON *jsonObj=[SBJSON new];
         NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
         NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
