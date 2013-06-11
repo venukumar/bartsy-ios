@@ -280,6 +280,7 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
 
 -(void)btnGetStarted_TouchUpInside
 {
+    appDelegate.isLoginForFB=NO;
     ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
     profileScreen.isCmgFromGetStarted=YES;
     [self.navigationController pushViewController:profileScreen animated:YES];

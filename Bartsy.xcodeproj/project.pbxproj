@@ -172,6 +172,7 @@
 		E0D56E7717424B6A00257870 /* VenueListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D56E7617424B6A00257870 /* VenueListViewController.m */; };
 		E0EEC339175B820400292043 /* slider.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EEC338175B820400292043 /* slider.png */; };
 		E0EEC33B175B889400292043 /* bottle.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EEC33A175B889400292043 /* bottle.png */; };
+		E0EED073176715C50045CA75 /* libCardIO.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0EED072176715C50045CA75 /* libCardIO.a */; };
 		E0FD8676172FD9BA006CB0A8 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8630172FD9BA006CB0A8 /* arrow.png */; };
 		E0FD867F172FD9BA006CB0A8 /* drinks.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8639172FD9BA006CB0A8 /* drinks.png */; };
 		E0FD868A172FD9BA006CB0A8 /* ic_checked_in.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8644172FD9BA006CB0A8 /* ic_checked_in.png */; };
@@ -460,6 +461,11 @@
 		E0D56E7617424B6A00257870 /* VenueListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueListViewController.m; sourceTree = "<group>"; };
 		E0EEC338175B820400292043 /* slider.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider.png; sourceTree = "<group>"; };
 		E0EEC33A175B889400292043 /* bottle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottle.png; sourceTree = "<group>"; };
+		E0EED06E176715C50045CA75 /* CardIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardIO.h; sourceTree = "<group>"; };
+		E0EED06F176715C50045CA75 /* CardIOCreditCardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardIOCreditCardInfo.h; sourceTree = "<group>"; };
+		E0EED070176715C50045CA75 /* CardIOPaymentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardIOPaymentViewController.h; sourceTree = "<group>"; };
+		E0EED071176715C50045CA75 /* CardIOPaymentViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardIOPaymentViewControllerDelegate.h; sourceTree = "<group>"; };
+		E0EED072176715C50045CA75 /* libCardIO.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCardIO.a; sourceTree = "<group>"; };
 		E0FD8630172FD9BA006CB0A8 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		E0FD8639172FD9BA006CB0A8 /* drinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drinks.png; sourceTree = "<group>"; };
 		E0FD8644172FD9BA006CB0A8 /* ic_checked_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_checked_in.png; sourceTree = "<group>"; };
@@ -509,6 +515,7 @@
 				E07716B017533DF3005FD5E1 /* libGoogleAnalytics.a in Frameworks */,
 				E0C2978717571A8100A50BCB /* GoogleOpenSource.framework in Frameworks */,
 				E0C2978917571A8100A50BCB /* GooglePlus.framework in Frameworks */,
+				E0EED073176715C50045CA75 /* libCardIO.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +576,7 @@
 		E041068D172A8D6F009F1B1E /* Bartsy */ = {
 			isa = PBXGroup;
 			children = (
+				E0EED06D176715960045CA75 /* CardIO */,
 				E07716B117533DFB005FD5E1 /* Google Analytics Library */,
 				E088B9D1174E105B0056FF39 /* Resources */,
 				E088B907174E02AF0056FF39 /* AuthorizeNet */,
@@ -961,6 +969,18 @@
 				E05F8086175D138A00937E80 /* MixerViewController.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		E0EED06D176715960045CA75 /* CardIO */ = {
+			isa = PBXGroup;
+			children = (
+				E0EED06E176715C50045CA75 /* CardIO.h */,
+				E0EED06F176715C50045CA75 /* CardIOCreditCardInfo.h */,
+				E0EED070176715C50045CA75 /* CardIOPaymentViewController.h */,
+				E0EED071176715C50045CA75 /* CardIOPaymentViewControllerDelegate.h */,
+				E0EED072176715C50045CA75 /* libCardIO.a */,
+			);
+			name = CardIO;
 			sourceTree = "<group>";
 		};
 		E0FD862D172FD948006CB0A8 /* Images */ = {

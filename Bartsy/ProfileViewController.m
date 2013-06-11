@@ -25,7 +25,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth,strGender,isCmgFromGetStarted;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -51,6 +51,8 @@
     
     self.trackedViewName = @"Profile Screen";
 
+    dictProfileData=[[NSMutableDictionary alloc]init];
+    
     self.view.backgroundColor=[UIColor lightGrayColor];
     
 //    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, 320, 405)];
@@ -184,20 +186,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     cell.tag=indexPath.section+1;
 
     if(indexPath.section==0)
     {
-        UILabel *lblEmailId=[self createLabelWithTitle:@"Email/userId:" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        UILabel *lblEmailId=[self createLabelWithTitle:@"EmailId" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblEmailId.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblEmailId];
         
         txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 10, 180, 30) tag:111 delegate:self];
-        txtFldEmailId.text=[dictResult objectForKey:@"username"];
-        txtFldEmailId.placeholder=@"Email/userId";
+        if(isReloadingForProfileVisible==NO)
+            txtFldEmailId.text=[dictResult objectForKey:@"username"];
+        else
+            txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
+        txtFldEmailId.placeholder=@"EmailId";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
         [cell.contentView addSubview:txtFldEmailId];
         
@@ -210,6 +214,9 @@
         txtFldPassword.placeholder=@"6 or more characters";
         txtFldPassword.font=[UIFont systemFontOfSize:15];
         [cell.contentView addSubview:txtFldPassword];
+        
+        if(isReloadingForProfileVisible==YES)
+            txtFldPassword.text=[dictProfileData objectForKey:@"password"];
 
     }
     else if(indexPath.section==1)
@@ -219,12 +226,22 @@
         NSURL *url=[[NSURL alloc]initWithString:strURL];
         
         imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(5, 10, 100, 100) tag:0];
+        
+
+
         if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
-            [imgViewProfilePicture setImageWithURL:url];
+        {
+            [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
+        }
         else if([[dictResult objectForKey:@"url"] length])
-            [imgViewProfilePicture setImageWithURL:[dictResult objectForKey:@"url"]];
+        {
+            [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dictResult objectForKey:@"url"]]]]];
+        }
         else
             [imgViewProfilePicture setImage:[UIImage imageNamed:@"DefaultUser.png"]];
+        
+        if(isReloadingForProfileVisible==YES)
+            [imgViewProfilePicture setImage:[dictProfileData objectForKey:@"profilepicture"]];
         
         [url release];
         [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
@@ -246,6 +263,8 @@
         
         txtFldNickName=[self createTextFieldWithFrame:CGRectMake(120, 35, 150, 30) tag:444 delegate:self];
         txtFldNickName.placeholder=@"Nick Name";
+            
+        
         if([dictResult count])
         {
             if([dictResult objectForKey:@"nickname"]!=(id)[NSNull null]&&[[dictResult objectForKey:@"nickname"] length]&&[dictResult objectForKey:@"nickname"]!=nil)
@@ -255,6 +274,10 @@
             else
                 txtFldNickName.text=[NSString stringWithFormat:@"%@",[dictResult objectForKey:@"first_name"]];
         }
+        
+        if(isReloadingForProfileVisible==YES)
+            txtFldNickName.text=[dictProfileData objectForKey:@"nickname"];
+        
         txtFldNickName.font=[UIFont systemFontOfSize:15];
         [cell.contentView addSubview:txtFldNickName];
         
@@ -269,9 +292,12 @@
         [cell.contentView addSubview:imgViewCreditCard];
 
         
-        UILabel *lblCreditCard=[self createLabelWithTitle:@"Add credit card..." frame:CGRectMake(50, 5, 120, 40) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        UILabel *lblCreditCard=[self createLabelWithTitle:@"Add credit card..." frame:CGRectMake(50, 5, 120, 40) tag:123 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblCreditCard.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblCreditCard];
+        
+        if([creditCardInfo.redactedCardNumber length])
+            lblCreditCard.text=creditCardInfo.redactedCardNumber;
         
         [lblCreditCard setUserInteractionEnabled:YES];
         
@@ -430,11 +456,6 @@
     return cell;
 }
 
--(void)btnCreditCard_TouchUpInside
-{
-    
-}
-
 -(void)btnPaypal_TouchUpInside
 {
     
@@ -444,6 +465,18 @@
 {
     isChecked=!isChecked;
     isReloadingForProfileVisible=YES;
+    if([txtFldEmailId.text length])
+    [dictProfileData setObject:txtFldEmailId.text forKey:@"username"];
+    
+    if([txtFldPassword.text length])
+        [dictProfileData setObject:txtFldPassword.text forKey:@"password"];
+    
+    if([txtFldNickName.text length])
+        [dictProfileData setObject:txtFldNickName.text forKey:@"nickname"];
+    
+    if(imgViewProfilePicture.image!=nil)
+        [dictProfileData setObject:imgViewProfilePicture.image forKey:@"profilepicture"];
+    
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     [tblView reloadData];
 }
@@ -501,6 +534,48 @@
         [btnGay setImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
     }
     
+}
+
+-(void)btnCreditCard_TouchUpInside
+{
+    CardIOPaymentViewController *scanViewController = [[CardIOPaymentViewController alloc] initWithPaymentDelegate:self];
+    scanViewController.appToken = @"0f13c2616ead46e7a000674d20743cfe"; // get your app token from the card.io website
+    //    [self presentModalViewController:scanViewController animated:YES];
+    [self.navigationController presentViewController:scanViewController animated:YES completion:nil];
+}
+
+- (void)userDidCancelPaymentViewController:(CardIOPaymentViewController *)scanViewController
+{
+    NSLog(@"User canceled payment info");
+    // Handle user cancellation here...
+    //    [scanViewController dismissModalViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)userDidProvideCreditCardInfo:(CardIOCreditCardInfo *)info inPaymentViewController:(CardIOPaymentViewController *)scanViewController
+{
+    creditCardInfo=[info retain];
+    // The full card number is available as info.cardNumber, but don't log that!
+    NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
+    // Use the card info...
+    //    [scanViewController dismissModalViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    
+    isReloadingForProfileVisible=YES;
+    if([txtFldEmailId.text length])
+        [dictProfileData setObject:txtFldEmailId.text forKey:@"username"];
+    
+    if([txtFldPassword.text length])
+        [dictProfileData setObject:txtFldPassword.text forKey:@"password"];
+    
+    if([txtFldNickName.text length])
+        [dictProfileData setObject:txtFldNickName.text forKey:@"nickname"];
+    
+    if(imgViewProfilePicture.image!=nil)
+        [dictProfileData setObject:imgViewProfilePicture.image forKey:@"profilepicture"];
+    
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+    [tblView reloadData];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1055,14 +1130,33 @@
     if([strDOB length]==0||strDOB==nil||strDOB==(id)[NSNull null])
     strDOB=@"";
     
+    if([strGender length]==0||strGender==nil||strGender==(id)[NSNull null])
+        strGender=@"";
+    
     NSString *strOrientation=[NSString stringWithFormat:@"%@",(intOrientation==1?@"Straight":(intOrientation==2?@"Gay":@"Bisexual"))];
+
+    if([txtViewDescription.text length]==0||[txtViewDescription.text isEqualToString:@"Enter something about you that you'd like others to see while you're checked in at a venue"])
+        txtViewDescription.text=@"";
+    
+    NSString *strProfileStatus;
+    if(isChecked)
+    strProfileStatus=[NSString stringWithFormat:@"ON"];
+    else
+    strProfileStatus=[NSString stringWithFormat:@"OFF"];
+
     
     if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
     {
+        if([self validemail:txtFldEmailId.text])
+        {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:@"" lastName:@"" dob:strDOB orientation:strOrientation status:@"" description:txtViewDescription.text nickName:txtFldNickName.text emailId:@"" delegate:self];
-        
-       
+            [sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB orientation:strOrientation status:@"" description:txtViewDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] delegate:self];
+        }
+        else
+        {
+            [self createAlertViewWithTitle:@"" message:@"EmailId is not valid" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
+            
     }
     else
         [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
@@ -1146,6 +1240,7 @@
         
         if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
+            
             NSManagedObjectContext *context=[appDelegate managedObjectContext];
             
             NSManagedObject *mngObjProfile=[NSEntityDescription insertNewObjectForEntityForName:@"Profile" inManagedObjectContext:context];

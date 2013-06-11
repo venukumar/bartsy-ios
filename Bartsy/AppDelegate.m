@@ -503,7 +503,7 @@
     else if(alertView1.tag==225)
     {
         if(buttonIndex==0)
-        [self updateOrderStatusForaOfferedDrink:@"7"]; //Rejected the Order
+        [self updateOrderStatusForaOfferedDrink:@"8"]; //Rejected the Order
         else
         [self updateOrderStatusForaOfferedDrink:@"0"]; //Accepted the Order
 

@@ -14,8 +14,9 @@
 #import <GoogleOpenSource/GoogleOpenSource.h>
 #import <GooglePlus/GooglePlus.h>
 #import <QuartzCore/QuartzCore.h>
+#import "CardIO.h"
 
-@interface ProfileViewController : BaseViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextViewDelegate>
+@interface ProfileViewController : BaseViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,CardIOPaymentViewControllerDelegate>
 {
     UIView *customPickerView;
     UIBarButtonItem *barButtonPrev;
@@ -37,7 +38,14 @@
     UITextView *txtViewDescription;
     BOOL isCmgFromGetStarted;
     BOOL isReloadingForProfileVisible;
+    NSMutableDictionary *dictProfileData;
+    CardIOCreditCardInfo *creditCardInfo;
+    BOOL isCmgForLogin;
+    
 }
+@property(nonatomic,retain)CardIOCreditCardInfo *creditCardInfo;
+@property(nonatomic,retain)NSMutableDictionary *dictProfileData;
+@property(nonatomic,assign)BOOL isReloadingForProfileVisible;
 @property(nonatomic,assign)BOOL isCmgFromGetStarted;
 @property(nonatomic,retain)NSString *strGender;
 @property(nonatomic,retain)GTMOAuth2Authentication *auth;
