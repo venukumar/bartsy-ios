@@ -43,7 +43,13 @@
     BOOL isCmgForLogin;
     BOOL isSelectedSingles;
     BOOL isSelectedFriends;
+    BOOL isCmgForEditProfile;
+    NSString *strPassword;
+    NSString *strDOB;
 }
+@property(nonatomic,retain)NSString *strDOB;
+@property(nonatomic,retain)NSString *strPassword;
+@property(nonatomic,assign)BOOL isCmgForEditProfile;
 @property(nonatomic,assign)BOOL isCmgForLogin;
 @property(nonatomic,retain)CardIOCreditCardInfo *creditCardInfo;
 @property(nonatomic,retain)NSMutableDictionary *dictProfileData;

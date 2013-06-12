@@ -201,7 +201,9 @@
 -(void)checkOrderStatusUpdate
 {
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -450,7 +452,6 @@
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"heartBeat"])
     {
         //AudioServicesPlaySystemSound(1007);
-        [self stopTimerForHeartBeat];
         [delegateForCurrentViewController heartBeat];
         
         intOrderCount=[[userInfo objectForKey:@"orderCount"] integerValue];
@@ -546,8 +547,9 @@
     //Updating the Order Status by the Receiver
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateSenderDrink",KServerURL];
     
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",[dictOfferedDrikDetails objectForKey:@"orderId"],@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
-    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",[dictOfferedDrikDetails objectForKey:@"orderId"],@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -693,7 +695,9 @@
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil&&[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]!=nil)
     {
         NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
-        NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:@"checkin",@"type",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",@"",@"userName",nil];
+        NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"checkin",@"type",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",@"",@"userName",nil];
+        [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
         NSLog(@"syncUserDetails Details \n %@",dictCheckIn);
         SBJSON *jsonObj=[SBJSON new];
         NSString *strJson=[jsonObj stringWithObject:dictCheckIn];

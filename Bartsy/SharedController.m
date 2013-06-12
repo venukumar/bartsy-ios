@@ -104,7 +104,10 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getMenu",KServerURL];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
+    
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -125,17 +128,19 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getVenueList",KServerURL];
     
-    //    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"100001",@"venueId",nil];
-    //    SBJSON *jsonObj=[SBJSON new];
-    //    NSString *strJson=[jsonObj stringWithObject:dictProfile];
-    //    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:nil];
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
     
     NSURL *url=[[NSURL alloc]initWithString:strURL];
     NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
-    //    [request setHTTPMethod:@"POST"];
-    //    [request setHTTPBody:dataProfile];
-    //    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-    //    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataProfile];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self sendRequest:request];
     [url release];
     [request release];
@@ -149,10 +154,13 @@ static SharedController *sharedController;
     
     NSData *imageData= UIImagePNGRepresentation(imgProfile);
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strUserName,@"emailId",strUserName,@"userName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strFirstName,@"firstname",strLastName,@"lastname",strDOB,@"dateofbirth",nil];
-    NSDictionary *dictUserProfile=[[NSDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strUserName,@"emailId",strUserName,@"userName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
     
-   // NSLog(@"Profile Info : \n %@",dictUserProfile);
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
+    NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
+    
+    NSLog(@"Profile Info : \n %@",dictUserProfile);
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
@@ -204,8 +212,12 @@ static SharedController *sharedController;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"recieverBartsyId",@"NO",@"drinkAcceptance", nil];
-    //NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"recieverBartsyId",@"NO",@"drinkAcceptance",@"Take care",@"specialInstructions", nil];
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
+    //NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
+    
+    NSLog(@"Order Details : \n %@",dictProfile);
     
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
@@ -250,7 +262,10 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/userCheckIn",KServerURL];
     
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -271,7 +286,11 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/userCheckOut",KServerURL];
     
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
+    
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -292,7 +311,9 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/checkedInUsersList",KServerURL];
     
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -313,7 +334,9 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
     
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strBartsyId,@"bartsyId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strBartsyId,@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -334,7 +357,9 @@ static SharedController *sharedController;
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/heartBeat",KServerURL];
     
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",strBartsyId,@"bartsyId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",strBartsyId,@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -354,7 +379,9 @@ static SharedController *sharedController;
 {
     self.delegate=aDelegate;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getIngredients",KServerURL];
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -376,8 +403,9 @@ static SharedController *sharedController;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSDictionary *dictProfile=[[NSDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type", nil];
-    
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type", nil];
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     
@@ -427,8 +455,9 @@ static SharedController *sharedController;
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
-    NSDictionary *dictCheckIn=[[NSDictionary alloc] initWithObjectsAndKeys:strType,@"type",strUserName,@"userName",appDelegate.deviceToken,@"deviceToken",@"1",@"deviceType",strBartsyId,@"bartsyId",nil];
-    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strType,@"type",strUserName,@"userName",appDelegate.deviceToken,@"deviceToken",@"1",@"deviceType",strBartsyId,@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     NSLog(@"Sync Details %@",dictCheckIn);
     
     SBJSON *jsonObj=[SBJSON new];
@@ -453,8 +482,9 @@ static SharedController *sharedController;
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/bartsyUserLogin",KServerURL];
-    NSDictionary *dictLogIn=[[NSDictionary alloc] initWithObjectsAndKeys:strEmailId,@"emailId",strPassword,@"password",nil];
-    
+    NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strEmailId,@"emailId",strPassword,@"password",nil];
+    [dictLogIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
     NSLog(@"Login Details %@",dictLogIn);
     
     SBJSON *jsonObj=[SBJSON new];
@@ -471,6 +501,36 @@ static SharedController *sharedController;
     [url release];
     [request release];
 }
+
+-(void)getUserProfileWithBartsyId:(NSString*)strBastsyId delegate:(id)aDelegate
+{
+    self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/getUserProfile",KServerURL];
+    
+    NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strBastsyId,@"bartsyId",nil];
+    [dictLogIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+
+    NSLog(@"Login Details %@",dictLogIn);
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictLogIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+}
+
+
 
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {

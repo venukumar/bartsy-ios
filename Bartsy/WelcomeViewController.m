@@ -9,7 +9,7 @@
 #import "WelcomeViewController.h"
 #import "VenueListViewController.h"
 #import "HomeViewController.h"
-
+#import "ProfileViewController.h"
 @interface WelcomeViewController ()
 
 @end
@@ -191,6 +191,15 @@
         VenueListViewController *obj=[[VenueListViewController alloc]init];
         [self.navigationController pushViewController:obj animated:YES];
         //[obj release];
+    }
+    else if(sender.tag==555)
+    {
+        appDelegate.isLoginForFB=NO;
+        ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+        profileScreen.isCmgFromGetStarted=NO;
+        profileScreen.isCmgForEditProfile=YES;
+        [self.navigationController pushViewController:profileScreen animated:YES];
+        [profileScreen release];
     }
 }
 

@@ -15,17 +15,17 @@
 
 @interface ProfileViewController ()
 {
-    NSDictionary *dictResult;
+    NSMutableDictionary *dictResult;
     BOOL isRequestForSavingProfile;
     NSArray *arrGender;
     NSArray *arrOrientation;
     NSArray *arrStatus;
 }
-@property (nonatomic,retain)NSDictionary *dictResult;
+@property (nonatomic,retain)NSMutableDictionary *dictResult;
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -57,7 +57,7 @@
     NSLog(@"isLoginForFB is %i, auth is %@,isCmgFromGetStarted is %i",appDelegate.isLoginForFB,auth,isCmgFromGetStarted);
     
     
-    if(appDelegate.isLoginForFB==YES||auth!=nil||isCmgFromGetStarted==YES)
+    if(appDelegate.isLoginForFB==YES||auth!=nil||isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
     {
         dictProfileData=[[NSMutableDictionary alloc]init];
         
@@ -77,7 +77,10 @@
         
         
         arrGender=[[NSArray alloc]initWithObjects:@"Female",@"Male", nil];
-        arrOrientation=[[NSArray alloc]initWithObjects:@"I'm straight",@"I'm gay",@"I'm bisexual", nil];
+        
+
+        
+        arrOrientation=[[NSArray alloc]initWithObjects:@"Straight",@"Gay",@"Bisexual", nil];
         arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
         
         
@@ -86,6 +89,12 @@
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
             self.sharedController=[SharedController sharedController];
             [sharedController gettingUserProfileInformationWithAccessToken:appDelegate.session.accessTokenData.accessToken delegate:self];
+        }
+        else if(isCmgForEditProfile==YES)
+        {
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            self.sharedController=[SharedController sharedController];
+            [sharedController getUserProfileWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
         }
         else if(isCmgFromGetStarted==NO)
         {
@@ -263,8 +272,13 @@
         txtFldPassword.font=[UIFont systemFontOfSize:15];
         [cell.contentView addSubview:txtFldPassword];
         
-        if(isReloadingForProfileVisible==YES)
-            txtFldPassword.text=[dictProfileData objectForKey:@"password"];
+        if([strPassword length])
+        txtFldPassword.text=strPassword;
+        else
+            txtFldPassword.text=[dictResult objectForKey:@"password"];
+        
+        //if(isReloadingForProfileVisible==YES)
+          //  txtFldPassword.text=[dictProfileData objectForKey:@"password"];
 
     }
     else if(indexPath.section==1)
@@ -274,16 +288,14 @@
         NSURL *url=[[NSURL alloc]initWithString:strURL];
         
         imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(5, 10, 100, 100) tag:0];
-        
-
-
-        if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
-        {
-            [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
-        }
-        else if([[dictResult objectForKey:@"url"] length])
+                
+        if([[dictResult objectForKey:@"url"] length])
         {
             [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dictResult objectForKey:@"url"]]]]];
+        }
+        else if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
+        {
+            [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
         }
         else
             [imgViewProfilePicture setImage:[UIImage imageNamed:@"DefaultUser.png"]];
@@ -399,7 +411,11 @@
             txtViewDescription=[[UITextView alloc] initWithFrame:CGRectMake(10, 70, 280, 50)];
             txtViewDescription.tag=555;
             txtViewDescription.delegate=self;
+            if([[dictResult objectForKey:@"description"] length])
+                txtViewDescription.text=[dictResult objectForKey:@"description"];
+            else
             txtViewDescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+            
             [[txtViewDescription layer]setBorderWidth:1];
             [[txtViewDescription layer]setBorderColor:[[UIColor blackColor] CGColor]];
             [[txtViewDescription layer]setCornerRadius:5];
@@ -413,7 +429,7 @@
             
             UIButton *btnMale=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 130, 28, 28) tag:0 selector:@selector(btnGender_TouchUpInside:) target:self];
             btnMale.tag=143;
-            if([[dictResult objectForKey:@"gender"] isEqualToString:@"male"])
+            if([[dictResult objectForKey:@"gender"] isEqualToString:@"male"]||[[dictResult objectForKey:@"gender"] isEqualToString:@"Male"])
             {
                 [btnMale setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
                 self.strGender=[[NSString stringWithFormat:@"Male"] retain];
@@ -429,7 +445,7 @@
             
             UIButton *btnFeMale=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(180, 130, 28, 28) tag:0 selector:@selector(btnGender_TouchUpInside:) target:self];
             btnFeMale.tag=225;
-            if([[dictResult objectForKey:@"gender"] isEqualToString:@"female"])
+            if([[dictResult objectForKey:@"gender"] isEqualToString:@"female"]||[[dictResult objectForKey:@"gender"] isEqualToString:@"Female"])
             {
                 self.strGender=[[NSString stringWithFormat:@"Female"] retain];
                 [btnFeMale setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
@@ -450,6 +466,9 @@
             
             UITextField *txtFldDOB=[self createTextFieldWithFrame:CGRectMake(95, 165, 150, 30) tag:666 delegate:self];
             txtFldDOB.placeholder=@"MM/DD/YYYY";
+            if([strDOB length]&&strDOB!=nil)
+            txtFldDOB.text=strDOB;
+            
             txtFldDOB.font=[UIFont systemFontOfSize:15];
             [cell.contentView addSubview:txtFldDOB];
             
@@ -731,13 +750,13 @@
              [dictGoogle setObject:person.nickname forKey:@"nickname"];
              if(dictResult==nil)
              {
-                 dictResult=[[NSDictionary alloc] initWithDictionary:dictGoogle];
+                 dictResult=[[NSMutableDictionary alloc] initWithDictionary:dictGoogle];
              }
              else
              {
                  [dictResult release];
                  dictResult=nil;
-                 dictResult=[[NSDictionary alloc] initWithDictionary:dictGoogle];
+                 dictResult=[[NSMutableDictionary alloc] initWithDictionary:dictGoogle];
              }
              
              isProfileExistsCheck=YES;
@@ -891,6 +910,11 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+
+    txtViewDescription.text=[dictResult objectForKey:@"description"];
+
+    [dictResult setObject:[NSString stringWithFormat:@"%@%@",textView.text,text] forKey:@"description"];
+    
     if([text isEqualToString:@"\n"])
     {
         [textView resignFirstResponder];
@@ -954,6 +978,17 @@
     [textField resignFirstResponder];
     return YES;
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if(textField.tag==222)
+    {
+        strPassword=[[NSString stringWithFormat:@"%@%@",textField.text,string] retain];
+
+    }
+    return YES;
+}
+
 
 -(void)showPickerView
 {
@@ -1069,6 +1104,9 @@
         [df setDateFormat:kDateMMDDYYYY];
         txtFldData.text = [NSString stringWithFormat:@"%@",
                                 [df stringFromDate:datePicker.date]];
+        
+        strDOB= [[NSString stringWithFormat:@"%@",
+                           [df stringFromDate:datePicker.date]] retain];
         [df release];
     }
     else
@@ -1217,10 +1255,7 @@
     isRequestForSavingProfile=YES;
     self.sharedController=[SharedController sharedController];
     //NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:kDateMMDDYYYY];
-    NSString *strDOB= [NSString stringWithFormat:@"%@",
-                    [df stringFromDate:datePicker.date]];
+    
     
     if([strDOB length]==0||strDOB==nil||strDOB==(id)[NSNull null])
     strDOB=@"";
@@ -1284,17 +1319,76 @@
 {
     [self hideProgressView:nil];
     
-    if(isRequestForSavingProfile==NO&&isProfileExistsCheck==NO)
+    if(isCmgForEditProfile==YES&&isRequestForSavingProfile==NO)
     {
         if(dictResult==nil)
         {
-            dictResult=[[NSDictionary alloc] initWithDictionary:result];
+            dictResult=[[NSMutableDictionary alloc] init];
         }
         else
         {
             [dictResult release];
             dictResult=nil;
-            dictResult=[[NSDictionary alloc] initWithDictionary:result];
+            dictResult=[[NSMutableDictionary alloc] init];
+        }
+        
+        [dictResult setObject:[result objectForKey:@"emailId"] forKey:@"username"];
+        [dictResult setObject:[result objectForKey:@"password"] forKey:@"password"];
+        [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
+        [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
+        
+        creditCardInfo=[[CardIOCreditCardInfo alloc]init];
+        if([result objectForKey:@"creditCardNumber"]!=nil)
+        creditCardInfo.cardNumber=[result objectForKey:@"creditCardNumber"];
+        
+        if([result objectForKey:@"expMonth"]!=nil)
+            creditCardInfo.expiryMonth=[[result objectForKey:@"expMonth"] integerValue];
+        
+        if([result objectForKey:@"expYear"]!=nil)
+            creditCardInfo.expiryYear=[[result objectForKey:@"expYear"] integerValue];
+
+        isChecked=([[result objectForKey:@"showProfile"] isEqualToString:@"ON"]?1:0);
+        
+        if([result objectForKey:@"description"]!=nil)
+        [dictResult setObject:[result objectForKey:@"description"] forKey:@"description"];
+        
+        if([result objectForKey:@"gender"]!=nil)
+            strGender=[[NSString stringWithFormat:@"%@",[result objectForKey:@"gender"]] retain];
+        [dictResult setObject:strGender forKey:@"gender"];
+        
+        strDOB= [[NSString stringWithFormat:@"%@",
+                  [result objectForKey:@"dateofbirth"]] retain];
+        
+        intOrientation=[arrOrientation indexOfObject:[result objectForKey:@"orientation"]]+1;
+
+        if([[result objectForKey:@"status"] isEqualToString:@"Singles/Friends"])
+        {
+            isSelectedSingles=YES;
+            isSelectedFriends=YES;
+        }
+        else if([result objectForKey:@"status"]!=nil)
+        {
+            isSelectedFriends=[[result objectForKey:@"status"] isEqualToString:@"Friends"];
+            isSelectedSingles=[[result objectForKey:@"status"] isEqualToString:@"Singles"];
+        }
+            
+        NSLog(@"Result \n %@",dictResult);
+        
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+        [tblView reloadData];
+        
+    }
+    else if(isRequestForSavingProfile==NO&&isProfileExistsCheck==NO)
+    {
+        if(dictResult==nil)
+        {
+            dictResult=[[NSMutableDictionary alloc] initWithDictionary:result];
+        }
+        else
+        {
+            [dictResult release];
+            dictResult=nil;
+            dictResult=[[NSMutableDictionary alloc] initWithDictionary:result];
         }
         
         isProfileExistsCheck=YES;
@@ -1344,6 +1438,16 @@
     else if(isRequestForSavingProfile==YES)
     {
         [self hideProgressView:nil];
+
+        if(isCmgForEditProfile==YES)
+        {
+            if([[result objectForKey:@"errorCode"] integerValue]==0)
+            {
+                [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:111222];
+            }
+            
+            return;
+        }
         isRequestForSavingProfile=NO;
         
         
@@ -1389,7 +1493,7 @@
         }
         else
         {
-            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:111222];
         }
             
     }
@@ -1401,6 +1505,14 @@
     [self hideProgressView:nil];
     [self createAlertViewWithTitle:@"Error" message:[error description] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
     
+}
+
+- (void)alertView:(UIAlertView *)alertView1 clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView1.tag==111222)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning

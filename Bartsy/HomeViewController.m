@@ -471,6 +471,18 @@
             }
             NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!=''"];
             [arrContents filterUsingPredicate:predicateName];
+
+            NSArray *tempArray = [[NSArray alloc] initWithArray:arrContents];
+            for (int i = 0; i<[tempArray count]; i++)
+            {
+                NSMutableDictionary *contentDict = [tempArray objectAtIndex:i];
+                NSNumber *priceNumber = [NSNumber numberWithFloat:[[contentDict valueForKey:@"price"] floatValue]];
+                if ([priceNumber isEqualToNumber:[NSNumber numberWithFloat:0.00000]])
+                {
+                    [arrContents removeObject:contentDict];
+                }
+            }
+            
             [arrTemp insertObject:arrContents atIndex:0];
         }
     }
@@ -497,13 +509,25 @@
                 NSMutableDictionary *dictSubsection=[[NSMutableDictionary alloc]initWithDictionary:[arrSubsections objectAtIndex:j]];
                 NSMutableArray *arrContents2=[[NSMutableArray alloc]initWithArray:[dictSubsection objectForKey:@"contents"]];
                 NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!=''"];
+                //NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!='' AND price CONTAINS[cd] %@",@"."];
                 [arrContents2 filterUsingPredicate:predicateName];
+                NSArray *tempArray = [[NSArray alloc] initWithArray:arrContents2];
+                for (int i = 0; i<[tempArray count]; i++)
+                {
+                    NSMutableDictionary *contentDict = [tempArray objectAtIndex:i];
+                    NSNumber *priceNumber = [NSNumber numberWithFloat:[[contentDict valueForKey:@"price"] floatValue]];
+                    if ([priceNumber isEqualToNumber:[NSNumber numberWithFloat:0.00000]])
+                    {
+                        [arrContents2 removeObject:contentDict];
+                    }
+                }
                 [dictSubsection setObject:arrContents2 forKey:@"contents"];
                 [dictSubsection setObject:[dict objectForKey:@"section_name"] forKey:@"section_name"];
                 [dictSubsection setObject:@"0" forKey:@"Arrow"];
                 if([arrContents2 count])
                     [arrTemp addObject:dictSubsection];
                 [dictSubsection release];
+                [tempArray release];
             }
         }
     }
