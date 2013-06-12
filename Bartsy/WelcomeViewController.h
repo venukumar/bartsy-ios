@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
+#import "MyRewardsViewController.h"
+
 @interface WelcomeViewController : BaseViewController
 
 -(void)reloadWelcomeScreen;

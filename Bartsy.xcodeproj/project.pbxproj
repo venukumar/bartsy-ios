@@ -51,6 +51,7 @@
 		E065D8AB1768878300DE7502 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E065D8A81768878300DE7502 /* Default-568h@2x.png */; };
 		E065D8AC1768878300DE7502 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E065D8A91768878300DE7502 /* Default@2x.png */; };
 		E065D8AD1768878300DE7502 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E065D8AA1768878300DE7502 /* Default.png */; };
+		E065D8B01768BC0D00DE7502 /* MyRewardsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E065D8AE1768BC0D00DE7502 /* MyRewardsViewController.m */; };
 		E075A960174512AE0061FBAE /* pic1.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A95C174512AE0061FBAE /* pic1.png */; };
 		E075A961174512AE0061FBAE /* pic2.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A95D174512AE0061FBAE /* pic2.png */; };
 		E075A962174512AE0061FBAE /* pic3.png in Resources */ = {isa = PBXBuildFile; fileRef = E075A95E174512AE0061FBAE /* pic3.png */; };
@@ -242,6 +243,8 @@
 		E065D8A81768878300DE7502 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		E065D8A91768878300DE7502 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		E065D8AA1768878300DE7502 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		E065D8AE1768BC0D00DE7502 /* MyRewardsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRewardsViewController.m; sourceTree = "<group>"; };
+		E065D8AF1768BC0D00DE7502 /* MyRewardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRewardsViewController.h; sourceTree = "<group>"; };
 		E0710346175F696700DF2E47 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		E075A95C174512AE0061FBAE /* pic1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic1.png; sourceTree = "<group>"; };
 		E075A95D174512AE0061FBAE /* pic2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic2.png; sourceTree = "<group>"; };
@@ -967,6 +970,8 @@
 				E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */,
 				E05F8085175D138900937E80 /* MixerViewController.h */,
 				E05F8086175D138A00937E80 /* MixerViewController.m */,
+				E065D8AF1768BC0D00DE7502 /* MyRewardsViewController.h */,
+				E065D8AE1768BC0D00DE7502 /* MyRewardsViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1254,6 +1259,7 @@
 				E0CDC8D91758BC060070E31D /* RearViewController.m in Sources */,
 				E0CDC8E51758BC380070E31D /* ZUUIRevealController.m in Sources */,
 				E05F8087175D138B00937E80 /* MixerViewController.m in Sources */,
+				E065D8B01768BC0D00DE7502 /* MyRewardsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

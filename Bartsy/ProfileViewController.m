@@ -11,7 +11,6 @@
 #import "HomeViewController.h"
 #import "WelcomeViewController.h"
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
-#define kDateMMDDYYYY                       @"MM/dd/yyyy"
 
 @interface ProfileViewController ()
 {
@@ -51,7 +50,8 @@
     
     self.trackedViewName = @"Profile Screen";
 
-    
+    dictResult=[[NSMutableDictionary alloc] init];
+
     self.view.backgroundColor=[UIColor lightGrayColor];
     
     NSLog(@"isLoginForFB is %i, auth is %@,isCmgFromGetStarted is %i",appDelegate.isLoginForFB,auth,isCmgFromGetStarted);
@@ -287,9 +287,15 @@
         NSLog(@"Pic URL is %@",strURL);
         NSURL *url=[[NSURL alloc]initWithString:strURL];
         
+        UIImage *imgProfiePic=imgViewProfilePicture.image;
+        
         imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(5, 10, 100, 100) tag:0];
-                
-        if([[dictResult objectForKey:@"url"] length])
+        
+        if(imgProfiePic!=nil)
+        {
+            [imgViewProfilePicture setImage:imgProfiePic];
+        }
+        else if([[dictResult objectForKey:@"url"] length])
         {
             [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dictResult objectForKey:@"url"]]]]];
         }
@@ -429,7 +435,7 @@
             
             UIButton *btnMale=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(90, 130, 28, 28) tag:0 selector:@selector(btnGender_TouchUpInside:) target:self];
             btnMale.tag=143;
-            if([[dictResult objectForKey:@"gender"] isEqualToString:@"male"]||[[dictResult objectForKey:@"gender"] isEqualToString:@"Male"])
+            if([[dictResult objectForKey:@"gender"] isEqualToString:@"male"]||[[dictResult objectForKey:@"gender"] isEqualToString:@"Male"]||[strGender isEqualToString:@"Male"])
             {
                 [btnMale setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
                 self.strGender=[[NSString stringWithFormat:@"Male"] retain];
@@ -445,7 +451,7 @@
             
             UIButton *btnFeMale=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(180, 130, 28, 28) tag:0 selector:@selector(btnGender_TouchUpInside:) target:self];
             btnFeMale.tag=225;
-            if([[dictResult objectForKey:@"gender"] isEqualToString:@"female"]||[[dictResult objectForKey:@"gender"] isEqualToString:@"Female"])
+            if([[dictResult objectForKey:@"gender"] isEqualToString:@"female"]||[[dictResult objectForKey:@"gender"] isEqualToString:@"Female"]||[strGender isEqualToString:@"Female"])
             {
                 self.strGender=[[NSString stringWithFormat:@"Female"] retain];
                 [btnFeMale setImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
@@ -915,6 +921,11 @@
 
     [dictResult setObject:[NSString stringWithFormat:@"%@%@",textView.text,text] forKey:@"description"];
     
+    if(range.length == 1 && [text length] == 0)
+    {
+        [dictResult setObject:[NSString stringWithFormat:@"%@",[textView.text substringToIndex:[textView.text length]-1]] forKey:@"description"];
+    }
+    
     if([text isEqualToString:@"\n"])
     {
         [textView resignFirstResponder];
@@ -983,8 +994,53 @@
 {
     if(textField.tag==222)
     {
+        if([string isEqualToString:@" "])
+        {
+            return NO;
+        }
         strPassword=[[NSString stringWithFormat:@"%@%@",textField.text,string] retain];
 
+        if ([string isEqualToString:@""])
+        {
+           strPassword = [[strPassword substringToIndex:[strPassword length]-1] retain];
+        }
+        NSLog(@"Password is %@",strPassword);
+    }
+    else if(textField.tag==111)
+    {
+        
+        if([string isEqualToString:@" "])
+        {
+            return NO;
+        }
+        
+        if ([string isEqualToString:@""])
+        {
+            [dictResult setObject:[textField.text substringToIndex:[textField.text length]-1] forKey:@"username"];
+        }
+        else
+        {
+            [dictResult setObject:[NSString stringWithFormat:@"%@%@",textField.text,string] forKey:@"username"]; 
+        }
+        
+    }
+    else if(textField.tag==444)
+    {
+        
+        if([string isEqualToString:@" "])
+        {
+            return NO;
+        }
+        
+        if ([string isEqualToString:@""])
+        {
+            [dictResult setObject:[textField.text substringToIndex:[textField.text length]-1] forKey:@"nickname"];
+        }
+        else
+        {
+            [dictResult setObject:[NSString stringWithFormat:@"%@%@",textField.text,string] forKey:@"nickname"];
+        }
+        
     }
     return YES;
 }

@@ -14,4 +14,7 @@
 //#define KServerURL @"http://192.168.0.109:8080" //Swetha
 //#define KServerURL @"http://54.235.76.180:8080/Bartsy_Sprint1"
 
+# define KAPIVersionNumber @"1"
+#define kDateMMDDYYYY                       @"MM/dd/yyyy"
+
 #endif

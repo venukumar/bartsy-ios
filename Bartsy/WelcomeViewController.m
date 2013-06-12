@@ -10,6 +10,7 @@
 #import "VenueListViewController.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
+
 @interface WelcomeViewController ()
 
 @end
@@ -200,6 +201,12 @@
         profileScreen.isCmgForEditProfile=YES;
         [self.navigationController pushViewController:profileScreen animated:YES];
         [profileScreen release];
+    }
+    else if(sender.tag==444)
+    {
+        MyRewardsViewController *obj=[[MyRewardsViewController alloc]init];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
     }
 }
 
