@@ -34,4 +34,5 @@ delegate;
 - (void)createAlertViewWithTitle:(NSString *)strTitle message:(NSString*)strMsg cancelBtnTitle:(NSString*)strCancel otherBtnTitle:(NSString*)strTitle1 delegate:(id)delegate tag:(NSInteger)tag;
 - (void)hideAlertView;
 -(void)heartBeat;
+- (UIImage *)scaleAndRotateImage:(UIImage *)img;
 @end

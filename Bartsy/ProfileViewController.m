@@ -1289,7 +1289,7 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     
-    UIImage *img=[info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *img=[self scaleAndRotateImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
     
     UIImageView *imgView=(UIImageView*)[self.view viewWithTag:333];
     imgView.image=img;

@@ -247,7 +247,7 @@ static SharedController *sharedController;
          else
          {
              NSLog(@"Error is %@",error);
-             [delegate controllerDidFinishLoadingWithResult:error];
+             [delegate controllerDidFailLoadingWithError:error];
          }
          
      }
