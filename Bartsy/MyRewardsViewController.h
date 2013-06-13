@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-@interface MyRewardsViewController : BaseViewController<UITextFieldDelegate>
+@interface MyRewardsViewController : BaseViewController<UITextFieldDelegate,SharedControllerDelegate>
 
 @end

@@ -57,4 +57,6 @@
 -(void)syncUserDetailsWithUserName:(NSString*)strUserName type:(NSString*)strType bartsyId:(NSString*)strBartsyId delegate:(id)aDelegate;
 -(void)loginWithEmailID:(NSString*)strEmailId password:(NSString*)strPassword delegate:(id)aDelegate;
 -(void)getUserProfileWithBartsyId:(NSString*)strBastsyId delegate:(id)aDelegate;
+-(void)getPastOrderWithVenueWithId:(NSString*)strVenueId bartsyId:(NSString*)strbartsyId date:(NSString*)date  delegate:(id)aDelegate;
+
 @end

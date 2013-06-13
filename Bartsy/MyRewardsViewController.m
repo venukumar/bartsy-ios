@@ -7,6 +7,7 @@
 //
 
 #import "MyRewardsViewController.h"
+#import "PastOrdersViewController.h"
 #import "Constants.h"
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
@@ -47,10 +48,6 @@
     lblDate.backgroundColor=[UIColor clearColor];
     lblDate.textAlignment = NSTextAlignmentLeft;
     [scrollView addSubview:lblDate];
-    
-//    NSString *strDOB= [NSString stringWithFormat:@"%@",
-//                       [df stringFromDate:datePicker.date]];
-    
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
 	[dateFormat setDateFormat:kDateMMDDYYYY];
@@ -124,8 +121,27 @@
         return;
     }
     NSLog(@"text is %@,%@,%@",txtFldStartIndex.text,txtFldResults.text,lblDateValue.text);
-}
 
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    [self.sharedController getPastOrderWithVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:lblDateValue.text delegate:self];
+    
+}
+-(void)controllerDidFinishLoadingWithResult:(id)result
+{
+    if ([[result objectForKey:@"errorCode"] integerValue]==0)
+    {
+        PastOrdersViewController *obj = [[PastOrdersViewController alloc] init];
+        obj.arrayForPastOrders = [result objectForKey:@"pastOrders"];
+        [self.navigationController pushViewController:obj animated:YES];
+        [self hideProgressView:nil];
+        [obj release];
+    }
+}
+-(void)controllerDidFailLoadingWithError:(NSError*)error;
+{
+    [self hideProgressView:nil];
+
+}
 -(void)designPickerView:(NSString*)type
 {
     [UIView beginAnimations:nil context:NULL];

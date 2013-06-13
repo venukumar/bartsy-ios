@@ -21,12 +21,15 @@
 {
     NSMutableArray *arrMenu;
     NSMutableArray *arrOrders;
+    NSMutableArray *arrPastOrders;
     NSInteger btnValue;
     BOOL isSelectedForDrinks;
+    BOOL isSelectedForPastOrders;
     NSString *strTotalPrice;
     BOOL isSelectedForPeople;
     NSMutableArray *arrPeople;
     BOOL isRequestForGettingsOrders;
+    BOOL isRequestForGettingsPastOrders;
     NSString *sessionToken;
 }
 
@@ -75,14 +78,19 @@
     arrOrders=[[NSMutableArray alloc]init];
     arrPeople=[[NSMutableArray alloc]init];
     arrBundledOrders=[[NSMutableArray alloc]init];
-    
+    arrPastOrders=[[NSMutableArray alloc]init];
     arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
     NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
     NSString *strPeopleCount=[NSString stringWithFormat:@"PEOPLE (%i)",appDelegate.intPeopleCount];
 
-    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",strPeopleCount,strOrder, nil]];
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",strPeopleCount,strOrder,@"PAST ORDERS", nil]];
     segmentControl.frame=CGRectMake(0, 1, 320, 40);
+    UIFont *font = [UIFont boldSystemFontOfSize:10.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
+                                                           forKey:UITextAttributeFont];
+    [segmentControl setTitleTextAttributes:attributes
+                                    forState:UIControlStateNormal];
     segmentControl.segmentedControlStyle=UISegmentedControlStyleBar;
     segmentControl.selectedSegmentIndex=0;
     segmentControl.tag=1111;
@@ -190,26 +198,40 @@
     else if(segmentControl.selectedSegmentIndex==1)
     {
         isRequestForPeople=YES;
+        isSelectedForPastOrders = NO;
+        isRequestForGettingsPastOrders = NO;
         tblView.hidden=NO;
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController gettingPeopleListFromVenue:[dictVenue objectForKey:@"venueId"]  delegate:self];
     }
-    else
+    else if(segmentControl.selectedSegmentIndex==2)
     {
         appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
         appDelegate.delegateForCurrentViewController=self;
-        
+        isRequestForGettingsPastOrders = NO;
+
         isRequestForGettingsOrders=YES;
         isRequestForPeople=NO;
         isRequestForOrder=NO;
        
         tblView.hidden=NO;
+        isSelectedForPastOrders = NO;
         isSelectedForDrinks=NO;
         isSelectedForPeople=NO;
         
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getUserOrdersWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
+    }
+    else if(segmentControl.selectedSegmentIndex==3)
+    {
+        isRequestForGettingsOrders=NO;
+        isRequestForPeople=NO;
+        isRequestForOrder=NO;
+        isRequestForGettingsPastOrders = YES;
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController getPastOrderWithVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:nil delegate:self];
+
     }
 }
 
@@ -300,11 +322,11 @@
 {
     [self hideProgressView:nil];
     
-    if([[result objectForKey:@"errorCode"] integerValue]==1)
+    if([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
         [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
-    else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO)
+    else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO)
     {
         [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:[dictVenue objectForKey:@"venueId"]];
         [[NSUserDefaults standardUserDefaults]synchronize];
@@ -335,12 +357,24 @@
         [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
-        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         NSString *strOrder=[NSString stringWithFormat:@"PEOPLE (%i)",[arrPeople count]];
         
         [segmentControl setTitle:strOrder forSegmentAtIndex:1];
+    }
+    else if (isRequestForGettingsPastOrders == YES)
+    {
+        isSelectedForPastOrders = YES;
+        isSelectedForDrinks=NO;
+        isSelectedForPeople=NO;
+        [arrPastOrders removeAllObjects];
+        [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
+        NSLog(@"past orders is %@",arrPastOrders);
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        [tblView reloadData];
+
     }
     else if(isRequestForGettingsOrders==YES)
     {
@@ -663,6 +697,10 @@
             }
         }
     }
+    else if(isSelectedForPastOrders == YES)
+    {
+        return [arrPastOrders count];
+    }
     else
     {
         return 1;
@@ -675,6 +713,10 @@
         return 80;
     else if(isSelectedForPeople)
         return 60;
+    else if(isSelectedForPastOrders == YES)
+    {
+        return 65;
+    }
     else
     {
         if([arrBundledOrders count])
@@ -773,6 +815,24 @@
         
         cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
         cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
+    }
+    else if (isSelectedForPastOrders == YES)
+    {
+        UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+        lblItemName.backgroundColor=[UIColor clearColor];
+        lblItemName.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblItemName];
+        
+        UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
+        lbldescription.backgroundColor=[UIColor clearColor];
+        lbldescription.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lbldescription];
+        NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+        
+        UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, -5, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+        lblTotalPrice.backgroundColor=[UIColor clearColor];
+        lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblTotalPrice];
     }
     else
     {

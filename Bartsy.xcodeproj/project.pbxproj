@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
 		E005DE371743D71C00EDDCFB /* welcomebartsy.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE361743D71000EDDCFB /* welcomebartsy.png */; };
 		E005DE391743FCC900EDDCFB /* box.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE381743FCBB00EDDCFB /* box.png */; };
@@ -189,6 +190,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
+		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
 		E005DE331743D2B200EDDCFB /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		E005DE341743D2B300EDDCFB /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		E005DE361743D71000EDDCFB /* welcomebartsy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcomebartsy.png; sourceTree = "<group>"; };
@@ -525,6 +528,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CBFDEE201768C95600E9DB56 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
 		E0410679172A8D6E009F1B1E = {
 			isa = PBXGroup;
 			children = (
@@ -972,6 +982,9 @@
 				E05F8086175D138A00937E80 /* MixerViewController.m */,
 				E065D8AF1768BC0D00DE7502 /* MyRewardsViewController.h */,
 				E065D8AE1768BC0D00DE7502 /* MyRewardsViewController.m */,
+				CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */,
+				CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */,
+				CBFDEE201768C95600E9DB56 /* New Group */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1260,6 +1273,7 @@
 				E0CDC8E51758BC380070E31D /* ZUUIRevealController.m in Sources */,
 				E05F8087175D138B00937E80 /* MixerViewController.m in Sources */,
 				E065D8B01768BC0D00DE7502 /* MyRewardsViewController.m in Sources */,
+				CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
