@@ -62,5 +62,6 @@
 -(void)updateOrderStatusForaOfferedDrink;
 -(void)startTimerToCheckHeartBeat;
 -(void)stopTimerForHeartBeat;
+-(void)showAPIVersionAlertWithReason:(NSString*)strReason;
 @end
 

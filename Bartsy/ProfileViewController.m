@@ -291,11 +291,13 @@
         
         imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(5, 10, 100, 100) tag:0];
         
-        if(imgProfiePic!=nil)
-        {
-            [imgViewProfilePicture setImage:imgProfiePic];
-        }
-        else if([[dictResult objectForKey:@"url"] length])
+//        if(imgProfiePic!=nil&&imgViewProfilePicture.image!=[UIImage imageNamed:@"DefaultUser.png"])
+//        {
+//            [imgViewProfilePicture setImage:imgProfiePic];
+//        }
+//        else
+        
+        if([[dictResult objectForKey:@"url"] length])
         {
             [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dictResult objectForKey:@"url"]]]]];
         }
@@ -722,6 +724,8 @@
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[jsonData dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     NSString *userId=[jsonDictionary objectForKey:@"id"];
     [dictGoogle setObject:[jsonDictionary objectForKey:@"email"] forKey:@"username"];
+    [dictGoogle setObject:userId forKey:@"id"];
+
     NSLog(@" user deata %@",jsonData);
     NSLog(@"Received Access Token:%@",auth);
     
@@ -768,7 +772,7 @@
              isProfileExistsCheck=YES;
              [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
              self.sharedController=[SharedController sharedController];
-             [sharedController syncUserDetailsWithUserName:[dictResult objectForKey:@"username"] type:@"login" bartsyId:@"" delegate:self];
+             [sharedController syncUserDetailsWithUserName:userId type:@"google" bartsyId:@"" delegate:self];
          }
      }];
 
@@ -1342,7 +1346,9 @@
         if([self validemail:txtFldEmailId.text])
         {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB orientation:strOrientation status:strStatus description:txtViewDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] delegate:self];
+            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"id"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text delegate:self];
+            
+            //[sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB orientation:strOrientation status:strStatus description:txtViewDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] delegate:self];
         }
         else
         {
@@ -1388,8 +1394,8 @@
             dictResult=[[NSMutableDictionary alloc] init];
         }
         
-        [dictResult setObject:[result objectForKey:@"emailId"] forKey:@"username"];
-        [dictResult setObject:[result objectForKey:@"password"] forKey:@"password"];
+        [dictResult setObject:[result objectForKey:@"bartsyLogin"] forKey:@"username"];
+        [dictResult setObject:[result objectForKey:@"bartsyPassword"] forKey:@"password"];
         [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
         [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
         
@@ -1450,7 +1456,8 @@
         isProfileExistsCheck=YES;
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         self.sharedController=[SharedController sharedController];
-        [sharedController syncUserDetailsWithUserName:[result objectForKey:@"username"] type:@"login" bartsyId:@"" delegate:self];
+        
+        [sharedController syncUserDetailsWithUserName:[result objectForKey:@"id"] type:@"facebook" bartsyId:@"" delegate:self];
     }
     else if(isProfileExistsCheck==YES)
     {
@@ -1499,7 +1506,7 @@
         {
             if([[result objectForKey:@"errorCode"] integerValue]==0)
             {
-                [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:111222];
+                [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:111222333];
             }
             
             return;
@@ -1565,7 +1572,7 @@
 
 - (void)alertView:(UIAlertView *)alertView1 clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if(alertView1.tag==111222)
+    if(alertView1.tag==111222333)
     {
         [self.navigationController popViewControllerAnimated:YES];
     }

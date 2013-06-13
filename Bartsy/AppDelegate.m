@@ -540,6 +540,10 @@
         [self updateOrderStatusForaOfferedDrink:@"0"]; //Accepted the Order
 
     }
+    else if(alertView1.tag==111222)
+    {
+        exit(0);
+    }
 }
 
 -(void)updateOrderStatusForaOfferedDrink:(NSString*)strStatus
@@ -790,6 +794,20 @@
     }
 }
 
+
+-(void)showAPIVersionAlertWithReason:(NSString*)strReason
+{
+    if(alertView!=nil)
+    {
+        [alertView dismissWithClickedButtonIndex:0 animated:YES];
+        [alertView release];
+        alertView=nil;
+    }
+    
+    alertView=[[UIAlertView alloc]initWithTitle:@"" message:strReason delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    alertView.tag=111222;
+    [alertView show];
+}
 #pragma mark - Core Data stack
 
 // Returns the managed object context for the application.

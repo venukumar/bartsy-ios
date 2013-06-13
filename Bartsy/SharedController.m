@@ -146,7 +146,9 @@ static SharedController *sharedController;
     [request release];
 }
 
--(void)saveProfileInfoWithId:(NSString*)strPassword name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strUserName profileImage:(UIImage*)imgProfile firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB orientation:(NSString*)strOrientation status:(NSString*)strStatus description:(NSString*)strDescription nickName:(NSString*)strNickName emailId:(NSString*)strEmailId showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryDate expYear:(NSString*)strExpYear delegate:(id)aDelegate
+/*
+
+-(void)saveProfileInfoWithId:(NSString*)strPassword name:(NSString*)strName loginType:(NSString*)strLoginType gender:(NSString*)strGender userName:(NSString*)strBartsyLogin profileImage:(UIImage*)imgProfile firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB orientation:(NSString*)strOrientation status:(NSString*)strStatus description:(NSString*)strDescription nickName:(NSString*)strNickName emailId:(NSString*)strEmailId showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryDate expYear:(NSString*)strExpYear delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
     
@@ -154,7 +156,10 @@ static SharedController *sharedController;
     
     NSData *imageData= UIImagePNGRepresentation(imgProfile);
     
-    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strUserName,@"emailId",strUserName,@"userName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
+    //NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strUserName,@"emailId",strUserName,@"userName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
+    
+    
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strBartsyLogin,@"barstyLogin",strUserName,@"facebookUserName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
@@ -204,6 +209,99 @@ static SharedController *sharedController;
     [url release];
     [request release];
     
+}
+ */
+
+-(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription delegate:(id)aDelegate
+{
+    
+    self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSData *imageData= UIImagePNGRepresentation(imgProfile);
+
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] init];
+    //WithObjectsAndKeys:strBartsyLogin,@"barstyLogin",strUserName,@"facebookUserName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
+
+    [dictProfile setObject:strBartsyLogin forKey:@"bartsyLogin"];
+    [dictProfile setObject:strBartsyPassword forKey:@"bartsyPassword"];
+    [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
+   
+    if(strFbID!=nil&&[strFbID length])
+    [dictProfile setObject:strFbID forKey:@"facebookId"];
+    
+    if(strGoogleId!=nil&&[strGoogleId length])
+    [dictProfile setObject:strGoogleId forKey:@"googleId"];
+    
+    [dictProfile setObject:strGender forKey:@"gender"];
+    [dictProfile setObject:strNickName forKey:@"nickname"];
+    [dictProfile setObject:@"1" forKey:@"deviceType"];
+    [dictProfile setObject:appDelegate.deviceToken forKey:@"deviceToken"];
+    [dictProfile setObject:strOrientation forKey:@"orientation"];
+    [dictProfile setObject:strShowProfileStatus forKey:@"showProfile"];
+    [dictProfile setObject:strcreditCardNumber forKey:@"creditCardNumber"];
+    [dictProfile setObject:strExpiryMonth forKey:@"expMonth"];
+    [dictProfile setObject:strExpYear forKey:@"expYear"];
+    [dictProfile setObject:strDOB forKey:@"dateofbirth"];
+    [dictProfile setObject:strDescription forKey:@"description"];
+    
+    if(strFirstName!=nil&&[strFirstName length])
+    [dictProfile setObject:strFirstName forKey:@"firstname"];
+    
+    if (strLastName!=nil&&[strLastName length])
+    [dictProfile setObject:strLastName forKey:@"lastname"];
+    
+    [dictProfile setObject:strStatus forKey:@"status"];
+    
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
+    
+    NSLog(@"Profile Info : \n %@",dictUserProfile);
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    
+    // set Content-Type in HTTP header
+    NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
+    
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+    [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
+    
+    // post body
+    NSMutableData *body = [NSMutableData data];
+    
+    // add params (all params are strings)
+    for (NSString *param in dictUserProfile)
+    {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", param] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"%@\r\n", [dictUserProfile objectForKey:param]] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    NSString* FileParamConstant = [NSString stringWithFormat:@"userImage"];
+    
+    // add image data
+    if (imageData) {
+        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"userImage.jpg\"\r\n", FileParamConstant] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:[[NSString stringWithString:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+        [body appendData:imageData];
+        [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+    }
+    
+    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    // setting the body of the post to the reqeust
+    [request setHTTPBody:body];
+    
+    [self sendRequest:request];
+    [url release];
+    [request release];
+
 }
 
 -(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId description:(NSString*)strDescription receiverBartsyId:(NSString*)strReceiverId delegate:(id)aDelegate
@@ -455,7 +553,11 @@ static SharedController *sharedController;
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
-    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strType,@"type",strUserName,@"userName",appDelegate.deviceToken,@"deviceToken",@"1",@"deviceType",strBartsyId,@"bartsyId",nil];
+
+    NSString *strLoginType=[NSString stringWithFormat:@"%@",([strType isEqualToString:@"facebook"]?@"facebookId":@"googleId")];
+    
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strType,@"type",strUserName,strLoginType,appDelegate.deviceToken,@"deviceToken",@"1",@"deviceType",strBartsyId,@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
     NSLog(@"Sync Details %@",dictCheckIn);
@@ -581,6 +683,14 @@ static SharedController *sharedController;
     if (outError == nil )
     {
         NSLog(@" result ----- :%@",result);
+        if([result isKindOfClass:[NSDictionary class]])
+        {
+            if([[result objectForKey:@"errorCode"] integerValue]==100)
+            {
+                [appDelegate showAPIVersionAlertWithReason:[result objectForKey:@"errorMessage"]];
+                return;
+            }
+        }
         [delegate controllerDidFinishLoadingWithResult:result];
     }
     else
