@@ -260,7 +260,7 @@
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
-    NSString *strBartsyId=@"100002";
+    NSString *strBartsyId=@"100004";
     
     
     [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] receiverBartsyId:strBartsyId delegate:self];
@@ -1103,11 +1103,12 @@
         }
         
         
-        
         UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,5,105,50)];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
+        NSLog(@"URL is %@",strURL);
+        [imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
         imgViewPhoto.tag=143225;
-        [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
+        //[imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
         [viewHeaderPhoto addSubview:imgViewPhoto];
         [imgViewPhoto release];
         

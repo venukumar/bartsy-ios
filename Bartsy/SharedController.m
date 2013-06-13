@@ -240,10 +240,18 @@ static SharedController *sharedController;
     [dictProfile setObject:appDelegate.deviceToken forKey:@"deviceToken"];
     [dictProfile setObject:strOrientation forKey:@"orientation"];
     [dictProfile setObject:strShowProfileStatus forKey:@"showProfile"];
+    
+    if(strcreditCardNumber!=nil&&[strcreditCardNumber length])
     [dictProfile setObject:strcreditCardNumber forKey:@"creditCardNumber"];
+    
+    if(strExpiryMonth!=nil&&[strExpiryMonth length])
     [dictProfile setObject:strExpiryMonth forKey:@"expMonth"];
+    
+    if(strExpYear!=nil&&[strExpYear length])
     [dictProfile setObject:strExpYear forKey:@"expYear"];
+    
     [dictProfile setObject:strDOB forKey:@"dateofbirth"];
+    
     [dictProfile setObject:strDescription forKey:@"description"];
     
     if(strFirstName!=nil&&[strFirstName length])
@@ -588,7 +596,7 @@ static SharedController *sharedController;
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/bartsyUserLogin",KServerURL];
-    NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strEmailId,@"emailId",strPassword,@"password",nil];
+    NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strEmailId,@"bartsyLogin",strPassword,@"bartsyPassword",nil];
     [dictLogIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
     NSLog(@"Login Details %@",dictLogIn);

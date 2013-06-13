@@ -110,7 +110,7 @@
         [self.view addSubview:lblHeader];
         
         
-        UILabel *lblEmailId=[self createLabelWithTitle:@"EmailId:" frame:CGRectMake(20, 150, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        UILabel *lblEmailId=[self createLabelWithTitle:@"Email:" frame:CGRectMake(20, 150, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblEmailId.textAlignment=NSTextAlignmentLeft;
         [self.view addSubview:lblEmailId];
         
@@ -119,7 +119,7 @@
             txtFldEmailId.text=[dictResult objectForKey:@"username"];
         else
             txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
-        txtFldEmailId.placeholder=@"EmailId";
+        txtFldEmailId.placeholder=@"Email";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
         [self.view addSubview:txtFldEmailId];
         
@@ -258,7 +258,7 @@
             txtFldEmailId.text=[dictResult objectForKey:@"username"];
         else
             txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
-        txtFldEmailId.placeholder=@"EmailId";
+        txtFldEmailId.placeholder=@"Email";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
         [cell.contentView addSubview:txtFldEmailId];
         
@@ -1352,7 +1352,7 @@
         }
         else
         {
-            [self createAlertViewWithTitle:@"" message:@"EmailId is not valid" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+            [self createAlertViewWithTitle:@"" message:@"Email is not valid" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         }
             
     }
@@ -1363,10 +1363,19 @@
 
 -(void)btnSubmit_TouchUpInside
 {
-    isRequestForSavingProfile=YES;
-    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-    self.sharedController=[SharedController sharedController];
-    [self.sharedController loginWithEmailID:txtFldEmailId.text password:txtFldPassword.text delegate:self];
+    if([txtFldEmailId.text length]&&[txtFldPassword.text length])
+    {
+        isRequestForSavingProfile=YES;
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        self.sharedController=[SharedController sharedController];
+        [self.sharedController loginWithEmailID:txtFldEmailId.text password:txtFldPassword.text delegate:self];
+    }
+    else
+    {
+        [self createAlertViewWithTitle:@"" message:@"Username and password should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+
+    }
+    
 }
 
 -(BOOL)validemail:(NSString *)candidate
@@ -1383,61 +1392,69 @@
     
     if(isCmgForEditProfile==YES&&isRequestForSavingProfile==NO)
     {
-        if(dictResult==nil)
+        if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
-            dictResult=[[NSMutableDictionary alloc] init];
+            if(dictResult==nil)
+            {
+                dictResult=[[NSMutableDictionary alloc] init];
+            }
+            else
+            {
+                [dictResult release];
+                dictResult=nil;
+                dictResult=[[NSMutableDictionary alloc] init];
+            }
+            
+            [dictResult setObject:[result objectForKey:@"bartsyLogin"] forKey:@"username"];
+            [dictResult setObject:[result objectForKey:@"bartsyPassword"] forKey:@"password"];
+            [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
+            [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
+            
+            creditCardInfo=[[CardIOCreditCardInfo alloc]init];
+            if([result objectForKey:@"creditCardNumber"]!=nil)
+                creditCardInfo.cardNumber=[result objectForKey:@"creditCardNumber"];
+            
+            if([result objectForKey:@"expMonth"]!=nil)
+                creditCardInfo.expiryMonth=[[result objectForKey:@"expMonth"] integerValue];
+            
+            if([result objectForKey:@"expYear"]!=nil)
+                creditCardInfo.expiryYear=[[result objectForKey:@"expYear"] integerValue];
+            
+            isChecked=([[result objectForKey:@"showProfile"] isEqualToString:@"ON"]?1:0);
+            
+            if([result objectForKey:@"description"]!=nil)
+                [dictResult setObject:[result objectForKey:@"description"] forKey:@"description"];
+            
+            if([result objectForKey:@"gender"]!=nil)
+                strGender=[[NSString stringWithFormat:@"%@",[result objectForKey:@"gender"]] retain];
+            [dictResult setObject:strGender forKey:@"gender"];
+            
+            strDOB= [[NSString stringWithFormat:@"%@",
+                      [result objectForKey:@"dateofbirth"]] retain];
+            
+            intOrientation=[arrOrientation indexOfObject:[result objectForKey:@"orientation"]]+1;
+            
+            if([[result objectForKey:@"status"] isEqualToString:@"Singles/Friends"])
+            {
+                isSelectedSingles=YES;
+                isSelectedFriends=YES;
+            }
+            else if([result objectForKey:@"status"]!=nil)
+            {
+                isSelectedFriends=[[result objectForKey:@"status"] isEqualToString:@"Friends"];
+                isSelectedSingles=[[result objectForKey:@"status"] isEqualToString:@"Singles"];
+            }
+            
+            NSLog(@"Result \n %@",dictResult);
+            
+            UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+            [tblView reloadData];
+            
         }
         else
         {
-            [dictResult release];
-            dictResult=nil;
-            dictResult=[[NSMutableDictionary alloc] init];
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:111222333];
         }
-        
-        [dictResult setObject:[result objectForKey:@"bartsyLogin"] forKey:@"username"];
-        [dictResult setObject:[result objectForKey:@"bartsyPassword"] forKey:@"password"];
-        [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
-        [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
-        
-        creditCardInfo=[[CardIOCreditCardInfo alloc]init];
-        if([result objectForKey:@"creditCardNumber"]!=nil)
-        creditCardInfo.cardNumber=[result objectForKey:@"creditCardNumber"];
-        
-        if([result objectForKey:@"expMonth"]!=nil)
-            creditCardInfo.expiryMonth=[[result objectForKey:@"expMonth"] integerValue];
-        
-        if([result objectForKey:@"expYear"]!=nil)
-            creditCardInfo.expiryYear=[[result objectForKey:@"expYear"] integerValue];
-
-        isChecked=([[result objectForKey:@"showProfile"] isEqualToString:@"ON"]?1:0);
-        
-        if([result objectForKey:@"description"]!=nil)
-        [dictResult setObject:[result objectForKey:@"description"] forKey:@"description"];
-        
-        if([result objectForKey:@"gender"]!=nil)
-            strGender=[[NSString stringWithFormat:@"%@",[result objectForKey:@"gender"]] retain];
-        [dictResult setObject:strGender forKey:@"gender"];
-        
-        strDOB= [[NSString stringWithFormat:@"%@",
-                  [result objectForKey:@"dateofbirth"]] retain];
-        
-        intOrientation=[arrOrientation indexOfObject:[result objectForKey:@"orientation"]]+1;
-
-        if([[result objectForKey:@"status"] isEqualToString:@"Singles/Friends"])
-        {
-            isSelectedSingles=YES;
-            isSelectedFriends=YES;
-        }
-        else if([result objectForKey:@"status"]!=nil)
-        {
-            isSelectedFriends=[[result objectForKey:@"status"] isEqualToString:@"Friends"];
-            isSelectedSingles=[[result objectForKey:@"status"] isEqualToString:@"Singles"];
-        }
-            
-        NSLog(@"Result \n %@",dictResult);
-        
-        UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
-        [tblView reloadData];
         
     }
     else if(isRequestForSavingProfile==NO&&isProfileExistsCheck==NO)

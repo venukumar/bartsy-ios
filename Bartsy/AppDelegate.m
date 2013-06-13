@@ -380,6 +380,7 @@
 	
 	
 }
+
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     UIDevice *device = [UIDevice currentDevice];
@@ -549,7 +550,7 @@
 -(void)updateOrderStatusForaOfferedDrink:(NSString*)strStatus
 {
     //Updating the Order Status by the Receiver
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateSenderDrink",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateOfferedDrinkStatus",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",[dictOfferedDrikDetails objectForKey:@"orderId"],@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];

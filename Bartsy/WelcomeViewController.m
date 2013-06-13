@@ -235,7 +235,11 @@
     [self hideProgressView:nil];
     
     UIImageView *imgViewBox=(UIImageView*)[self.view viewWithTag:143];
-    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
+    if([[result objectForKey:@"errorCode"] integerValue]!=0)
+    {
+        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+    }
+    else if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
     {
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"Orders"];
         [[NSUserDefaults standardUserDefaults]synchronize];

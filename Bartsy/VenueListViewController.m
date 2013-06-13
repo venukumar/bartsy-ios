@@ -317,7 +317,11 @@
     
     [self hideProgressView:nil];
     
-    if(isRequestForCheckIn==NO)
+    if([result isKindOfClass:[NSDictionary class]]&&[[result objectForKey:@"errorCode"] integerValue]!=0)
+    {
+        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+    }
+    else if(isRequestForCheckIn==NO)
     {
         [arrVenueList removeAllObjects];
         [arrVenueList addObjectsFromArray:result];
@@ -330,25 +334,17 @@
     }
     else
     {
-        if([[result objectForKey:@"errorCode"] integerValue]==0)
-        {
-            isRequestForCheckIn=NO;
-            appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
-            appDelegate.intOrderCount=0;
-            [[NSUserDefaults standardUserDefaults]setObject:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
-            [[NSUserDefaults standardUserDefaults]setObject:[arrVenueList objectAtIndex:intIndex] forKey:@"VenueDetails"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            [appDelegate startTimerToCheckHeartBeat];
-            HomeViewController *obj=[[HomeViewController alloc]init];
-            obj.dictVenue=[arrVenueList objectAtIndex:intIndex];
-            [self.navigationController pushViewController:obj animated:YES];
-            [obj release];
-        }
-        else
-        {
-            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        }
-        
+        isRequestForCheckIn=NO;
+        appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+        appDelegate.intOrderCount=0;
+        [[NSUserDefaults standardUserDefaults]setObject:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+        [[NSUserDefaults standardUserDefaults]setObject:[arrVenueList objectAtIndex:intIndex] forKey:@"VenueDetails"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [appDelegate startTimerToCheckHeartBeat];
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        obj.dictVenue=[arrVenueList objectAtIndex:intIndex];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
     }
     
 }
