@@ -31,6 +31,10 @@
 {
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
+    
+    self.sharedController=[SharedController sharedController];
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    [self.sharedController getVenueListWithDelegate:self];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -82,9 +86,7 @@
         tblView.frame=CGRectMake(0, 241, 320, 180+108);
     }
     
-    self.sharedController=[SharedController sharedController];
-    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-    [self.sharedController getVenueListWithDelegate:self];
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
