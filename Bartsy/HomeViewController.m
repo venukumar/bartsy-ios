@@ -818,21 +818,30 @@
     }
     else if (isSelectedForPastOrders == YES)
     {
-        UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
-        lblItemName.backgroundColor=[UIColor clearColor];
-        lblItemName.textAlignment = NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblItemName];
+        if ([arrPastOrders count]) {
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            lblItemName.backgroundColor=[UIColor clearColor];
+            lblItemName.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblItemName];
+            
+            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
+            lbldescription.backgroundColor=[UIColor clearColor];
+            lbldescription.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lbldescription];
+            NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+            
+            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, -5, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            lblTotalPrice.backgroundColor=[UIColor clearColor];
+            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblTotalPrice];
+
+        }
+        else
+        {
+            cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some\nGo to menu for Past Orders...";
+            cell.textLabel.numberOfLines=5;
+        }
         
-        UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
-        lbldescription.backgroundColor=[UIColor clearColor];
-        lbldescription.textAlignment = NSTextAlignmentLeft;
-        [cell.contentView addSubview:lbldescription];
-        NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
-        
-        UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, -5, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
-        lblTotalPrice.backgroundColor=[UIColor clearColor];
-        lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblTotalPrice];
     }
     else
     {

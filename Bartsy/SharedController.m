@@ -688,8 +688,10 @@ static SharedController *sharedController;
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
     if(date!=nil&&[date length])
     [dictCheckIn setObject:date forKey:@"date"];
-    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
-    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    [dictCheckIn setObject:strbartsyId forKey:@"bartsyId"];
+    if (strVenueId!=nil) {
+        [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    }
 
     NSLog(@"dict is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];

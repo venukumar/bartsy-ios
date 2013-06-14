@@ -21,6 +21,7 @@
 }
 @end
 
+
 @implementation MyRewardsViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -31,6 +32,7 @@
     }
     return self;
 }
+#pragma mark- View Life cycle
 
 - (void)viewDidLoad
 {
@@ -123,11 +125,15 @@
     NSLog(@"text is %@,%@,%@",txtFldStartIndex.text,txtFldResults.text,lblDateValue.text);
 
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-    [self.sharedController getPastOrderWithVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:lblDateValue.text delegate:self];
+    [self.sharedController getPastOrderWithVenueWithId:nil bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:lblDateValue.text delegate:self];
     
 }
+#pragma mark- Shared controller delegates
+
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
+    [self hideProgressView:nil];
+
     if ([[result objectForKey:@"errorCode"] integerValue]==0)
     {
         PastOrdersViewController *obj = [[PastOrdersViewController alloc] init];
@@ -142,10 +148,12 @@
     [self hideProgressView:nil];
 
 }
+#pragma mark- Showing Picker view 
+
 -(void)designPickerView:(NSString*)type
 {
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationDuration:0.2];
     customPickerView.center =CGPointMake(160,700);
     [UIView commitAnimations];
     

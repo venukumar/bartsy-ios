@@ -85,7 +85,7 @@
     
     UIButton *btnVenue=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(5, 60, 260, 40) tag:0 selector:@selector(btnCheckIn_TouchUpInside) target:self];
     [self.view addSubview:btnVenue];
-    
+/*
     UIImageView *imgViewCheckInBox2=[self createImageViewWithImage:[UIImage imageNamed:@"box.png"] frame:CGRectMake(5, 110, 310, 44) tag:0];
     [self.view addSubview:imgViewCheckInBox2];
     
@@ -141,7 +141,18 @@
     UILabel *lblComment=[self createLabelWithTitle:@"Send us praise,comments or suggestions" frame:CGRectMake(55, 0, 280, 40) tag:0 font:[UIFont systemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
     [imgViewCheckInBox4 addSubview:lblComment];
     
+*/
     
+    UIButton *btnNearBy=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic1.png"] frame:CGRectMake(90, 120, 140, 85) tag:222 selector:@selector(btn_TouchUpInside:) target:self];
+    [self.view addSubview:btnNearBy];
+    
+    UIButton *btnMyRewards=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic4.png"] frame:CGRectMake(90, 220, 140, 85) tag:444 selector:@selector(btn_TouchUpInside:) target:self];
+    [self.view addSubview:btnMyRewards];
+    
+    UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic3.png"] frame:CGRectMake(90, 320, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
+    [self.view addSubview:btnProfile];
+    
+
     UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
     lblCopyRight.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblCopyRight];
