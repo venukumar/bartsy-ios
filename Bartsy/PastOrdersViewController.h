@@ -11,7 +11,8 @@
 
 @interface PastOrdersViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>
 {
-    
+    NSString *strDate;
 }
 @property(nonatomic,retain)NSMutableArray *arrayForPastOrders;
+@property(nonatomic,retain)NSString *strDate;
 @end

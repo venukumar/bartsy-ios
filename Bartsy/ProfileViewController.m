@@ -77,14 +77,14 @@
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         if (screenBounds.size.height == 568)
         {
-            if(isCmgFromGetStarted==YES)
+            if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
             tblView.frame=CGRectMake(0, 40, 320,528);
             else
             tblView.frame=CGRectMake(0, 40, 320,528-25);
         }
         else
         {
-            if(isCmgFromGetStarted==YES)
+            if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
                 tblView.frame=CGRectMake(0, 40, 320, 420);
             else
                 tblView.frame=CGRectMake(0, 15, 320, 445);

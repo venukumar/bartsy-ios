@@ -12,7 +12,7 @@
 @end
 
 @implementation PastOrdersViewController
-@synthesize arrayForPastOrders;
+@synthesize arrayForPastOrders,strDate;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -25,7 +25,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"My Orders";
+    
+        UIBarButtonItem *btnBack=[[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(btnCancel_TouchUpInside)];
+        self.navigationItem.backBarButtonItem=btnBack;
+    
+    self.navigationItem.title=[NSString stringWithFormat:@"Displaying orders for %@",strDate];
+    
+    NSMutableDictionary *newAttributes = [[NSMutableDictionary alloc] init];
+    [newAttributes setObject:[UIFont boldSystemFontOfSize:13.5] forKey:UITextAttributeFont];
+    [self.navigationController.navigationBar setTitleTextAttributes:newAttributes];
+    
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
     
@@ -36,6 +45,11 @@
     [self.view addSubview:tblView];
 
 	// Do any additional setup after loading the view.
+}
+
+-(void)btnCancel_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated

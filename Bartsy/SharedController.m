@@ -235,11 +235,11 @@ static SharedController *sharedController;
     
     
     
-    if(strFbUserName!=nil&&[strFbUserName length])
+    if(strFbID!=nil&&[strFbID length])
     {
-        [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
-        if(strFbID!=nil&&[strFbID length])
         [dictProfile setObject:[NSString stringWithFormat:@" %@",strFbID] forKey:@"facebookId"];
+        if(strFbUserName!=nil&&[strFbUserName length])
+        [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
         
         [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:strFbUserName,@"facebookUserName",strFbID,@"facebookId", nil] forKey:@"LoginDetails"];
 

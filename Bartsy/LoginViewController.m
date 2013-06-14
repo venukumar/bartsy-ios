@@ -233,8 +233,9 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     }    
     
     [self hideProgressView:nil];
-    
+    appDelegate.isLoginForFB=NO;
     ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+    profileScreen.isCmgFromGetStarted=NO;
     profileScreen.auth=auth;
     [self.navigationController pushViewController:profileScreen animated:YES];
     [profileScreen release];

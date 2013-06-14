@@ -1002,15 +1002,15 @@
             
             for (int i=0; i<[arrSubSectionOrders count]; i++)
             {
-                NSDictionary *dictTemp=[arrSubSectionOrders objectAtIndex:i];
+                NSDictionary *dictTempOrder=[arrSubSectionOrders objectAtIndex:i];
                 
-                floatPrice+=[[dictTemp objectForKey:@"basePrice"] floatValue];
-                floatTotalPrice+=[[dictTemp objectForKey:@"totalPrice"]floatValue];
-                floatTipTaxFee+=[[dictTemp objectForKey:@"totalPrice"]floatValue]-[[dictTemp objectForKey:@"basePrice"]floatValue];
+                floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
+                floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
+                floatTipTaxFee+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
                 
                 UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
                 lblDescription1.font = [UIFont boldSystemFontOfSize:14];
-                lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTemp objectForKey:@"itemName"]];
+                lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
                 lblDescription1.tag = 1234234567;
                 lblDescription1.numberOfLines = 1;
                 lblDescription1.backgroundColor = [UIColor clearColor];
@@ -1021,7 +1021,7 @@
                 
                 UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 21+(i*70), 245, 40)];
                 lblDescription2.font = [UIFont systemFontOfSize:14];
-                lblDescription2.text = [NSString stringWithFormat:@"%@",[dictTemp objectForKey:@"description"]];
+                lblDescription2.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"description"]];
                 lblDescription2.numberOfLines = 2;
                 lblDescription2.tag = 12347890;
                 lblDescription2.backgroundColor = [UIColor clearColor];
@@ -1032,7 +1032,7 @@
                 
                 UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
                 lblPrice.font = [UIFont systemFontOfSize:12];
-                lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTemp objectForKey:@"basePrice"] floatValue]];
+                lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
                 lblPrice.numberOfLines = 1;
                 lblPrice.backgroundColor = [UIColor clearColor];
                 lblPrice.textColor = [UIColor blackColor] ;
@@ -1170,9 +1170,9 @@
         UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,10,60,60)];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
         NSLog(@"URL is %@",strURL);
-        [imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+        //[imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
         imgViewPhoto.tag=143225;
-        //[imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
+        [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
         [viewHeaderPhoto addSubview:imgViewPhoto];
         [imgViewPhoto release];
         
@@ -1336,7 +1336,7 @@
         [btn20 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn20];
         
-        UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(113, 7, 30, 30)];
+        UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(118, 7, 30, 30)];
         lbl15.font = [UIFont boldSystemFontOfSize:12];
         lbl15.text = @"15%";
         lbl15.backgroundColor = [UIColor clearColor];
@@ -1346,13 +1346,13 @@
         [lbl15 release];
         
         UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn30.frame = CGRectMake(143,10,23,23);
+        btn30.frame = CGRectMake(148,10,23,23);
         [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
         btn30.tag = 20;
         [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn30];
         
-        UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(170, 7, 30, 30)];
+        UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(180, 7, 30, 30)];
         lbl20.font = [UIFont boldSystemFontOfSize:12];
         lbl20.text = @"20%";
         lbl20.backgroundColor = [UIColor clearColor];
@@ -1362,11 +1362,11 @@
         [lbl20 release];
         
         UIButton *btn40 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn40.frame = CGRectMake(200,10,23,23);
+        btn40.frame = CGRectMake(210,10,23,23);
         [btn40 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
         btn40.tag = 40;
         [btn40 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-        [viewTip addSubview:btn40];
+        //[viewTip addSubview:btn40];
         
         UITextField *txtFieldTip = [[UITextField alloc] initWithFrame:CGRectMake(223,7, 40, 30)];
         [txtFieldTip setBackground:[UIImage imageNamed:@"txt-box1.png"]];
@@ -1376,7 +1376,7 @@
         txtFieldTip.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         txtFieldTip.textAlignment = NSTextAlignmentCenter;
         txtFieldTip.autocorrectionType = UITextAutocorrectionTypeNo;
-        [viewTip addSubview:txtFieldTip];
+        //[viewTip addSubview:txtFieldTip];
         [txtFieldTip release];
         
         UIButton *btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -1424,7 +1424,8 @@
     UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];
     NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeopleSelectedForDrink objectForKey:@"userImagePath"]];
     NSLog(@"URL is %@",strURL);
-    [imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+    //[imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+    [imgView setImageWithURL:[NSURL URLWithString:strURL]];
     UILabel *lblName=(UILabel*)[self.view viewWithTag:111222333];
     lblName.text=[dictPeopleSelectedForDrink objectForKey:@"nickName"];
 

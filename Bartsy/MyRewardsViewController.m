@@ -37,7 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"My Rewards";
+    self.title = @"Past Orders";
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
 
@@ -69,24 +69,24 @@
     UILabel *lblStartIndex = [self createLabelWithTitle:@"Start Index:" frame:CGRectMake(50, 70, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
     lblStartIndex.backgroundColor = [UIColor clearColor];
     lblStartIndex.textAlignment = NSTextAlignmentLeft;
-    [scrollView addSubview:lblStartIndex];
+    //[scrollView addSubview:lblStartIndex];
     
     UITextField *txtFldStartIndex = [self createTextFieldWithFrame:CGRectMake(155, 75, 150, 30) tag:666 delegate:self];
     txtFldStartIndex.keyboardType = UIKeyboardTypeNumberPad;
     txtFldStartIndex.font = [UIFont systemFontOfSize:15];
-    [scrollView addSubview:txtFldStartIndex];
+    //[scrollView addSubview:txtFldStartIndex];
 
     UILabel *lblNoofResults = [self createLabelWithTitle:@"No of results:" frame:CGRectMake(50, 110, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
     lblNoofResults.backgroundColor = [UIColor clearColor];
     lblNoofResults.textAlignment = NSTextAlignmentLeft;
-    [scrollView addSubview:lblNoofResults];
+    //[scrollView addSubview:lblNoofResults];
     
     UITextField *txtFldResults = [self createTextFieldWithFrame:CGRectMake(155, 115, 150, 30) tag:777 delegate:self];
     txtFldResults.keyboardType = UIKeyboardTypeNumberPad;
     txtFldResults.font = [UIFont systemFontOfSize:15];
-    [scrollView addSubview:txtFldResults];
+   // [scrollView addSubview:txtFldResults];
 
-    UIButton *btnContinue=[self createUIButtonWithTitle:@"Save&Continue" image:nil frame:CGRectMake(90, 180, 150, 40) tag:0 selector:@selector(btnContinue_TouchUpInside) target:self];
+    UIButton *btnContinue=[self createUIButtonWithTitle:@"Save&Continue" image:nil frame:CGRectMake(90, 130, 150, 40) tag:0 selector:@selector(btnContinue_TouchUpInside) target:self];
     btnContinue.backgroundColor=[UIColor darkGrayColor];
     [scrollView addSubview:btnContinue];
 
@@ -112,6 +112,7 @@
    UILabel *lblDateValue = (UILabel*)[self.view viewWithTag:225];
     UITextField *txtFldStartIndex = (UITextField*)[self.view viewWithTag:666];
     UITextField *txtFldResults = (UITextField*)[self.view viewWithTag:777];
+    /*
     if ([txtFldStartIndex.text length] == 0)
     {
         [self.sharedController showAlertWithTitle:@"Error" message:@"Please enter Start index" delegate:self];
@@ -123,7 +124,7 @@
         return;
     }
     NSLog(@"text is %@,%@,%@",txtFldStartIndex.text,txtFldResults.text,lblDateValue.text);
-
+*/
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     [self.sharedController getPastOrderWithVenueWithId:nil bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:lblDateValue.text delegate:self];
     
@@ -133,14 +134,20 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
+    UILabel *lblDateValue = (UILabel*)[self.view viewWithTag:225];
 
     if ([[result objectForKey:@"errorCode"] integerValue]==0)
     {
         PastOrdersViewController *obj = [[PastOrdersViewController alloc] init];
         obj.arrayForPastOrders = [result objectForKey:@"pastOrders"];
+        obj.strDate=lblDateValue.text;
         [self.navigationController pushViewController:obj animated:YES];
         [self hideProgressView:nil];
         [obj release];
+    }
+    else
+    {
+        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error;
