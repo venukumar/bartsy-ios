@@ -13,7 +13,7 @@
 #import "RearViewController.h"
 #import "RevealController.h"
 #import "Constants.h"
-
+#import "PeopleViewController.h"
 
 
 
@@ -36,7 +36,7 @@
 @end
 
 @implementation HomeViewController
-@synthesize dictVenue;
+@synthesize dictVenue,dictPeopleSelectedForDrink;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -140,7 +140,7 @@
     //optional pre init, so the ZooZ screen will upload immediatly, you can skip this call
     //    ZooZ * zooz = [ZooZ sharedInstance];
     //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
-    
+    [self getPeopleList];
 }
 
 
@@ -260,8 +260,11 @@
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
-    NSString *strBartsyId=@"2342352565346";
-    
+    NSString *strBartsyId;
+    if([dictPeopleSelectedForDrink count])
+       strBartsyId=[NSString stringWithFormat:@"%@",[dictPeopleSelectedForDrink objectForKey:@"bartsyId"]];
+    else
+    strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
     
     [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] receiverBartsyId:strBartsyId delegate:self];
 }
@@ -321,6 +324,7 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
     [self hideProgressView:nil];
+    
     
     if([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
@@ -572,6 +576,50 @@
     
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
+}
+
+-(void)getPeopleList
+{
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/checkedInUsersList",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[dictVenue objectForKey:@"venueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             [arrPeople removeAllObjects];
+             [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+
+    
+    [url release];
+    [request release];
 }
 
 #pragma mark - Table view Datasource
@@ -1051,9 +1099,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+        
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if(isSelectedForDrinks)
     {
+        if(dictPeopleSelectedForDrink!=nil)
+        {
+            [dictPeopleSelectedForDrink release];
+            dictPeopleSelectedForDrink=nil;
+        }
         id object=[arrMenu objectAtIndex:indexPath.section-1];
         NSDictionary *dict;
         if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
@@ -1081,7 +1135,7 @@
         viewB.tag=333;
         [viewA addSubview:viewB];
         
-        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 328)];
+        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 20, 295, 358)];
         viewC.layer.cornerRadius = 2;
         viewC.layer.borderWidth = 2;
         viewC.backgroundColor = [UIColor redColor];
@@ -1090,7 +1144,7 @@
         viewC.tag=444;
         [viewB addSubview:viewC];
         
-        UIView *viewHeaderPhoto = [[UIView alloc]initWithFrame:CGRectMake(11, 5, 268, 60)];
+        UIView *viewHeaderPhoto = [[UIView alloc]initWithFrame:CGRectMake(11, 5, 268, 90)];
         viewHeaderPhoto.backgroundColor = [UIColor blackColor];
         viewHeaderPhoto.layer.cornerRadius = 6;
         viewHeaderPhoto.tag = 11111;
@@ -1113,7 +1167,7 @@
         }
         
         
-        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,5,50,50)];
+        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,10,60,60)];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
         NSLog(@"URL is %@",strURL);
         [imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
@@ -1122,6 +1176,26 @@
         [viewHeaderPhoto addSubview:imgViewPhoto];
         [imgViewPhoto release];
         
+        NSLog(@"nickname is %@",[dictTemp objectForKey:@"nickname"]);
+        
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(10, 72, 120, 18)];
+        lblName.text=[dictTemp objectForKey:@"nickName"];
+        lblName.font=[UIFont systemFontOfSize:10];
+        lblName.tag=111222333;
+        lblName.backgroundColor=[UIColor clearColor];
+        lblName.textColor=[UIColor whiteColor];
+        [viewHeaderPhoto addSubview:lblName];
+        [lblName release];
+        
+        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(85, 10, 160, 60)];
+        lblMsg.text=@"Click on photo if you would like to send drink to other people";
+        lblMsg.font=[UIFont systemFontOfSize:15];
+        lblMsg.numberOfLines=3;
+        lblMsg.backgroundColor=[UIColor clearColor];
+        lblMsg.textColor=[UIColor whiteColor];
+        [viewHeaderPhoto addSubview:lblMsg];
+        [lblMsg release];
+
         
         UIButton *btnPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
         btnPhoto.frame = CGRectMake(10,5,105,50);
@@ -1132,7 +1206,7 @@
         [viewHeaderPhoto release];
 
         
-        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 70, 268, 45)];
+        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 100, 268, 45)];
         viewHeader.backgroundColor = [UIColor blackColor];
         viewHeader.layer.cornerRadius = 6;
         viewHeader.tag = 555;
@@ -1149,7 +1223,7 @@
         [viewHeader addSubview:lblTitle];
         [lblTitle release];
         
-        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 123, 200, 100)];
+        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 153, 200, 100)];
         viewDetail.backgroundColor = [UIColor whiteColor];
         viewDetail.layer.borderWidth = 1;
         viewDetail.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1190,7 +1264,7 @@
         [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         [viewDetail addSubview:btnCustomise];
         
-        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 123, 63, 100)];
+        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 153, 63, 100)];
         viewPrice.backgroundColor = [UIColor whiteColor];
         viewPrice.layer.borderWidth = 1;
         viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1218,7 +1292,7 @@
         //    [viewPrice addSubview:lblPriceOff];
         //    [lblPriceOff release];
         
-        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 231, 268, 45)];
+        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 261, 268, 45)];
         viewTip.backgroundColor = [UIColor whiteColor];
         viewTip.layer.borderWidth = 1;
         viewTip.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1306,7 +1380,7 @@
         [txtFieldTip release];
         
         UIButton *btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnCancel.frame = CGRectMake(148,287,120,30);
+        btnCancel.frame = CGRectMake(148,317,120,30);
         btnCancel.titleLabel.textColor = [UIColor whiteColor];
         [btnCancel setTitle:@"Cancel" forState:UIControlStateNormal];
         btnCancel.titleLabel.font = [UIFont boldSystemFontOfSize:12];
@@ -1315,7 +1389,7 @@
         [viewC addSubview:btnCancel];
         
         UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnOrder.frame = CGRectMake(20,287,115,30);
+        btnOrder.frame = CGRectMake(20,317,115,30);
         [btnOrder setTitle:@"Order" forState:UIControlStateNormal];
         btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
         btnOrder.titleLabel.textColor = [UIColor whiteColor];
@@ -1332,6 +1406,28 @@
 
 -(void)btnPhoto_TouchUpInside
 {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"PeopleSelected" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedPeople:) name:@"PeopleSelected" object:nil];
+    
+    PeopleViewController *obj=[[PeopleViewController alloc]init];
+    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:obj];
+    obj.arrPeople=arrPeople;
+    [self presentModalViewController:nav animated:YES];
+    [nav release];
+    [obj release];
+    
+}
+
+-(void)selectedPeople:(NSNotification*)notification
+{
+    dictPeopleSelectedForDrink=[[NSDictionary alloc]initWithDictionary:notification.object];
+    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeopleSelectedForDrink objectForKey:@"userImagePath"]];
+    NSLog(@"URL is %@",strURL);
+    [imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+    UILabel *lblName=(UILabel*)[self.view viewWithTag:111222333];
+    lblName.text=[dictPeopleSelectedForDrink objectForKey:@"nickName"];
+
     
 }
 

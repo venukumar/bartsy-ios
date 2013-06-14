@@ -44,6 +44,7 @@
 		E04106BC172AB4E6009F1B1E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BB172AB4E6009F1B1E /* Accounts.framework */; };
 		E04106BE172AB4EB009F1B1E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BD172AB4EB009F1B1E /* Security.framework */; };
 		E04106C0172AB4F7009F1B1E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BF172AB4F7009F1B1E /* Social.framework */; };
+		E0417106176B5F3D00FBA233 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0417105176B5F3D00FBA233 /* PeopleViewController.m */; };
 		E05F8083175CB16600937E80 /* radio_btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = E05F8081175CB16600937E80 /* radio_btn_selected.png */; };
 		E05F8084175CB16600937E80 /* radio_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = E05F8082175CB16600937E80 /* radio_btn.png */; };
 		E05F8087175D138B00937E80 /* MixerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E05F8086175D138A00937E80 /* MixerViewController.m */; };
@@ -237,6 +238,8 @@
 		E04106BB172AB4E6009F1B1E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		E04106BD172AB4EB009F1B1E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		E04106BF172AB4F7009F1B1E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		E0417104176B5F3D00FBA233 /* PeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleViewController.h; sourceTree = "<group>"; };
+		E0417105176B5F3D00FBA233 /* PeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleViewController.m; sourceTree = "<group>"; };
 		E05F8081175CB16600937E80 /* radio_btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_btn_selected.png; sourceTree = "<group>"; };
 		E05F8082175CB16600937E80 /* radio_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_btn.png; sourceTree = "<group>"; };
 		E05F8085175D138900937E80 /* MixerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixerViewController.h; sourceTree = "<group>"; };
@@ -986,6 +989,8 @@
 				E065D8AE1768BC0D00DE7502 /* MyRewardsViewController.m */,
 				CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */,
 				CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */,
+				E0417104176B5F3D00FBA233 /* PeopleViewController.h */,
+				E0417105176B5F3D00FBA233 /* PeopleViewController.m */,
 				CBFDEE201768C95600E9DB56 /* New Group */,
 			);
 			name = View;
@@ -1278,6 +1283,7 @@
 				E05F8087175D138B00937E80 /* MixerViewController.m in Sources */,
 				E065D8B01768BC0D00DE7502 /* MyRewardsViewController.m in Sources */,
 				CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */,
+				E0417106176B5F3D00FBA233 /* PeopleViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

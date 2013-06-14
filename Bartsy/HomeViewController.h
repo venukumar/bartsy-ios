@@ -21,7 +21,9 @@
     NSArray *arrStatus;
     NSMutableArray *arrBundledOrders;
     NSMutableDictionary *dictTemp;
+    NSDictionary *dictPeopleSelectedForDrink;
 }
+@property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;
 @property(nonatomic,retain)NSDictionary *dictVenue;
 -(void)orderTheDrink;
 -(void)reloadDataPeopleAndOrderCount;
