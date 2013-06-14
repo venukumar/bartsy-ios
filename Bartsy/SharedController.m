@@ -212,7 +212,7 @@ static SharedController *sharedController;
 }
  */
 
--(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription delegate:(id)aDelegate
+-(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName delegate:(id)aDelegate
 {
     
     self.delegate=aDelegate;
@@ -224,8 +224,13 @@ static SharedController *sharedController;
     NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] init];
     //WithObjectsAndKeys:strBartsyLogin,@"barstyLogin",strUserName,@"facebookUserName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
 
+    if(strBartsyLogin!=nil&&[strBartsyLogin length])
     [dictProfile setObject:strBartsyLogin forKey:@"bartsyLogin"];
+    
+    if(strBartsyPassword!=nil&&[strBartsyPassword length])
     [dictProfile setObject:strBartsyPassword forKey:@"bartsyPassword"];
+    
+    if(strFbUserName!=nil&&[strFbUserName length])
     [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
    
     if(strFbID!=nil&&[strFbID length])
@@ -233,6 +238,9 @@ static SharedController *sharedController;
     
     if(strGoogleId!=nil&&[strGoogleId length])
     [dictProfile setObject:strGoogleId forKey:@"googleId"];
+    
+    if(strGoogleId!=nil&&[strGoogleId length])
+        [dictProfile setObject:strGoogleId forKey:@"googleId"];
     
     [dictProfile setObject:strGender forKey:@"gender"];
     [dictProfile setObject:strNickName forKey:@"nickname"];

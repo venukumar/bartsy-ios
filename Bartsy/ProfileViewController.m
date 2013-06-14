@@ -64,7 +64,7 @@
         UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
         lblHeader.backgroundColor=[UIColor blackColor];
         lblHeader.textAlignment=NSTextAlignmentCenter;
-        [self.view addSubview:lblHeader];
+        
         
         UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 420) style:UITableViewStyleGrouped];
         tblView.backgroundColor=[UIColor clearColor];
@@ -73,8 +73,13 @@
         tblView.delegate=self;
         tblView.tag=143225;
         [self.view addSubview:tblView];
+        
+        if(!isCmgFromGetStarted)
+            tblView.frame=CGRectMake(0, 15, 320, 445);
+        
         [tblView release];
         
+        [self.view addSubview:lblHeader];
         
         arrGender=[[NSArray alloc]initWithObjects:@"Female",@"Male", nil];
         
@@ -149,7 +154,7 @@
         
     }
     
-       
+    
     
 }
 
@@ -160,7 +165,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;    // fixed font style. use custom view (UILabel) if you want something different
 {
-    if(section==0)
+    if(section==0&&isCmgFromGetStarted)
     {
         return @"Account Information*";
     }
@@ -172,9 +177,13 @@
     {
         return @"Payment Information";
     }
-    else
+    else if(section==3)
     {
         return @"See and be seen";
+    }
+    else
+    {
+        return nil;
     }
 }
 
@@ -220,7 +229,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section==0)
+    if(indexPath.section==0&&isCmgFromGetStarted)
     {
         return 85;
     }
@@ -232,12 +241,16 @@
     {
         return 50;
     }
-    else
+    else if(indexPath.section==3)
     {
         if(isChecked)
         return 300+80;
         else
             return 50;
+    }
+    else
+    {
+        return 0;
     }
 }
 
@@ -247,7 +260,7 @@
     
     cell.tag=indexPath.section+1;
 
-    if(indexPath.section==0)
+    if(indexPath.section==0&&isCmgFromGetStarted)
     {
         UILabel *lblEmailId=[self createLabelWithTitle:@"EmailId" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblEmailId.textAlignment=NSTextAlignmentLeft;
@@ -285,25 +298,19 @@
     {
         NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=100&height=100",[dictResult objectForKey:@"id"]];
         NSLog(@"Pic URL is %@",strURL);
+
         NSURL *url=[[NSURL alloc]initWithString:strURL];
-        
-        UIImage *imgProfiePic=imgViewProfilePicture.image;
         
         imgViewProfilePicture=[self createImageViewWithImage:nil frame:CGRectMake(5, 10, 100, 100) tag:0];
         
-//        if(imgProfiePic!=nil&&imgViewProfilePicture.image!=[UIImage imageNamed:@"DefaultUser.png"])
-//        {
-//            [imgViewProfilePicture setImage:imgProfiePic];
-//        }
-//        else
         
         if([[dictResult objectForKey:@"url"] length])
         {
-            [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dictResult objectForKey:@"url"]]]]];
+            [self setImageWithURL:[NSURL URLWithString:[dictResult objectForKey:@"url"]]];
         }
         else if(appDelegate.isLoginForFB&&[[NSUserDefaults standardUserDefaults]objectForKey:@"GooglePlusAuth"]==nil)
         {
-            [imgViewProfilePicture setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:url]]];
+            [self setImageWithURL:url];
         }
         else
             [imgViewProfilePicture setImage:[UIImage imageNamed:@"DefaultUser.png"]];
@@ -392,7 +399,7 @@
         
         
     }
-    else
+    else if(indexPath.section==3)
     {
         UILabel *lblCheck=[self createLabelWithTitle:@"Check to see others:" frame:CGRectMake(10, 10, 150, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
         lblCheck.textAlignment=NSTextAlignmentLeft;
@@ -907,8 +914,12 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];    
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+    if(isCmgFromGetStarted)
     [tblView setContentOffset:CGPointMake(0,400) animated:YES];
+    else
+        [tblView setContentOffset:CGPointMake(0,315) animated:YES];
+
     
     if([textView.text isEqualToString:@"Enter something about you that you'd like others to see while you're checked in at a venue"])
     {
@@ -961,33 +972,27 @@
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     intTextFieldTagValue=textField.tag;
     
-    if(textField.tag==444)
+    if(textField.tag==444&&isCmgFromGetStarted)
     [tblView setContentOffset:CGPointMake(0,100) animated:YES];
+   
 
     
-    if(textField.tag==666)    {
+    if(textField.tag==666)
+    {
         [textField resignFirstResponder];
+        if(isCmgFromGetStarted)
         [tblView setContentOffset:CGPointMake(0,480) animated:YES];
+        else
+        [tblView setContentOffset:CGPointMake(0,480-85) animated:YES];
         [self showPickerView];
 
     }
-    /*
-    else if(textField.tag==888||textField.tag==1110)
-    {
-        NSInteger index=intTextFieldTagValue/111;
-        [scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
-    }
-     */
+    
     
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField*)textField
 {
-//    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
-//    scrollView.contentSize=CGSizeMake(320, 405);
-//    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-//    scrollView.scrollEnabled=NO;
-    
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     [tblView setContentOffset:CGPointMake(0,0) animated:YES];
     [textField resignFirstResponder];
@@ -1070,9 +1075,6 @@
         [customPickerView release];
         customPickerView=nil;
     }
-    NSInteger index=intTextFieldTagValue/111;
-    
-    //[scrollView setContentOffset:CGPointMake(0,(index-2)*30) animated:YES];
 
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.3];
@@ -1340,25 +1342,57 @@
     else if(isSelectedSingles||isSelectedFriends)
         strStatus=[NSString stringWithFormat:@"%@",(isSelectedFriends==1?@"Friends":@"Singles")];
 
+    BOOL isValidationSucced=NO;
     
-    if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
+    if(isCmgFromGetStarted==YES)
     {
-        if([self validemail:txtFldEmailId.text])
+        if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
         {
-            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"id"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text delegate:self];
-            
-            //[sharedController saveProfileInfoWithId:txtFldPassword.text name:@"" loginType:@"0" gender:strGender userName:txtFldEmailId.text profileImage:imgViewProfilePicture.image firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB orientation:strOrientation status:strStatus description:txtViewDescription.text nickName:txtFldNickName.text emailId:txtFldEmailId.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] delegate:self];
+            if([self validemail:txtFldEmailId.text])
+            {
+                isValidationSucced=YES;
+            }
+            else
+            {
+                [self createAlertViewWithTitle:@"" message:@"Email is not valid" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+                return;
+            }
         }
         else
         {
-            [self createAlertViewWithTitle:@"" message:@"Email is not valid" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+            [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+            return;
         }
+        
+    }
+    
+    if([txtFldNickName.text length])
+    {
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"id"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"username"] delegate:self];
             
     }
-    else
-        [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     
+    
+}
+
+-(void)setImageWithURL:(NSURL*)url
+{
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataImg, NSError *error)
+     {
+         if(error==nil)
+         {
+             [imgViewProfilePicture setImage:[UIImage imageWithData:dataImg]];
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+     }
+     ];
 }
 
 -(void)btnSubmit_TouchUpInside
@@ -1484,7 +1518,7 @@
             UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
             [tblView reloadData];
         }
-        else
+        else if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
             [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyId"] forKey:@"bartsyId"];
             [[NSUserDefaults standardUserDefaults]synchronize];
@@ -1512,6 +1546,10 @@
                 [obj release];
             }
 
+        }
+        else
+        {
+            [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         }
         
     }

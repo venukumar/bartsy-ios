@@ -58,4 +58,5 @@
 @property(nonatomic,retain)NSString *strGender;
 @property(nonatomic,retain)GTMOAuth2Authentication *auth;
 -(void)saveProfileData:(NSDictionary*)dict;
+-(void)setImageWithURL:(NSURL*)url;
 @end
