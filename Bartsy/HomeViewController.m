@@ -260,7 +260,7 @@
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
-    NSString *strBartsyId=@"100004";
+    NSString *strBartsyId=@"2342352565346";
     
     
     [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] receiverBartsyId:strBartsyId delegate:self];
@@ -1091,11 +1091,12 @@
         //NSPredicate *predicate=[NSPredicate predicateWithFormat:@"bartsyId == %i",[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] integerValue]];
         //[arrPeopleTemp filterUsingPredicate:predicate];
         
-
+        NSLog(@"Bartsy id is %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
+        
         for (int i=0; i<[arrPeople count]; i++)
         {
             NSDictionary *dictMember=[arrPeople objectAtIndex:i];
-            if([[dictMember objectForKey:@"bartsyId"] integerValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] integerValue])
+            if([[NSString stringWithFormat:@"%@",[dictMember objectForKey:@"bartsyId"]]isEqualToString:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]])
             {
                 dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
                 break;
@@ -1103,7 +1104,7 @@
         }
         
         
-        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,5,105,50)];
+        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,5,50,50)];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
         NSLog(@"URL is %@",strURL);
         [imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];

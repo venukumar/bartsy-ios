@@ -225,23 +225,45 @@ static SharedController *sharedController;
     //WithObjectsAndKeys:strBartsyLogin,@"barstyLogin",strUserName,@"facebookUserName",strPassword,@"password",strNickName,@"nickname",@"facebook",@"loginType",@"1",@"deviceType",appDelegate.deviceToken,@"deviceToken",strGender,@"gender",strOrientation,@"orientation",strShowProfileStatus,@"showProfile",strcreditCardNumber,@"creditCardNumber",strExpiryDate,@"expMonth",strExpYear,@"expYear",strStatus,@"status",strDescription,@"description",strEmailId,@"emailId",strDOB,@"dateofbirth",strFirstName,@"firstname",strLastName,@"lastname",nil];
 
     if(strBartsyLogin!=nil&&[strBartsyLogin length])
-    [dictProfile setObject:strBartsyLogin forKey:@"bartsyLogin"];
+    {
+        [dictProfile setObject:strBartsyLogin forKey:@"bartsyLogin"];
+        if(strBartsyPassword!=nil&&[strBartsyPassword length])
+        [dictProfile setObject:strBartsyPassword forKey:@"bartsyPassword"];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:dictProfile forKey:@"LoginDetails"];
+    }
     
-    if(strBartsyPassword!=nil&&[strBartsyPassword length])
-    [dictProfile setObject:strBartsyPassword forKey:@"bartsyPassword"];
+    
     
     if(strFbUserName!=nil&&[strFbUserName length])
-    [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
+    {
+        [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
+        if(strFbID!=nil&&[strFbID length])
+        [dictProfile setObject:[NSString stringWithFormat:@" %@",strFbID] forKey:@"facebookId"];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:strFbUserName,@"facebookUserName",strFbID,@"facebookId", nil] forKey:@"LoginDetails"];
+
+    }
    
-    if(strFbID!=nil&&[strFbID length])
-    [dictProfile setObject:strFbID forKey:@"facebookId"];
     
     if(strGoogleId!=nil&&[strGoogleId length])
-    [dictProfile setObject:strGoogleId forKey:@"googleId"];
+    {
+        [dictProfile setObject:[NSString stringWithFormat:@" %@",strGoogleId] forKey:@"googleId"];
+        if(strGoogleUserName!=nil&&[strGoogleUserName length])
+            [dictProfile setObject:strGoogleUserName forKey:@"googleUserName"];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:strGoogleId,@"googleId",strGoogleUserName,@"googleUserName", nil] forKey:@"LoginDetails"];
+
+    }
     
-    if(strGoogleId!=nil&&[strGoogleId length])
-        [dictProfile setObject:strGoogleId forKey:@"googleId"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+
+   
     
+   
+    
+    
+
     [dictProfile setObject:strGender forKey:@"gender"];
     [dictProfile setObject:strNickName forKey:@"nickname"];
     [dictProfile setObject:@"1" forKey:@"deviceType"];
@@ -272,6 +294,7 @@ static SharedController *sharedController;
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
+        
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"Profile Info : \n %@",dictUserProfile);
@@ -329,7 +352,7 @@ static SharedController *sharedController;
     if(strProdId==nil&&strProdId!=(id)[NSNull null])
         strProdId=@"1";
     
-    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"recieverBartsyId",@"NO",@"drinkAcceptance",@"Take care",@"specialInstructions", nil];
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",strReceiverId,@"recieverBartsyId",@"NO",@"drinkAcceptance",@"Take care",@"specialInstructions", nil];
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
     //NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
@@ -632,9 +655,13 @@ static SharedController *sharedController;
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/getUserProfile",KServerURL];
     
-    NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strBastsyId,@"bartsyId",nil];
+    NSDictionary *dictProfileDetails=[[NSDictionary alloc]initWithDictionary:[[NSUserDefaults standardUserDefaults]objectForKey:@"LoginDetails"]];
+    
+    
+    NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithDictionary:dictProfileDetails];
+                                    
+    [dictLogIn setObject:strBastsyId forKey:@"bartsyId"];
     [dictLogIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-
     NSLog(@"Login Details %@",dictLogIn);
     
     SBJSON *jsonObj=[SBJSON new];

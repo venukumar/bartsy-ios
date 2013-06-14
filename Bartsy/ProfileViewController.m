@@ -73,9 +73,24 @@
         tblView.delegate=self;
         tblView.tag=143225;
         [self.view addSubview:tblView];
+       
+        CGRect screenBounds = [[UIScreen mainScreen] bounds];
+        if (screenBounds.size.height == 568)
+        {
+            if(isCmgFromGetStarted==YES)
+            tblView.frame=CGRectMake(0, 40, 320,528);
+            else
+            tblView.frame=CGRectMake(0, 40, 320,528-25);
+        }
+        else
+        {
+            if(isCmgFromGetStarted==YES)
+                tblView.frame=CGRectMake(0, 40, 320, 420);
+            else
+                tblView.frame=CGRectMake(0, 15, 320, 445);
+  
+        }
         
-        if(!isCmgFromGetStarted)
-            tblView.frame=CGRectMake(0, 15, 320, 445);
         
         [tblView release];
         
@@ -730,8 +745,9 @@
     NSString *jsonData = [[NSString alloc] initWithContentsOfURL:url usedEncoding:nil error:nil];
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[jsonData dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     NSString *userId=[jsonDictionary objectForKey:@"id"];
-    [dictGoogle setObject:[jsonDictionary objectForKey:@"email"] forKey:@"username"];
-    [dictGoogle setObject:userId forKey:@"id"];
+    [dictGoogle setObject:[jsonDictionary objectForKey:@"email"] forKey:@"googleusername"];
+    
+    [dictGoogle setObject:[NSString stringWithFormat:@"%@",userId] forKey:@"googleid"];
 
     NSLog(@" user deata %@",jsonData);
     NSLog(@"Received Access Token:%@",auth);
@@ -1304,7 +1320,7 @@
 -(void)btnCancel_TouchUpInside
 {
     [appDelegate.session closeAndClearTokenInformation];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)btnContinue_TouchUpInside
@@ -1369,7 +1385,7 @@
     if([txtFldNickName.text length])
     {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"id"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"username"] delegate:self];
+            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:creditCardInfo.cardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] delegate:self];
             
     }
     
@@ -1439,20 +1455,43 @@
                 dictResult=[[NSMutableDictionary alloc] init];
             }
             
-            [dictResult setObject:[result objectForKey:@"bartsyLogin"] forKey:@"username"];
-            [dictResult setObject:[result objectForKey:@"bartsyPassword"] forKey:@"password"];
+            if([[result objectForKey:@"bartsyLogin"] length])
+            {
+                [dictResult setObject:[result objectForKey:@"bartsyLogin"] forKey:@"username"];
+                [dictResult setObject:[result objectForKey:@"bartsyPassword"] forKey:@"password"];
+                isCmgFromGetStarted=YES;
+            }
+            else if([[result objectForKey:@"facebookUserName"] length])
+            {
+                isCmgFromGetStarted=NO;
+                appDelegate.isLoginForFB=YES;
+                [dictResult setObject:[result objectForKey:@"facebookUserName"] forKey:@"username"];
+                [dictResult setObject:[result objectForKey:@"facebookId"] forKey:@"id"];
+                
+            }
+            else if([[result objectForKey:@"googleUserName"] length])
+            {
+                isCmgFromGetStarted=NO;
+                [dictResult setObject:[result objectForKey:@"googleUserName"] forKey:@"googleusername"];
+                [dictResult setObject:[result objectForKey:@"googleId"] forKey:@"googleid"];
+            }
+            
             [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
             [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
             
-            creditCardInfo=[[CardIOCreditCardInfo alloc]init];
             if([result objectForKey:@"creditCardNumber"]!=nil)
+            {
+                creditCardInfo=[[CardIOCreditCardInfo alloc]init];
                 creditCardInfo.cardNumber=[result objectForKey:@"creditCardNumber"];
+
+                if([result objectForKey:@"expMonth"]!=nil)
+                    creditCardInfo.expiryMonth=[[result objectForKey:@"expMonth"] integerValue];
+                
+                if([result objectForKey:@"expYear"]!=nil)
+                    creditCardInfo.expiryYear=[[result objectForKey:@"expYear"] integerValue];
+            }
             
-            if([result objectForKey:@"expMonth"]!=nil)
-                creditCardInfo.expiryMonth=[[result objectForKey:@"expMonth"] integerValue];
             
-            if([result objectForKey:@"expYear"]!=nil)
-                creditCardInfo.expiryYear=[[result objectForKey:@"expYear"] integerValue];
             
             isChecked=([[result objectForKey:@"showProfile"] isEqualToString:@"ON"]?1:0);
             
