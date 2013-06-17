@@ -78,7 +78,7 @@
         if (screenBounds.size.height == 568)
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
-            tblView.frame=CGRectMake(0, 40, 320,528);
+            tblView.frame=CGRectMake(0, 40, 320,515);
             else
             tblView.frame=CGRectMake(0, 40, 320,528-25);
         }

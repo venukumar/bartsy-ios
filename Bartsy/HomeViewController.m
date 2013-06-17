@@ -266,7 +266,7 @@
     }
     
     
-    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8)))/100;
+    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8+9)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];

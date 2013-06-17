@@ -628,6 +628,10 @@ static SharedController *sharedController;
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/bartsyUserLogin",KServerURL];
     NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strEmailId,@"bartsyLogin",strPassword,@"bartsyPassword",nil];
+    
+    [[NSUserDefaults standardUserDefaults]setObject:dictLogIn forKey:@"LoginDetails"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+    
     [dictLogIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
     NSLog(@"Login Details %@",dictLogIn);

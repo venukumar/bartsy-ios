@@ -52,7 +52,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1531"
          endingLineNumber = "1531"
-         landmarkName = "-createTransaction"
+         landmarkName = "-loginToGateway"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -65,7 +65,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1509"
          endingLineNumber = "1509"
-         landmarkName = "-loginToGateway"
+         landmarkName = "-textFieldShouldReturn:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -372,11 +372,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/PeopleViewController.m"
-         timestampString = "393162730.206537"
+         timestampString = "393166783.198128"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "75"
-         endingLineNumber = "75"
+         startingLineNumber = "72"
+         endingLineNumber = "72"
          landmarkName = "-btnSave_TouchUpInside"
          landmarkType = "5">
       </FileBreakpoint>
@@ -416,7 +416,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1480"
          endingLineNumber = "1480"
-         landmarkName = "-selectedPeople:"
+         landmarkName = "-btnPhoto_TouchUpInside"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -437,11 +437,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/PeopleViewController.m"
-         timestampString = "393162730.206537"
+         timestampString = "393166783.198128"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "113"
-         endingLineNumber = "113"
+         startingLineNumber = "110"
+         endingLineNumber = "110"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -450,11 +450,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/PeopleViewController.m"
-         timestampString = "393162730.206537"
+         timestampString = "393166783.198128"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "107"
-         endingLineNumber = "107"
+         startingLineNumber = "104"
+         endingLineNumber = "104"
          landmarkName = "-tableView:numberOfRowsInSection:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -463,11 +463,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/PeopleViewController.m"
-         timestampString = "393162730.206537"
+         timestampString = "393166783.198128"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "153"
-         endingLineNumber = "153"
+         startingLineNumber = "150"
+         endingLineNumber = "150"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -481,7 +481,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1466"
          endingLineNumber = "1466"
-         landmarkName = "-btnPhoto_TouchUpInside"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
