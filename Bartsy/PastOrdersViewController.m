@@ -35,6 +35,9 @@
     [newAttributes setObject:[UIFont boldSystemFontOfSize:13.5] forKey:UITextAttributeFont];
     [self.navigationController.navigationBar setTitleTextAttributes:newAttributes];
     
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
+    [arrayForPastOrders filterUsingPredicate:predicate];
+    
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
     
@@ -95,7 +98,6 @@
         NSString *newDateString = [outputFormatter stringFromDate:date];
         
         NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
-        NSLog(@"newDateString %@", newDateString);
         
         if([arrDateComps count]==5)
         {

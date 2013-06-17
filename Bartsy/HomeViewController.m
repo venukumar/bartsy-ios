@@ -388,6 +388,8 @@
         isSelectedForPeople=NO;
         [arrPastOrders removeAllObjects];
         [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
+        [arrPastOrders filterUsingPredicate:predicate];
         NSLog(@"past orders is %@",arrPastOrders);
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
