@@ -739,7 +739,6 @@
         if(section!=0)
         object=[arrMenu objectAtIndex:section-1];
         
-        
         if(section==0)
         {
             return 0;
@@ -762,7 +761,13 @@
     }
     else if(isSelectedForPastOrders == YES)
     {
-        return [arrPastOrders count];
+        if ([arrPastOrders count]) {
+            return [arrPastOrders count];
+        }
+        else
+        {
+            return 1;
+        }
     }
     else
     {

@@ -59,36 +59,44 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 {
-    return [arrayForPastOrders count];
+    if ([arrayForPastOrders count]) {
+        return [arrayForPastOrders count];
+    }
+    else
+    {
+        return 1;
+    }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
   
-//    cell.textLabel.text = [[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"];
-//    cell.textLabel.text = @"dgjdflgjfl;dkgdlf;kg;dflkg;dfkgf;dkgdf;kg;dfkg;dfkg;dfkgdfjglkdjfgljdfkgldfjg";
-//    cell.textLabel.font = [UIFont boldSystemFontOfSize:13];
-//    cell.textLabel.frame = CGRectMake(5, 0, 260, 40);
-//    cell.detailTextLabel.text = [[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"];
-//    cell.detailTextLabel.font = [UIFont boldSystemFontOfSize:11];
-    
-    UILabel *lblItemName = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
-    lblItemName.backgroundColor=[UIColor clearColor];
-    lblItemName.textAlignment = NSTextAlignmentLeft;
-    [cell.contentView addSubview:lblItemName];
-    
-    UILabel *lbldescription = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
-    lbldescription.backgroundColor=[UIColor clearColor];
-    lbldescription.textAlignment = NSTextAlignmentLeft;
-    [cell.contentView addSubview:lbldescription];
-
-
-    NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
-    
-    UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 0, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
-    lblTotalPrice.backgroundColor=[UIColor clearColor];
-    lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-    [cell.contentView addSubview:lblTotalPrice];
+    if ([arrayForPastOrders count])
+    {
+        UILabel *lblItemName = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+        lblItemName.backgroundColor=[UIColor clearColor];
+        lblItemName.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblItemName];
+        
+        UILabel *lbldescription = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
+        lbldescription.backgroundColor=[UIColor clearColor];
+        lbldescription.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lbldescription];
+        
+        
+        NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+        
+        UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 0, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
+        lblTotalPrice.backgroundColor=[UIColor clearColor];
+        lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblTotalPrice];
+ 
+    }
+    else
+    {
+        cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some";
+        cell.textLabel.numberOfLines=5;
+    }
 
     return cell;
 }
