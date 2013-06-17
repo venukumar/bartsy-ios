@@ -1017,7 +1017,7 @@
             [cell.contentView addSubview:viewBorder];
             [viewBorder release];
             
-            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 43)];
+            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 48)];
             if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
                 viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
             else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"2"])
@@ -1029,12 +1029,13 @@
             [viewBorder addSubview:viewHeader];
             [viewHeader release];
             
-            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 280, 30)];
-            lblTitle.font = [UIFont boldSystemFontOfSize:15];
+            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 280, 43)];
+            lblTitle.numberOfLines=2;
+            lblTitle.font = [UIFont boldSystemFontOfSize:18];
             if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
                 lblTitle.text = [NSString stringWithFormat:@"Waiting for bartender to accept (%i)",[[dict objectForKey:@"orderId"] integerValue]];
             else
-                lblTitle.text = [NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
+                lblTitle.text = [NSString stringWithFormat:@"%@ with number (%i)",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
             
             lblTitle.tag = 1234;
             lblTitle.backgroundColor = [UIColor clearColor];
