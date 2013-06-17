@@ -78,11 +78,84 @@
         lblItemName.textAlignment = NSTextAlignmentLeft;
         [cell.contentView addSubview:lblItemName];
         
-        UILabel *lbldescription = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
+        UILabel *lbldescription = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 60, 250, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:3];
         lbldescription.backgroundColor=[UIColor clearColor];
         lbldescription.textAlignment = NSTextAlignmentLeft;
         [cell.contentView addSubview:lbldescription];
         
+        
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
+        NSDate *date    = [dateFormatter dateFromString:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"dateCreated"]];
+        
+        
+        NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+        [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
+        
+        NSString *newDateString = [outputFormatter stringFromDate:date];
+        
+        NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
+        NSLog(@"newDateString %@", newDateString);
+        
+        if([arrDateComps count]==5)
+        {
+            NSString *strMeridian;
+            NSString *strTime=[arrDateComps objectAtIndex:0];
+            NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
+            if(intHours>=12)
+            {
+                strMeridian=[NSString stringWithFormat:@"PM"];
+                NSString *strTime;
+                
+                if(intHours==12)
+                {
+                    strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
+                }
+                else
+                {
+                    strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
+                    
+                }
+                [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
+            }
+            else
+            {
+                strMeridian=[NSString stringWithFormat:@"AM"];
+            }
+            [arrDateComps insertObject:strMeridian atIndex:0];
+        }
+        
+        
+        NSCalendar * cal = [NSCalendar currentCalendar];
+        NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
+        
+        if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
+            comps.hour-=12;
+        
+        NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
+        
+
+        UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 25, 280, 30)];
+        lblTime.font = [UIFont systemFontOfSize:14];
+        lblTime.text = strDate1;
+        lblTime.tag = 1234234567;
+        lblTime.backgroundColor = [UIColor clearColor];
+        lblTime.textColor = [UIColor blackColor] ;
+        lblTime.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblTime];
+        [lblTime release];
+        
+        
+        UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 48, 280, 30)];
+        lblRecepient.font = [UIFont systemFontOfSize:14];
+        lblRecepient.text = [NSString stringWithFormat:@"Recepient:%@",[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
+        lblRecepient.tag = 1234234567;
+        lblRecepient.backgroundColor = [UIColor clearColor];
+        lblRecepient.textColor = [UIColor blackColor] ;
+        lblRecepient.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblRecepient];
+        [lblRecepient release];
+
         
         NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
         
@@ -106,7 +179,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return 65;
+    return 130;
 }
 - (void)didReceiveMemoryWarning
 {

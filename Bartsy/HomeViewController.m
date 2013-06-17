@@ -783,7 +783,7 @@
         return 60;
     else if(isSelectedForPastOrders == YES)
     {
-        return 65;
+        return 130;
     }
     else
     {
@@ -894,23 +894,99 @@
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
 
-        if ([arrPastOrders count]) {
+        if ([arrPastOrders count])
+        {
             UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             
-            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 25, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:1];
+            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 60, 250, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:3];
             lbldescription.backgroundColor=[UIColor clearColor];
             lbldescription.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lbldescription];
+            
+            
+            NSDateFormatter *dateFormatter = [NSDateFormatter new];
+            dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
+            NSDate *date    = [dateFormatter dateFromString:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"dateCreated"]];
+            
+            
+            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
+            
+            NSString *newDateString = [outputFormatter stringFromDate:date];
+            
+            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
+            NSLog(@"newDateString %@", newDateString);
+            
+            if([arrDateComps count]==5)
+            {
+                NSString *strMeridian;
+                NSString *strTime=[arrDateComps objectAtIndex:0];
+                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
+                if(intHours>=12)
+                {
+                    strMeridian=[NSString stringWithFormat:@"PM"];
+                    NSString *strTime;
+                    
+                    if(intHours==12)
+                    {
+                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
+                    }
+                    else
+                    {
+                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
+                        
+                    }
+                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
+                }
+                else
+                {
+                    strMeridian=[NSString stringWithFormat:@"AM"];
+                }
+                [arrDateComps insertObject:strMeridian atIndex:0];
+            }
+            
+            
+            NSCalendar * cal = [NSCalendar currentCalendar];
+            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
+            
+            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
+                comps.hour-=12;
+            
+            NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
+            
+            
+            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 25, 280, 30)];
+            lblTime.font = [UIFont systemFontOfSize:14];
+            lblTime.text = strDate1;
+            lblTime.tag = 1234234567;
+            lblTime.backgroundColor = [UIColor clearColor];
+            lblTime.textColor = [UIColor blackColor] ;
+            lblTime.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblTime];
+            [lblTime release];
+            
+            
+            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 48, 280, 30)];
+            lblRecepient.font = [UIFont systemFontOfSize:14];
+            lblRecepient.text = [NSString stringWithFormat:@"Recepient:%@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
+            lblRecepient.tag = 1234234567;
+            lblRecepient.backgroundColor = [UIColor clearColor];
+            lblRecepient.textColor = [UIColor blackColor] ;
+            lblRecepient.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblRecepient];
+            [lblRecepient release];
+            
+            
             NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
             
-            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, -5, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 0, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
             lblTotalPrice.backgroundColor=[UIColor clearColor];
             lblTotalPrice.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblTotalPrice];
-
+            
         }
         else
         {
