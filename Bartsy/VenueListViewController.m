@@ -146,7 +146,7 @@
     
     if([[dict objectForKey:@"venueStatus"] isEqualToString:@"OFFLINE"])
     {
-        //[cell setUserInteractionEnabled:NO];
+        [cell setUserInteractionEnabled:NO];
         cell.contentView.backgroundColor=[UIColor grayColor];
         imgViewDrink.alpha=0.1;
     }

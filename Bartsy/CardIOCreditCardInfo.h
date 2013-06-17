@@ -37,9 +37,10 @@ typedef enum {
 // When provided by card.io, cardType will not be CardIOCreditCardTypeUnrecognized or CardIOCreditCardTypeAmbiguous.
 @property(nonatomic, assign, readonly) CardIOCreditCardType cardType;
 
-// Convenience method to return a card type string (e.g. "Visa", "AmEx", "JCB", "MasterCard", or "Discover") suitable for display.
-// Currently English only.
-+ (NSString *)displayStringForCardType:(CardIOCreditCardType)cardType;
+// Convenience method to return a card type string (e.g. "Visa", "American Express", "JCB", "MasterCard", or "Discover") suitable for display.
+// Where appropriate, this string will be translated into the language specified.
+// (See CardIOPaymentViewController.h for a detailed explanation of languageOrLocale.)
++ (NSString *)displayStringForCardType:(CardIOCreditCardType)cardType usingLanguageOrLocale:(NSString *)languageOrLocale;
 
 // Returns a 36x25 credit card logo, at a resolution appropriate for the device
 + (UIImage *)logoForCardType:(CardIOCreditCardType)cardType;

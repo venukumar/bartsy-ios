@@ -16,6 +16,15 @@
 #import "PeopleViewController.h"
 
 
+@interface PeopleCustomCell : UITableViewCell {}
+@end
+@implementation PeopleCustomCell
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    self.imageView.frame = CGRectMake(0,0,60,60);
+}
+@end
 
 @interface HomeViewController ()
 {
@@ -781,7 +790,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
-    UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    PeopleCustomCell *cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     if(isSelectedForDrinks==YES)
     {
@@ -886,7 +895,7 @@
         }
         else
         {
-            cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some\nGo to menu for Past Orders...";
+            cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some";
             cell.textLabel.numberOfLines=5;
         }
         

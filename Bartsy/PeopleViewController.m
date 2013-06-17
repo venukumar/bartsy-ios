@@ -147,7 +147,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSMutableDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
+    NSMutableDictionary *dictPeople=[[NSMutableDictionary alloc]initWithDictionary:[arrPeople objectAtIndex:indexPath.row]];
+    [arrPeople setValue:@"NO" forKey:@"Checked"];
     [dictPeople setValue:[NSNumber numberWithBool:![[dictPeople objectForKey:@"Checked"] boolValue]] forKey:@"Checked"];
     
     [arrPeople replaceObjectAtIndex:indexPath.row withObject:dictPeople];
