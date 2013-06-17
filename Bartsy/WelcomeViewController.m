@@ -227,7 +227,7 @@
     {
         NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
         NSString *strMsg;
-        if([[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]==nil)
+        if(appDelegate.intOrderCount==0)
         {
             strMsg=[NSString stringWithFormat:@"Do you want to checkout from %@",[dict objectForKey:@"venueName"]];
         }

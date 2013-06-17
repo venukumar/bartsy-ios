@@ -266,7 +266,7 @@
     }
     
     
-    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+8+9)))/100;
+    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+9)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
@@ -973,7 +973,7 @@
             
             UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 48, 280, 30)];
             lblRecepient.font = [UIFont systemFontOfSize:14];
-            lblRecepient.text = [NSString stringWithFormat:@"Recepient:%@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
+            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
             lblRecepient.tag = 1234234567;
             lblRecepient.backgroundColor = [UIColor clearColor];
             lblRecepient.textColor = [UIColor blackColor] ;
@@ -982,7 +982,7 @@
             [lblRecepient release];
             
             
-            NSString *stringFortotalPrice = [NSString stringWithFormat:@"%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+            NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
             
             UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 0, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
             lblTotalPrice.backgroundColor=[UIColor clearColor];
