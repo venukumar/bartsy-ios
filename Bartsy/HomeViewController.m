@@ -23,6 +23,8 @@
     [super layoutSubviews];
     
     self.imageView.frame = CGRectMake(0,0,60,60);
+    self.textLabel.frame = CGRectMake(61,0,200,20);
+    self.detailTextLabel.frame = CGRectMake(61,21,200,20);
 }
 @end
 
@@ -368,6 +370,8 @@
         isSelectedForPeople=YES;
         [arrPeople removeAllObjects];
         [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+        [appDelegate.arrPeople removeAllObjects];
+        [appDelegate.arrPeople addObjectsFromArray:arrPeople];
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
         [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
@@ -617,6 +621,8 @@
              id result = [jsonParser objectWithString:jsonString error:nil];
              [arrPeople removeAllObjects];
              [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+             [appDelegate.arrPeople removeAllObjects];
+             [appDelegate.arrPeople addObjectsFromArray:arrPeople];
          }
          else
          {
@@ -790,10 +796,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
-    PeopleCustomCell *cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    UITableViewCell *cell;
+    
     
     if(isSelectedForDrinks==YES)
     {
+        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
         //        UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
         //        imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
         //        [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
@@ -859,6 +867,8 @@
     }
     else if(isSelectedForPeople)
     {
+        cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+
         [cell setUserInteractionEnabled:NO];
         
         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.section];
@@ -872,9 +882,13 @@
         
         cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
         cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
+        
+        //UILabel *lbl
     }
     else if (isSelectedForPastOrders == YES)
     {
+        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+
         if ([arrPastOrders count]) {
             UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
@@ -902,6 +916,8 @@
     }
     else
     {
+        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+
         if([arrBundledOrders count])
         {
             NSDictionary *dict=[[arrBundledOrders objectAtIndex:indexPath.section] lastObject];
@@ -959,10 +975,41 @@
             NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
             [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
             
+            
             NSString *newDateString = [outputFormatter stringFromDate:date];
             
-            NSArray *arrDateComps=[newDateString componentsSeparatedByString:@" "];
+            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
             NSLog(@"newDateString %@", newDateString);
+            
+            if([arrDateComps count]==5)
+            {
+                NSString *strMeridian;
+                NSString *strTime=[arrDateComps objectAtIndex:0];
+                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
+                if(intHours>=12)
+                {
+                    strMeridian=[NSString stringWithFormat:@"PM"];
+                    NSString *strTime;
+
+                    if(intHours==12)
+                    {
+                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
+                    }
+                    else
+                    {
+                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
+
+                    }
+                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
+
+                }
+                else
+                {
+                    strMeridian=[NSString stringWithFormat:@"AM"];
+                }
+                [arrDateComps insertObject:strMeridian atIndex:0];
+            }
+            
             
             NSCalendar * cal = [NSCalendar currentCalendar];
             NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
@@ -1096,8 +1143,10 @@
         }
         else
         {
+            cell.imageView.image=nil;
+            [cell.textLabel setNumberOfLines:0];
+            cell.textLabel.lineBreakMode =NSLineBreakByWordWrapping;
             cell.textLabel.text=@"No open orders\nGo to the drinks tab to place some\nGo to menu for Past Orders...";
-            cell.textLabel.numberOfLines=5;
         }
     }
     
@@ -1271,7 +1320,7 @@
         btnCustomise.titleLabel.textColor = [UIColor whiteColor];
         btnCustomise.backgroundColor=[UIColor blackColor];
         [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-        [viewDetail addSubview:btnCustomise];
+        //[viewDetail addSubview:btnCustomise];
         
         UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 153, 63, 100)];
         viewPrice.backgroundColor = [UIColor whiteColor];
@@ -1421,7 +1470,7 @@
     PeopleViewController *obj=[[PeopleViewController alloc]init];
     UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:obj];
     obj.arrPeople=arrPeople;
-    [self presentModalViewController:nav animated:YES];
+    [self presentViewController:nav animated:YES completion:nil];
     [nav release];
     [obj release];
     

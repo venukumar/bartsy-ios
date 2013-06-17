@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "AppDelegate.h"
 @interface PeopleViewController : UITableViewController
 {
     NSMutableArray *arrPeople;
     NSInteger btnValue;
+    AppDelegate *appDelegate;
 }
 @property(nonatomic,retain)NSMutableArray *arrPeople;
 @end

@@ -16,7 +16,10 @@
     NSDictionary *dictIngrident;
     NSDictionary *dictSelectedToMakeOrder;
     NSInteger btnValue;
+    NSMutableDictionary *dictTemp;
+    NSDictionary *dictPeopleSelectedForDrink;
 }
+@property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;
 @property(nonatomic,retain)NSDictionary *dictIngrident;
 @property(nonatomic,retain)NSMutableArray *arrMixers;
 @property(nonatomic,retain)NSDictionary *dictSelectedToMakeOrder;

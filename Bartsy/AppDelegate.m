@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails,timerForHeartBeat;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails,timerForHeartBeat,arrPeople;
 
 - (void)dealloc
 {
@@ -46,6 +46,7 @@
     
     [Crittercism enableWithAppID:@"51b196e597c8f25177000005"];
     
+    arrPeople=[[NSMutableArray alloc]init];
     arrOrders=[[NSMutableArray alloc]init];
     
 //    // Optional: automatically send uncaught exceptions to Google Analytics.

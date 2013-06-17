@@ -41,6 +41,9 @@
     
     self.title=@"People";
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    arrPeople=[[NSMutableArray alloc]initWithArray:appDelegate.arrPeople];
+   // [arrPeople addObjectsFromArray:appDelegate.arrPeople];
     [arrPeople setValue:@"NO" forKey:@"Checked"];
 
         
@@ -159,3 +162,6 @@
 }
 
 @end
+
+
+

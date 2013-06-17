@@ -7,13 +7,14 @@
 //
 
 #import "MixerViewController.h"
-
+#import "PeopleViewController.h"
+#import "UIImageView+WebCache.h"
 @interface MixerViewController ()
 
 @end
 
 @implementation MixerViewController
-@synthesize arrMixers,dictIngrident,dictSelectedToMakeOrder;
+@synthesize arrMixers,dictIngrident,dictSelectedToMakeOrder,dictPeopleSelectedForDrink;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -68,7 +69,7 @@
         viewB.tag=333;
         [viewA addSubview:viewB];
         
-        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 50, 295, 268)];
+        UIView *viewC = [[UIView alloc]initWithFrame:CGRectMake(12, 20, 295, 358)];
         viewC.layer.cornerRadius = 2;
         viewC.layer.borderWidth = 2;
         viewC.backgroundColor = [UIColor redColor];
@@ -77,7 +78,70 @@
         viewC.tag=444;
         [viewB addSubview:viewC];
         
-        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 10, 268, 45)];
+        UIView *viewHeaderPhoto = [[UIView alloc]initWithFrame:CGRectMake(11, 5, 268, 90)];
+        viewHeaderPhoto.backgroundColor = [UIColor blackColor];
+        viewHeaderPhoto.layer.cornerRadius = 6;
+        viewHeaderPhoto.tag = 11111;
+        [viewC addSubview:viewHeaderPhoto];
+        
+        //NSMutableArray *arrPeopleTemp=[[NSMutableArray alloc]initWithArray:arrPeople];
+        //NSPredicate *predicate=[NSPredicate predicateWithFormat:@"bartsyId == %i",[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] integerValue]];
+        //[arrPeopleTemp filterUsingPredicate:predicate];
+        
+        NSLog(@"Bartsy id is %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
+        
+        NSMutableArray *arrPeople=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"People"]];
+        for (int i=0; i<[arrPeople count]; i++)
+        {
+            NSDictionary *dictMember=[arrPeople objectAtIndex:i];
+            if([[NSString stringWithFormat:@"%@",[dictMember objectForKey:@"bartsyId"]]isEqualToString:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]])
+            {
+                dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
+                break;
+            }
+        }
+        
+        
+        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,10,60,60)];
+        NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
+        NSLog(@"URL is %@",strURL);
+        //[imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+        imgViewPhoto.tag=143225;
+        [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
+        [viewHeaderPhoto addSubview:imgViewPhoto];
+        [imgViewPhoto release];
+        
+        NSLog(@"nickname is %@",[dictTemp objectForKey:@"nickname"]);
+        
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(10, 72, 120, 18)];
+        lblName.text=[dictTemp objectForKey:@"nickName"];
+        lblName.font=[UIFont systemFontOfSize:10];
+        lblName.tag=111222333;
+        lblName.backgroundColor=[UIColor clearColor];
+        lblName.textColor=[UIColor whiteColor];
+        [viewHeaderPhoto addSubview:lblName];
+        [lblName release];
+        
+        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(85, 10, 160, 60)];
+        lblMsg.text=@"Click on photo if you would like to send drink to other people";
+        lblMsg.font=[UIFont systemFontOfSize:15];
+        lblMsg.numberOfLines=3;
+        lblMsg.backgroundColor=[UIColor clearColor];
+        lblMsg.textColor=[UIColor whiteColor];
+        [viewHeaderPhoto addSubview:lblMsg];
+        [lblMsg release];
+        
+        
+        UIButton *btnPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnPhoto.frame = CGRectMake(10,5,105,50);
+        [btnPhoto addTarget:self action:@selector(btnPhoto_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        btnPhoto.backgroundColor=[UIColor clearColor];
+        [viewHeaderPhoto addSubview:btnPhoto];
+        
+        [viewHeaderPhoto release];
+        
+        
+        UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(11, 100, 268, 45)];
         viewHeader.backgroundColor = [UIColor blackColor];
         viewHeader.layer.cornerRadius = 6;
         viewHeader.tag = 555;
@@ -94,7 +158,7 @@
         [viewHeader addSubview:lblTitle];
         [lblTitle release];
         
-        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 63, 200, 100)];
+        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 153, 200, 100)];
         viewDetail.backgroundColor = [UIColor whiteColor];
         viewDetail.layer.borderWidth = 1;
         viewDetail.layer.borderColor = [UIColor grayColor].CGColor;
@@ -115,27 +179,16 @@
         //    [viewDetail addSubview:imgViewDrink];
         //    [imgViewDrink release];
         
-        NSMutableString *strDescription=[[NSMutableString alloc]init];
-        for (NSDictionary *dict in arrTemp)
-        {
-            NSString *strDesc=[NSString stringWithFormat:@"%@,",[dict objectForKey:@"name"]];
-            [strDescription appendString:strDesc];
-        }
-        
-        [arrTemp release];
-        
         UITextView *txtViewNotes = [[UITextView alloc] initWithFrame:CGRectMake(5, 10, 185, 50)];
         txtViewNotes.delegate = self;
         txtViewNotes.tag = 1000;
         txtViewNotes.backgroundColor = [UIColor clearColor];
         txtViewNotes.editable = NO;
-        txtViewNotes.text = [strDescription substringToIndex:[strDescription length]-1];
+        txtViewNotes.text = [dictIngrident objectForKey:@"description"];
         txtViewNotes.textColor = [UIColor blackColor];
         txtViewNotes.font = [UIFont boldSystemFontOfSize:10];
         [viewDetail addSubview:txtViewNotes];
         [txtViewNotes release];
-        
-        [strDescription release];
         
         UIButton *btnCustomise = [UIButton buttonWithType:UIButtonTypeCustom];
         btnCustomise.frame = CGRectMake(50,65,105,25);
@@ -144,9 +197,9 @@
         btnCustomise.titleLabel.textColor = [UIColor whiteColor];
         btnCustomise.backgroundColor=[UIColor blackColor];
         [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-        [viewDetail addSubview:btnCustomise];
+        //[viewDetail addSubview:btnCustomise];
         
-        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 63, 63, 100)];
+        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 153, 63, 100)];
         viewPrice.backgroundColor = [UIColor whiteColor];
         viewPrice.layer.borderWidth = 1;
         viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
@@ -157,14 +210,24 @@
         
         UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, 63, 30)];
         lblPrice.font = [UIFont boldSystemFontOfSize:20];
-        lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictIngrident objectForKey:@"price"] floatValue]];
+        lblPrice.text = [NSString
+                         stringWithFormat:@"$%@",[dictIngrident objectForKey:@"price"]];
         lblPrice.backgroundColor = [UIColor clearColor];
         lblPrice.textColor = [UIColor brownColor] ;
         lblPrice.textAlignment = NSTextAlignmentCenter;
         [viewPrice addSubview:lblPrice];
         [lblPrice release];
         
-        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 171, 268, 45)];
+        //    UILabel *lblPriceOff = [[UILabel alloc]initWithFrame:CGRectMake(0, 60, 63, 30)];
+        //    lblPriceOff.font = [UIFont boldSystemFontOfSize:12];
+        //    lblPriceOff.text = @"($2 off)";
+        //    lblPriceOff.backgroundColor = [UIColor clearColor];
+        //    lblPriceOff.textColor = [UIColor blackColor] ;
+        //    lblPriceOff.textAlignment = NSTextAlignmentCenter;
+        //    [viewPrice addSubview:lblPriceOff];
+        //    [lblPriceOff release];
+        
+        UIView *viewTip = [[UIView alloc]initWithFrame:CGRectMake(11, 261, 268, 45)];
         viewTip.backgroundColor = [UIColor whiteColor];
         viewTip.layer.borderWidth = 1;
         viewTip.layer.borderColor = [UIColor grayColor].CGColor;
@@ -208,7 +271,7 @@
         [btn20 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn20];
         
-        UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(113, 7, 30, 30)];
+        UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(118, 7, 30, 30)];
         lbl15.font = [UIFont boldSystemFontOfSize:12];
         lbl15.text = @"15%";
         lbl15.backgroundColor = [UIColor clearColor];
@@ -218,13 +281,13 @@
         [lbl15 release];
         
         UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn30.frame = CGRectMake(143,10,23,23);
+        btn30.frame = CGRectMake(148,10,23,23);
         [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
         btn30.tag = 20;
         [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn30];
         
-        UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(170, 7, 30, 30)];
+        UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(180, 7, 30, 30)];
         lbl20.font = [UIFont boldSystemFontOfSize:12];
         lbl20.text = @"20%";
         lbl20.backgroundColor = [UIColor clearColor];
@@ -234,11 +297,11 @@
         [lbl20 release];
         
         UIButton *btn40 = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn40.frame = CGRectMake(200,10,23,23);
+        btn40.frame = CGRectMake(210,10,23,23);
         [btn40 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
         btn40.tag = 40;
         [btn40 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-        [viewTip addSubview:btn40];
+        //[viewTip addSubview:btn40];
         
         UITextField *txtFieldTip = [[UITextField alloc] initWithFrame:CGRectMake(223,7, 40, 30)];
         [txtFieldTip setBackground:[UIImage imageNamed:@"txt-box1.png"]];
@@ -248,11 +311,11 @@
         txtFieldTip.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         txtFieldTip.textAlignment = NSTextAlignmentCenter;
         txtFieldTip.autocorrectionType = UITextAutocorrectionTypeNo;
-        [viewTip addSubview:txtFieldTip];
+        //[viewTip addSubview:txtFieldTip];
         [txtFieldTip release];
         
         UIButton *btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnCancel.frame = CGRectMake(148,227,120,30);
+        btnCancel.frame = CGRectMake(148,317,120,30);
         btnCancel.titleLabel.textColor = [UIColor whiteColor];
         [btnCancel setTitle:@"Cancel" forState:UIControlStateNormal];
         btnCancel.titleLabel.font = [UIFont boldSystemFontOfSize:12];
@@ -261,7 +324,7 @@
         [viewC addSubview:btnCancel];
         
         UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnOrder.frame = CGRectMake(20,227,115,30);
+        btnOrder.frame = CGRectMake(20,317,115,30);
         [btnOrder setTitle:@"Order" forState:UIControlStateNormal];
         btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
         btnOrder.titleLabel.textColor = [UIColor whiteColor];
@@ -273,8 +336,37 @@
         [viewB release];
         [viewC release];
 
+
     }
 }
+
+-(void)btnPhoto_TouchUpInside
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"PeopleSelected" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedPeople:) name:@"PeopleSelected" object:nil];
+    
+    PeopleViewController *obj=[[PeopleViewController alloc]init];
+    UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:obj];
+    [self presentViewController:nav animated:YES completion:nil];
+    [nav release];
+    [obj release];
+    
+}
+
+-(void)selectedPeople:(NSNotification*)notification
+{
+    dictPeopleSelectedForDrink=[[NSDictionary alloc]initWithDictionary:notification.object];
+    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeopleSelectedForDrink objectForKey:@"userImagePath"]];
+    NSLog(@"URL is %@",strURL);
+    //[imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+    [imgView setImageWithURL:[NSURL URLWithString:strURL]];
+    UILabel *lblName=(UILabel*)[self.view viewWithTag:111222333];
+    lblName.text=[dictPeopleSelectedForDrink objectForKey:@"nickName"];
+    
+    
+}
+
 
 -(void)btnTip_TouchUpInside:(id)sender
 {
@@ -345,9 +437,13 @@
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
-    
+    NSString *strBartsyId;
+    if([dictPeopleSelectedForDrink count])
+        strBartsyId=[NSString stringWithFormat:@"%@",[dictPeopleSelectedForDrink objectForKey:@"bartsyId"]];
+    else
+        strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
 
-    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"ingredientId"] description:[strDescription substringToIndex:[strDescription length]-1] ingredients:arrIds delegate:self];
+    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"ingredientId"] description:[strDescription substringToIndex:[strDescription length]-1] ingredients:arrIds receiverBartsyId:strBartsyId delegate:self];
     
     [strDescription release];
     [arrIds release];

@@ -31,7 +31,9 @@
     UIBackgroundTaskIdentifier bgTask;
     NSDictionary *dictOfferedDrikDetails;
     NSTimer *timerForHeartBeat;
+    NSMutableArray *arrPeople;
 }
+@property(nonatomic,retain)NSMutableArray *arrPeople;
 @property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;
 @property(nonatomic,retain)NSTimer *timerForHeartBeat;
 @property(nonatomic,retain)NSMutableArray *arrOrders;

@@ -1362,7 +1362,7 @@
 				GCC_PREFIX_HEADER = "Bartsy/Bartsy-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"/usr/include/libxml2\"";
 				INFOPLIST_FILE = "Bartsy/Bartsy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Bartsy/PayPalMobile\"",
@@ -1376,6 +1376,7 @@
 					"-ObjC",
 					"-lstdc++",
 					"-lxml2",
+					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "352D3EF5-7C91-4016-BB43-58EB625D05BC";
@@ -1399,7 +1400,7 @@
 				GCC_PREFIX_HEADER = "Bartsy/Bartsy-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"/usr/include/libxml2\"";
 				INFOPLIST_FILE = "Bartsy/Bartsy-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Bartsy/PayPalMobile\"",
@@ -1413,6 +1414,7 @@
 					"-ObjC",
 					"-lstdc++",
 					"-lxml2",
+					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "352D3EF5-7C91-4016-BB43-58EB625D05BC";
