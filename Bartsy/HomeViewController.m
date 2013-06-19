@@ -168,7 +168,7 @@
     else if(segmentControl.selectedSegmentIndex==2)
     {
         [arrOrders removeAllObjects];
-        [arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        //[arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         tblView.hidden=NO;
         isSelectedForDrinks=NO;
@@ -229,6 +229,23 @@
         isSelectedForPastOrders = NO;
         isSelectedForDrinks=NO;
         isSelectedForPeople=NO;
+        
+        [arrBundledOrders removeAllObjects];
+        [arrBundledOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        
+        int intOrdersCount=0;
+        for (NSArray *arrOrder in arrBundledOrders)
+        {
+            intOrdersCount+=[arrOrder count];
+        }
+        
+        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",intOrdersCount];
+        
+        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+        
+
+        
+        [tblView reloadData];
         
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -363,6 +380,8 @@
         appDelegate.intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         [appDelegate startTimerToCheckOrderStatusUpdate];
+        
+        
     }
     else if(isRequestForPeople==YES)
     {
@@ -442,6 +461,8 @@
             
         }
          
+        [[NSUserDefaults standardUserDefaults]setObject:arrBundledOrders forKey:@"Orders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         
         NSLog(@"Orders %@",arrBundledOrders);
         
@@ -490,9 +511,9 @@
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
         
-        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
-        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+//        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+//        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
+//        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
     }
 
     

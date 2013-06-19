@@ -129,6 +129,9 @@
 -(void)addMixer
 {
     MixerViewController *obj=[[MixerViewController alloc]init];
+    NSLog(@"Categories \n %@",arrCategories);
+    
+    if([arrCategories count]>=2)
     obj.arrMixers=[[[[arrCategories objectAtIndex:1] objectForKey:@"categories"] objectAtIndex:0] objectForKey:@"ingredients"];
     NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrIngridents];
     [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];

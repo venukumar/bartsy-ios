@@ -511,7 +511,27 @@ static SharedController *sharedController;
     [request setHTTPBody:dataCheckIn];
     [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [NSURLConnection connectionWithRequest:request delegate:nil];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             [appDelegate controllerDidFinishLoadingWithResult:result];
+             
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+             [appDelegate controllerDidFailLoadingWithError:error];
+
+         }
+         
+     }
+     ];
     [url release];
     [request release];
 }
@@ -545,6 +565,8 @@ static SharedController *sharedController;
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type",strReceiverId,@"recieverBartsyId", nil];
+    [dictProfile setValue:@"Take Care" forKey:@"specialInstructions"];
+
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
     SBJSON *jsonObj=[SBJSON new];
@@ -574,12 +596,12 @@ static SharedController *sharedController;
 
              id result = [jsonParser objectWithString:jsonString error:nil];
              NSLog(@"Result is %@",result);
-             [delegate controllerDidFinishLoadingWithResult:result];
+             [appDelegate.delegateForCurrentViewController controllerDidFinishLoadingWithResult:result];
          }
          else
          {
              NSLog(@"Error is %@",[error description]);
-             [delegate controllerDidFinishLoadingWithResult:error];
+             [appDelegate.delegateForCurrentViewController controllerDidFinishLoadingWithResult:error];
          }
          
      }

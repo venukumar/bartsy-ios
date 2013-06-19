@@ -80,7 +80,7 @@
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
             tblView.frame=CGRectMake(0, 40, 320,515);
             else
-            tblView.frame=CGRectMake(0, 40, 320,528-25);
+            tblView.frame=CGRectMake(0, 15, 320,528);
         }
         else
         {

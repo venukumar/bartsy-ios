@@ -301,6 +301,22 @@
     [delegateForCurrentViewController heartBeat];
 }
 
+-(void)controllerDidFinishLoadingWithResult:(id)result
+{
+    intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
+    intPeopleCount=[[result objectForKey:@"userCount"] integerValue];
+    
+    if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
+        [delegateForCurrentViewController reloadDataPeopleAndOrderCount];
+
+    
+}
+
+
+-(void)controllerDidFailLoadingWithError:(NSError*)error
+{
+    NSLog(@"Error is %@",error);
+}
 
 - (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif
 {
@@ -701,7 +717,7 @@
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil&&[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]!=nil)
     {
         NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/syncUserDetails",KServerURL];
-        NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"checkin",@"type",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",@"",@"userName",nil];
+        NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"checkin",@"type",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",deviceToken,@"deviceToken",@"1",@"deviceType",nil];
         [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
         NSLog(@"syncUserDetails Details \n %@",dictCheckIn);

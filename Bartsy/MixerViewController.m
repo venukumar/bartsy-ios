@@ -32,6 +32,8 @@
     
     self.title=@"Mixers";
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
     UIBarButtonItem *btnContinue=[[UIBarButtonItem alloc]initWithTitle:@"Continue" style:UIBarButtonItemStylePlain target:self action:@selector(btnContinue_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnContinue;
 
@@ -54,7 +56,7 @@
     NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrMixers];
     [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
     
-    if([arrTemp count])
+    if(1)
     {
         dictSelectedToMakeOrder=[[NSDictionary alloc]initWithDictionary:dictIngrident];
         
@@ -402,6 +404,8 @@
     NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrMixers];
     [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
     
+    NSLog(@"Spirit is %@",dictSelectedToMakeOrder);
+    
     NSMutableArray *arrIds=[[NSMutableArray alloc]init];
     [arrIds addObject:[dictSelectedToMakeOrder objectForKey:@"ingredientId"]];
     
@@ -418,6 +422,9 @@
         [strDescription appendString:strDesc];
     }
     
+    if([strDescription length])
+        strDescription=(NSMutableString*)[strDescription substringToIndex:[strDescription length]-1];
+    
     [arrTemp release];
     
     NSString *strBasePrice=[NSString stringWithFormat:@"%.2f",floatBasePrice];
@@ -432,7 +439,7 @@
     }
     
     
-    float subTotal=(floatBasePrice*(([strTip floatValue]+8)))/100;
+    float subTotal=(floatBasePrice*(([strTip floatValue]+9)))/100;
     float totalPrice=floatBasePrice+subTotal;
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
@@ -443,10 +450,12 @@
     else
         strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
 
-    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"ingredientId"] description:[strDescription substringToIndex:[strDescription length]-1] ingredients:arrIds receiverBartsyId:strBartsyId delegate:self];
     
-    [strDescription release];
-    [arrIds release];
+    
+    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"ingredientId"] description:strDescription ingredients:arrIds receiverBartsyId:strBartsyId delegate:self];
+    
+    //[strDescription release];
+    //[arrIds release];
 }
 
 

@@ -65,5 +65,7 @@
 -(void)startTimerToCheckHeartBeat;
 -(void)stopTimerForHeartBeat;
 -(void)showAPIVersionAlertWithReason:(NSString*)strReason;
+-(void)controllerDidFinishLoadingWithResult:(id)result;
+-(void)controllerDidFailLoadingWithError:(NSError*)error;
 @end
 
