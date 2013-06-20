@@ -60,6 +60,8 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
 }
+#pragma mark - Table view delegates
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 {
     if ([arrayForPastOrders count]) {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB8AB47D1773096300445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB47C1773096200445934 /* NotificationsViewController.m */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
@@ -192,6 +193,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB8AB47B1773096200445934 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		CB8AB47C1773096200445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -984,6 +987,8 @@
 				CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */,
 				E0417104176B5F3D00FBA233 /* PeopleViewController.h */,
 				E0417105176B5F3D00FBA233 /* PeopleViewController.m */,
+				CB8AB47B1773096200445934 /* NotificationsViewController.h */,
+				CB8AB47C1773096200445934 /* NotificationsViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1276,6 +1281,7 @@
 				E065D8B01768BC0D00DE7502 /* MyRewardsViewController.m in Sources */,
 				CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */,
 				E0417106176B5F3D00FBA233 /* PeopleViewController.m in Sources */,
+				CB8AB47D1773096300445934 /* NotificationsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 //
 
 #import "WelcomeViewController.h"
+#import "NotificationsViewController.h"
 #import "VenueListViewController.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
@@ -117,21 +118,21 @@
     
     UILabel *lblCreditCard=[self createLabelWithTitle:@"Setup your credit card..." frame:CGRectMake(55, 0, 200, 40) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
     [imgViewCheckInBox3 addSubview:lblCreditCard];
+*/    
     
-    
-    UIButton *btnNearBy=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic1.png"] frame:CGRectMake(10, 210, 140, 85) tag:222 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnNearBy=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic1.png"] frame:CGRectMake(10, 160, 140, 85) tag:222 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnNearBy];
     
-    UIButton *btnNotifications=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic2.png"] frame:CGRectMake(10, 302, 140, 85) tag:333 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnNotifications=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic2.png"] frame:CGRectMake(10, 280, 140, 85) tag:333 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnNotifications];
     
-    UIButton *btnMyRewards=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic4.png"] frame:CGRectMake(170, 210, 140, 85) tag:444 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnMyRewards=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic4.png"] frame:CGRectMake(170, 160, 140, 85) tag:444 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnMyRewards];
     
-    UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic3.png"] frame:CGRectMake(170, 302, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
+    UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic3.png"] frame:CGRectMake(170, 280, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnProfile];
     
-    
+ /*
     UIImageView *imgViewCheckInBox4=[self createImageViewWithImage:[UIImage imageNamed:@"box.png"] frame:CGRectMake(5, 390, 310, 44) tag:0];
     [self.view addSubview:imgViewCheckInBox4];
     
@@ -141,8 +142,8 @@
     UILabel *lblComment=[self createLabelWithTitle:@"Send us praise,comments or suggestions" frame:CGRectMake(55, 0, 280, 40) tag:0 font:[UIFont systemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
     [imgViewCheckInBox4 addSubview:lblComment];
     
-*/
-    
+
+
     UIButton *btnNearBy=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic1.png"] frame:CGRectMake(90, 120, 140, 85) tag:222 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnNearBy];
     
@@ -152,8 +153,8 @@
     UIButton *btnProfile=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"pic3.png"] frame:CGRectMake(90, 320, 140, 85) tag:555 selector:@selector(btn_TouchUpInside:) target:self];
     [self.view addSubview:btnProfile];
     
-
-    UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
+*/
+    UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(0, 420, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
     lblCopyRight.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblCopyRight];
 }
@@ -219,6 +220,13 @@
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }
+    else if(sender.tag==333)
+    {
+        NotificationsViewController *obj=[[NotificationsViewController alloc]init];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
+    }
+
 }
 
 -(void)btnClose_TouchUpInside:(UIButton*)sender
