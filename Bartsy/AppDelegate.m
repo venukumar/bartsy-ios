@@ -183,7 +183,7 @@
 {
     if(self.timerForOrderStatusUpdate==nil)
     {
-        self.timerForOrderStatusUpdate = [[NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(checkOrderStatusUpdate) userInfo:nil repeats:YES] retain];
+        self.timerForOrderStatusUpdate = [[NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(checkOrderStatusUpdate) userInfo:nil repeats:YES] retain];
     }
     
 }
@@ -235,10 +235,60 @@
              
              arrOrdersTimer=[[NSMutableArray alloc]initWithArray:[result objectForKey:@"orders"]];
              
-             [arrOrdersTimer removeObjectsInArray:arrOrders];
+             NSMutableArray *arrPlacedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"PlacedOrders"]];
+             
+             for (int i=0; i<0; i++)
+             //for (int i=0; i<[arrPlacedOrders count]; i++)
+             {
+                 NSMutableDictionary *dictOrder=[[NSMutableDictionary alloc]initWithDictionary:[arrPlacedOrders objectAtIndex:i]];
+                 
+                 NSDate* date1 = [dictOrder objectForKey:@"Time"];
+                 NSDate* date2 = [NSDate date];
+                 NSTimeInterval distanceBetweenDates = [date2 timeIntervalSinceDate:date1];
+                 NSLog(@"Time is %f",distanceBetweenDates);
+                 double secondsInAnMinute = 60;
+                 NSInteger intMinutesBetweenDates = distanceBetweenDates / secondsInAnMinute;
+                 
+                 NSMutableArray *arrOrdersTemp=[[NSMutableArray alloc]initWithArray:arrOrdersTimer];
+                 NSPredicate *pred=[NSPredicate predicateWithFormat:@"orderId ==[c] %@",[dictOrder objectForKey:@"orderId"]];
+                 [arrOrdersTemp filterUsingPredicate:pred];
+
+                 NSLog(@"Order is %@",arrOrdersTemp);
+
+                 NSDictionary *dictOrderTemp;
+                 if([arrOrdersTemp count])
+                     dictOrderTemp=[arrOrdersTemp objectAtIndex:0];
+                 
+                 if(intMinutesBetweenDates>=[[dictOrder objectForKey:@"orderTimeout"] integerValue]&&[dictOrderTemp count]&&[[dictOrder objectForKey:@"orderStatus"] integerValue]==[[dictOrderTemp objectForKey:@"orderStatus"] integerValue])
+                 {
+                     UILocalNotification *localNotificationForOrderFailure = [[UILocalNotification alloc]init];
+                     localNotificationForOrderFailure.alertBody =[NSString stringWithFormat:@"Something is wrong with this order(%i). Please check with your bartender",[[dictOrder objectForKey:@"orderId"] integerValue]];
+                     localNotificationForOrderFailure.fireDate = [NSDate date];
+                     localNotificationForOrderFailure.soundName = UILocalNotificationDefaultSoundName;
+                     localNotificationForOrderFailure.userInfo =[NSDictionary
+                                                                       dictionaryWithObjectsAndKeys:[dictOrder objectForKey:@"orderId"],@"orderId", nil];
+                     [[UIApplication sharedApplication] scheduleLocalNotification:localNotificationForOrderFailure];
+                 }
+                 else if([dictOrderTemp count]&&[[dictOrder objectForKey:@"orderStatus"] integerValue]!=[[dictOrderTemp objectForKey:@"orderStatus"] integerValue])
+                 {
+                     if([[dictOrderTemp objectForKey:@"orderStatus"] integerValue]!=5)
+                     {
+                         [dictOrder setObject:[dictOrderTemp objectForKey:@"orderStatus"] forKey:@"orderStatus"];
+                         [arrPlacedOrders replaceObjectAtIndex:i  withObject:dictOrder];
+                     }
+                     else
+                     {
+                         [arrPlacedOrders removeObjectAtIndex:i];
+                     }
+                     [[NSUserDefaults standardUserDefaults]setObject:arrPlacedOrders forKey:@"PlacedOrders"];
+                     [[NSUserDefaults standardUserDefaults]synchronize];
+                 }
+             }
              
              NSLog(@"Updated Orders is %@",arrOrdersTimer);
              
+             [arrOrdersTimer removeObjectsInArray:arrOrders];
+
              if([arrOrdersTimer count])
              {
                  NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"orderStatus" ascending:NO selector:nil];
@@ -308,8 +358,6 @@
     
     if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
         [delegateForCurrentViewController reloadDataPeopleAndOrderCount];
-
-    
 }
 
 
@@ -477,8 +525,6 @@
        
         if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
         [delegateForCurrentViewController reloadDataPeopleAndOrderCount];
-
-        
     }
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOffered"])
     {

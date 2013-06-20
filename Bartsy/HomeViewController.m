@@ -381,6 +381,12 @@
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         [appDelegate startTimerToCheckOrderStatusUpdate];
         
+        NSMutableArray *arrPlacedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"PlacedOrders"]];
+        NSDictionary *dictOrderPlaced=[[NSDictionary alloc]initWithObjectsAndKeys:[result objectForKey:@"orderId"],@"orderId",[result objectForKey:@"orderStatus"],@"orderStatus",[result objectForKey:@"orderTimeout"],@"orderTimeout",[NSDate date],@"Time",nil];
+        [arrPlacedOrders addObject:dictOrderPlaced];
+        [[NSUserDefaults standardUserDefaults]setObject:arrPlacedOrders forKey:@"PlacedOrders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [arrPlacedOrders release];
         
     }
     else if(isRequestForPeople==YES)
@@ -1287,12 +1293,12 @@
         
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
-        UIView *viewA=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        UIView *viewA=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480+23)];
         viewA.backgroundColor=[UIColor clearColor];
         viewA.tag=222;
         [self.view addSubview:viewA];
         
-        UIView *viewB=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480)];
+        UIView *viewB=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480+23)];
         viewB.backgroundColor=[UIColor blackColor];
         viewB.layer.opacity=0.6;
         viewB.tag=333;

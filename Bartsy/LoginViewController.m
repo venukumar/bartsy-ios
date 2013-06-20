@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-
+#import "AgreementViewController.h"
 @interface LoginViewController ()
 
 - (void)updateView;
@@ -35,9 +35,20 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
     appDelegate.delegateForCurrentViewController=self;
     
     [[GPPSignIn sharedInstance] signOut];
-
+    
+    
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"isNDAAccepted"]==nil)
+    {
+        AgreementViewController *obj=[[AgreementViewController alloc]init];
+        UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:obj];
+        [self presentViewController:nav animated:YES completion:nil];
+        [obj release];
+    }
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -263,6 +274,13 @@ static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5
 }
 
 -(void)btnRefresh_TouchUpInside
+{
+    int intCurrentPage=1;
+    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
+    [scrollView setContentOffset:CGPointMake(intCurrentPage*320, 0) animated:YES];
+}
+
+-(void)move
 {
     int intCurrentPage=1;
     UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];

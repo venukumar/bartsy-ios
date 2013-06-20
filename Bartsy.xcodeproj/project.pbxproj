@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CB8AB47D1773096300445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB47C1773096200445934 /* NotificationsViewController.m */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
@@ -174,6 +173,12 @@
 		E0D56E72174239DA00257870 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D56E71174239DA00257870 /* MobileCoreServices.framework */; };
 		E0D56E74174239DF00257870 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0D56E73174239DF00257870 /* MessageUI.framework */; };
 		E0D56E7717424B6A00257870 /* VenueListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0D56E7617424B6A00257870 /* VenueListViewController.m */; };
+		E0DBAFAA17733993003524EE /* AgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DBAFA917733993003524EE /* AgreementViewController.m */; };
+		E0DBAFAD177342CF003524EE /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DBAFAC177342CF003524EE /* WebViewController.m */; };
+		E0DBAFB21773474F003524EE /* 1.html in Resources */ = {isa = PBXBuildFile; fileRef = E0DBAFAE1773474F003524EE /* 1.html */; };
+		E0DBAFB31773474F003524EE /* 2.html in Resources */ = {isa = PBXBuildFile; fileRef = E0DBAFAF1773474F003524EE /* 2.html */; };
+		E0DBAFB41773474F003524EE /* 4.html in Resources */ = {isa = PBXBuildFile; fileRef = E0DBAFB01773474F003524EE /* 4.html */; };
+		E0DBAFB51773474F003524EE /* 3.html in Resources */ = {isa = PBXBuildFile; fileRef = E0DBAFB11773474F003524EE /* 3.html */; };
 		E0EEC339175B820400292043 /* slider.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EEC338175B820400292043 /* slider.png */; };
 		E0EEC33B175B889400292043 /* bottle.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EEC33A175B889400292043 /* bottle.png */; };
 		E0EED07517679DAF0045CA75 /* uncheck.png in Resources */ = {isa = PBXBuildFile; fileRef = E0EED07417679DAE0045CA75 /* uncheck.png */; };
@@ -193,8 +198,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CB8AB47B1773096200445934 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
-		CB8AB47C1773096200445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -476,6 +479,14 @@
 		E0D56E73174239DF00257870 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		E0D56E7517424B6A00257870 /* VenueListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenueListViewController.h; sourceTree = "<group>"; };
 		E0D56E7617424B6A00257870 /* VenueListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueListViewController.m; sourceTree = "<group>"; };
+		E0DBAFA817733992003524EE /* AgreementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgreementViewController.h; sourceTree = "<group>"; };
+		E0DBAFA917733993003524EE /* AgreementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgreementViewController.m; sourceTree = "<group>"; };
+		E0DBAFAB177342CF003524EE /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		E0DBAFAC177342CF003524EE /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		E0DBAFAE1773474F003524EE /* 1.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 1.html; sourceTree = "<group>"; };
+		E0DBAFAF1773474F003524EE /* 2.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 2.html; sourceTree = "<group>"; };
+		E0DBAFB01773474F003524EE /* 4.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 4.html; sourceTree = "<group>"; };
+		E0DBAFB11773474F003524EE /* 3.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = 3.html; sourceTree = "<group>"; };
 		E0EEC338175B820400292043 /* slider.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider.png; sourceTree = "<group>"; };
 		E0EEC33A175B889400292043 /* bottle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottle.png; sourceTree = "<group>"; };
 		E0EED07417679DAE0045CA75 /* uncheck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uncheck.png; sourceTree = "<group>"; };
@@ -609,6 +620,10 @@
 		E041068E172A8D6F009F1B1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E0DBAFAE1773474F003524EE /* 1.html */,
+				E0DBAFAF1773474F003524EE /* 2.html */,
+				E0DBAFB01773474F003524EE /* 4.html */,
+				E0DBAFB11773474F003524EE /* 3.html */,
 				E0FD862D172FD948006CB0A8 /* Images */,
 				E041068F172A8D6F009F1B1E /* Bartsy-Info.plist */,
 				E0410690172A8D6F009F1B1E /* InfoPlist.strings */,
@@ -987,8 +1002,10 @@
 				CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */,
 				E0417104176B5F3D00FBA233 /* PeopleViewController.h */,
 				E0417105176B5F3D00FBA233 /* PeopleViewController.m */,
-				CB8AB47B1773096200445934 /* NotificationsViewController.h */,
-				CB8AB47C1773096200445934 /* NotificationsViewController.m */,
+				E0DBAFA817733992003524EE /* AgreementViewController.h */,
+				E0DBAFA917733993003524EE /* AgreementViewController.m */,
+				E0DBAFAB177342CF003524EE /* WebViewController.h */,
+				E0DBAFAC177342CF003524EE /* WebViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1172,6 +1189,10 @@
 				E065D8AC1768878300DE7502 /* Default@2x.png in Resources */,
 				E065D8AD1768878300DE7502 /* Default.png in Resources */,
 				CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */,
+				E0DBAFB21773474F003524EE /* 1.html in Resources */,
+				E0DBAFB31773474F003524EE /* 2.html in Resources */,
+				E0DBAFB41773474F003524EE /* 4.html in Resources */,
+				E0DBAFB51773474F003524EE /* 3.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1281,7 +1302,8 @@
 				E065D8B01768BC0D00DE7502 /* MyRewardsViewController.m in Sources */,
 				CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */,
 				E0417106176B5F3D00FBA233 /* PeopleViewController.m in Sources */,
-				CB8AB47D1773096300445934 /* NotificationsViewController.m in Sources */,
+				E0DBAFAA17733993003524EE /* AgreementViewController.m in Sources */,
+				E0DBAFAD177342CF003524EE /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
