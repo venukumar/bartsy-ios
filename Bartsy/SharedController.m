@@ -736,7 +736,35 @@ static SharedController *sharedController;
     
 }
 
+-(void)getNotificationsWithDelegate:(id)aDelegate;
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getNotifications",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
+    {
+        [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+        [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    }
+    
+    NSLog(@"dict for get Notifications is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
 
+}
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
