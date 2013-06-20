@@ -7,7 +7,7 @@
 //
 
 #import "WelcomeViewController.h"
-#import "NotificationsViewController.h"
+//#import "NotificationsViewController.h"
 #import "VenueListViewController.h"
 #import "HomeViewController.h"
 #import "ProfileViewController.h"
@@ -222,9 +222,11 @@
     }
     else if(sender.tag==333)
     {
+        /*
         NotificationsViewController *obj=[[NotificationsViewController alloc]init];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
+         */
     }
 
 }
