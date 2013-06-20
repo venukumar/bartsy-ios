@@ -60,7 +60,7 @@
     
     if ([arrayForNotifications count])
     {
-        if ([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkin"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkout"])
+        if ([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkin"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkout"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"self"])
         {
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImage"]];
             
@@ -70,10 +70,36 @@
             [[cell.imageView layer] setShadowRadius:3.0];
             [[cell.imageView layer] setShadowOpacity:0.8];
             
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61, 0, 290, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61, -10, 250, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
+        }
+        else if([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"offer"])
+        {
+            NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImage"]];
+            
+            [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
+            [[cell.imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+            [[cell.imageView layer] setShadowRadius:3.0];
+            [[cell.imageView layer] setShadowOpacity:0.8];
+            
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61, -10, 250, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
+            lblItemName.backgroundColor=[UIColor clearColor];
+            lblItemName.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblItemName];
+
+            NSString *strURL1=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"recieverImage"]];
+
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(260, 0, 60, 60)];
+            [imgView setImageWithURL:[NSURL URLWithString:[strURL1 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [[imgView layer] setShadowOffset:CGSizeMake(0, 1)];
+            [[imgView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+            [[imgView layer] setShadowRadius:3.0];
+            [[imgView layer] setShadowOpacity:0.8];
+            [cell.contentView addSubview:imgView];
+
         }
     }
     else
