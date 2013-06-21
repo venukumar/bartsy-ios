@@ -12,6 +12,10 @@
 
 @interface MessageListViewController : BaseViewController<SharedControllerDelegate,UITextFieldDelegate,UIBubbleTableViewDataSource>
 {
+    UIImage *imgSelf;
+    UIImage *imgReceiver;
 }
+@property(nonatomic,retain)UIImage *imgSelf;
+@property(nonatomic,retain)UIImage *imgReceiver;
 @property(nonatomic,retain)NSDictionary *dictForReceiver;
 @end

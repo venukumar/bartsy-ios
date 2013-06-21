@@ -11,6 +11,8 @@
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
 #import "Constants.h"
+#import "UIImageView+WebCache.h"
+
 
 @interface MessageListViewController ()
 {
@@ -25,7 +27,7 @@
 @end
 
 @implementation MessageListViewController
-@synthesize dictForReceiver;
+@synthesize dictForReceiver,imgSelf,imgReceiver;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -41,6 +43,25 @@
     self.title = @"Messages";
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
+    
+    NSURL *urlSelf=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:urlSelf]
+queue:[NSOperationQueue mainQueue]
+completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+    {
+        imgSelf=[[UIImage alloc] initWithData:dataOrder];
+        NSLog(@"ImgSelf is %@",imgSelf);
+
+    }];
+    
+    NSURL *urlReceiver=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dictForReceiver objectForKey:@"bartsyId"]]];
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:urlReceiver]
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder1, NSError *error)
+     {
+         imgReceiver=[[UIImage alloc] initWithData:dataOrder1];
+         NSLog(@"ImgRec is %@",imgReceiver);
+     }];
     
     viewForTextField = [[UIView alloc] init];
     if (IS_IPHONE_5)
@@ -88,7 +109,7 @@
     bubbleTableView.snapInterval = 120;
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
-//    bubbleTableView.showAvatars = YES;
+    bubbleTableView.showAvatars = YES;
     
     // Uncomment the line below to add "Now typing" bubble
     // Possible values are
@@ -103,6 +124,11 @@
 	// Do any additional setup after loading the view.
 }
 -(void)viewWillAppear:(BOOL)animated
+{
+    
+}
+
+-(void)viewDidAppear:(BOOL)animated
 {
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     isGetMessageWebService = YES;
@@ -183,6 +209,7 @@
         isGetMessageWebService=NO;
         [bubbleData removeAllObjects];
         NSMutableArray *arrayForMessages = [[NSMutableArray alloc] initWithArray:[result objectForKey:@"messages"]];
+        
         for (int i = 0 ; i<[arrayForMessages count]; i++)
         {
             NSDictionary *dictMsg=[arrayForMessages objectAtIndex:i];
@@ -196,8 +223,15 @@
                 isSentByMe=YES;
             }
             isSentByMe=!isSentByMe;
-            
             NSBubbleData *bubbleMsg = [NSBubbleData dataWithText:[dictMsg objectForKey:@"message"] date:date type:isSentByMe];
+            
+            if(!isSentByMe)
+                bubbleMsg.avatar=imgSelf;
+            else
+                bubbleMsg.avatar=imgReceiver;
+            
+            NSLog(@"Img is %@",imgReceiver);
+            
             [bubbleData addObject:bubbleMsg];
         }
         [bubbleTableView reloadData];
