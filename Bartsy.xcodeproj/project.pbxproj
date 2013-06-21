@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB482177417AB00445934 /* NotificationsViewController.m */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
@@ -198,6 +199,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB8AB481177417AB00445934 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
+		CB8AB482177417AB00445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -1006,6 +1009,8 @@
 				E0DBAFA917733993003524EE /* AgreementViewController.m */,
 				E0DBAFAB177342CF003524EE /* WebViewController.h */,
 				E0DBAFAC177342CF003524EE /* WebViewController.m */,
+				CB8AB481177417AB00445934 /* NotificationsViewController.h */,
+				CB8AB482177417AB00445934 /* NotificationsViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1304,6 +1309,7 @@
 				E0417106176B5F3D00FBA233 /* PeopleViewController.m in Sources */,
 				E0DBAFAA17733993003524EE /* AgreementViewController.m in Sources */,
 				E0DBAFAD177342CF003524EE /* WebViewController.m in Sources */,
+				CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
