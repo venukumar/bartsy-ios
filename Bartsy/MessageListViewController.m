@@ -50,7 +50,6 @@ queue:[NSOperationQueue mainQueue]
 completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     {
         imgSelf=[[UIImage alloc] initWithData:dataOrder];
-        NSLog(@"ImgSelf is %@",imgSelf);
 
     }];
     
@@ -60,7 +59,6 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
                            completionHandler:^(NSURLResponse *response, NSData *dataOrder1, NSError *error)
      {
          imgReceiver=[[UIImage alloc] initWithData:dataOrder1];
-         NSLog(@"ImgRec is %@",imgReceiver);
      }];
     
     viewForTextField = [[UIView alloc] init];
@@ -229,8 +227,6 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
                 bubbleMsg.avatar=imgSelf;
             else
                 bubbleMsg.avatar=imgReceiver;
-            
-            NSLog(@"Img is %@",imgReceiver);
             
             [bubbleData addObject:bubbleMsg];
         }
