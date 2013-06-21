@@ -10,6 +10,7 @@
 #import "UIBubbleTableView.h"
 #import "UIBubbleTableViewDataSource.h"
 #import "NSBubbleData.h"
+#import "Constants.h"
 
 @interface MessageListViewController ()
 {
@@ -41,12 +42,21 @@
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
     
-    viewForTextField = [[UIView alloc] initWithFrame:CGRectMake(0, 381, 320, 35)];
+    viewForTextField = [[UIView alloc] init];
+    if (IS_IPHONE_5)
+    {
+        viewForTextField.frame = CGRectMake(0, 469, 320, 35);
+    }
+    else
+    {
+        viewForTextField.frame = CGRectMake(0, 381, 320, 35);
+    }
     viewForTextField.backgroundColor = [UIColor grayColor];
     [self.view addSubview:viewForTextField];
     
     txtField = [[UITextField alloc] initWithFrame:CGRectMake(2,3, 275, 30)];
     txtField.borderStyle = UITextBorderStyleRoundedRect;
+    txtField.placeholder=@"Type Message";
     txtField.delegate = self;
     txtField.autocorrectionType = UITextAutocorrectionTypeNo;
     txtField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -60,30 +70,25 @@
 
     
     //Adding Bubble View Table View Code
-    bubbleTableView = [[UIBubbleTableView alloc]initWithFrame:CGRectMake(0, 0, 320, 382)];
+    bubbleTableView = [[UIBubbleTableView alloc]init];
+    if (IS_IPHONE_5)
+    {
+        bubbleTableView.frame = CGRectMake(0, 0, 320, 465);
+    }
+    else
+    {
+        bubbleTableView.frame = CGRectMake(0, 0, 320, 382);
+    }
+    bubbleData = [[NSMutableArray alloc] init];
     
-    NSBubbleData *heyBubble = [NSBubbleData dataWithText:@"hi, just now i had kingfisher" date:[NSDate dateWithTimeIntervalSinceNow:-300] type:BubbleTypeSomeoneElse];
-    heyBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
-    
-    NSBubbleData *photoBubble = [NSBubbleData dataWithImage:[UIImage imageNamed:@"halloween.jpg"] date:[NSDate dateWithTimeIntervalSinceNow:-290] type:BubbleTypeSomeoneElse];
-    photoBubble.avatar = [UIImage imageNamed:@"avatar1.png"];
-    
-    NSBubbleData *replyBubble = [NSBubbleData dataWithText:@"Wow.. Really cool" date:[NSDate dateWithTimeIntervalSinceNow:-5] type:BubbleTypeMine];
-    replyBubble.avatar = nil;
-    
-    bubbleData = [[NSMutableArray alloc] initWithObjects:heyBubble, photoBubble, replyBubble, nil];
     bubbleTableView.bubbleDataSource = self;
-    
     // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
     // Groups are delimited with header which contains date and time for the first message in the group.
-    
     bubbleTableView.snapInterval = 120;
-    
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
-    
-    bubbleTableView.showAvatars = YES;
+//    bubbleTableView.showAvatars = YES;
     
     // Uncomment the line below to add "Now typing" bubble
     // Possible values are
@@ -92,21 +97,22 @@
     //    - NSBubbleTypingTypeNone - no "now typing" bubble
     
 //   bubbleTableView.typingBubble = NSBubbleTypingTypeNone;
-    
     [bubbleTableView reloadData];
-    
     [self.view addSubview:bubbleTableView];
 
 	// Do any additional setup after loading the view.
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     isGetMessageWebService = YES;
     [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
 }
 
 -(void)btnSend_TouchUpInside:(UIButton*)sender
 {
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+     isGetMessageWebService=NO;
     isSendWebService = YES;
     [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:txtField.text delegate:self];
 }
@@ -123,7 +129,6 @@
         CGRect frame = viewForTextField.frame;
         frame.origin.y -= kbSize.height;
         viewForTextField.frame = frame;
-        
         
         frame = bubbleTableView.frame;
         frame.size.height -= kbSize.height;
@@ -172,15 +177,36 @@
     if ([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
         [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        
     }
     else if (isGetMessageWebService == YES)
     {
-        
+        isGetMessageWebService=NO;
+        [bubbleData removeAllObjects];
+        NSMutableArray *arrayForMessages = [[NSMutableArray alloc] initWithArray:[result objectForKey:@"messages"]];
+        for (int i = 0 ; i<[arrayForMessages count]; i++)
+        {
+            NSDictionary *dictMsg=[arrayForMessages objectAtIndex:i];
+            NSDateFormatter *dateFormatter = [NSDateFormatter new];
+            dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
+            NSDate *date    = [dateFormatter dateFromString:[dictMsg objectForKey:@"date"]];
+            
+            BOOL isSentByMe=NO;
+            if([[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] stringValue] isEqualToString:[dictMsg objectForKey:@"senderId"]])
+            {
+                isSentByMe=YES;
+            }
+            isSentByMe=!isSentByMe;
+            
+            NSBubbleData *bubbleMsg = [NSBubbleData dataWithText:[dictMsg objectForKey:@"message"] date:date type:isSentByMe];
+            [bubbleData addObject:bubbleMsg];
+        }
+        [bubbleTableView reloadData];
     }
     else if (isSendWebService == YES)
     {
-        
+        txtField.text=@"";
+        isGetMessageWebService = YES;
+        [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
     }
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error;
