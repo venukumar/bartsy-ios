@@ -104,7 +104,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
     // Groups are delimited with header which contains date and time for the first message in the group.
-    bubbleTableView.snapInterval = 120;
+    bubbleTableView.snapInterval = 60;
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
     bubbleTableView.showAvatars = YES;
