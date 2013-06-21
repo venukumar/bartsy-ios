@@ -50,7 +50,6 @@ queue:[NSOperationQueue mainQueue]
 completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     {
         imgSelf=[[UIImage alloc] initWithData:dataOrder];
-
     }];
     
     NSURL *urlReceiver=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dictForReceiver objectForKey:@"bartsyId"]]];
@@ -135,10 +134,17 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 
 -(void)btnSend_TouchUpInside:(UIButton*)sender
 {
-    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-     isGetMessageWebService=NO;
-    isSendWebService = YES;
-    [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:txtField.text delegate:self];
+    if ([txtField.text length])
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        isGetMessageWebService=NO;
+        isSendWebService = YES;
+        [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:txtField.text delegate:self];
+    }
+    else
+    {
+        [self.sharedController showAlertWithTitle:nil message:@"Message should not be empty" delegate:nil];
+    }
 }
 #pragma mark - Keyboard notification methods
 

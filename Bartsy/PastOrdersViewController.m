@@ -42,6 +42,10 @@
     self.sharedController=[SharedController sharedController];
     
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 415)];
+    if (IS_IPHONE_5)
+    {
+        tblView.frame = CGRectMake(0, 0, 320, 495);
+    }
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
