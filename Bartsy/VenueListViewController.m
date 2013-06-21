@@ -217,6 +217,10 @@
     MKMapView *mapView=(MKMapView*)[self.view viewWithTag:222];
     mapView.delegate=self;
     
+    NSMutableArray * annotationsToRemove = [ mapView.annotations mutableCopy ] ;
+    [annotationsToRemove removeObject:mapView.userLocation ] ;
+    [mapView removeAnnotations:annotationsToRemove] ;
+    
     for (int i=0;i<[arrVenueList count];i++)
     {
         NSMutableDictionary *dict=[arrVenueList objectAtIndex:i];
@@ -228,13 +232,7 @@
         NSNumber *miles=[NSNumber numberWithFloat:distanceInMiles];
         [dict setObject:miles forKey:@"distance"];
         [arrVenueList replaceObjectAtIndex:i withObject:dict];
-        
-        MyAnnotation *ann=[[MyAnnotation alloc]initWithCoordinate:venueLocation.coordinate title:[dict objectForKey:@"venueName"] subtitle:[dict objectForKey:@"address"]];
-        ann.tagValue=i;
-        [mapView addAnnotation:ann];
-        
-        //        [currentLocation release];
-        //        [venueLocation release];
+    
     }
     
     NSLog(@"Venue List %@",arrVenueList);
@@ -242,6 +240,16 @@
     NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"distance" ascending:YES selector:nil];
     [arrVenueList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     //[sortDescriptor release];
+    
+    for (int i=0;i<[arrVenueList count];i++)
+    {
+        NSMutableDictionary *dict=[arrVenueList objectAtIndex:i];
+        CLLocation *venueLocation = [[CLLocation alloc] initWithLatitude:[[dict objectForKey:@"latitude"] floatValue] longitude:[[dict objectForKey:@"longitude"] floatValue]];
+        
+        MyAnnotation *ann=[[MyAnnotation alloc]initWithCoordinate:venueLocation.coordinate title:[dict objectForKey:@"venueName"] subtitle:[dict objectForKey:@"address"]];
+        ann.tagValue=i;
+        [mapView addAnnotation:ann];
+    }
     
     NSLog(@"Venue List %@",arrVenueList);
     if([arrVenueList count])
@@ -277,23 +285,19 @@
         MyAnnotation *ann=(MyAnnotation*)annotation;
         
         UIButton *btnDetail=[UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        NSLog(@"Tag is %i title is %@",ann.tagValue,ann.title);
         btnDetail.tag=ann.tagValue;
         [btnDetail addTarget:self action:@selector(btnDetail_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         pinAnn.rightCalloutAccessoryView=btnDetail;
         
         return pinAnn;
     }
-    //    else
-    //    {
-    //        MKUserLocation *ann=[[MKPointAnnotation alloc]init];
-    //        ann.coordinate=currentLocaion;
-    //        return ann;
-    //    }
-    
 }
 
 -(void)btnDetail_TouchUpInside:(UIButton*)sender
 {
+    NSLog(@"Tag is %i",sender.tag);
+    
     if([[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] integerValue]!=[[[arrVenueList objectAtIndex:sender.tag] objectForKey:@"venueId"] integerValue])
     {
         intIndex=sender.tag;

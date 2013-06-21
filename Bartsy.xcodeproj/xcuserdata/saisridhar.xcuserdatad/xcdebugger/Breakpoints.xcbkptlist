@@ -332,13 +332,39 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "393425591.753579"
+         filePath = "Bartsy/VenueListViewController.m"
+         timestampString = "393502708.822463"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "192"
-         endingLineNumber = "192"
-         landmarkName = "-stopTimerForOrderStatusUpdate"
+         startingLineNumber = "299"
+         endingLineNumber = "299"
+         landmarkName = "-btnDetail_TouchUpInside:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/VenueListViewController.m"
+         timestampString = "393501824.926925"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "223"
+         endingLineNumber = "223"
+         landmarkName = "-reloadMapView"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/SharedController.m"
+         timestampString = "393501954.826685"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "402"
+         endingLineNumber = "402"
+         landmarkName = "-checkInAtBartsyVenueWithId:delegate:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

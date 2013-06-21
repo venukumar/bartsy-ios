@@ -1479,7 +1479,7 @@
             [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
             [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
             
-            if([result objectForKey:@"creditCardNumber"]!=nil)
+            if([[result objectForKey:@"creditCardNumber"]length]==16)
             {
                 creditCardInfo=[[CardIOCreditCardInfo alloc]init];
                 creditCardInfo.cardNumber=[result objectForKey:@"creditCardNumber"];
