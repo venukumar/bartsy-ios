@@ -14,6 +14,8 @@
 #import "RevealController.h"
 #import "Constants.h"
 #import "PeopleViewController.h"
+#import "MessageListViewController.h"
+
 
 
 @interface PeopleCustomCell : UITableViewCell {}
@@ -903,7 +905,7 @@
     {
         cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
 
-        [cell setUserInteractionEnabled:NO];
+//        [cell setUserInteractionEnabled:NO];
         
         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.section];
         
@@ -1569,6 +1571,13 @@
         [viewA release];
         [viewB release];
         [viewC release];
+    }
+    else if(isSelectedForPeople)
+    {
+        MessageListViewController *obj = [[MessageListViewController alloc] init];
+        obj.dictForReceiver = [arrPeople objectAtIndex:indexPath.section];
+        //[self.navigationController pushViewController:obj animated:YES];
+        [obj release];
     }
     // Navigation logic may go here. Create and push another view controller.
 }

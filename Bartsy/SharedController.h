@@ -59,4 +59,6 @@
 -(void)getUserProfileWithBartsyId:(NSString*)strBastsyId delegate:(id)aDelegate;
 -(void)getPastOrderWithVenueWithId:(NSString*)strVenueId bartsyId:(NSString*)strbartsyId date:(NSString*)date  delegate:(id)aDelegate;
 -(void)getNotificationsWithDelegate:(id)aDelegate;
+-(void)sendMessageWithSenderId:(NSString*)strSenderBarstsyID receiverId:(NSString*)strReceiverBartsyId message:(NSString*)message delegate:(id)aDelegate;
+
 @end
