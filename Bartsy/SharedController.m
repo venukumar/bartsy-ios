@@ -796,7 +796,7 @@ static SharedController *sharedController;
 -(void)getMessagesWithReceiverId:(NSString*)strReceiverBartsyId delegate:(id)aDelegate;
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/sendMessage",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getMessages",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
