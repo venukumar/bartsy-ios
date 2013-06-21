@@ -1560,6 +1560,16 @@
         else if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
             [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+            
+            if(appDelegate.isLoginForFB)
+            {
+                [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:[dictResult objectForKey:@"username"],@"facebookUserName",[dictResult objectForKey:@"id"],@"facebookId", nil] forKey:@"LoginDetails"];
+            }
+            else if(auth!=nil)
+            {
+                [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:[dictResult objectForKey:@"googleid"],@"googleId",[dictResult objectForKey:@"googleusername"],@"googleUserName", nil] forKey:@"LoginDetails"];
+            }
+            
             [[NSUserDefaults standardUserDefaults]synchronize];
             
             if([[result objectForKey:@"venueId"] integerValue]&&[result objectForKey:@"venueId"]!=nil)

@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-@interface MessageListViewController : BaseViewController<SharedControllerDelegate,UITableViewDataSource,UITableViewDelegate>
+#import "UIBubbleTableViewDataSource.h"
+
+@interface MessageListViewController : BaseViewController<SharedControllerDelegate,UITextFieldDelegate,UIBubbleTableViewDataSource>
 {
 }
 @property(nonatomic,retain)NSDictionary *dictForReceiver;

@@ -1576,7 +1576,7 @@
     {
         MessageListViewController *obj = [[MessageListViewController alloc] init];
         obj.dictForReceiver = [arrPeople objectAtIndex:indexPath.section];
-        //[self.navigationController pushViewController:obj animated:YES];
+        [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }
     // Navigation logic may go here. Create and push another view controller.

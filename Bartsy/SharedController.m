@@ -130,7 +130,7 @@ static SharedController *sharedController;
     
         NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:nil];
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
-
+    [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictProfile];
     NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -765,7 +765,6 @@ static SharedController *sharedController;
     [request release];
 
 }
-
 -(void)sendMessageWithSenderId:(NSString*)strSenderBarstsyID receiverId:(NSString*)strReceiverBartsyId message:(NSString*)message delegate:(id)aDelegate;
 {
     self.delegate=aDelegate;
@@ -791,7 +790,33 @@ static SharedController *sharedController;
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [self sendRequest:request];
     [url release];
-    [request release];    
+    [request release];
+ 
+}
+-(void)getMessagesWithReceiverId:(NSString*)strReceiverBartsyId delegate:(id)aDelegate;
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/sendMessage",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"senderId"];
+    [dictCheckIn setObject:strReceiverBartsyId forKey:@"receiverId"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    NSLog(@"dict for get Messages is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
 }
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {

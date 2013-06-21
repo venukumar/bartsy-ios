@@ -9,6 +9,23 @@
 /* Begin PBXBuildFile section */
 		CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB482177417AB00445934 /* NotificationsViewController.m */; };
 		CB8AB4861774200B00445934 /* MessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4851774200B00445934 /* MessageListViewController.m */; };
+		CB8AB4891774376400445934 /* arrow_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4871774376400445934 /* arrow_chat@2x.png */; };
+		CB8AB48A1774376400445934 /* arrow_chat.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4881774376400445934 /* arrow_chat.png */; };
+		CB8AB4F21774580500445934 /* NSBubbleData.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4E81774580500445934 /* NSBubbleData.m */; };
+		CB8AB4F31774580500445934 /* UIBubbleTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4EA1774580500445934 /* UIBubbleTableView.m */; };
+		CB8AB4F41774580500445934 /* UIBubbleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4EC1774580500445934 /* UIBubbleTableViewCell.m */; };
+		CB8AB4F51774580500445934 /* UIBubbleHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4EE1774580500445934 /* UIBubbleHeaderTableViewCell.m */; };
+		CB8AB4F61774580500445934 /* UIBubbleTypingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4F01774580500445934 /* UIBubbleTypingTableViewCell.m */; };
+		CB8AB5021774583300445934 /* bubbleMine.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4F81774583300445934 /* bubbleMine.png */; };
+		CB8AB5031774583300445934 /* bubbleMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4F91774583300445934 /* bubbleMine@2x.png */; };
+		CB8AB5041774583300445934 /* bubbleSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FA1774583300445934 /* bubbleSomeone.png */; };
+		CB8AB5051774583300445934 /* bubbleSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FB1774583300445934 /* bubbleSomeone@2x.png */; };
+		CB8AB5061774583300445934 /* missingAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FC1774583300445934 /* missingAvatar.png */; };
+		CB8AB5071774583300445934 /* missingAvatar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FD1774583300445934 /* missingAvatar@2x.png */; };
+		CB8AB5081774583300445934 /* typingMine.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FE1774583300445934 /* typingMine.png */; };
+		CB8AB5091774583300445934 /* typingMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FF1774583300445934 /* typingMine@2x.png */; };
+		CB8AB50A1774583300445934 /* typingSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5001774583300445934 /* typingSomeone.png */; };
+		CB8AB50B1774583300445934 /* typingSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5011774583300445934 /* typingSomeone@2x.png */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
@@ -204,6 +221,29 @@
 		CB8AB482177417AB00445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CB8AB4841774200B00445934 /* MessageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageListViewController.h; sourceTree = "<group>"; };
 		CB8AB4851774200B00445934 /* MessageListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageListViewController.m; sourceTree = "<group>"; };
+		CB8AB4871774376400445934 /* arrow_chat@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_chat@2x.png"; sourceTree = "<group>"; };
+		CB8AB4881774376400445934 /* arrow_chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_chat.png; sourceTree = "<group>"; };
+		CB8AB4E71774580500445934 /* NSBubbleData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSBubbleData.h; sourceTree = "<group>"; };
+		CB8AB4E81774580500445934 /* NSBubbleData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSBubbleData.m; sourceTree = "<group>"; };
+		CB8AB4E91774580500445934 /* UIBubbleTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTableView.h; sourceTree = "<group>"; };
+		CB8AB4EA1774580500445934 /* UIBubbleTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTableView.m; sourceTree = "<group>"; };
+		CB8AB4EB1774580500445934 /* UIBubbleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTableViewCell.h; sourceTree = "<group>"; };
+		CB8AB4EC1774580500445934 /* UIBubbleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTableViewCell.m; sourceTree = "<group>"; };
+		CB8AB4ED1774580500445934 /* UIBubbleHeaderTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleHeaderTableViewCell.h; sourceTree = "<group>"; };
+		CB8AB4EE1774580500445934 /* UIBubbleHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleHeaderTableViewCell.m; sourceTree = "<group>"; };
+		CB8AB4EF1774580500445934 /* UIBubbleTypingTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTypingTableViewCell.h; sourceTree = "<group>"; };
+		CB8AB4F01774580500445934 /* UIBubbleTypingTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBubbleTypingTableViewCell.m; sourceTree = "<group>"; };
+		CB8AB4F11774580500445934 /* UIBubbleTableViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBubbleTableViewDataSource.h; sourceTree = "<group>"; };
+		CB8AB4F81774583300445934 /* bubbleMine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubbleMine.png; sourceTree = "<group>"; };
+		CB8AB4F91774583300445934 /* bubbleMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubbleMine@2x.png"; sourceTree = "<group>"; };
+		CB8AB4FA1774583300445934 /* bubbleSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bubbleSomeone.png; sourceTree = "<group>"; };
+		CB8AB4FB1774583300445934 /* bubbleSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bubbleSomeone@2x.png"; sourceTree = "<group>"; };
+		CB8AB4FC1774583300445934 /* missingAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = missingAvatar.png; sourceTree = "<group>"; };
+		CB8AB4FD1774583300445934 /* missingAvatar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "missingAvatar@2x.png"; sourceTree = "<group>"; };
+		CB8AB4FE1774583300445934 /* typingMine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = typingMine.png; sourceTree = "<group>"; };
+		CB8AB4FF1774583300445934 /* typingMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingMine@2x.png"; sourceTree = "<group>"; };
+		CB8AB5001774583300445934 /* typingSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = typingSomeone.png; sourceTree = "<group>"; };
+		CB8AB5011774583300445934 /* typingSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingSomeone@2x.png"; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -553,6 +593,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CB8AB4E6177457E000445934 /* BubbleTableClasses */ = {
+			isa = PBXGroup;
+			children = (
+				CB8AB4E71774580500445934 /* NSBubbleData.h */,
+				CB8AB4E81774580500445934 /* NSBubbleData.m */,
+				CB8AB4E91774580500445934 /* UIBubbleTableView.h */,
+				CB8AB4EA1774580500445934 /* UIBubbleTableView.m */,
+				CB8AB4EB1774580500445934 /* UIBubbleTableViewCell.h */,
+				CB8AB4EC1774580500445934 /* UIBubbleTableViewCell.m */,
+				CB8AB4ED1774580500445934 /* UIBubbleHeaderTableViewCell.h */,
+				CB8AB4EE1774580500445934 /* UIBubbleHeaderTableViewCell.m */,
+				CB8AB4EF1774580500445934 /* UIBubbleTypingTableViewCell.h */,
+				CB8AB4F01774580500445934 /* UIBubbleTypingTableViewCell.m */,
+				CB8AB4F11774580500445934 /* UIBubbleTableViewDataSource.h */,
+			);
+			name = BubbleTableClasses;
+			sourceTree = "<group>";
+		};
+		CB8AB4F71774582200445934 /* BubbleTableImages */ = {
+			isa = PBXGroup;
+			children = (
+				CB8AB4F81774583300445934 /* bubbleMine.png */,
+				CB8AB4F91774583300445934 /* bubbleMine@2x.png */,
+				CB8AB4FA1774583300445934 /* bubbleSomeone.png */,
+				CB8AB4FB1774583300445934 /* bubbleSomeone@2x.png */,
+				CB8AB4FC1774583300445934 /* missingAvatar.png */,
+				CB8AB4FD1774583300445934 /* missingAvatar@2x.png */,
+				CB8AB4FE1774583300445934 /* typingMine.png */,
+				CB8AB4FF1774583300445934 /* typingMine@2x.png */,
+				CB8AB5001774583300445934 /* typingSomeone.png */,
+				CB8AB5011774583300445934 /* typingSomeone@2x.png */,
+			);
+			name = BubbleTableImages;
+			sourceTree = "<group>";
+		};
 		E0410679172A8D6E009F1B1E = {
 			isa = PBXGroup;
 			children = (
@@ -613,6 +688,7 @@
 				E088B907174E02AF0056FF39 /* AuthorizeNet */,
 				E092F9921730552900E1CC15 /* Database */,
 				E092F9931730553B00E1CC15 /* View */,
+				CB8AB4E6177457E000445934 /* BubbleTableClasses */,
 				E092F9911730550800E1CC15 /* WebServices */,
 				E092F98D17304EA500E1CC15 /* Lazy Loading */,
 				E092F971173049F700E1CC15 /* Network */,
@@ -1035,6 +1111,9 @@
 		E0FD862D172FD948006CB0A8 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CB8AB4F71774582200445934 /* BubbleTableImages */,
+				CB8AB4871774376400445934 /* arrow_chat@2x.png */,
+				CB8AB4881774376400445934 /* arrow_chat.png */,
 				E0EED07617679E540045CA75 /* checked.png */,
 				E0EED07417679DAE0045CA75 /* uncheck.png */,
 				E0895E8717664B5300498995 /* ic_launcher.png */,
@@ -1203,6 +1282,18 @@
 				E0DBAFB31773474F003524EE /* 2.html in Resources */,
 				E0DBAFB41773474F003524EE /* 4.html in Resources */,
 				E0DBAFB51773474F003524EE /* 3.html in Resources */,
+				CB8AB4891774376400445934 /* arrow_chat@2x.png in Resources */,
+				CB8AB48A1774376400445934 /* arrow_chat.png in Resources */,
+				CB8AB5021774583300445934 /* bubbleMine.png in Resources */,
+				CB8AB5031774583300445934 /* bubbleMine@2x.png in Resources */,
+				CB8AB5041774583300445934 /* bubbleSomeone.png in Resources */,
+				CB8AB5051774583300445934 /* bubbleSomeone@2x.png in Resources */,
+				CB8AB5061774583300445934 /* missingAvatar.png in Resources */,
+				CB8AB5071774583300445934 /* missingAvatar@2x.png in Resources */,
+				CB8AB5081774583300445934 /* typingMine.png in Resources */,
+				CB8AB5091774583300445934 /* typingMine@2x.png in Resources */,
+				CB8AB50A1774583300445934 /* typingSomeone.png in Resources */,
+				CB8AB50B1774583300445934 /* typingSomeone@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1316,6 +1407,11 @@
 				E0DBAFAD177342CF003524EE /* WebViewController.m in Sources */,
 				CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */,
 				CB8AB4861774200B00445934 /* MessageListViewController.m in Sources */,
+				CB8AB4F21774580500445934 /* NSBubbleData.m in Sources */,
+				CB8AB4F31774580500445934 /* UIBubbleTableView.m in Sources */,
+				CB8AB4F41774580500445934 /* UIBubbleTableViewCell.m in Sources */,
+				CB8AB4F51774580500445934 /* UIBubbleHeaderTableViewCell.m in Sources */,
+				CB8AB4F61774580500445934 /* UIBubbleTypingTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
