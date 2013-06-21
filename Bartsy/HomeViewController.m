@@ -820,7 +820,7 @@
     {
         if([arrBundledOrders count])
         {
-            return [[arrBundledOrders objectAtIndex:indexPath.section] count]*70+170;
+            return [[arrBundledOrders objectAtIndex:indexPath.section] count]*70+170+70;
         }
         else
         {
@@ -1036,7 +1036,7 @@
             //cell.textLabel.text=[dict objectForKey:@"itemName"];
             [cell setUserInteractionEnabled:NO];
             
-            UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, [[arrBundledOrders objectAtIndex:indexPath.section] count]*70+160)];
+            UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, [[arrBundledOrders objectAtIndex:indexPath.section] count]*70+160+70)];
             viewBorder.backgroundColor = [UIColor clearColor];
             viewBorder.layer.borderWidth = 1;
             viewBorder.layer.cornerRadius = 6;
@@ -1046,7 +1046,7 @@
             [cell.contentView addSubview:viewBorder];
             [viewBorder release];
             
-            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 48)];
+            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 48+20)];
             if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
                 viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
             else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"2"])
@@ -1058,23 +1058,46 @@
             [viewBorder addSubview:viewHeader];
             [viewHeader release];
             
-            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 280, 43)];
+            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dict objectForKey:@"recieverBartsyId"]]];
+            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,15,60,60)];
+            [imgViewPhoto setImageWithURL:urlPhoto];
+            [viewBorder addSubview:imgViewPhoto];
+            [imgViewPhoto release];
+            
+            
+            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(100, 10, 180, 40)];
+            lblOrderId.font = [UIFont boldSystemFontOfSize:38];
+            lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
+            lblOrderId.backgroundColor = [UIColor clearColor];
+            lblOrderId.textColor = [UIColor whiteColor] ;
+            lblOrderId.textAlignment = NSTextAlignmentLeft;
+            [viewBorder addSubview:lblOrderId];
+            [lblOrderId release];
+            
+            UIView *viewStatus = [[UIView alloc]initWithFrame:CGRectMake(5, 85, 290, 30)];
+            viewStatus.backgroundColor = [UIColor whiteColor];
+            viewStatus.layer.borderWidth = 1;
+            viewStatus.layer.borderColor = [UIColor grayColor].CGColor;
+            viewStatus.layer.cornerRadius = 6;
+            [viewBorder addSubview:viewStatus];
+            [viewStatus release];
+            
+            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 280, 30)];
             lblTitle.numberOfLines=2;
             lblTitle.font = [UIFont boldSystemFontOfSize:18];
             if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
-                lblTitle.text = [NSString stringWithFormat:@"Waiting for bartender to accept (%i)",[[dict objectForKey:@"orderId"] integerValue]];
+                lblTitle.text = [NSString stringWithFormat:@"Waiting for bartender to accept"];
             else
-                lblTitle.text = [NSString stringWithFormat:@"%@ with number (%i)",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
-            
+                lblTitle.text = [NSString stringWithFormat:@"%@",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2]];
             lblTitle.tag = 1234;
             lblTitle.backgroundColor = [UIColor clearColor];
-            lblTitle.textColor = [UIColor whiteColor] ;
+            lblTitle.textColor = [UIColor blackColor] ;
             lblTitle.textAlignment = NSTextAlignmentCenter;
             lblTitle.adjustsFontSizeToFitWidth=YES;
-            [viewHeader addSubview:lblTitle];
+            [viewStatus addSubview:lblTitle];
             [lblTitle release];
             
-            UIView *viewDate = [[UIView alloc]initWithFrame:CGRectMake(5, 66, 290, 30)];
+            UIView *viewDate = [[UIView alloc]initWithFrame:CGRectMake(5, 66+60, 290, 30)];
             viewDate.backgroundColor = [UIColor whiteColor];
             viewDate.layer.borderWidth = 1;
             viewDate.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1154,7 +1177,7 @@
             [lblPrice release];
             */
             
-            UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 111, 290, [[arrBundledOrders objectAtIndex:indexPath.section] count]*70)];
+            UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 111+60, 290, [[arrBundledOrders objectAtIndex:indexPath.section] count]*70)];
             viewDescription.backgroundColor = [UIColor whiteColor];
             viewDescription.layer.borderWidth = 1;
             viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1211,7 +1234,7 @@
 
             }
             
-            UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 111+[[arrBundledOrders objectAtIndex:indexPath.section] count]*70+15, 290, 30)];
+            UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 111+[[arrBundledOrders objectAtIndex:indexPath.section] count]*70+15+60, 290, 30)];
             viewPrice.backgroundColor = [UIColor whiteColor];
             viewPrice.layer.borderWidth = 1;
             viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
