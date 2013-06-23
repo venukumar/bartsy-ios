@@ -14,6 +14,7 @@
 {
     UIImage *imgSelf;
     UIImage *imgReceiver;
+    NSInteger intHeight;
 }
 @property(nonatomic,retain)UIImage *imgSelf;
 @property(nonatomic,retain)UIImage *imgReceiver;

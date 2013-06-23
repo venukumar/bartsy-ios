@@ -814,7 +814,7 @@
         return 60;
     else if(isSelectedForPastOrders == YES)
     {
-        return 130;
+        return 100;
     }
     else
     {
@@ -927,12 +927,12 @@
 
         if ([arrPastOrders count])
         {
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 0, 250, 40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 2, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             
-            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 60, 250, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor grayColor] numberOfLines:3];
+            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 15,250, 45) tag:0 font:[UIFont systemFontOfSize:13] color:[UIColor grayColor] numberOfLines:3];
             lbldescription.backgroundColor=[UIColor clearColor];
             lbldescription.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lbldescription];
@@ -949,7 +949,6 @@
             NSString *newDateString = [outputFormatter stringFromDate:date];
             
             NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
-            NSLog(@"newDateString %@", newDateString);
             
             if([arrDateComps count]==5)
             {
@@ -989,7 +988,7 @@
             NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
             
             
-            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 25, 280, 30)];
+            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
             lblTime.font = [UIFont systemFontOfSize:14];
             lblTime.text = strDate1;
             lblTime.tag = 1234234567;
@@ -1000,7 +999,7 @@
             [lblTime release];
             
             
-            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 48, 280, 30)];
+            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 75, 280, 15)];
             lblRecepient.font = [UIFont systemFontOfSize:14];
             lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
             lblRecepient.tag = 1234234567;
@@ -1013,7 +1012,7 @@
             
             NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
             
-            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 0, 200, 40) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
             lblTotalPrice.backgroundColor=[UIColor clearColor];
             lblTotalPrice.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblTotalPrice];

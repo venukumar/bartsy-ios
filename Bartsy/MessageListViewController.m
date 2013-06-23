@@ -103,7 +103,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
     // Groups are delimited with header which contains date and time for the first message in the group.
-    bubbleTableView.snapInterval = 60;
+    bubbleTableView.snapInterval = 120;
     // The line below enables avatar support. Avatar can be specified for each bubble with .avatar property of NSBubbleData.
     // Avatars are enabled for the whole table at once. If particular NSBubbleData misses the avatar, a default placeholder will be set (missingAvatar.png)
     bubbleTableView.showAvatars = YES;
@@ -119,7 +119,29 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     [self.view addSubview:bubbleTableView];
 
 	// Do any additional setup after loading the view.
+    
+    /*
+    UIButton   *btnRefresh=[UIButton buttonWithType:UIButtonTypeCustom];
+    btnRefresh.frame=CGRectMake(213.5,4, 30, 30);
+    btnRefresh.tag=1000;
+    [btnRefresh setBackgroundImage:[UIImage imageNamed:@"refresh.png"] forState:UIControlStateNormal];
+    [btnRefresh addTarget:self action:@selector(btnRefresh_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [bottomContentView addSubview:btnRefresh];
+     */
+    
+    UIBarButtonItem *btnRefresh=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(btnRefresh_TouchUpInside)];
+    self.navigationItem.rightBarButtonItem=btnRefresh;
+    
 }
+
+
+-(void)btnRefresh_TouchUpInside
+{
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    isGetMessageWebService = YES;
+    [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     
@@ -136,7 +158,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 {
     if ([txtField.text length])
     {
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self createProgressViewToParentView:self.view withTitle:@"Sending Message..."];
         isGetMessageWebService=NO;
         isSendWebService = YES;
         [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:txtField.text delegate:self];
@@ -164,6 +186,18 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         frame.size.height -= kbSize.height;
         bubbleTableView.frame = frame;
     }];
+    
+    if (IS_IPHONE_5)
+    {
+        if(intHeight>252)
+        {
+            [bubbleTableView setContentOffset:CGPointMake(0, intHeight-252) animated:YES];
+        }
+    }
+    else if(intHeight>144)
+    {
+        [bubbleTableView setContentOffset:CGPointMake(0,intHeight-144) animated:YES];
+    }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
@@ -185,6 +219,31 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;              // called when 'return' key pressed. return NO to ignore.
 {
     [textField resignFirstResponder];
+    
+    if (IS_IPHONE_5)
+    {
+        if(intHeight>465)
+        {
+            [bubbleTableView setContentOffset:CGPointMake(0, intHeight-465) animated:YES];
+        }
+    }
+    else if(intHeight>382)
+    {
+        [bubbleTableView setContentOffset:CGPointMake(0,intHeight-382) animated:YES];
+    }
+    
+    if ([txtField.text length])
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Sending Message..."];
+        isGetMessageWebService=NO;
+        isSendWebService = YES;
+        [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:txtField.text delegate:self];
+    }
+    else
+    {
+        [self.sharedController showAlertWithTitle:nil message:@"Message should not be empty" delegate:nil];
+    }
+    
     return YES;
 }
 #pragma mark - UIBubbleTableViewDataSource implementation
@@ -237,6 +296,25 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
             [bubbleData addObject:bubbleMsg];
         }
         [bubbleTableView reloadData];
+        
+        [bubbleTableView layoutIfNeeded];
+        
+        CGSize tableViewSize=bubbleTableView.contentSize;
+        intHeight=tableViewSize.height;
+        
+        if (IS_IPHONE_5)
+        {
+            if(intHeight>465)
+            {
+                [bubbleTableView setContentOffset:CGPointMake(0, intHeight-465) animated:YES];
+            }
+        }
+        else if(intHeight>382)
+        {
+            [bubbleTableView setContentOffset:CGPointMake(0,intHeight-382) animated:YES];
+        }
+        
+        NSLog(@"TableView height is %i",intHeight);
     }
     else if (isSendWebService == YES)
     {
