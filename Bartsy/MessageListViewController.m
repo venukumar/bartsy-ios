@@ -229,7 +229,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     }
     else if(intHeight>382)
     {
-        [bubbleTableView setContentOffset:CGPointMake(0,intHeight-382) animated:YES];
+        [bubbleTableView setContentOffset:CGPointMake(0,intHeight-378) animated:YES];
     }
     
     if ([txtField.text length])
@@ -281,7 +281,10 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
             NSDate *date    = [dateFormatter dateFromString:[dictMsg objectForKey:@"date"]];
             
             BOOL isSentByMe=NO;
-            if([[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] stringValue] isEqualToString:[dictMsg objectForKey:@"senderId"]])
+            
+            
+            NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
+            if([strBartsyId doubleValue] ==[[dictMsg objectForKey:@"senderId"]doubleValue])
             {
                 isSentByMe=YES;
             }
@@ -311,7 +314,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         }
         else if(intHeight>382)
         {
-            [bubbleTableView setContentOffset:CGPointMake(0,intHeight-382) animated:YES];
+            [bubbleTableView setContentOffset:CGPointMake(0,intHeight-378) animated:YES];
         }
         
         NSLog(@"TableView height is %i",intHeight);

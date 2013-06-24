@@ -46,7 +46,11 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    [self.sharedController getNotificationsWithDelegate:self];
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController getNotificationsWithDelegate:self];
+    }
 }
 #pragma mark - TableView Delegates
 
@@ -66,7 +70,7 @@
     {
         if ([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkin"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkout"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"self"])
         {
-            NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImage"]];
+            NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
             [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
@@ -74,14 +78,30 @@
             [[cell.imageView layer] setShadowRadius:3.0];
             [[cell.imageView layer] setShadowOpacity:0.8];
             
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61, -10, 250, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
+            UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(61, 5, 250, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor grayColor] numberOfLines:1];
+            lblVenueName.backgroundColor=[UIColor clearColor];
+            lblVenueName.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblVenueName];
+            //[lblVenueName release];
+            
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61,25,250,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
+            //[lblItemName release];
+            
+            
+            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(61,65,250,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            lblDate.backgroundColor=[UIColor clearColor];
+            lblDate.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblDate];
+            //[lblDate release];
+            
+            
         }
         else if([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"offer"])
         {
-            NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImage"]];
+            NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
             [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
@@ -89,11 +109,25 @@
             [[cell.imageView layer] setShadowRadius:3.0];
             [[cell.imageView layer] setShadowOpacity:0.8];
             
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61, -10, 200, 75) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
+            UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(61, 5, 200, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor grayColor] numberOfLines:1];
+            lblVenueName.text=@"VenueName";
+            lblVenueName.backgroundColor=[UIColor clearColor];
+            lblVenueName.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblVenueName];
+            //[lblVenueName release];
+            
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61,25,200,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
-
+            //[lblItemName release];
+            
+            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(61,65,200,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            lblDate.backgroundColor=[UIColor clearColor];
+            lblDate.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblDate];
+            //[lblDate release];
+            
             NSString *strURL1=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"recieverImage"]];
 
             UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(260, 0, 60, 60)];
@@ -119,7 +153,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return 60;
+    return 100;
 }
 -(void)reloadTable
 {

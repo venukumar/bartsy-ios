@@ -15,7 +15,7 @@
 #import "Constants.h"
 #import "PeopleViewController.h"
 #import "MessageListViewController.h"
-
+#import "PeopleDetailViewController.h"
 
 
 @interface PeopleCustomCell : UITableViewCell {}
@@ -919,6 +919,9 @@
         cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
         cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
         
+        UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.section selector:@selector(btnChat_TouchUpInside:) target:self];
+        [cell.contentView addSubview:btnChat];
+        
         //UILabel *lbl
     }
     else if (isSelectedForPastOrders == YES)
@@ -1288,6 +1291,15 @@
     return cell;
 }
 
+-(void)btnChat_TouchUpInside:(UIButton*)sender
+{
+    MessageListViewController *obj = [[MessageListViewController alloc] init];
+    obj.dictForReceiver = [arrPeople objectAtIndex:sender.tag];
+    [self.navigationController pushViewController:obj animated:YES];
+    [obj release];
+
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1596,8 +1608,9 @@
     }
     else if(isSelectedForPeople)
     {
-        MessageListViewController *obj = [[MessageListViewController alloc] init];
-        obj.dictForReceiver = [arrPeople objectAtIndex:indexPath.section];
+        
+        PeopleDetailViewController *obj = [[PeopleDetailViewController alloc] init];
+        obj.dictPeople = [arrPeople objectAtIndex:indexPath.section];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }
