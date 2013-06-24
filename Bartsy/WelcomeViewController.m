@@ -293,6 +293,8 @@
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Checking Out..."];
         [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
     }
 }
 - (void)didReceiveMemoryWarning

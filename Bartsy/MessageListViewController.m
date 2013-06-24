@@ -265,7 +265,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     
     if ([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
-        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
     else if (isGetMessageWebService == YES)
     {

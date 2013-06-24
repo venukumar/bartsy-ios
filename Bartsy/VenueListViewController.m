@@ -337,6 +337,8 @@
     }
     else
     {
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         isRequestForCheckIn=NO;
         appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
         appDelegate.intOrderCount=0;

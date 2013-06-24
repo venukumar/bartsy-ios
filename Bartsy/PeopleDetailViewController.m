@@ -89,6 +89,9 @@
     lblMessages.text=@"Messages";
     
     
+    UITextView *txtViewDescription=(UITextView*)[self.view viewWithTag:666];
+    txtViewDescription.text=[dictPeople objectForKey:@"description"];
+    
 
 }
 

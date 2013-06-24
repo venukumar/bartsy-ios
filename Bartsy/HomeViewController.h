@@ -22,6 +22,8 @@
     NSMutableArray *arrBundledOrders;
     NSMutableDictionary *dictTemp;
     NSDictionary *dictPeopleSelectedForDrink;
+    NSMutableArray *arrOrdersTimedOut;
+    NSInteger intNoOfSections;
 }
 @property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;
 @property(nonatomic,retain)NSDictionary *dictVenue;

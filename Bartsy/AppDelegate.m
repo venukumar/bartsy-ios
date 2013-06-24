@@ -237,8 +237,8 @@
              
              NSMutableArray *arrPlacedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"PlacedOrders"]];
              
-             for (int i=0; i<0; i++)
-             //for (int i=0; i<[arrPlacedOrders count]; i++)
+             //for (int i=0; i<0; i++)
+             for (int i=0; i<[arrPlacedOrders count]; i++)
              {
                  NSMutableDictionary *dictOrder=[[NSMutableDictionary alloc]initWithDictionary:[arrPlacedOrders objectAtIndex:i]];
                  
@@ -256,18 +256,36 @@
                  NSLog(@"Order is %@",arrOrdersTemp);
 
                  NSDictionary *dictOrderTemp;
+                 BOOL isOrderExists=YES;
+                 BOOL isSameStatus=NO;
                  if([arrOrdersTemp count])
+                 {
                      dictOrderTemp=[arrOrdersTemp objectAtIndex:0];
+                     isOrderExists=NO;
+                     isSameStatus=[[dictOrder objectForKey:@"orderStatus"] integerValue]==[[dictOrderTemp objectForKey:@"orderStatus"] integerValue];
+                 }
                  
-                 if(intMinutesBetweenDates>=[[dictOrder objectForKey:@"orderTimeout"] integerValue]&&[dictOrderTemp count]&&[[dictOrder objectForKey:@"orderStatus"] integerValue]==[[dictOrderTemp objectForKey:@"orderStatus"] integerValue])
+                 if(isOrderExists==NO||(intMinutesBetweenDates>=[[dictOrder objectForKey:@"orderTimeout"] integerValue]&&isSameStatus))
                  {
                      UILocalNotification *localNotificationForOrderFailure = [[UILocalNotification alloc]init];
                      localNotificationForOrderFailure.alertBody =[NSString stringWithFormat:@"Something is wrong with this order(%i). Please check with your bartender",[[dictOrder objectForKey:@"orderId"] integerValue]];
                      localNotificationForOrderFailure.fireDate = [NSDate date];
                      localNotificationForOrderFailure.soundName = UILocalNotificationDefaultSoundName;
                      localNotificationForOrderFailure.userInfo =[NSDictionary
-                                                                       dictionaryWithObjectsAndKeys:[dictOrder objectForKey:@"orderId"],@"orderId", nil];
+                                                                       dictionaryWithObjectsAndKeys:[dictOrder objectForKey:@"orderId"],@"orderId",localNotificationForOrderFailure.alertBody,@"Message", nil];
                      [[UIApplication sharedApplication] scheduleLocalNotification:localNotificationForOrderFailure];
+                     
+                     NSMutableArray *arrOrdersTimeOut=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
+                     [arrOrdersTimeOut addObject:dictOrder];
+                     
+                     [[NSUserDefaults standardUserDefaults]setObject:arrOrdersTimeOut forKey:@"OrdersTimedOut"];
+                     
+                     NSMutableArray *arrPlacedOrdersTemp=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"PlacedOrders"]];
+                     [arrPlacedOrdersTemp removeObject:dictOrder];
+                     [[NSUserDefaults standardUserDefaults]setObject:arrPlacedOrdersTemp forKey:@"PlacedOrders"];
+
+                     [[NSUserDefaults standardUserDefaults]synchronize];
+
                  }
                  else if([dictOrderTemp count]&&[[dictOrder objectForKey:@"orderStatus"] integerValue]!=[[dictOrderTemp objectForKey:@"orderStatus"] integerValue])
                  {
