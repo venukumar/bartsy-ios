@@ -1340,7 +1340,7 @@
             UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 280, 40)];
             lblTitle.numberOfLines=3;
             lblTitle.font = [UIFont boldSystemFontOfSize:12];
-            lblTitle.text=@"Your bartender is taking too long and the order was cancelled. Please check with your bartender";
+            lblTitle.text=@"Something is wrong with this order. Please check with your bartender";
             lblTitle.tag = 1234;
             lblTitle.backgroundColor = [UIColor clearColor];
             lblTitle.textColor = [UIColor blackColor] ;
