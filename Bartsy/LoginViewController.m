@@ -18,7 +18,7 @@
 
 GPPSignIn *signIn;
 
-static NSString * const kClientId = @"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5sv9.apps.googleusercontent.com";
+static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; //@"699931169234-9vjbmi0eqd3juqjdpr1vishsegqr5sv9.apps.googleusercontent.com";
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

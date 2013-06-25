@@ -1470,7 +1470,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sudheer P (TA54E893P8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sudheer P (TA54E893P8)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1485,6 +1486,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "ADC71693-8580-477C-9738-02218E0A29C6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ADC71693-8580-477C-9738-02218E0A29C6";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1500,7 +1503,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sudheer P (TA54E893P8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sudheer P (TA54E893P8)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1508,6 +1512,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "ADC71693-8580-477C-9738-02218E0A29C6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ADC71693-8580-477C-9738-02218E0A29C6";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1516,8 +1522,8 @@
 		E04106A5172A8D70009F1B1E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: sudheer palchuri (39AS55DRED)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: sudheer palchuri (39AS55DRED)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sudheer P (TA54E893P8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sudheer P (TA54E893P8)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1545,8 +1551,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9EBF0B3E-0967-4253-82FD-18505054313B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9EBF0B3E-0967-4253-82FD-18505054313B";
+				PROVISIONING_PROFILE = "ADC71693-8580-477C-9738-02218E0A29C6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ADC71693-8580-477C-9738-02218E0A29C6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1554,8 +1560,8 @@
 		E04106A6172A8D70009F1B1E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: sudheer palchuri (39AS55DRED)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: sudheer palchuri (39AS55DRED)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Sudheer P (TA54E893P8)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Sudheer P (TA54E893P8)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1583,8 +1589,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9EBF0B3E-0967-4253-82FD-18505054313B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9EBF0B3E-0967-4253-82FD-18505054313B";
+				PROVISIONING_PROFILE = "ADC71693-8580-477C-9738-02218E0A29C6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ADC71693-8580-477C-9738-02218E0A29C6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
