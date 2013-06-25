@@ -287,7 +287,7 @@
                      [[NSUserDefaults standardUserDefaults]synchronize];
 
                  }
-                 else if([dictOrderTemp count]&&[[dictOrder objectForKey:@"orderStatus"] integerValue]!=[[dictOrderTemp objectForKey:@"orderStatus"] integerValue])
+                 else if([dictOrderTemp count]&&!isSameStatus)
                  {
                      if([[dictOrderTemp objectForKey:@"orderStatus"] integerValue]!=5)
                      {

@@ -384,19 +384,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "393804918.206743"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1367"
-         endingLineNumber = "1367"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Bartsy/AppDelegate.m"
          timestampString = "393800869.880704"
          startingColumnNumber = "9223372036854775807"
@@ -417,32 +404,6 @@
          startingLineNumber = "269"
          endingLineNumber = "269"
          landmarkName = "-checkOrderStatusUpdate"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "393802939.109777"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1295"
-         endingLineNumber = "1295"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "393805001.026829"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1548"
-         endingLineNumber = "1548"
-         landmarkName = "-btnGoToPastOrders_TouchUpInside"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

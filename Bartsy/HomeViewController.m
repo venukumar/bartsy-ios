@@ -1680,7 +1680,37 @@
         [viewHeader addSubview:lblTitle];
         [lblTitle release];
         
-        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 153, 200, 100)];
+        UIButton *btnLike = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        btnLike.frame = CGRectMake(10,153,60,35);
+        btnLike.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        [btnLike setTitle:@"Like" forState:UIControlStateNormal];
+        btnLike.titleLabel.textColor = [UIColor blackColor];
+        [btnLike addTarget:self action:@selector(btnLike_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [viewC addSubview:btnLike];
+        
+        UIButton *btnComment = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        btnComment.frame = CGRectMake(75,153,60,35);
+        btnComment.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        [btnComment setTitle:@"Comment" forState:UIControlStateNormal];
+        btnComment.titleLabel.textColor = [UIColor blackColor];
+        [btnComment addTarget:self action:@selector(btnComment_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [viewC addSubview:btnComment];
+        
+        UIButton *btnShare = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        btnShare.frame = CGRectMake(140,153,60,35);
+        btnShare.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+        [btnShare setTitle:@"Share" forState:UIControlStateNormal];
+        btnShare.titleLabel.textColor = [UIColor blackColor];
+        [btnShare addTarget:self action:@selector(btnShare_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [viewC addSubview:btnShare];
+        
+        UIButton *btnFav = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btnFav setImage:[UIImage imageNamed:@"icon_favorites.png"] forState:UIControlStateNormal];
+        btnFav.frame = CGRectMake(205,150,52,40);
+        [btnFav addTarget:self action:@selector(btnFav_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [viewC addSubview:btnFav];
+        
+        UIView *viewDetail = [[UIView alloc]initWithFrame:CGRectMake(11, 153+40, 200, 60)];
         viewDetail.backgroundColor = [UIColor whiteColor];
         viewDetail.layer.borderWidth = 1;
         viewDetail.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1701,7 +1731,7 @@
         //    [viewDetail addSubview:imgViewDrink];
         //    [imgViewDrink release];
         
-        UITextView *txtViewNotes = [[UITextView alloc] initWithFrame:CGRectMake(5, 10, 185, 50)];
+        UITextView *txtViewNotes = [[UITextView alloc] initWithFrame:CGRectMake(5, 5, 185, 50)];
         txtViewNotes.delegate = self;
         txtViewNotes.tag = 1000;
         txtViewNotes.backgroundColor = [UIColor clearColor];
@@ -1721,7 +1751,7 @@
         [btnCustomise addTarget:self action:@selector(btnCustomise_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
         //[viewDetail addSubview:btnCustomise];
         
-        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 153, 63, 100)];
+        UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(216, 153+40, 63, 60)];
         viewPrice.backgroundColor = [UIColor whiteColor];
         viewPrice.layer.borderWidth = 1;
         viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
@@ -1730,7 +1760,7 @@
         [viewC addSubview:viewPrice];
         [viewPrice release];
         
-        UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(0, 30, 63, 30)];
+        UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 63, 60)];
         lblPrice.font = [UIFont boldSystemFontOfSize:20];
         lblPrice.text = [NSString
                          stringWithFormat:@"$%@",[dict objectForKey:@"price"]];
@@ -1894,6 +1924,26 @@
     UILabel *lblName=(UILabel*)[self.view viewWithTag:111222333];
     lblName.text=[dictPeopleSelectedForDrink objectForKey:@"nickName"];
 
+    
+}
+
+-(void)btnLike_TouchUpInside
+{
+    
+}
+
+-(void)btnComment_TouchUpInside
+{
+    
+}
+
+-(void)btnShare_TouchUpInside
+{
+    
+}
+
+-(void)btnFav_TouchUpInside
+{
     
 }
 
