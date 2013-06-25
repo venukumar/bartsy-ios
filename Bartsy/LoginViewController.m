@@ -80,7 +80,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     
     if (!appDelegate.session.isOpen) {
         // create a fresh session object
-        appDelegate.session = [[FBSession alloc] init];
+        appDelegate.session = [[FBSession alloc] initWithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions", nil]];
         
         // if we don't have a cached token, a call to open here would cause UX for login to
         // occur; we don't want that to happen unless the user clicks the login button, and so

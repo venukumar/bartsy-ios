@@ -1929,7 +1929,21 @@
 
 -(void)btnLike_TouchUpInside
 {
+    /*
+    NSString *urlToLikeFor = @"https://www.facebook.com/techvedika";
     
+    NSString *theWholeUrl = [NSString stringWithFormat:@"https://graph.facebook.com/me/og.likes?object=%@&access_token=%@", urlToLikeFor, appDelegate.session.accessTokenData.accessToken];
+    NSURL *facebookUrl = [NSURL URLWithString:theWholeUrl];
+    
+    NSMutableURLRequest *req = [NSMutableURLRequest requestWithURL:facebookUrl];
+    [req setHTTPMethod:@"POST"];
+    NSURLResponse *response;
+    NSError *err;
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:req returningResponse:&response error:&err];
+    NSString *content = [NSString stringWithUTF8String:[responseData bytes]];
+    
+    NSLog(@"responseData: %@", content);
+     */
 }
 
 -(void)btnComment_TouchUpInside

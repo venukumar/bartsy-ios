@@ -1688,4 +1688,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [txtFldEmailId resignFirstResponder];
+    [txtFldNickName resignFirstResponder];
+    [txtFldPassword resignFirstResponder];
+    [txtViewDescription resignFirstResponder];
+}
+
 @end
