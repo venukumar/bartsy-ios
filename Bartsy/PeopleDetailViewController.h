@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface PeopleDetailViewController : UIViewController
+#import "BaseViewController.h"
+@interface PeopleDetailViewController : BaseViewController
 {
     NSDictionary *dictPeople;
+    NSInteger intLikeStatus;
+    BOOL isRequestForLike;
 }
 @property(nonatomic,retain)NSDictionary *dictPeople;
 @end

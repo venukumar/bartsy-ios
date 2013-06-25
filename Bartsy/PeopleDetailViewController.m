@@ -32,7 +32,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    appDelegate.delegateForCurrentViewController=self;
     
+   
     self.title=[dictPeople objectForKey:@"nickName"];
     
     UIImageView *imgViewProfilePicture=(UIImageView*)[self.view viewWithTag:111];
@@ -92,7 +95,58 @@
     UITextView *txtViewDescription=(UITextView*)[self.view viewWithTag:666];
     txtViewDescription.text=[dictPeople objectForKey:@"description"];
     
+    UIButton *btnLike=(UIButton*)[self.view viewWithTag:777];
+    intLikeStatus=[[dictPeople objectForKey:@"like"] integerValue];
+    if([[dictPeople objectForKey:@"like"] integerValue]==1)
+    {
+        [btnLike setImage:[UIImage imageNamed:@"icon_favourite_unselect.png"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [btnLike setImage:[UIImage imageNamed:@"icon_favorites.png"] forState:UIControlStateNormal];
+    }
+    [btnLike addTarget:self action:@selector(btnLike_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 
+
+}
+
+
+-(void)btnLike_TouchUpInside:(UIButton*)sender
+{
+    intLikeStatus=!intLikeStatus;
+    isRequestForLike=YES;
+    self.sharedController=[SharedController sharedController];
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    [self.sharedController likePeopleWithBartsyId:[dictPeople objectForKey:@"bartsyId"] status:intLikeStatus withDelegate:self];
+}
+
+-(void)controllerDidFinishLoadingWithResult:(id)result
+{
+    [self hideProgressView:nil];
+    
+    if([[result objectForKey:@"errorCode"] integerValue]!=0)
+    {
+        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+    }
+    else if(isRequestForLike==YES)
+    {
+        UIButton *btnLike=(UIButton*)[self.view viewWithTag:777];
+//        intLikeStatus=[[dictPeople objectForKey:@"like"] integerValue];
+        if(intLikeStatus==1)
+        {
+            [btnLike setImage:[UIImage imageNamed:@"icon_favourite_unselect.png"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            [btnLike setImage:[UIImage imageNamed:@"icon_favorites.png"] forState:UIControlStateNormal];
+        }
+
+    }
+}
+
+-(void)controllerDidFailLoadingWithError:(NSError*)error
+{
+    [self hideProgressView:nil];
 }
 
 - (void)didReceiveMemoryWarning

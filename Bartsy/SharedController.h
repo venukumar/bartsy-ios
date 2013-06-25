@@ -61,4 +61,5 @@
 -(void)getNotificationsWithDelegate:(id)aDelegate;
 -(void)sendMessageWithSenderId:(NSString*)strSenderBarstsyID receiverId:(NSString*)strReceiverBartsyId message:(NSString*)message delegate:(id)aDelegate;
 -(void)getMessagesWithReceiverId:(NSString*)strReceiverBartsyId delegate:(id)aDelegate;
+-(void)likePeopleWithBartsyId:(NSString*)strBartsyId status:(NSInteger)intStatus withDelegate:(id)aDelegate;
 @end
