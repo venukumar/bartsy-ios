@@ -40,8 +40,8 @@
     
     UIImageView *imgViewProfilePicture=(UIImageView*)[self.view viewWithTag:111];
     
-    NSURL *urlReceiver=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dictPeople objectForKey:@"bartsyId"]]];
-    [imgViewProfilePicture setImageWithURL:urlReceiver];
+    NSString *urlReceiver=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
+    [imgViewProfilePicture setImageWithURL:[NSURL URLWithString:urlReceiver]];
     [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
     [[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
     [[imgViewProfilePicture layer] setShadowRadius:3.0];

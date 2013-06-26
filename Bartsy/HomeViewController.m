@@ -1134,7 +1134,7 @@
             [viewBorder addSubview:viewHeader];
             [viewHeader release];
             
-            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dict objectForKey:@"recieverBartsyId"]]];
+            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/img/%@",KServerURL,[dict objectForKey:@"recieverBartsyId"]]];
             UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,15,60,60)];
             [imgViewPhoto setImageWithURL:urlPhoto];
             [viewBorder addSubview:imgViewPhoto];
