@@ -13,6 +13,7 @@
 {
     BOOL isRequestForCheckIn;
     NSInteger intIndex;
+    CLLocationManager *locationManager;
 }
 @end
 
@@ -32,6 +33,10 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
+    MKMapView *mapView = (MKMapView*)[self.view viewWithTag:222];
+    mapView.showsUserLocation = YES;
+    [locationManager startUpdatingLocation];
+    
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     [self.sharedController getVenueListWithDelegate:self];
@@ -40,7 +45,21 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     MKMapView *mapView=(MKMapView*)[self.view viewWithTag:222];
+    mapView.showsUserLocation = NO;
     mapView.delegate=nil;
+    [locationManager stopUpdatingLocation];
+
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (locationManager)
+    {
+        MKMapView *mapView = (MKMapView*)[self.view viewWithTag:222];
+        mapView.showsUserLocation = NO;
+        [locationManager stopUpdatingLocation];
+    }
+    
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidLoad
@@ -67,7 +86,7 @@
     [self.view addSubview:mapView];
     //[mapView release];
     
-    CLLocationManager *locationManager=[[CLLocationManager alloc]init];
+    locationManager=[[CLLocationManager alloc]init];
     locationManager.delegate=self;
     [locationManager startUpdatingLocation];
 //    [locationManager release];
