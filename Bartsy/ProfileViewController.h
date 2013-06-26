@@ -57,6 +57,7 @@
 @property(nonatomic,assign)BOOL isCmgFromGetStarted;
 @property(nonatomic,retain)NSString *strGender;
 @property(nonatomic,retain)GTMOAuth2Authentication *auth;
+@property(nonatomic,retain)UITextView *txtViewDescription;
 -(void)saveProfileData:(NSDictionary*)dict;
 -(void)setImageWithURL:(NSURL*)url;
 @end

@@ -24,7 +24,8 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -274,7 +275,8 @@
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     cell.tag=indexPath.section+1;
-
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     if(indexPath.section==0&&isCmgFromGetStarted)
     {
         UILabel *lblEmailId=[self createLabelWithTitle:@"EmailId" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
@@ -438,19 +440,19 @@
             lblDescription.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblDescription];
             
-            txtViewDescription=[[UITextView alloc] initWithFrame:CGRectMake(10, 70, 280, 50)];
-            txtViewDescription.tag=555;
-            txtViewDescription.delegate=self;
+            self.txtViewDescription=[[UITextView alloc] initWithFrame:CGRectMake(10, 70, 280, 50)];
+            self.txtViewDescription.tag=555;
+            self.txtViewDescription.delegate=self;
             if([[dictResult objectForKey:@"description"] length])
-                txtViewDescription.text=[dictResult objectForKey:@"description"];
+                self.txtViewDescription.text=[dictResult objectForKey:@"description"];
             else
-            txtViewDescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+            self.txtViewDescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
             
             [[txtViewDescription layer]setBorderWidth:1];
             [[txtViewDescription layer]setBorderColor:[[UIColor blackColor] CGColor]];
             [[txtViewDescription layer]setCornerRadius:5];
-            txtViewDescription.textColor=[UIColor lightGrayColor];
-            txtViewDescription.font=[UIFont systemFontOfSize:12];
+            self.txtViewDescription.textColor=[UIColor lightGrayColor];
+            self.txtViewDescription.font=[UIFont systemFontOfSize:12];
             [cell.contentView addSubview:txtViewDescription];
             
             UILabel *lblGender=[self createLabelWithTitle:@"Gender:" frame:CGRectMake(10, 133, 120, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
@@ -494,13 +496,23 @@
             [cell.contentView addSubview:lblDOB];
             
             
-            UITextField *txtFldDOB=[self createTextFieldWithFrame:CGRectMake(95, 165, 150, 30) tag:666 delegate:self];
-            txtFldDOB.placeholder=@"MM/DD/YYYY";
-            if([strDOB length]&&strDOB!=nil)
-            txtFldDOB.text=strDOB;
+//            self.txtFldDOB=[self createTextFieldWithFrame:CGRectMake(95, 165, 150, 30) tag:666 delegate:self];
+//            self.txtFldDOB.placeholder=@"MM/DD/YYYY";
+//            if([strDOB length]&&strDOB!=nil)
+//            self.txtFldDOB.text=strDOB;
+//            
+//            self.txtFldDOB.font=[UIFont systemFontOfSize:15];
+//            [cell.contentView addSubview:txtFldDOB];
             
-            txtFldDOB.font=[UIFont systemFontOfSize:15];
-            [cell.contentView addSubview:txtFldDOB];
+            
+            
+            UIButton *btnDOB=[self createUIButtonWithTitle:@"MM/DD/YYYY" image:nil frame:CGRectMake(95, 165, 150, 30) tag:666 selector:@selector(btnDOB_TouchUpInside) target:self];
+            [btnDOB setBackgroundImage:[UIImage imageNamed:@"textfield.png"] forState:UIControlStateNormal];
+            [btnDOB setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            btnDOB.titleLabel.font=[UIFont systemFontOfSize:15];
+            if([strDOB length]&&strDOB!=nil)
+                [btnDOB setTitle:strDOB forState:UIControlStateNormal];
+            [cell.contentView addSubview:btnDOB];
             
             UILabel *lblLooking=[self createLabelWithTitle:@"Looking to:" frame:CGRectMake(10, 205, 80, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblLooking.textAlignment=NSTextAlignmentLeft;
@@ -930,6 +942,13 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
+    if(customPickerView!=nil)
+    {
+        [customPickerView removeFromSuperview];
+        [customPickerView release];
+        customPickerView=nil;
+    }
+
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     if(isCmgFromGetStarted)
     [tblView setContentOffset:CGPointMake(0,400) animated:YES];
@@ -969,8 +988,16 @@
     }
     return YES;
 }
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    [textView resignFirstResponder];
+    return YES;
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    
     if(customPickerView!=nil)
     {
         [customPickerView removeFromSuperview];
@@ -991,20 +1018,6 @@
     if(textField.tag==444&&isCmgFromGetStarted)
     [tblView setContentOffset:CGPointMake(0,100) animated:YES];
    
-
-    
-    if(textField.tag==666)
-    {
-        [textField resignFirstResponder];
-        if(isCmgFromGetStarted)
-        [tblView setContentOffset:CGPointMake(0,480) animated:YES];
-        else
-        [tblView setContentOffset:CGPointMake(0,480-85) animated:YES];
-        [self showPickerView];
-
-    }
-    
-    
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField*)textField
@@ -1070,20 +1083,26 @@
     return YES;
 }
 
+-(void)btnDOB_TouchUpInside
+{
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+        if(isCmgFromGetStarted)
+            [tblView setContentOffset:CGPointMake(0,480) animated:YES];
+        else
+            [tblView setContentOffset:CGPointMake(0,480-85) animated:YES];
+        
+        [txtFldEmailId resignFirstResponder];
+        [txtFldNickName resignFirstResponder];
+        [txtFldPassword resignFirstResponder];
+        [self.txtViewDescription resignFirstResponder];
+        
+        [self showPickerView];
+}
 
 -(void)showPickerView
 {
     isSelectedPicker=NO;
     customPickerView.center =CGPointMake(160,700);
-
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:143225];
-
-    UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
-    [txtFldData resignFirstResponder];
-    
-    UITextField *txtFldData1=(UITextField*)[scrollView viewWithTag:intTextFieldTagValue];
-    [txtFldData1 resignFirstResponder];
-
     
     if(customPickerView!=nil)
     {
@@ -1120,8 +1139,8 @@
     barButtonNext.enabled=YES;
     
     //Adding picker view
-    if(intTextFieldTagValue==666)
-    {
+    //if(intTextFieldTagValue==666)
+    //{
         datePicker=[[UIDatePicker alloc]initWithFrame:CGRectMake(0, 44, 320, 250)];
         datePicker.datePickerMode = UIDatePickerModeDate;
         datePicker.hidden = NO;
@@ -1131,16 +1150,16 @@
                        action:@selector(changeDateFromLabel:)
              forControlEvents:UIControlEventValueChanged];
         [customPickerView addSubview:datePicker];
-    }
-    else
-    {
-        pickerViewForm=[[UIPickerView alloc]initWithFrame:CGRectMake(0, 44, 320, 250)];
-        pickerViewForm.delegate=self;
-        pickerViewForm.dataSource=self;
-        pickerViewForm.showsSelectionIndicator = YES;
-        pickerViewForm.backgroundColor=[UIColor clearColor];
-        [customPickerView addSubview:pickerViewForm];
-    }
+    //}
+//    else
+//    {
+//        pickerViewForm=[[UIPickerView alloc]initWithFrame:CGRectMake(0, 44, 320, 250)];
+//        pickerViewForm.delegate=self;
+//        pickerViewForm.dataSource=self;
+//        pickerViewForm.showsSelectionIndicator = YES;
+//        pickerViewForm.backgroundColor=[UIColor clearColor];
+//        [customPickerView addSubview:pickerViewForm];
+//    }
     
     
     [UIView beginAnimations:nil context:NULL];
@@ -1160,11 +1179,13 @@
 
 - (void)changeDateFromLabel:(id)sender
 {    
-    UITextField *lblData=(UITextField*)[self.view viewWithTag:666];
+    UIButton *lblData=(UIButton*)[self.view viewWithTag:666];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:kDateMMDDYYYY];
-    lblData.text = [NSString stringWithFormat:@"%@",
-                            [df stringFromDate:datePicker.date]];
+    strDOB= [[NSString stringWithFormat:@"%@",
+              [df stringFromDate:datePicker.date]] retain];
+    [lblData setTitle:strDOB forState:UIControlStateNormal];
+
     [df release];
 }
 
@@ -1174,98 +1195,22 @@
     UITableView *scrollView=(UITableView*)[self.view viewWithTag:143225];
     scrollView.userInteractionEnabled = YES;
     
-    UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
+    UIButton *txtFldData=(UIButton*)[self.view viewWithTag:666];
 
-    if(intTextFieldTagValue==666)
-    {
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:kDateMMDDYYYY];
-        txtFldData.text = [NSString stringWithFormat:@"%@",
-                                [df stringFromDate:datePicker.date]];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:kDateMMDDYYYY];
+    
         
-        strDOB= [[NSString stringWithFormat:@"%@",
+    strDOB= [[NSString stringWithFormat:@"%@",
                            [df stringFromDate:datePicker.date]] retain];
-        [df release];
-    }
-    else
-    {
-        if(intTextFieldTagValue==555)
-        {
-            txtFldData.text =[arrGender objectAtIndex:intIndex];
-        }
-        else if(intTextFieldTagValue==666)
-        {
-            txtFldData.text= [arrOrientation objectAtIndex:intIndex];
-        }
-        else
-        {
-            txtFldData.text= [arrStatus objectAtIndex:intIndex];
-        }
-    }
-   	[UIView beginAnimations:nil context:NULL];
+    [txtFldData setTitle:strDOB forState:UIControlStateNormal];
+
+    [df release];
+    [UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.5];
 	customPickerView.center =CGPointMake(160,700);
 	[UIView commitAnimations];
 }
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)thePickerView
-{
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)thePickerView numberOfRowsInComponent:(NSInteger)component
-{
-    if(intTextFieldTagValue==555)
-    {
-        return [arrGender count];
-    }
-    else if(intTextFieldTagValue==666)
-    {
-        return [arrOrientation count];
-    }
-    else
-    {
-        return [arrStatus count];
-    }
-}
-
-- (NSString *)pickerView:(UIPickerView *)thePickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    if(intTextFieldTagValue==555)
-    {
-        return [arrGender objectAtIndex:row];
-    }
-    else if(intTextFieldTagValue==666)
-    {
-        return [arrOrientation objectAtIndex:row];
-    }
-    else
-    {
-        return [arrStatus objectAtIndex:row];
-    }
-}
-
-- (void)pickerView:(UIPickerView *)thePickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    isSelectedPicker=YES;
-    
-    intIndex=row;
-    
-    UITextField *txtFldData=(UITextField*)[self.view viewWithTag:intTextFieldTagValue];
-    if(intTextFieldTagValue==555)
-    {
-        txtFldData.text =[arrGender objectAtIndex:row];
-    }
-    else if(intTextFieldTagValue==666)
-    {
-        txtFldData.text= [arrOrientation objectAtIndex:row];
-    }
-    else
-    {
-        txtFldData.text= [arrStatus objectAtIndex:row];
-    }
-}
-
 
 -(void)removeLoader
 {
