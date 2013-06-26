@@ -853,7 +853,6 @@
     // Configure the cell...
     UITableViewCell *cell;
     
-    
     if(isSelectedForDrinks==YES)
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
@@ -925,7 +924,8 @@
         cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
 
 //        [cell setUserInteractionEnabled:NO];
-        
+        NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
+
         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.section];
         
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
@@ -938,9 +938,12 @@
         cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
         cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
         
-        UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.section selector:@selector(btnChat_TouchUpInside:) target:self];
-        [cell.contentView addSubview:btnChat];
-        
+        if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
+        {
+            UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.section selector:@selector(btnChat_TouchUpInside:) target:self];
+            [cell.contentView addSubview:btnChat];
+        }
+
         //UILabel *lbl
     }
     else if (isSelectedForPastOrders == YES)
