@@ -851,8 +851,19 @@ static SharedController *sharedController;
 
 }
 
-
-
+-(void)shareAMessage:(NSString*)message AccessToken:(NSString*)strToken delegate:(id)aDelegate;
+{
+    self.delegate = aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/me/feed?method=post&message=%@&access_token=%@",message,strToken];
+    strURL=[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:strURL]];
+    [self sendRequest:request];
+    
+    [request release];
+}
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
