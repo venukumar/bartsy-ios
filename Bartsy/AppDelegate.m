@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails,timerForHeartBeat,arrPeople;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
 
 - (void)dealloc
 {
@@ -61,9 +61,15 @@
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
+        isCmgForWelcomeScreen=YES;
+        LoginViewController *loginObj=[[LoginViewController alloc]init];
+        UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:loginObj];
+        [self.window addSubview:nav.view];
+        /*
         WelcomeViewController *homeObj = [[WelcomeViewController alloc] init];
         UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:homeObj];
         [self.window addSubview:nav.view];
+         */
     }
     else
     {
@@ -256,16 +262,16 @@
                  NSLog(@"Order is %@",arrOrdersTemp);
 
                  NSDictionary *dictOrderTemp;
-                 BOOL isOrderExists=YES;
+                 BOOL isOrderExists=NO;
                  BOOL isSameStatus=NO;
                  if([arrOrdersTemp count])
                  {
                      dictOrderTemp=[arrOrdersTemp objectAtIndex:0];
-                     isOrderExists=NO;
+                     isOrderExists=YES;
                      isSameStatus=[[dictOrder objectForKey:@"orderStatus"] integerValue]==[[dictOrderTemp objectForKey:@"orderStatus"] integerValue];
                  }
                  
-                 if(isOrderExists==NO||(intMinutesBetweenDates>=[[dictOrder objectForKey:@"orderTimeout"] integerValue]&&isSameStatus))
+                 if(intMinutesBetweenDates>=[[dictOrder objectForKey:@"orderTimeout"] integerValue])
                  {
                      UILocalNotification *localNotificationForOrderFailure = [[UILocalNotification alloc]init];
                      localNotificationForOrderFailure.alertBody =[NSString stringWithFormat:@"Something is wrong with this order(%i). Please check with your bartender",[[dictOrder objectForKey:@"orderId"] integerValue]];

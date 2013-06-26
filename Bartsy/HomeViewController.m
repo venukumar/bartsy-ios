@@ -81,6 +81,9 @@
     
     self.title=[dictVenue objectForKey:@"venueName"];
     
+    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"LogOut" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
+    self.navigationItem.rightBarButtonItem=btnLogOut;
+    
    
     // Do any additional setup after loading the view, typically from a nib.
     
@@ -159,6 +162,10 @@
     [self getPeopleList];
 }
 
+-(void)backLogOut_TouchUpInside
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 -(void)reloadData
 {
@@ -394,7 +401,13 @@
         [dictOrderPlaced setValue:[result objectForKey:@"orderStatus"] forKey:@"orderStatus"];
         [dictOrderPlaced setValue:[result objectForKey:@"orderTimeout"] forKey:@"orderTimeout"];
         [dictOrderPlaced setValue:[NSNumber numberWithInteger:btnValue] forKey:@"tipPercentage"];
-         [dictOrderPlaced setValue:[NSDate date] forKey:@"Time"];
+        
+        NSDate* date = [NSDate date];
+
+         [dictOrderPlaced setValue:date forKey:@"Time"];
+       
+        NSLog(@"Order is %@",dictOrderPlaced);
+        
         [arrPlacedOrders addObject:dictOrderPlaced];
         [[NSUserDefaults standardUserDefaults]setObject:arrPlacedOrders forKey:@"PlacedOrders"];
         [[NSUserDefaults standardUserDefaults]synchronize];

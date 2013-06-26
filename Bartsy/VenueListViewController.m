@@ -75,6 +75,9 @@
     
     arrVenueList=[[NSMutableArray alloc]init];
     
+    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"LogOut" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
+    self.navigationItem.rightBarButtonItem=btnLogOut;
+    
     UILabel *lblHeader=[self createLabelWithTitle:@"Check in at a Bartsy venue to order drinks and see who else is there" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
     lblHeader.backgroundColor=[UIColor lightGrayColor];
     lblHeader.textAlignment=NSTextAlignmentCenter;
@@ -105,6 +108,11 @@
     }
     
     
+}
+
+-(void)backLogOut_TouchUpInside
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

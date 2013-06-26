@@ -1052,10 +1052,10 @@
     else if(textField.tag==444)
     {
         
-        if([string isEqualToString:@" "])
-        {
-            return NO;
-        }
+//        if([string isEqualToString:@" "])
+//        {
+//            return NO;
+//        }
         
         if ([string isEqualToString:@""])
         {

@@ -8,6 +8,7 @@
 
 #import "LoginViewController.h"
 #import "AgreementViewController.h"
+#import "WelcomeViewController.h"
 @interface LoginViewController ()
 
 - (void)updateView;
@@ -36,7 +37,18 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     
     [[GPPSignIn sharedInstance] signOut];
     
+    if(appDelegate.isCmgForWelcomeScreen==YES)
+    {
+        appDelegate.isCmgForWelcomeScreen=NO;
+        WelcomeViewController *homeObj = [[WelcomeViewController alloc] init];
+        [self.navigationController pushViewController:homeObj animated:YES];
+        [homeObj release];
+    }
     
+    self.navigationController.navigationBarHidden=YES;
+    
+    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
+    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 -(void)viewDidAppear:(BOOL)animated

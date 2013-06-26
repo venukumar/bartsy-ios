@@ -32,6 +32,7 @@
     NSDictionary *dictOfferedDrikDetails;
     NSTimer *timerForHeartBeat;
     NSMutableArray *arrPeople;
+    BOOL isCmgForWelcomeScreen;
 }
 @property(nonatomic,retain)NSMutableArray *arrPeople;
 @property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;
@@ -53,6 +54,7 @@
 @property BOOL internetActive;
 @property BOOL hostActive;
 @property(nonatomic,retain)NSDictionary *dictOfferedDrikDetails;
+@property(nonatomic,assign)BOOL isCmgForWelcomeScreen;
 
 - (void) checkNetworkStatus:(NSNotification *)notice;
 - (void)saveContext;
