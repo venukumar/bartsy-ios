@@ -444,6 +444,11 @@
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
     
+    float tipTotal = ([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*[strTip floatValue])/100;
+    NSString *strTipTotal=[NSString stringWithFormat:@"%.2f",tipTotal];
+    
+    NSLog(@"Tip is %@",strTipTotal);
+    
     NSString *strBartsyId;
     if([dictPeopleSelectedForDrink count])
         strBartsyId=[NSString stringWithFormat:@"%@",[dictPeopleSelectedForDrink objectForKey:@"bartsyId"]];
@@ -452,7 +457,7 @@
 
     
     
-    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTip itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"ingredientId"] description:strDescription ingredients:arrIds receiverBartsyId:strBartsyId delegate:self];
+    [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTipTotal itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"ingredientId"] description:strDescription ingredients:arrIds receiverBartsyId:strBartsyId delegate:self];
     
     //[strDescription release];
     //[arrIds release];
