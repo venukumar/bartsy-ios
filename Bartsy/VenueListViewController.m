@@ -112,7 +112,19 @@
 
 -(void)backLogOut_TouchUpInside
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+    NSString *strMsg=nil;
+   
+    if(appDelegate.intOrderCount)
+    {
+        strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you logout they will be cancelled and you will still be charged for it.Do you want to logout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+    }
+    else
+    {
+        strMsg=[NSString stringWithFormat:@"Do you want to logout"];
+    }
+    [self createAlertViewWithTitle:@"" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:225];
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -401,6 +413,15 @@
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
         [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] delegate:self];
+    }
+    else if(alertView.tag==225&&buttonIndex==1)
+    {
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+        [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:nil];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
+
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 

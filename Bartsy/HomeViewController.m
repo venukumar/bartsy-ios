@@ -164,8 +164,21 @@
 
 -(void)backLogOut_TouchUpInside
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+    NSString *strMsg=nil;
+    
+    if(appDelegate.intOrderCount)
+    {
+        strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you logout they will be cancelled and you will still be charged for it.Do you want to logout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+    }
+    else
+    {
+        strMsg=[NSString stringWithFormat:@"Do you want to logout"];
+    }
+    [self createAlertViewWithTitle:@"" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:225];
+    
 }
+
 
 -(void)reloadData
 {
@@ -412,6 +425,8 @@
         [[NSUserDefaults standardUserDefaults]setObject:arrPlacedOrders forKey:@"PlacedOrders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrPlacedOrders release];
+        
+        [self createAlertViewWithTitle:nil message:@"Your order has been placed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         
     }
     else if(isRequestForPeople==YES)
@@ -690,6 +705,18 @@
     [url release];
     [request release];
 }
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag==225&&buttonIndex==1)
+    {
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+            [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:nil];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
+
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
 
 #pragma mark - Table view Datasource
 
@@ -704,8 +731,10 @@
     {
         if([arrBundledOrders count]||[arrOrdersTimedOut count])
         {
-            intNoOfSections=[arrBundledOrders count]+([arrOrdersTimedOut count]>=1?1:0);
-            return [arrBundledOrders count]+([arrOrdersTimedOut count]>=1?1:0);
+//            intNoOfSections=[arrBundledOrders count]+([arrOrdersTimedOut count]>=1?1:0);
+//            return [arrBundledOrders count]+([arrOrdersTimedOut count]>=1?1:0);
+            intNoOfSections=[arrBundledOrders count]+([arrOrdersTimedOut count]>=1?0:0);
+            return [arrBundledOrders count]+([arrOrdersTimedOut count]>=1?0:0);
         }
         else
         {

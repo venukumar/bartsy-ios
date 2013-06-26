@@ -92,7 +92,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     
     if (!appDelegate.session.isOpen) {
         // create a fresh session object
-        appDelegate.session = [[FBSession alloc] initWithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
+        appDelegate.session = [[FBSession alloc] init];//WithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
         
 //        appDelegate.session = [[FBSession alloc] initWithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions", nil]];
 

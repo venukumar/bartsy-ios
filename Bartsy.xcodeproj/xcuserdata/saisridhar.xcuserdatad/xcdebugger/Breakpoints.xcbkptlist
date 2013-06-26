@@ -294,11 +294,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/VenueListViewController.m"
-         timestampString = "393867237.767186"
+         timestampString = "393935397.570354"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "303"
-         endingLineNumber = "303"
+         startingLineNumber = "315"
+         endingLineNumber = "315"
          landmarkName = "-reloadMapView"
          landmarkType = "5">
       </FileBreakpoint>
@@ -429,7 +429,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "890"
          endingLineNumber = "890"
-         landmarkName = "-connectionDidFinishLoading:"
+         landmarkName = "-connection:didReceiveResponse:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -450,11 +450,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "393877616.78881"
+         timestampString = "393935444.673211"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "402"
-         endingLineNumber = "402"
+         startingLineNumber = "415"
+         endingLineNumber = "415"
          landmarkName = "-controllerDidFinishLoadingWithResult:"
          landmarkType = "5">
       </FileBreakpoint>
