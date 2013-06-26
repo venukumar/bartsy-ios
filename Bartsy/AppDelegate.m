@@ -827,7 +827,7 @@
                      {
                          [delegateForCurrentViewController reloadWelcomeScreen];
                      }
-                     else
+                     else if(delegateForCurrentViewController!=nil)
                      {
                          UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
                          for (UIViewController *viewController in viewCont.navigationController.viewControllers)

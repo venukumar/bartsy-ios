@@ -88,9 +88,11 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     self.navigationController.navigationBarHidden=YES;
     self.view.backgroundColor=[UIColor blackColor];
     
+    if(appDelegate.isCmgForWelcomeScreen==NO)
     [self updateView];
     
-    if (!appDelegate.session.isOpen) {
+    if (!appDelegate.session.isOpen&&appDelegate.isCmgForWelcomeScreen==NO)
+    {
         // create a fresh session object
         appDelegate.session = [[FBSession alloc] init];//WithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
         
