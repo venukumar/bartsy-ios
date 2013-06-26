@@ -243,8 +243,8 @@
              
              NSMutableArray *arrPlacedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"PlacedOrders"]];
              
-             //for (int i=0; i<0; i++)
-             for (int i=0; i<[arrPlacedOrders count]; i++)
+             for (int i=0; i<0; i++)
+             //for (int i=0; i<[arrPlacedOrders count]; i++)
              {
                  NSMutableDictionary *dictOrder=[[NSMutableDictionary alloc]initWithDictionary:[arrPlacedOrders objectAtIndex:i]];
                  
