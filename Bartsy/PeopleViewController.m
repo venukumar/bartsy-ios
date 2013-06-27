@@ -51,8 +51,8 @@
     self.navigationItem.rightBarButtonItem=btnSave;
     
     
-//    UIBarButtonItem *btnBack=[[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(btnCancel_TouchUpInside)];
-//    self.navigationItem.backBarButtonItem=btnBack;
+    UIBarButtonItem *btnBack=[[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(btnCancel_TouchUpInside)];
+    self.navigationController.navigationBar.topItem.leftBarButtonItem=btnBack;
 
     
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
@@ -70,11 +70,14 @@
 
 -(void)btnSave_TouchUpInside
 {
-    
     NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrPeople];
     [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
     if([arrTemp count])
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"PeopleSelected" object:[arrTemp objectAtIndex:0]];
+    {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"PeopleSelected" object:[arrTemp objectAtIndex:0]];
+        [self dismissViewControllerAnimated:YES completion:nil];
+
+    }
     else
     {
         UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"" message:@"Please select one of the people" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -82,7 +85,6 @@
         [alert release];
     }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
 
 }
 

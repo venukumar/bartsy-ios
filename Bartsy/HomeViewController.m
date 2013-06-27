@@ -698,6 +698,15 @@
              [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
              [appDelegate.arrPeople removeAllObjects];
              [appDelegate.arrPeople addObjectsFromArray:arrPeople];
+             
+             if([appDelegate.arrPeople count])
+             {
+                 NSDictionary *dictPeople=[appDelegate.arrPeople objectAtIndex:0];
+                 NSString *strImagePath=[dictPeople objectForKey:@"userImagePath"];
+                 NSString *strImgPath=[strImagePath stringByReplacingOccurrencesOfString:[dictPeople objectForKey:@"bartsyId"] withString:@""];
+                 [[NSUserDefaults standardUserDefaults]setObject:strImgPath forKey:@"ImagePath"];
+                 [[NSUserDefaults standardUserDefaults]synchronize];
+             }
          }
          else
          {
@@ -1134,7 +1143,7 @@
             [viewBorder addSubview:viewHeader];
             [viewHeader release];
             
-            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/img/%@",KServerURL,[dict objectForKey:@"recieverBartsyId"]]];
+            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"recieverBartsyId"]]];
             UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,15,60,60)];
             [imgViewPhoto setImageWithURL:urlPhoto];
             [viewBorder addSubview:imgViewPhoto];
@@ -1149,6 +1158,22 @@
             lblOrderId.textAlignment = NSTextAlignmentLeft;
             [viewBorder addSubview:lblOrderId];
             [lblOrderId release];
+            
+            NSMutableArray *arrPeopleTemp=[[NSMutableArray alloc]initWithArray:arrPeople];
+            NSPredicate *pred=[NSPredicate predicateWithFormat:@"bartsyId ==[c] %@",[dict objectForKey:@"recieverBartsyId"]];
+            [arrPeopleTemp filterUsingPredicate:pred];
+            
+            if([arrPeopleTemp count])
+            {
+                UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(100, 50, 200, 28)];
+                lblName.font = [UIFont boldSystemFontOfSize:20];
+                lblName.text = [NSString stringWithFormat:@"%@",[[arrPeopleTemp objectAtIndex:0] objectForKey:@"nickName"]];
+                lblName.backgroundColor = [UIColor clearColor];
+                lblName.textColor = [UIColor whiteColor] ;
+                lblName.textAlignment = NSTextAlignmentLeft;
+                [viewBorder addSubview:lblName];
+                [lblName release];
+            }
             
             UIView *viewStatus = [[UIView alloc]initWithFrame:CGRectMake(5, 85, 290, 30)];
             viewStatus.backgroundColor = [UIColor whiteColor];

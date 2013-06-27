@@ -189,21 +189,8 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "393934037.777573"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "621"
-         endingLineNumber = "621"
-         landmarkName = "-alertView:clickedButtonAtIndex:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Bartsy/MixerViewController.m"
-         timestampString = "393345055.326149"
+         timestampString = "394021461.360108"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "397"
@@ -216,7 +203,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/MixerViewController.m"
-         timestampString = "393964237.765058"
+         timestampString = "394021461.360108"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "530"
@@ -229,51 +216,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/MixerViewController.m"
-         timestampString = "393964237.765058"
+         timestampString = "394021461.360108"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "544"
          endingLineNumber = "544"
          landmarkName = "-controllerDidFailLoadingWithError:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/FrontViewController.m"
-         timestampString = "393347099.741482"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "294"
-         endingLineNumber = "294"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/RearViewController.m"
-         timestampString = "393347172.844117"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "67"
-         endingLineNumber = "67"
-         landmarkName = "-CategoriesList:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/FrontViewController.m"
-         timestampString = "393347189.117426"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "262"
-         endingLineNumber = "262"
-         landmarkName = "-CategoriesClicked:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -352,45 +300,6 @@
          startingLineNumber = "823"
          endingLineNumber = "823"
          landmarkName = "-likePeopleWithBartsyId:status:withDelegate:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/FrontViewController.m"
-         timestampString = "393939176.023565"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "78"
-         endingLineNumber = "78"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/RearViewController.m"
-         timestampString = "393939356.71766"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "54"
-         endingLineNumber = "54"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/FrontViewController.m"
-         timestampString = "393939632.155971"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "144"
-         endingLineNumber = "144"
-         landmarkName = "-loadScrollViewWithDrinks"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -476,7 +385,7 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/MixerViewController.m"
-         timestampString = "393964288.799814"
+         timestampString = "394021461.360108"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "451"
@@ -495,6 +404,32 @@
          startingLineNumber = "44"
          endingLineNumber = "44"
          landmarkName = "-viewDidLoad"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/MixerViewController.m"
+         timestampString = "394021461.360108"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "94"
+         endingLineNumber = "94"
+         landmarkName = "-btnContinue_TouchUpInside"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "394021921.349109"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1162"
+         endingLineNumber = "1162"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

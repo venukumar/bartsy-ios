@@ -36,7 +36,7 @@
     appDelegate.delegateForCurrentViewController=self;
     UIBarButtonItem *btnContinue=[[UIBarButtonItem alloc]initWithTitle:@"Continue" style:UIBarButtonItemStylePlain target:self action:@selector(btnContinue_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnContinue;
-
+    
     NSPredicate *pred=[NSPredicate predicateWithFormat:@"available ==[c] 'true'"];
     
     [arrMixers filterUsingPredicate:pred];
@@ -92,10 +92,9 @@
         
         NSLog(@"Bartsy id is %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
         
-        NSMutableArray *arrPeople=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"People"]];
-        for (int i=0; i<[arrPeople count]; i++)
+        for (int i=0; i<[appDelegate.arrPeople count]; i++)
         {
-            NSDictionary *dictMember=[arrPeople objectAtIndex:i];
+            NSDictionary *dictMember=[appDelegate.arrPeople objectAtIndex:i];
             if([[NSString stringWithFormat:@"%@",[dictMember objectForKey:@"bartsyId"]]isEqualToString:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]])
             {
                 dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
@@ -105,7 +104,8 @@
         
         
         UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,10,60,60)];
-        NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
+        NSString *strURL=[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dictTemp objectForKey:@"bartsyId"]];
+        
         NSLog(@"URL is %@",strURL);
         //[imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
         imgViewPhoto.tag=143225;
@@ -358,8 +358,9 @@
 -(void)selectedPeople:(NSNotification*)notification
 {
     dictPeopleSelectedForDrink=[[NSDictionary alloc]initWithDictionary:notification.object];
-    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];
-    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeopleSelectedForDrink objectForKey:@"userImagePath"]];
+    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];    
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dictPeopleSelectedForDrink objectForKey:@"bartsyId"]];
+
     NSLog(@"URL is %@",strURL);
     //[imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
     [imgView setImageWithURL:[NSURL URLWithString:strURL]];

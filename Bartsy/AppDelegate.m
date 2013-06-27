@@ -771,7 +771,7 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-    
+    [UIApplication sharedApplication].applicationIconBadgeNumber=0;
     // FBSample logic
     // We need to properly handle activation of the application with regards to SSO
     //  (e.g., returning from iOS 6.0 authorization dialog or from fast app switching).
