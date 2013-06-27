@@ -107,6 +107,11 @@
     }
     [btnLike addTarget:self action:@selector(btnLike_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 
+    lblAddress.hidden=YES;
+    lblStatus.hidden=YES;
+    lblMessages.hidden=YES;
+    btnLike.hidden=YES;
+    
 
 }
 

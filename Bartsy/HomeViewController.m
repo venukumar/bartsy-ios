@@ -998,7 +998,7 @@
         if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
         {
             UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.section selector:@selector(btnChat_TouchUpInside:) target:self];
-            [cell.contentView addSubview:btnChat];
+            //[cell.contentView addSubview:btnChat];
         }
 
         //UILabel *lbl
