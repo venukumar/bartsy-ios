@@ -814,44 +814,52 @@
                  id result = [jsonParser objectWithString:jsonString error:nil];
                  NSLog(@"Result is %@",result);
                  
-                 if([[result objectForKey:@"venueId"] integerValue]==0)
+                 
+                 @try
                  {
-                     [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"CheckInVenueId"];
-                     [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"VenueDetails"];
-                     [[NSUserDefaults standardUserDefaults]synchronize];
-                     
-                     [self stopTimerForOrderStatusUpdate];
-                     [self stopTimerForHeartBeat];
-                     
-                     if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
+                     if([[result objectForKey:@"venueId"] integerValue]==0)
                      {
-                         [delegateForCurrentViewController reloadWelcomeScreen];
-                     }
-                     else if(delegateForCurrentViewController!=nil)
-                     {
-                         UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
-                         for (UIViewController *viewController in viewCont.navigationController.viewControllers)
+                         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"CheckInVenueId"];
+                         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"VenueDetails"];
+                         [[NSUserDefaults standardUserDefaults]synchronize];
+                         
+                         [self stopTimerForOrderStatusUpdate];
+                         [self stopTimerForHeartBeat];
+                         
+                         if([delegateForCurrentViewController isKindOfClass:[WelcomeViewController class]])
                          {
-                             if([viewController isKindOfClass:[HomeViewController class]])
+                             [delegateForCurrentViewController reloadWelcomeScreen];
+                         }
+                         else if(delegateForCurrentViewController!=nil)
+                         {
+                             UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
+                             for (UIViewController *viewController in viewCont.navigationController.viewControllers)
                              {
-                                 [delegateForCurrentViewController popToViewController:viewController animated:YES];
+                                 if([viewController isKindOfClass:[HomeViewController class]])
+                                 {
+                                     [delegateForCurrentViewController popToViewController:viewController animated:YES];
+                                 }
                              }
                          }
                      }
-                 }
-                 else
-                 {
-                     [self startTimerToCheckHeartBeat];
-                     intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
-                     intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
-                     UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
-                     if([viewCont isKindOfClass:[HomeViewController class]])
+                     else
                      {
-                         [viewCont  reloadDataPeopleAndOrderCount];
+                         [self startTimerToCheckHeartBeat];
+                         intOrderCount=[[result objectForKey:@"orderCount"]integerValue];
+                         intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+                         UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
+                         if([viewCont isKindOfClass:[HomeViewController class]])
+                         {
+                             [viewCont  reloadDataPeopleAndOrderCount];
+                         }
+                         
                      }
-                     
                  }
-                 
+                 @catch (NSException *exception)
+                 {
+                     NSLog(@"Exception name is %@, reason is %@",exception.name,exception.reason);
+                 }
+
              }
              else
              {

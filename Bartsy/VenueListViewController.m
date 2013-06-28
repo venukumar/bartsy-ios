@@ -75,7 +75,7 @@
     
     arrVenueList=[[NSMutableArray alloc]init];
     
-    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"LogOut" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
+    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"Check out" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnLogOut;
     
     UILabel *lblHeader=[self createLabelWithTitle:@"Check in at a Bartsy venue to order drinks and see who else is there" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];

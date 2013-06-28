@@ -81,7 +81,7 @@
     
     self.title=[dictVenue objectForKey:@"venueName"];
     
-    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"LogOut" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
+    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"Check out" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnLogOut;
     
    
@@ -432,7 +432,7 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrPlacedOrders release];
         
-        [self createAlertViewWithTitle:nil message:@"Your order has been placed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:nil message:@"Your order was sent" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         
     }
     else if(isRequestForPeople==YES)
@@ -1285,10 +1285,6 @@
             {
                 NSDictionary *dictTempOrder=[arrSubSectionOrders objectAtIndex:i];
                 
-                floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
-                floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
-                floatTipTaxFee+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
-                
                 UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
                 lblDescription1.font = [UIFont boldSystemFontOfSize:14];
                 lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
@@ -1298,7 +1294,7 @@
                 lblDescription1.textColor = [UIColor blackColor] ;
                 lblDescription1.textAlignment = NSTextAlignmentLeft;
                 [viewDescription addSubview:lblDescription1];
-                [lblDescription1 release];
+                
                 
                 UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 21+(i*70), 245, 40)];
                 lblDescription2.font = [UIFont systemFontOfSize:14];
@@ -1309,7 +1305,7 @@
                 lblDescription2.textColor = [UIColor blackColor] ;
                 lblDescription2.textAlignment = NSTextAlignmentLeft;
                 [viewDescription addSubview:lblDescription2];
-                [lblDescription2 release];
+                
                 
                 UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
                 lblPrice.font = [UIFont systemFontOfSize:12];
@@ -1319,7 +1315,24 @@
                 lblPrice.textColor = [UIColor blackColor] ;
                 lblPrice.textAlignment = NSTextAlignmentLeft;
                 [viewDescription addSubview:lblPrice];
+                
+                NSLog(@"ID's %@,%@",[dictTempOrder objectForKey:@"senderBartsyId"],[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
+                
+                if([[dictTempOrder objectForKey:@"senderBartsyId"]isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
+                {
+                    floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
+                    floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
+                    floatTipTaxFee+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
+                }
+                else
+                {
+                    lblPrice.text=@"-";
+                }
+                
+                [lblDescription1 release];
+                [lblDescription2 release];
                 [lblPrice release];
+                
 
             }
             
@@ -1334,7 +1347,10 @@
             
             UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(3, 0, 82, 30)];
             lblPrice.font = [UIFont systemFontOfSize:11];
+            if(floatPrice>0.01)
             lblPrice.text = [NSString stringWithFormat:@"Price: $%.2f",floatPrice];
+            else
+            lblPrice.text = [NSString stringWithFormat:@"Price: -"];
             lblPrice.tag = 12347890;
             lblPrice.backgroundColor = [UIColor clearColor];
             lblPrice.textColor = [UIColor blackColor] ;
@@ -1344,7 +1360,10 @@
             
             UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(80, 0, 130, 30)];
             lblTipTaxFee.font = [UIFont systemFontOfSize:11];
+            if(floatTipTaxFee>0.01)
             lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
+            else
+            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: -"];
             lblTipTaxFee.tag = 12347890;
             lblTipTaxFee.backgroundColor = [UIColor clearColor];
             lblTipTaxFee.textColor = [UIColor blackColor] ;
@@ -1354,7 +1373,10 @@
             
             UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(215, 0, 100, 30)];
             lblTotalPrice.font = [UIFont systemFontOfSize:11];
+            if(floatTotalPrice>0.01)
             lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
+            else
+            lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
             lblTotalPrice.tag = 12347890;
             lblTotalPrice.backgroundColor = [UIColor clearColor];
             lblTotalPrice.textColor = [UIColor blackColor] ;
@@ -1517,12 +1539,7 @@
             {
                 NSDictionary *dictTempOrder=[arrOrdersTimedOut objectAtIndex:i];
                 
-                floatPrice+=[[dictTempOrder objectForKey:@"price"] floatValue];
                 
-                float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([[dict objectForKey:@"tipPercentage"] integerValue]+9)))/100;
-                
-                floatTotalPrice+=floatPrice+subTotal;
-                floatTipTaxFee+=subTotal;
                 
                 UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
                 lblDescription1.font = [UIFont boldSystemFontOfSize:14];
@@ -1533,7 +1550,7 @@
                 lblDescription1.textColor = [UIColor blackColor] ;
                 lblDescription1.textAlignment = NSTextAlignmentLeft;
                 [viewDescription addSubview:lblDescription1];
-                [lblDescription1 release];
+                
                 
                 UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 21+(i*70), 245, 40)];
                 lblDescription2.font = [UIFont systemFontOfSize:14];
@@ -1544,7 +1561,7 @@
                 lblDescription2.textColor = [UIColor blackColor] ;
                 lblDescription2.textAlignment = NSTextAlignmentLeft;
                 [viewDescription addSubview:lblDescription2];
-                [lblDescription2 release];
+                
                 
                 UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
                 lblPrice.font = [UIFont systemFontOfSize:12];
@@ -1554,6 +1571,24 @@
                 lblPrice.textColor = [UIColor blackColor] ;
                 lblPrice.textAlignment = NSTextAlignmentLeft;
                 [viewDescription addSubview:lblPrice];
+                
+                
+                if([[dictTempOrder objectForKey:@"senderBartsyId"]isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
+                {
+                    floatPrice+=[[dictTempOrder objectForKey:@"price"] floatValue];
+                    
+                    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([[dict objectForKey:@"tipPercentage"] integerValue]+9)))/100;
+                    
+                    floatTotalPrice+=floatPrice+subTotal;
+                    floatTipTaxFee+=subTotal;
+                }
+                else
+                {
+                    lblPrice.text=@"-";
+                }
+                
+                [lblDescription1 release];
+                [lblDescription2 release];
                 [lblPrice release];
                 
             }
@@ -1569,7 +1604,10 @@
             
             UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(3, 0, 82, 30)];
             lblPrice.font = [UIFont systemFontOfSize:11];
+            if(floatPrice>0.01)
             lblPrice.text = [NSString stringWithFormat:@"Price: $%.2f",floatPrice];
+            else
+                lblPrice.text = [NSString stringWithFormat:@"Price: -"];
             lblPrice.tag = 12347890;
             lblPrice.backgroundColor = [UIColor clearColor];
             lblPrice.textColor = [UIColor blackColor] ;
@@ -1579,7 +1617,10 @@
             
             UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(80, 0, 130, 30)];
             lblTipTaxFee.font = [UIFont systemFontOfSize:11];
+            if(floatTipTaxFee>0.01)
             lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
+            else
+            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: -"];   
             lblTipTaxFee.tag = 12347890;
             lblTipTaxFee.backgroundColor = [UIColor clearColor];
             lblTipTaxFee.textColor = [UIColor blackColor] ;
@@ -1589,7 +1630,10 @@
             
             UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(215, 0, 100, 30)];
             lblTotalPrice.font = [UIFont systemFontOfSize:11];
+            if(floatTotalPrice>0.01)
             lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
+            else
+                lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
             lblTotalPrice.tag = 12347890;
             lblTotalPrice.backgroundColor = [UIColor clearColor];
             lblTotalPrice.textColor = [UIColor blackColor] ;
