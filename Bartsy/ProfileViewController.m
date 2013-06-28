@@ -136,10 +136,11 @@
         [self.view addSubview:lblEmailId];
         
         txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 150, 180, 30) tag:111 delegate:self];
-        if(isReloadingForProfileVisible==NO)
-            txtFldEmailId.text=[dictResult objectForKey:@"username"];
-        else
-            txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
+//        if(isReloadingForProfileVisible==NO)
+//            txtFldEmailId.text=[dictResult objectForKey:@"username"];
+//        else
+//            txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
+        txtFldEmailId.text=[[[NSUserDefaults standardUserDefaults]objectForKey:@"LoginDetails"] objectForKey:@"bartsyLogin"];
         txtFldEmailId.placeholder=@"Email";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
         [self.view addSubview:txtFldEmailId];
@@ -255,6 +256,9 @@
     }
     else if(indexPath.section==2)
     {
+        if([creditCardInfo.redactedCardNumber length])
+        return 70;
+        else
         return 50;
     }
     else if(indexPath.section==3)
@@ -413,6 +417,17 @@
         [tapForPaypal setNumberOfTouchesRequired:1];
         [tapForPaypal setNumberOfTapsRequired:1];
         [lblPaypal addGestureRecognizer:tapForPaypal];
+        
+        if([creditCardInfo.redactedCardNumber length])
+        {
+            UIButton *btnChange=[self createUIButtonWithTitle:@"Rescan" image:nil frame:CGRectMake(10, 50, 80, 20) tag:0 selector:@selector(btnCreditCard_TouchUpInside) target:self];
+            btnChange.titleLabel.textColor=[UIColor blackColor];
+            [cell.contentView addSubview:btnChange];
+            
+            UIButton *btnDelete=[self createUIButtonWithTitle:@"Delete" image:nil frame:CGRectMake(95, 50, 80, 20) tag:0 selector:@selector(btnDelete_TouchUpInside) target:self];
+            btnDelete.titleLabel.textColor=[UIColor blackColor];
+            [cell.contentView addSubview:btnDelete];
+        }
         
         
     }
@@ -595,6 +610,12 @@
     return cell;
 }
 
+-(void)btnDelete_TouchUpInside
+{
+    creditCardInfo=nil;
+    UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
+    [tblView reloadData];
+}
 
 -(void)btnLooking_TouchUpInside:(UIButton*)sender
 {
