@@ -737,7 +737,7 @@
 {
     creditCardInfo=[info retain];
     // The full card number is available as info.cardNumber, but don't log that!
-    NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
+   // NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
     // Use the card info...
     //    [scanViewController dismissModalViewControllerAnimated:YES];
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
@@ -1484,7 +1484,7 @@
                 isSelectedSingles=[[result objectForKey:@"status"] isEqualToString:@"Singles"];
             }
             
-            NSLog(@"Result \n %@",dictResult);
+            //NSLog(@"Result \n %@",dictResult);
             
             UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
             [tblView reloadData];

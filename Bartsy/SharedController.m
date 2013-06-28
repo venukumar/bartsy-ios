@@ -297,7 +297,7 @@ static SharedController *sharedController;
         
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
-    NSLog(@"Profile Info : \n %@",dictUserProfile);
+   // NSLog(@"Profile Info : \n %@",dictUserProfile);
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];
@@ -905,14 +905,14 @@ static SharedController *sharedController;
     
     NSString *jsonString = [[[NSString alloc] initWithData:self.data encoding:NSUTF8StringEncoding] autorelease];
     
-    NSLog(@" JSON String ----- :%@",jsonString);
+    //NSLog(@" JSON String ----- :%@",jsonString);
 
     NSError *outError = nil;
         
     id result = [jsonParser objectWithString:jsonString error:&outError];
     if (outError == nil )
     {
-        NSLog(@" result ----- :%@",result);
+        //NSLog(@" result ----- :%@",result);
         if([result isKindOfClass:[NSDictionary class]])
         {
             if([[result objectForKey:@"errorCode"] integerValue]==100)
