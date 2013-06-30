@@ -837,6 +837,7 @@
                              {
                                  if([viewController isKindOfClass:[HomeViewController class]])
                                  {
+                                     NSLog(@"vc is %@",delegateForCurrentViewController);
                                      [delegateForCurrentViewController popToViewController:viewController animated:YES];
                                  }
                              }

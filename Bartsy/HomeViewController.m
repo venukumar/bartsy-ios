@@ -297,7 +297,15 @@
     [viewA removeFromSuperview];
     isRequestForOrder=YES;
     self.sharedController=[SharedController sharedController];
-    [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
+    if([dictPeopleSelectedForDrink count]==0||[[dictPeopleSelectedForDrink objectForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
+    }
+    else
+    {
+        NSString *strMsg=[NSString stringWithFormat:@"Sending Order details to %@...",[dictPeopleSelectedForDrink objectForKey:@"nickName"]];
+        [self createProgressViewToParentView:self.view withTitle:strMsg];
+    }
     NSString *strBasePrice=[NSString stringWithFormat:@"%f",[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]];
     
     NSString *strTip;

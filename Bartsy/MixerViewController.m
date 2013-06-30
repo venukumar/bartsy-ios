@@ -37,11 +37,6 @@
     UIBarButtonItem *btnContinue=[[UIBarButtonItem alloc]initWithTitle:@"Continue" style:UIBarButtonItemStylePlain target:self action:@selector(btnContinue_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnContinue;
     
-    NSPredicate *pred=[NSPredicate predicateWithFormat:@"available ==[c] 'true'"];
-    
-    [arrMixers filterUsingPredicate:pred];
-    [arrMixers setValue:@"NO" forKey:@"Checked"];
-
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 416) style:UITableViewStylePlain];
     tblView.dataSource=self;
     tblView.delegate=self;
@@ -400,10 +395,26 @@
     UIView *viewA = (UIView*)[self.view viewWithTag:222];
     [viewA removeFromSuperview];
     self.sharedController=[SharedController sharedController];
-    [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
     
-    NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrMixers];
-    [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:@"Checked==1"]];
+    if([dictPeopleSelectedForDrink count]==0||[[dictPeopleSelectedForDrink objectForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
+    {
+        [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
+    }
+    else
+    {
+        NSString *strMsg=[NSString stringWithFormat:@"Sending Order details to %@...",[dictPeopleSelectedForDrink objectForKey:@"nickName"]];
+        [self createProgressViewToParentView:self.view withTitle:strMsg];
+    }
+    
+    NSMutableArray *arrTemp=[[NSMutableArray alloc]init];
+    NSPredicate *pred=[NSPredicate predicateWithFormat:@"Checked==1"];
+    for (int i=0; i<[arrMixers count]; i++)
+    {
+        NSMutableArray *arrTem=[[NSMutableArray alloc]initWithArray:[[arrMixers objectAtIndex:i] objectForKey:@"ingredients"]];
+        [arrTem filterUsingPredicate:pred];
+        [arrTemp addObjectsFromArray:arrTem];
+        [arrTem release];
+    }
     
     NSLog(@"Spirit is %@",dictSelectedToMakeOrder);
     
@@ -481,10 +492,21 @@
     return YES;
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [arrMixers count];
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [[arrMixers objectAtIndex:section] objectForKey:@"categoryName"];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [arrMixers count];
+	return [[[arrMixers objectAtIndex:section] objectForKey:@"ingredients"] count];
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -496,7 +518,7 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
 	}
 	
-    NSDictionary *dict=[arrMixers objectAtIndex:indexPath.row];
+    NSDictionary *dict=[[[arrMixers objectAtIndex:indexPath.section] objectForKey:@"ingredients"] objectAtIndex:indexPath.row];
     cell.textLabel.textColor=[UIColor blackColor];
 	cell.textLabel.text=[dict objectForKey:@"name"];
     cell.detailTextLabel.text=[NSString stringWithFormat:@"$%@",[dict objectForKey:@"price"]];
@@ -517,14 +539,12 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSMutableDictionary *dictMixer=[arrMixers objectAtIndex:indexPath.row];
+    NSMutableDictionary *dictMixer=[[[arrMixers objectAtIndex:indexPath.section] objectForKey:@"ingredients"] objectAtIndex:indexPath.row];
     [dictMixer setValue:[NSNumber numberWithBool:![[dictMixer objectForKey:@"Checked"] boolValue]] forKey:@"Checked"];
     
-    [arrMixers replaceObjectAtIndex:indexPath.row withObject:dictMixer];
+    [[[arrMixers objectAtIndex:indexPath.section] objectForKey:@"ingredients"] replaceObjectAtIndex:indexPath.row withObject:dictMixer];
     
-    [tableView reloadData];
-
-    
+    [tableView reloadData];    
 }
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
