@@ -69,5 +69,6 @@
 -(void)showAPIVersionAlertWithReason:(NSString*)strReason;
 -(void)controllerDidFinishLoadingWithResult:(id)result;
 -(void)controllerDidFailLoadingWithError:(NSError*)error;
+-(void)updateOrderStatusForaOfferedDrink:(NSString*)strStatus;
 @end
 

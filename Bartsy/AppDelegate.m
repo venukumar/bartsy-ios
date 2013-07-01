@@ -833,14 +833,16 @@
                          else if(delegateForCurrentViewController!=nil)
                          {
                              UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
+                             
                              for (UIViewController *viewController in viewCont.navigationController.viewControllers)
                              {
-                                 if([viewController isKindOfClass:[HomeViewController class]])
+                                 if([viewController isKindOfClass:[WelcomeViewController class]])
                                  {
                                      NSLog(@"vc is %@",delegateForCurrentViewController);
                                      [delegateForCurrentViewController popToViewController:viewController animated:YES];
                                  }
                              }
+                              
                          }
                      }
                      else

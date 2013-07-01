@@ -288,13 +288,18 @@
 {
     if(alertView.tag==143225&&buttonIndex==1)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        self.sharedController=[SharedController sharedController];
-        [self createProgressViewToParentView:self.view withTitle:@"Checking Out..."];
-        [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+        {
+            self.sharedController=[SharedController sharedController];
+            [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:nil];
+        }
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"CheckInVenueId"];
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
         [[NSUserDefaults standardUserDefaults]synchronize];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 - (void)didReceiveMemoryWarning

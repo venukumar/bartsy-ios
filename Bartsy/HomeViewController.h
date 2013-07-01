@@ -23,6 +23,7 @@
     NSMutableDictionary *dictTemp;
     NSDictionary *dictPeopleSelectedForDrink;
     NSMutableArray *arrOrdersTimedOut;
+    NSMutableArray *arrOrdersOffered;
     NSInteger intNoOfSections;
 }
 @property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;
