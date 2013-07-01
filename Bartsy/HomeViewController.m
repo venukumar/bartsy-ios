@@ -16,7 +16,7 @@
 #import "PeopleViewController.h"
 #import "MessageListViewController.h"
 #import "PeopleDetailViewController.h"
-
+#import "SDImageCache.h"
 
 @interface PeopleCustomCell : UITableViewCell {}
 @end
@@ -441,10 +441,14 @@
         [arrPlacedOrders release];
         
         [self createAlertViewWithTitle:nil message:@"Your order was sent" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        
     }
     else if(isRequestForPeople==YES)
     {
+        SDImageCache *sharedSDImageCache=[SDImageCache sharedImageCache];
+        [sharedSDImageCache clearMemory];
+        [sharedSDImageCache clearDisk];
+        [sharedSDImageCache cleanDisk];
+        
         isSelectedForDrinks=NO;
         isSelectedForPeople=YES;
         [arrPeople removeAllObjects];
@@ -453,7 +457,7 @@
         [appDelegate.arrPeople addObjectsFromArray:arrPeople];
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
-        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         NSString *strOrder=[NSString stringWithFormat:@"PEOPLE (%i)",[arrPeople count]];
@@ -476,6 +480,11 @@
     }
     else if(isRequestForGettingsOrders==YES)
     {
+        SDImageCache *sharedSDImageCache=[SDImageCache sharedImageCache];
+        [sharedSDImageCache clearMemory];
+        [sharedSDImageCache clearDisk];
+        [sharedSDImageCache cleanDisk];
+        
         [arrOrders removeAllObjects];
         [appDelegate.arrOrders removeAllObjects];
         [appDelegate.arrOrders addObjectsFromArray:[result objectForKey:@"orders"]];
