@@ -9,8 +9,8 @@
 #ifndef Bartsy_Constants_h
 #define Bartsy_Constants_h
 
-#define KServerURL @"http://app.bartsy.vendsy.com/" //Prod Amazon Server
-//#define KServerURL @"http://54.235.76.180:8080" //Dev Amazon Server
+//#define KServerURL @"http://app.bartsy.vendsy.com/" //Prod Amazon Server
+#define KServerURL @"http://54.235.76.180:8080" //Dev Amazon Server
 //#define KServerURL @"http://192.168.0.172:8080" //Srikanth
 //#define KServerURL @"http://192.168.0.109:8080" //Swetha
 //#define KServerURL @"http://192.168.0.72:8080" //NagaBhargavi P

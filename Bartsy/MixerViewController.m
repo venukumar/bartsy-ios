@@ -233,24 +233,13 @@
         [viewC addSubview:viewTip];
         [viewTip release];
         
-        UILabel *lblTip = [[UILabel alloc]initWithFrame:CGRectMake(8, 7, 30, 30)];
-        lblTip.font = [UIFont boldSystemFontOfSize:12];
-        lblTip.text = @"Tip:";
-        lblTip.backgroundColor = [UIColor clearColor];
-        lblTip.textColor = [UIColor blackColor] ;
-        lblTip.textAlignment = NSTextAlignmentCenter;
-        [viewTip addSubview:lblTip];
-        [lblTip release];
-        
-        
         UIButton *btn10 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn10.frame = CGRectMake(37,10,23,23);
         btn10.tag = 10;
-        [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+        [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
         [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn10];
         
-        btnValue=btn10.tag;
         
         UILabel *lbl10 = [[UILabel alloc]initWithFrame:CGRectMake(60, 7, 30, 30)];
         lbl10.font = [UIFont boldSystemFontOfSize:12];
@@ -279,10 +268,12 @@
         
         UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn30.frame = CGRectMake(148,10,23,23);
-        [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
         btn30.tag = 20;
         [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn30];
+        
+        btnValue=btn30.tag;
         
         UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(180, 7, 30, 30)];
         lbl20.font = [UIFont boldSystemFontOfSize:12];
@@ -557,7 +548,27 @@
     }
     else
     {
+        appDelegate.intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
+        [appDelegate startTimerToCheckOrderStatusUpdate];
+        NSMutableArray *arrPlacedOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"PlacedOrders"]];
+        NSMutableDictionary *dictOrderPlaced=[[NSMutableDictionary alloc]initWithDictionary:dictSelectedToMakeOrder];
+        [dictOrderPlaced setValue:[result objectForKey:@"orderId"] forKey:@"orderId"];
+        [dictOrderPlaced setValue:[result objectForKey:@"orderStatus"] forKey:@"orderStatus"];
+        [dictOrderPlaced setValue:[result objectForKey:@"orderTimeout"] forKey:@"orderTimeout"];
+        [dictOrderPlaced setValue:[NSNumber numberWithInteger:btnValue] forKey:@"tipPercentage"];
         
+        NSDate* date = [NSDate date];
+        
+        [dictOrderPlaced setValue:date forKey:@"Time"];
+        
+        NSLog(@"Order is %@",dictOrderPlaced);
+        
+        [arrPlacedOrders addObject:dictOrderPlaced];
+        [[NSUserDefaults standardUserDefaults]setObject:arrPlacedOrders forKey:@"PlacedOrders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [arrPlacedOrders release];
+        
+        [self createAlertViewWithTitle:nil message:@"Your order was sent" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
 }
 

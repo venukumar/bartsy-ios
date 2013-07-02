@@ -2241,11 +2241,10 @@
         UIButton *btn10 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn10.frame = CGRectMake(37,10,23,23);
         btn10.tag = 10;
-        [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+        [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
         [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn10];
         
-        btnValue=btn10.tag;
         
         UILabel *lbl10 = [[UILabel alloc]initWithFrame:CGRectMake(60, 7, 30, 30)];
         lbl10.font = [UIFont boldSystemFontOfSize:12];
@@ -2274,11 +2273,13 @@
         
         UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
         btn30.frame = CGRectMake(148,10,23,23);
-        [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+        [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
         btn30.tag = 20;
         [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [viewTip addSubview:btn30];
         
+        btnValue=btn30.tag;
+
         UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(180, 7, 30, 30)];
         lbl20.font = [UIFont boldSystemFontOfSize:12];
         lbl20.text = @"20%";
