@@ -87,7 +87,7 @@
         lblItemName.textAlignment = NSTextAlignmentLeft;
         [cell.contentView addSubview:lblItemName];
         
-        UILabel *lbldescription = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 15,250, 45) tag:0 font:[UIFont systemFontOfSize:13] color:[UIColor grayColor] numberOfLines:3];
+        UILabel *lbldescription = [self createLabelWithTitle:[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor grayColor] numberOfLines:2];
         lbldescription.backgroundColor=[UIColor clearColor];
         lbldescription.textAlignment = NSTextAlignmentLeft;
         [cell.contentView addSubview:lbldescription];
@@ -142,7 +142,7 @@
         
         NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
         
-
+        
         UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
         lblTime.font = [UIFont systemFontOfSize:14];
         lblTime.text = strDate1;
@@ -153,17 +153,26 @@
         [cell.contentView addSubview:lblTime];
         [lblTime release];
         
+        UILabel *lblSender = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
+        lblSender.font = [UIFont systemFontOfSize:14];
+        lblSender.text = [NSString stringWithFormat:@"Sender : %@",[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderNickname"]];
+        lblSender.tag = 1234234567;
+        lblSender.backgroundColor = [UIColor clearColor];
+        lblSender.textColor = [UIColor blackColor] ;
+        lblSender.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblSender];
+        [lblSender release];
         
-        UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 75, 280, 15)];
+        UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
         lblRecepient.font = [UIFont systemFontOfSize:14];
-        lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
+        lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"recipientNickname"]];
         lblRecepient.tag = 1234234567;
         lblRecepient.backgroundColor = [UIColor clearColor];
         lblRecepient.textColor = [UIColor blackColor] ;
         lblRecepient.textAlignment = NSTextAlignmentLeft;
         [cell.contentView addSubview:lblRecepient];
         [lblRecepient release];
-
+        
         
         NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
         
@@ -171,7 +180,7 @@
         lblTotalPrice.backgroundColor=[UIColor clearColor];
         lblTotalPrice.textAlignment = NSTextAlignmentLeft;
         [cell.contentView addSubview:lblTotalPrice];
- 
+        
     }
     else
     {
@@ -187,7 +196,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return 100;
+    return 130;
 }
 - (void)didReceiveMemoryWarning
 {

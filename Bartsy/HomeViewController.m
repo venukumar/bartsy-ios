@@ -921,7 +921,7 @@
         return 60;
     else if(isSelectedForPastOrders == YES)
     {
-        return 100;
+        return 130;
     }
     else
     {
@@ -1057,7 +1057,7 @@
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             
-            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 15,250, 45) tag:0 font:[UIFont systemFontOfSize:13] color:[UIColor grayColor] numberOfLines:3];
+            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor grayColor] numberOfLines:2];
             lbldescription.backgroundColor=[UIColor clearColor];
             lbldescription.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lbldescription];
@@ -1123,10 +1123,19 @@
             [cell.contentView addSubview:lblTime];
             [lblTime release];
             
+            UILabel *lblSender = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
+            lblSender.font = [UIFont systemFontOfSize:14];
+            lblSender.text = [NSString stringWithFormat:@"Sender : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderNickname"]];
+            lblSender.tag = 1234234567;
+            lblSender.backgroundColor = [UIColor clearColor];
+            lblSender.textColor = [UIColor blackColor] ;
+            lblSender.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblSender];
+            [lblSender release];
             
-            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 75, 280, 15)];
+            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
             lblRecepient.font = [UIFont systemFontOfSize:14];
-            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"nickName"]];
+            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"recipientNickname"]];
             lblRecepient.tag = 1234234567;
             lblRecepient.backgroundColor = [UIColor clearColor];
             lblRecepient.textColor = [UIColor blackColor] ;
