@@ -207,6 +207,7 @@
 
 -(void)checkOrderStatusUpdate
 {
+    return;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -839,7 +840,8 @@
                                  if([viewController isKindOfClass:[WelcomeViewController class]])
                                  {
                                      NSLog(@"vc is %@",delegateForCurrentViewController);
-                                     [delegateForCurrentViewController popToViewController:viewController animated:YES];
+                                     UIViewController *viewCont=(UIViewController*)delegateForCurrentViewController;
+                                     [viewCont.navigationController popToViewController:viewController animated:YES];
                                  }
                              }
                               

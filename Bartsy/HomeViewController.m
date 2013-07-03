@@ -96,7 +96,7 @@
     arrBundledOrders=[[NSMutableArray alloc]init];
     arrPastOrders=[[NSMutableArray alloc]init];
     arrOrdersTimedOut=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
-    arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
+    arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"OrderStatus1",@"Order is accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"OrderStatus6",@"OrderStatus7",@"OrderStatus8",@"OrderStatus9", nil];
     arrOrdersOffered=[[NSMutableArray alloc]init];
     
     NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
@@ -197,10 +197,11 @@
     {
         [arrOrders removeAllObjects];
         //[arrOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
-        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-        tblView.hidden=NO;
+       
+        //UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        //tblView.hidden=NO;
         isSelectedForDrinks=NO;
-        [tblView reloadData];
+        //[tblView reloadData];
         
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
@@ -228,6 +229,8 @@
 -(void)segmentControl_ValueChanged:(UISegmentedControl*)segmentControl
 {
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+    UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
+    [scrollViewOld removeFromSuperview];
     if(segmentControl.selectedSegmentIndex==0)
     {
         isSelectedForDrinks=YES;
@@ -253,7 +256,7 @@
         isRequestForPeople=NO;
         isRequestForOrder=NO;
        
-        tblView.hidden=NO;
+        tblView.hidden=YES;
         isSelectedForPastOrders = NO;
         isSelectedForDrinks=NO;
         isSelectedForPeople=NO;
@@ -273,7 +276,7 @@
         
 
         
-        [tblView reloadData];
+        //[tblView reloadData];
         
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -281,6 +284,7 @@
     }
     else if(segmentControl.selectedSegmentIndex==3)
     {
+        tblView.hidden=NO;
         isRequestForGettingsOrders=NO;
         isRequestForPeople=NO;
         isRequestForOrder=NO;
@@ -493,72 +497,107 @@
         for (int i=0;i<[arrTemp count];i++)
         {
             NSMutableDictionary *dictOrder=[[NSMutableDictionary alloc] initWithDictionary:[arrTemp objectAtIndex:i]];
-            if(![[dictOrder objectForKey:@"orderStatus"] isEqualToString:@"5"])
-            {
+            //if(![[dictOrder objectForKey:@"orderStatus"] isEqualToString:@"5"])
+            //{
                 NSDateFormatter *dateFormatter = [NSDateFormatter new];
                 dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ss zzz";
                 NSDate *date    = [dateFormatter dateFromString:[dictOrder objectForKey:@"orderTime"]];
                 [dictOrder setObject:date forKey:@"Date"];
                 [arrOrders addObject:dictOrder];
-            }
+            //}
             [dictOrder release];
         }
+        
+        [arrTemp release];
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
         [arrBundledOrders removeAllObjects];
-        for (int i=0; i<=3&&[arrOrders count]; i++)
-        {
-            if(i==0||i==2||i==3)
-            {
+        
+        NSMutableArray *arrTemp1=[[NSMutableArray alloc]initWithArray:arrOrders]; //Array for Loop
+        NSMutableArray *arrTemp2=[[NSMutableArray alloc]initWithArray:arrOrders]; //Array to remove the added orders to bundled array
 
-            NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrOrders];
-            
-            NSString *strPred;
-            if(i==0)
-            strPred=[NSString stringWithFormat:@"orderStatus == [c]'0'"];
-            else if(i==2)
-            strPred=[NSString stringWithFormat:@"orderStatus == [c]'2'"];
-            else
-            strPred=[NSString stringWithFormat:@"orderStatus == [c]'3'"];
-   
-            [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:strPred]];
-            
-                if([arrTemp count])
-                [arrBundledOrders addObject:arrTemp];
-                
-                [arrTemp release];
-            }
-            
-            /*
-            if(i==3)
+        for (int i=0; i<[arrTemp1 count]; i++)
+        {
+            //Array to sort for a particular order status
+            NSMutableArray *arrTemp3=[[NSMutableArray alloc]initWithArray:arrOrders];
+            NSDictionary *dictOrder=[arrTemp1 objectAtIndex:i];
+                    
+            //Checking weather the order is there in arrTemp2 or not
+            if([arrTemp2 indexOfObject:dictOrder]!= NSNotFound)
             {
-                [arrOrdersOffered removeAllObjects];
-                
-                NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:arrOrders];
-                NSString *strPred;
-                strPred=[NSString stringWithFormat:@"orderStatus == [c]'9'"];
-                [arrTemp filterUsingPredicate:[NSPredicate predicateWithFormat:strPred]];
-                if([arrTemp count])
-                    [arrOrdersOffered addObject:arrTemp];
-                
-                [arrTemp release];
+                NSString *strBartsyId=[NSString stringWithFormat:@"%@",[NSNumber numberWithDouble:[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]]];
+                NSString *strSenderBartsyId=[NSString stringWithFormat:@"'%@'",[NSNumber numberWithDouble:[[dictOrder objectForKey:@"senderBartsyId"] doubleValue]]];
+                NSString *strRecieverBartsyId=[NSString stringWithFormat:@"'%@'",[NSNumber numberWithDouble:[[dictOrder objectForKey:@"recieverBartsyId"] doubleValue]]];
+
+                //Checking weather order is ordered for self and bundling the self orders with same status
+                if([[dictOrder objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictOrder objectForKey:@"recieverBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue])
+                {
+                    NSPredicate *pred1=[NSPredicate predicateWithFormat:[self getPredicateWithOrderStatus:[[dictOrder objectForKey:@"orderStatus"] integerValue]]];
+                    NSPredicate *pred2=[NSPredicate predicateWithFormat:@"senderBartsyId==[c]%@",strBartsyId];
+                    NSPredicate *pred3=[NSPredicate predicateWithFormat:@"recieverBartsyId==[c]%@",strBartsyId];
+                    
+                    NSPredicate *predCompound=[NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:pred1,pred2,pred3, nil]];
+
+                    [arrTemp3 filterUsingPredicate:predCompound];
+                    
+                    if([arrTemp3 count])
+                    {
+                        [arrBundledOrders addObject:arrTemp3];
+                        [arrTemp2 removeObjectsInArray:arrTemp3];
+                    }
+                }
+                //Checking weather order is ordered to others and bundling those orders with same status
+                else if([[dictOrder objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictOrder objectForKey:@"recieverBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue])
+                {
+                    NSPredicate *pred1=[NSPredicate predicateWithFormat:[self getPredicateWithOrderStatus:[[dictOrder objectForKey:@"orderStatus"] integerValue]]];
+                    NSPredicate *pred2=[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"senderBartsyId == [c]'%@'",strBartsyId]];
+                    NSPredicate *pred3=[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"recieverBartsyId == [c]%@",strRecieverBartsyId]];
+                    NSPredicate *predCompound=[NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:pred1,pred2,pred3, nil]];
+                    
+                    [arrTemp3 filterUsingPredicate:predCompound];
+                    
+                    if([arrTemp3 count])
+                    {
+                        [arrBundledOrders addObject:arrTemp3];
+                        [arrTemp2 removeObjectsInArray:arrTemp3];
+                    }
+                }
+                //Checking weather order is offered to me by others and bundling those orders with same status
+                else if([[dictOrder objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictOrder objectForKey:@"recieverBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue])
+                {
+                    NSPredicate *pred1=[NSPredicate predicateWithFormat:[self getPredicateWithOrderStatus:[[dictOrder objectForKey:@"orderStatus"] integerValue]]];
+                    NSPredicate *pred2=[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"senderBartsyId == [c]%@",strSenderBartsyId]];
+                    NSPredicate *pred3=[NSPredicate predicateWithFormat:[NSString stringWithFormat:@"recieverBartsyId == [c]'%@'",strBartsyId]];
+                    NSPredicate *predCompound=[NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:pred1,pred2,pred3, nil]];
+                    
+                    [arrTemp3 filterUsingPredicate:predCompound];
+                    
+                    if([arrTemp3 count])
+                    {
+                        [arrBundledOrders addObject:arrTemp3];
+                        [arrTemp2 removeObjectsInArray:arrTemp3];
+                    }
+                }
             }
-             */
+            
+            [arrTemp3 release];
         }
-         
-        [[NSUserDefaults standardUserDefaults]setObject:arrBundledOrders forKey:@"Orders"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
         
         NSLog(@"Orders %@",arrBundledOrders);
+
+        [[NSUserDefaults standardUserDefaults]setObject:arrBundledOrders forKey:@"Orders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         
         if([arrOrders count])
             [appDelegate startTimerToCheckOrderStatusUpdate];
         else
             [appDelegate stopTimerForOrderStatusUpdate];
         
-        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-        [tblView reloadData];
+        //UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        //[tblView reloadData];
+        
+        [self loadOrdersView];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
@@ -593,8 +632,8 @@
     }
     else if(isRequestForGettingsOrders==YES)
     {
-        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-        [tblView reloadData];
+        //UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        //[tblView reloadData];
         
 //        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
 //        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
@@ -771,6 +810,301 @@
 
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
+}
+
+-(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus
+{
+    NSString *strPred;
+    if(intStatus==0)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'0'"];
+    else if(intStatus==2)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'2'"];
+    else if(intStatus==3)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'3'"];
+    else if(intStatus==4)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'4'"];
+    else if(intStatus==5)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'5'"];
+    else if(intStatus==6)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'6'"];
+    else if(intStatus==7)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'7'"];
+    else if(intStatus==8)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'8'"];
+    else
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'9'"];
+    
+    return strPred;
+}
+
+-(void)loadOrdersView
+{
+    UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
+    [scrollViewOld removeFromSuperview];
+    
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 40, 320, 375)];
+    scrollView.tag=987;
+    scrollView.backgroundColor=[UIColor grayColor];
+    [self.view addSubview:scrollView];
+    
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (screenBounds.size.height == 568)
+    {
+        scrollView.frame=CGRectMake(0, 40, 320, 373+90);
+    }
+    
+    NSInteger intContentSizeHeight=0;
+    NSInteger intHeight=0;
+    //Loop for bundled orders to show on UI
+    for (int i=0; i<[arrBundledOrders count]; i++)
+    {
+        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
+        NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
+        
+        UIView *viewBg=[self createViewWithFrame:CGRectMake(0, intContentSizeHeight, 320, 120+[arrBundledOrdersObject count]*20) tag:0];
+        viewBg.backgroundColor=[UIColor redColor]; //Color based on Order Status
+        
+        if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
+            viewBg.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
+        else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"2"])
+            viewBg.backgroundColor = [UIColor orangeColor];
+        else
+            viewBg.backgroundColor = [UIColor greenColor];
+        [scrollView addSubview:viewBg];
+        
+        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(20, 0, 250, 30) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor whiteColor] numberOfLines:2];
+        lblOrderStatus.text = [arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]];
+        lblOrderStatus.textAlignment = NSTextAlignmentLeft;
+        [viewBg addSubview:lblOrderStatus];
+        
+        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
+        {
+            UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 2, 37.5, 26) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
+            btnDismiss.titleLabel.font=[UIFont systemFontOfSize:10];
+            btnDismiss.backgroundColor=[UIColor grayColor];
+            [viewBg addSubview:btnDismiss];
+        }
+       
+        
+        UIView *viewBg2=[self createViewWithFrame:CGRectMake(2, 30, 316, 87+[arrBundledOrdersObject count]*20) tag:0];
+        viewBg2.backgroundColor=[UIColor blackColor];
+        [viewBg addSubview:viewBg2];
+        
+        NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"recieverBartsyId"]]];
+        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(0,0,60,60)];
+        [imgViewPhoto setImageWithURL:urlPhoto];
+        [viewBg2 addSubview:imgViewPhoto];
+        [imgViewPhoto release];
+        
+        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(61, 0, 180, 40)];
+        lblOrderId.font = [UIFont boldSystemFontOfSize:38];
+        lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
+        lblOrderId.backgroundColor = [UIColor clearColor];
+        lblOrderId.textColor = [UIColor whiteColor] ;
+        lblOrderId.textAlignment = NSTextAlignmentLeft;
+        [viewBg2 addSubview:lblOrderId];
+        [lblOrderId release];
+        
+        UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(61, 40, 200, 15)];
+        lblName.font = [UIFont boldSystemFontOfSize:12];
+        lblName.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"recipientNickname"]];
+        lblName.backgroundColor = [UIColor clearColor];
+        lblName.textColor = [UIColor whiteColor] ;
+        lblName.textAlignment = NSTextAlignmentLeft;
+        [viewBg2 addSubview:lblName];
+        [lblName release];
+        
+        if([[dict objectForKey:@"senderBartsyId"] doubleValue]!=[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+        {
+            UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(60, 55, 210, 15)];
+            lblName.font = [UIFont boldSystemFontOfSize:12];
+            lblName.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"senderNickname"]];
+            lblName.backgroundColor = [UIColor clearColor];
+            lblName.textColor = [UIColor whiteColor] ;
+            lblName.textAlignment = NSTextAlignmentRight;
+            [viewBg2 addSubview:lblName];
+            [lblName release];
+            
+            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"senderBartsyId"]]];
+            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(270,30,40,40)];
+            [imgViewPhoto setImageWithURL:urlPhoto];
+            [viewBg2 addSubview:imgViewPhoto];
+            [imgViewPhoto release];
+        }
+        
+        UIView *viewLine=[self createViewWithFrame:CGRectMake(0, 71, 316, 1) tag:0];
+        viewLine.backgroundColor=[UIColor redColor];
+        [viewBg2 addSubview:viewLine];
+
+        float floatPrice=0;
+        float floatTotalPrice=0;
+        float floatTipTaxFee=0;
+        
+        intHeight=72;
+        
+        for (int j=0; j<[arrBundledOrdersObject count]; j++)
+        {
+            NSDictionary *dictTempOrder=[arrBundledOrdersObject objectAtIndex:j];
+            
+            UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(1, intHeight+(j*15), 242, 15)];
+            lblDescription.font = [UIFont boldSystemFontOfSize:12];
+            lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+            lblDescription.numberOfLines = 1;
+            lblDescription.backgroundColor = [UIColor clearColor];
+            lblDescription.textColor = [UIColor whiteColor] ;
+            lblDescription.textAlignment = NSTextAlignmentLeft;
+            [viewBg2 addSubview:lblDescription];
+            
+            
+            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(273, intHeight+(j*15), 42, 15)];
+            lblPrice.font = [UIFont systemFontOfSize:15];
+            lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
+            lblPrice.numberOfLines = 1;
+            lblPrice.backgroundColor = [UIColor clearColor];
+            lblPrice.textColor = [UIColor whiteColor] ;
+            lblPrice.textAlignment = NSTextAlignmentRight;
+            [viewBg2 addSubview:lblPrice];
+            
+            NSLog(@"ID's %@,%@",[dictTempOrder objectForKey:@"senderBartsyId"],[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
+            
+            if([[dictTempOrder objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue])
+            {
+                floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
+                floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
+                floatTipTaxFee+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
+            }
+            else
+            {
+                lblPrice.text=@"-";
+            }
+            
+            [lblDescription release];
+            [lblPrice release];            
+        }
+        
+        
+        UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(1, intHeight+([arrBundledOrdersObject count]*15)+5, 150, 15)];
+        lblTipTaxFee.font = [UIFont boldSystemFontOfSize:11];
+        if(floatTipTaxFee>0.01)
+            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
+        else
+            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: -"];
+        lblTipTaxFee.tag = 12347890;
+        lblTipTaxFee.backgroundColor = [UIColor clearColor];
+        lblTipTaxFee.textColor = [UIColor whiteColor] ;
+        lblTipTaxFee.textAlignment = NSTextAlignmentLeft;
+        [viewBg2 addSubview:lblTipTaxFee];
+        [lblTipTaxFee release];
+        
+        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+([arrBundledOrdersObject count]*15)+5, 153, 15)];
+        lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
+        if(floatTotalPrice>0.01)
+            lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
+        else
+            lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
+        lblTotalPrice.tag = 12347890;
+        lblTotalPrice.backgroundColor = [UIColor clearColor];
+        lblTotalPrice.textColor = [UIColor whiteColor] ;
+        lblTotalPrice.textAlignment = NSTextAlignmentRight;
+        [viewBg2 addSubview:lblTotalPrice];
+        [lblTotalPrice release];
+        
+        intContentSizeHeight+=123+[arrBundledOrdersObject count]*20;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+10);
+    [scrollView release];
+}
+
+-(void)btnDismiss_TouchUpInside:(UIButton*)sender
+{
+    self.sharedController=[SharedController sharedController];
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    [appDelegate checkNetworkStatus:nil];
+    if(appDelegate.internetActive)
+    {
+        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:sender.tag];
+        for (int i=0; i<[arrBundledOrdersObject count]; i++)
+        {
+            NSDictionary *dictOrder=[arrBundledOrdersObject objectAtIndex:i];
+            NSMutableDictionary *dictJSON=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[dictOrder objectForKey:@"orderId"],@"orderId",@"10",@"orderStatus", nil];
+            [dictJSON setValue:KAPIVersionNumber forKey:@"apiVersion"];
+                        
+            SBJSON *jsonObj=[SBJSON new];
+            NSString *strJson=[jsonObj stringWithObject:dictJSON];
+            NSData *dataJSON=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+            
+            NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateOrderStatus",KServerURL];
+            NSURL *url=[[NSURL alloc]initWithString:strURL];
+            NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+            [request setHTTPMethod:@"POST"];
+            [request setHTTPBody:dataJSON];
+            [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+
+            [NSURLConnection sendAsynchronousRequest:request
+                                               queue:[NSOperationQueue mainQueue]
+                                   completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+             {
+                 if(error==nil)
+                 {
+                     
+                     SBJSON *jsonParser = [[SBJSON new] autorelease];
+                     NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+                     id result = [jsonParser objectWithString:jsonString error:nil];
+                     NSLog(@"Result is %@",result);
+                     
+                 }
+                 else
+                 {
+                     NSLog(@"Error is %@",error);
+                 }
+                 
+             }
+             ];
+            
+            [url release];
+            [request release];
+        }
+
+        
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(getOpenOrders) userInfo:nil repeats:NO];
+        
+    }
+    else
+    {
+        [self hideProgressView:nil];
+        [self createAlertViewWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+    }
+    
+    
+}
+
+-(void)getOpenOrders
+{
+    isRequestForGettingsPastOrders = NO;
+    
+    isRequestForGettingsOrders=YES;
+    isRequestForPeople=NO;
+    isRequestForOrder=NO;
+    
+    isSelectedForPastOrders = NO;
+    isSelectedForDrinks=NO;
+    isSelectedForPeople=NO;
+    
+    [arrBundledOrders removeAllObjects];
+    [arrBundledOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+   
+    [self.sharedController getUserOrdersWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
 }
 
 #pragma mark - Table view Datasource
@@ -1241,7 +1575,7 @@
             if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
                 lblTitle.text = [NSString stringWithFormat:@"Waiting for bartender to accept"];
             else
-                lblTitle.text = [NSString stringWithFormat:@"%@",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2]];
+               // lblTitle.text = [NSString stringWithFormat:@"%@",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2]];
             lblTitle.tag = 1234;
             lblTitle.backgroundColor = [UIColor clearColor];
             lblTitle.textColor = [UIColor blackColor] ;

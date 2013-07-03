@@ -30,4 +30,6 @@
 @property(nonatomic,retain)NSDictionary *dictVenue;
 -(void)orderTheDrink;
 -(void)reloadDataPeopleAndOrderCount;
+-(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus;
+-(void)loadOrdersView;
 @end

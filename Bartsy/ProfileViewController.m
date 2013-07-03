@@ -1063,7 +1063,6 @@
         {
            strPassword = [[strPassword substringToIndex:[strPassword length]-1] retain];
         }
-        NSLog(@"Password is %@",strPassword);
     }
     else if(textField.tag==111)
     {

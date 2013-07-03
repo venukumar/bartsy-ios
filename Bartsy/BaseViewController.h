@@ -27,8 +27,10 @@
 
 -(UITextField*)createTextFieldWithFrame:(CGRect)frame tag:(NSInteger)tag delegate:(id)
 delegate;
+-(UIView*)createViewWithFrame:(CGRect)frame tag:(NSInteger)tag;
 
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title;
+
 - (void)hideProgressView:(UIAlertView *)inProgressView;
 
 - (void)createAlertViewWithTitle:(NSString *)strTitle message:(NSString*)strMsg cancelBtnTitle:(NSString*)strCancel otherBtnTitle:(NSString*)strTitle1 delegate:(id)delegate tag:(NSInteger)tag;

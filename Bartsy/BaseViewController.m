@@ -78,6 +78,15 @@ delegate
     return txtField;
 }
 
+-(UIView*)createViewWithFrame:(CGRect)frame tag:(NSInteger)tag
+{
+     UIView *viewBg=[[UIView alloc]initWithFrame:frame];
+    viewBg.backgroundColor=[UIColor clearColor];
+    viewBg.tag=tag;
+    return viewBg;
+}
+
+
 //Creating Progreessview wth label
 - (UIAlertView *)createProgressViewToParentView:(UIView *)view withTitle:(NSString *)title
 {

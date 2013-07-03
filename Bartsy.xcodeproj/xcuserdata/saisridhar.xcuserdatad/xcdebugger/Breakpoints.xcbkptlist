@@ -8,11 +8,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/ProfileViewController.m"
-         timestampString = "394093881.31965"
+         timestampString = "394561512.929448"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1129"
-         endingLineNumber = "1129"
+         startingLineNumber = "1128"
+         endingLineNumber = "1128"
          landmarkName = "-showPickerView"
          landmarkType = "5">
       </FileBreakpoint>
@@ -228,32 +228,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394477298.036717"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1213"
-         endingLineNumber = "1213"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394477298.036717"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1370"
-         endingLineNumber = "1370"
-         landmarkName = "-tableView:cellForRowAtIndexPath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "Bartsy/MixerViewController.m"
          timestampString = "394448711.944791"
          startingColumnNumber = "9223372036854775807"
@@ -261,19 +235,6 @@
          startingLineNumber = "418"
          endingLineNumber = "418"
          landmarkName = "-btnOrder_TouchUpInside"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394375241.231962"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "395"
-         endingLineNumber = "395"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -293,52 +254,13 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/WelcomeViewController.m"
-         timestampString = "394393485.517521"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "394575555.533488"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "164"
-         endingLineNumber = "164"
-         landmarkName = "-reloadWelcomeScreen"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "394476924.123874"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "787"
-         endingLineNumber = "787"
-         landmarkName = "-checkUserCheckInStatus"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "394476924.123874"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "813"
-         endingLineNumber = "813"
-         landmarkName = "-checkUserCheckInStatus"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "394476924.123874"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "850"
-         endingLineNumber = "850"
-         landmarkName = "-checkUserCheckInStatus"
+         startingLineNumber = "859"
+         endingLineNumber = "859"
+         landmarkName = "-loadOrdersView"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -346,25 +268,38 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394394143.414183"
+         timestampString = "394579174.954372"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "217"
-         endingLineNumber = "217"
-         landmarkName = "-reloadDataPeopleAndOrderCount"
+         startingLineNumber = "1027"
+         endingLineNumber = "1027"
+         landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "394476924.123874"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "394579325.090448"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "822"
-         endingLineNumber = "822"
-         landmarkName = "-checkUserCheckInStatus"
+         startingLineNumber = "1062"
+         endingLineNumber = "1062"
+         landmarkName = "-btnDismiss_TouchUpInside:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "394579326.562816"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "1069"
+         endingLineNumber = "1069"
+         landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
