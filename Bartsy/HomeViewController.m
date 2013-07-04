@@ -96,7 +96,7 @@
     arrBundledOrders=[[NSMutableArray alloc]init];
     arrPastOrders=[[NSMutableArray alloc]init];
     arrOrdersTimedOut=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
-    arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"OrderStatus1",@"Order is accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"OrderStatus6",@"OrderStatus7",@"OrderStatus8",@"OrderStatus9", nil];
+    arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"Your order was rejected by Bartender",@"Order was accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"Noshow",@"Your order was timedout",@"Your order was rejected",@"Drink offered",@"Past Order", nil];
     arrOrdersOffered=[[NSMutableArray alloc]init];
     
     NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
@@ -861,19 +861,19 @@
         NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
         NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
         
-        UIView *viewBg=[self createViewWithFrame:CGRectMake(0, intContentSizeHeight, 320, 120+[arrBundledOrdersObject count]*20) tag:0];
-        viewBg.backgroundColor=[UIColor redColor]; //Color based on Order Status
+        int intHeightForOfferedDrinks=0;
         
-        if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
-            viewBg.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
-        else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"2"])
-            viewBg.backgroundColor = [UIColor orangeColor];
-        else
-            viewBg.backgroundColor = [UIColor greenColor];
+        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+        {
+            intHeightForOfferedDrinks=35;
+        }
+        
+        UIView *viewBg=[self createViewWithFrame:CGRectMake(0, intContentSizeHeight, 320, 120+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks) tag:0];
+        viewBg.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
         [scrollView addSubview:viewBg];
         
         UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(20, 0, 250, 30) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor whiteColor] numberOfLines:2];
-        lblOrderStatus.text = [arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]];
+        lblOrderStatus.text = [self getTheStatusMessageForOrder:dict];
         lblOrderStatus.textAlignment = NSTextAlignmentLeft;
         [viewBg addSubview:lblOrderStatus];
         
@@ -956,18 +956,16 @@
             [viewBg2 addSubview:lblDescription];
             
             
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(273, intHeight+(j*15), 42, 15)];
-            lblPrice.font = [UIFont systemFontOfSize:15];
+            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+(j*15), 45, 15)];
+            lblPrice.font = [UIFont systemFontOfSize:12];
             lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
             lblPrice.numberOfLines = 1;
             lblPrice.backgroundColor = [UIColor clearColor];
             lblPrice.textColor = [UIColor whiteColor] ;
             lblPrice.textAlignment = NSTextAlignmentRight;
             [viewBg2 addSubview:lblPrice];
-            
-            NSLog(@"ID's %@,%@",[dictTempOrder objectForKey:@"senderBartsyId"],[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
-            
-            if([[dictTempOrder objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue])
+                        
+            if([[dictTempOrder objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
             {
                 floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
                 floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
@@ -1009,15 +1007,22 @@
         [viewBg2 addSubview:lblTotalPrice];
         [lblTotalPrice release];
         
-        intContentSizeHeight+=123+[arrBundledOrdersObject count]*20;
+        
+        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+        {
+            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 30+87+[arrBundledOrdersObject count]*20+2, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
+            btnReject.titleLabel.font=[UIFont systemFontOfSize:10];
+            btnReject.backgroundColor=[UIColor grayColor];
+            [viewBg addSubview:btnReject];
+            
+            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 30+87+[arrBundledOrdersObject count]*20+2, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
+            btnAccept.titleLabel.font=[UIFont systemFontOfSize:10];
+            btnAccept.backgroundColor=[UIColor grayColor];
+            [viewBg addSubview:btnAccept];
+        }
+        
+        intContentSizeHeight+=123+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks;
     }
-    
-    
-    
-    
-    
-    
-    
     
     scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+10);
     [scrollView release];
@@ -1085,8 +1090,55 @@
         [self hideProgressView:nil];
         [self createAlertViewWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
     }
+}
+
+-(void)btnReject_TouchUpInside:(UIButton*)sender
+{
+    self.sharedController=[SharedController sharedController];
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    [appDelegate checkNetworkStatus:nil];
+    if(appDelegate.internetActive)
+    {
+        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:sender.tag];
+        for (int i=0; i<[arrBundledOrdersObject count]; i++)
+        {
+            NSDictionary *dictOrder=[arrBundledOrdersObject objectAtIndex:i];
+            [self updateOrderStatusForaOfferedDrinkWithStatus:@"8" withOrderId:[dictOrder objectForKey:@"orderId"]];
+        }
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(getOpenOrders) userInfo:nil repeats:NO];
+    }
+    else
+    {
+        [self hideProgressView:nil];
+        [self createAlertViewWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+    }
+
+}
+
+-(void)btnAccept_TouchUpInside:(UIButton*)sender
+{
+    self.sharedController=[SharedController sharedController];
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    [appDelegate checkNetworkStatus:nil];
+    if(appDelegate.internetActive)
+    {
+        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:sender.tag];
+        for (int i=0; i<[arrBundledOrdersObject count]; i++)
+        {
+            NSDictionary *dictOrder=[arrBundledOrdersObject objectAtIndex:i];
+            [self updateOrderStatusForaOfferedDrinkWithStatus:@"0" withOrderId:[dictOrder objectForKey:@"orderId"]];
+        }
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(getOpenOrders) userInfo:nil repeats:NO];
+    }
+    else
+    {
+        [self hideProgressView:nil];
+        [self createAlertViewWithTitle:@"NetWorkStatus" message:@"Internet Connection Required" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+    }
 }
 
 -(void)getOpenOrders
@@ -1106,6 +1158,159 @@
    
     [self.sharedController getUserOrdersWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
 }
+
+-(UIColor*)getTheColorForOrderStatus:(NSInteger)intStatus
+{
+    UIColor *color;
+    switch (intStatus)
+    {
+        case 0:
+            color=[UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
+            break;
+        case 1:
+            color=[UIColor redColor];
+            break;
+        case 2:
+            color=[UIColor orangeColor];
+            break;
+        case 3:
+            color=[UIColor greenColor];
+            break;
+        case 4:
+            color=[UIColor redColor];
+            break;
+        case 5:
+            color=[UIColor greenColor];
+            break;
+        case 6:
+            color=[UIColor redColor];
+            break;
+        case 7:
+            color=[UIColor redColor];
+            break;
+        case 8:
+            color=[UIColor redColor];
+            break;
+        case 9:
+            color=[UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
+            break;
+        default:
+            color=[UIColor redColor];
+            break;
+    }
+
+    return color;
+}
+
+-(NSString*)getTheStatusMessageForOrder:(NSDictionary*)dictOrder
+{
+    arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"Your order was rejected by Bartender",@"Order was accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"Noshow",@"Your order was timedout",@"Your order was rejected",@"Drink offered",@"Past Order", nil];
+
+    if([[dictOrder objectForKey:@"orderStatus"] integerValue]==0)
+    {
+       return @"Waiting for bartender to accept";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==1)
+    {
+        return @"Your order was rejected by Bartender";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==2)
+    {
+        return @"Order was accepted by Bartender";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==3)
+    {
+        return @"Your order is ready for pickup";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==4)
+    {
+        return @"Order was failed";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==5)
+    {
+        return @"Your order is picked up";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==6)
+    {
+        return @"Order is noshow";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==7)
+    {
+        return @"Your order was timed out";
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==8)
+    {
+        
+        NSString *strStatusMessage;
+        if([[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dictOrder objectForKey:@"senderBartsyId"] doubleValue])
+        strStatusMessage=[NSString stringWithFormat:@"Your order was rejected by %@",[dictOrder objectForKey:@"recipientNickname"]];
+        else
+        strStatusMessage=[NSString stringWithFormat:@"You rejected the order offered by %@",[dictOrder objectForKey:@"senderNickname"]];
+        return strStatusMessage;
+    }
+    else if([[dictOrder objectForKey:@"orderStatus"] integerValue]==9)
+    {
+        NSString *strStatusMessage;
+        if([[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dictOrder objectForKey:@"senderBartsyId"] doubleValue])
+        strStatusMessage=[NSString stringWithFormat:@"Waiting for %@ to accept",[dictOrder objectForKey:@"recipientNickname"]];
+        else
+            strStatusMessage=[NSString stringWithFormat:@"You were offered a drink by %@. Accept it or let it timeout",[dictOrder objectForKey:@"senderNickname"]];
+    
+        return strStatusMessage;
+    }
+    else
+        return @"";
+    
+}
+
+
+-(void)updateOrderStatusForaOfferedDrinkWithStatus:(NSString*)strStatus withOrderId:(NSString*)strOrderId
+{
+    //Updating the Order Status by the Receiver
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateOfferedDrinkStatus",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strOrderId,@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             NSLog(@"Result is %@",result);
+             
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+    
+    
+    [url release];
+    [request release];
+    
+}
+
 
 #pragma mark - Table view Datasource
 

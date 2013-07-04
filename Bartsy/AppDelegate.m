@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,dictOfferedDrikDetails,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
 
 - (void)dealloc
 {
@@ -554,7 +554,6 @@
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOffered"])
     {
         AudioServicesPlaySystemSound(1007);
-        dictOfferedDrikDetails=[[NSDictionary alloc]initWithDictionary:userInfo];
         if(alertView!=nil)
         {
             [alertView dismissWithClickedButtonIndex:0 animated:YES];
@@ -562,14 +561,13 @@
             alertView=nil;
         }
         
-        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES",nil];
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK",nil];
         alertView.tag=225;
         [alertView show];
     }
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOfferRejected"])
     {
         AudioServicesPlaySystemSound(1007);
-        dictOfferedDrikDetails=[[NSDictionary alloc]initWithDictionary:userInfo];
         if(alertView!=nil)
         {
             [alertView dismissWithClickedButtonIndex:0 animated:YES];
@@ -583,7 +581,6 @@
     else if([[userInfo objectForKey:@"messageType"] isEqualToString:@"DrinkOfferAccepted"])
     {
         AudioServicesPlaySystemSound(1007);
-        dictOfferedDrikDetails=[[NSDictionary alloc]initWithDictionary:userInfo];
         if(alertView!=nil)
         {
             [alertView dismissWithClickedButtonIndex:0 animated:YES];
@@ -598,7 +595,7 @@
 
 - (void)alertView:(UIAlertView *)alertView1 clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if(alertView1.tag==143225)
+    if(alertView1.tag==143225||alertView1.tag==225)
     {
         isComingForOrders=YES;
         
@@ -621,66 +618,20 @@
             
         }
     }
-    else if(alertView1.tag==225)
-    {
-        if(buttonIndex==0)
-        [self updateOrderStatusForaOfferedDrink:@"8"]; //Rejected the Order
-        else
-        [self updateOrderStatusForaOfferedDrink:@"0"]; //Accepted the Order
-
-    }
+//    else if(alertView1.tag==225)
+//    {
+//        if(buttonIndex==0)
+//        [self updateOrderStatusForaOfferedDrink:@"8"]; //Rejected the Order
+//        else
+//        [self updateOrderStatusForaOfferedDrink:@"0"]; //Accepted the Order
+//
+//    }
     else if(alertView1.tag==111222)
     {
         exit(0);
     }
 }
 
--(void)updateOrderStatusForaOfferedDrink:(NSString*)strStatus
-{
-    //Updating the Order Status by the Receiver
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateOfferedDrinkStatus",KServerURL];
-    
-    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",[dictOfferedDrikDetails objectForKey:@"orderId"],@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
-    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-
-    
-    SBJSON *jsonObj=[SBJSON new];
-    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
-    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSURL *url=[[NSURL alloc]initWithString:strURL];
-    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:dataCheckIn];
-    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-    
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
-     {
-         if(error==nil)
-         {
-             SBJSON *jsonParser = [[SBJSON new] autorelease];
-             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
-             id result = [jsonParser objectWithString:jsonString error:nil];
-             NSLog(@"Result is %@",result);
-             
-         }
-         else
-         {
-             NSLog(@"Error is %@",error);
-         }
-         
-     }
-     ];
-    
-    
-    [url release];
-    [request release];
-
-}
 
 // FBSample logic
 // The native facebook application transitions back to an authenticating application when the user

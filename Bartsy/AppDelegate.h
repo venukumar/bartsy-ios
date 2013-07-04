@@ -29,7 +29,6 @@
     NSMutableArray *arrOrdersTimer;
     NSTimer *timerForOrderStatusUpdate;
     UIBackgroundTaskIdentifier bgTask;
-    NSDictionary *dictOfferedDrikDetails;
     NSTimer *timerForHeartBeat;
     NSMutableArray *arrPeople;
     BOOL isCmgForWelcomeScreen;
@@ -53,7 +52,6 @@
 @property(nonatomic,assign)NSInteger intOrderCount;
 @property BOOL internetActive;
 @property BOOL hostActive;
-@property(nonatomic,retain)NSDictionary *dictOfferedDrikDetails;
 @property(nonatomic,assign)BOOL isCmgForWelcomeScreen;
 
 - (void) checkNetworkStatus:(NSNotification *)notice;
@@ -63,12 +61,10 @@
 -(void)startTimerToCheckOrderStatusUpdate;
 -(void)stopTimerForOrderStatusUpdate;
 -(void)checkOrderStatusUpdate;
--(void)updateOrderStatusForaOfferedDrink;
 -(void)startTimerToCheckHeartBeat;
 -(void)stopTimerForHeartBeat;
 -(void)showAPIVersionAlertWithReason:(NSString*)strReason;
 -(void)controllerDidFinishLoadingWithResult:(id)result;
 -(void)controllerDidFailLoadingWithError:(NSError*)error;
--(void)updateOrderStatusForaOfferedDrink:(NSString*)strStatus;
 @end
 

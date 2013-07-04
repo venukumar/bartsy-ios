@@ -32,4 +32,7 @@
 -(void)reloadDataPeopleAndOrderCount;
 -(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus;
 -(void)loadOrdersView;
+-(UIColor*)getTheColorForOrderStatus:(NSInteger)intStatus;
+-(void)updateOrderStatusForaOfferedDrinkWithStatus:(NSString*)strStatus withOrderId:(NSString*)strOrderId;
+-(NSString*)getTheStatusMessageForOrder:(NSDictionary*)dictOrder;
 @end
