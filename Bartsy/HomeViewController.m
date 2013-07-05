@@ -638,6 +638,10 @@
 //        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
 //        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
 //        [segmentControl setTitle:strOrder forSegmentAtIndex:2];
+        [arrBundledOrders removeAllObjects];
+        [arrBundledOrders addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"Orders"]];
+        [self loadOrdersView];
+        
     }
 
     
@@ -837,6 +841,7 @@
     return strPred;
 }
 
+//Showing the Orders on ScrollView
 -(void)loadOrdersView
 {
     UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
@@ -872,8 +877,9 @@
         viewBg.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
         [scrollView addSubview:viewBg];
         
-        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(20, 0, 250, 30) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor whiteColor] numberOfLines:2];
+        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(20, 0, 250, 30) tag:0 font:[UIFont boldSystemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:2];
         lblOrderStatus.text = [self getTheStatusMessageForOrder:dict];
+        lblOrderStatus.adjustsFontSizeToFitWidth=YES;
         lblOrderStatus.textAlignment = NSTextAlignmentLeft;
         [viewBg addSubview:lblOrderStatus];
         
