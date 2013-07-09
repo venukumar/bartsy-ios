@@ -371,7 +371,7 @@
     else if(isRequestForCheckIn==NO)
     {
         [arrVenueList removeAllObjects];
-        [arrVenueList addObjectsFromArray:result];
+        [arrVenueList addObjectsFromArray:[result objectForKey:@"venues"]];
         
         [self reloadMapView];
         
