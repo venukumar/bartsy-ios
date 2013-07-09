@@ -35,8 +35,8 @@
     [newAttributes setObject:[UIFont boldSystemFontOfSize:13.5] forKey:UITextAttributeFont];
     [self.navigationController.navigationBar setTitleTextAttributes:newAttributes];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
-    [arrayForPastOrders filterUsingPredicate:predicate];
+    //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
+    //[arrayForPastOrders filterUsingPredicate:predicate];
     
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
@@ -173,13 +173,26 @@
         [cell.contentView addSubview:lblRecepient];
         [lblRecepient release];
         
+        if([[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]
+           &&[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"] integerValue]!=1)
+        {
+            NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+            
+            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
+            lblTotalPrice.backgroundColor=[UIColor clearColor];
+            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblTotalPrice];
+        }
         
-        NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
         
-        UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
-        lblTotalPrice.backgroundColor=[UIColor clearColor];
-        lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblTotalPrice];
+        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
+        lblOrderId.font = [UIFont systemFontOfSize:14];
+        lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[[arrayForPastOrders objectAtIndex:indexPath.row] objectForKey:@"orderId"]];
+        lblOrderId.backgroundColor = [UIColor clearColor];
+        lblOrderId.textColor = [UIColor blackColor] ;
+        lblOrderId.textAlignment = NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblOrderId];
+        [lblOrderId release];
         
     }
     else
@@ -196,7 +209,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return 130;
+    return 150;
 }
 - (void)didReceiveMemoryWarning
 {

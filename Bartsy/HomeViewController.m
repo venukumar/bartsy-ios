@@ -475,8 +475,8 @@
         isSelectedForPeople=NO;
         [arrPastOrders removeAllObjects];
         [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
-        [arrPastOrders filterUsingPredicate:predicate];
+        //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
+        //[arrPastOrders filterUsingPredicate:predicate];
         NSLog(@"past orders is %@",arrPastOrders);
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
@@ -1048,6 +1048,7 @@
         {
             NSDictionary *dictOrder=[arrBundledOrdersObject objectAtIndex:i];
             NSMutableDictionary *dictJSON=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[dictOrder objectForKey:@"orderId"],@"orderId",@"10",@"orderStatus", nil];
+            [dictJSON setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
             [dictJSON setValue:KAPIVersionNumber forKey:@"apiVersion"];
                         
             SBJSON *jsonObj=[SBJSON new];
@@ -1466,7 +1467,7 @@
         return 60;
     else if(isSelectedForPastOrders == YES)
     {
-        return 130;
+        return 150;
     }
     else
     {
@@ -1689,12 +1690,24 @@
             [lblRecepient release];
             
             
-            NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+            if([[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"] integerValue]!=1)
+            {
+                NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+                
+                UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
+                lblTotalPrice.backgroundColor=[UIColor clearColor];
+                lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:lblTotalPrice];
+            }
             
-            UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
-            lblTotalPrice.backgroundColor=[UIColor clearColor];
-            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lblTotalPrice];
+            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
+            lblOrderId.font = [UIFont systemFontOfSize:14];
+            lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"orderId"]];
+            lblOrderId.backgroundColor = [UIColor clearColor];
+            lblOrderId.textColor = [UIColor blackColor] ;
+            lblOrderId.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblOrderId];
+            [lblOrderId release];
             
         }
         else
