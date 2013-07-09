@@ -182,12 +182,12 @@
     [cell.contentView addSubview:lblMiles];
     // [lblMiles release];
     
-    if([[dict objectForKey:@"venueStatus"] isEqualToString:@"OFFLINE"])
-    {
-        [cell setUserInteractionEnabled:NO];
-        cell.contentView.backgroundColor=[UIColor grayColor];
-        imgViewDrink.alpha=0.1;
-    }
+//    if([[dict objectForKey:@"venueStatus"] isEqualToString:@"OFFLINE"])
+//    {
+//        [cell setUserInteractionEnabled:NO];
+//        cell.contentView.backgroundColor=[UIColor grayColor];
+//        imgViewDrink.alpha=0.1;
+//    }
 
     
     return cell;

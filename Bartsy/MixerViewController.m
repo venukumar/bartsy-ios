@@ -176,12 +176,36 @@
         //    [viewDetail addSubview:imgViewDrink];
         //    [imgViewDrink release];
         
+        NSMutableArray *arrTemp=[[NSMutableArray alloc]init];
+        NSPredicate *pred=[NSPredicate predicateWithFormat:@"Checked==1"];
+        for (int i=0; i<[arrMixers count]; i++)
+        {
+            NSMutableArray *arrTem=[[NSMutableArray alloc]initWithArray:[[arrMixers objectAtIndex:i] objectForKey:@"ingredients"]];
+            [arrTem filterUsingPredicate:pred];
+            [arrTemp addObjectsFromArray:arrTem];
+            [arrTem release];
+        }
+        NSMutableString *strDescription=[[NSMutableString alloc]init];
+        for (NSDictionary *dict in arrTemp)
+        {
+            NSString *strDesc=[NSString stringWithFormat:@"%@,",[dict objectForKey:@"name"]];
+            [strDescription appendString:strDesc];
+        }
+        
+        if([strDescription length])
+            strDescription=(NSMutableString*)[strDescription substringToIndex:[strDescription length]-1];
+        
+        NSString *strIngridentDescription=@"";
+        if([[dictIngrident objectForKey:@"description"] length]&&[dictIngrident objectForKey:@"description"]!=nil &&[dictIngrident objectForKey:@"description"]!=(id)[NSNull null])
+        {
+            strIngridentDescription=[NSString stringWithFormat:@"%@",[dictIngrident objectForKey:@"description"]];
+        }
+        
         UITextView *txtViewNotes = [[UITextView alloc] initWithFrame:CGRectMake(5, 10, 185, 50)];
-        txtViewNotes.delegate = self;
         txtViewNotes.tag = 1000;
         txtViewNotes.backgroundColor = [UIColor clearColor];
         txtViewNotes.editable = NO;
-        txtViewNotes.text = [dictIngrident objectForKey:@"description"];
+        txtViewNotes.text =[NSString stringWithFormat:@"%@ \n%@",strIngridentDescription,strDescription];
         txtViewNotes.textColor = [UIColor blackColor];
         txtViewNotes.font = [UIFont boldSystemFontOfSize:10];
         [viewDetail addSubview:txtViewNotes];
@@ -568,7 +592,7 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrPlacedOrders release];
         
-        [self createAlertViewWithTitle:nil message:@"Your order was sent" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:nil message:@"Your order was sent" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:111222];
     }
 }
 
@@ -577,6 +601,13 @@
     [self hideProgressView:nil];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag==111222)
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
 - (void)didReceiveMemoryWarning
 {
