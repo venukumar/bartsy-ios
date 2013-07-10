@@ -29,6 +29,151 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     }
     return self;
 }
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    appDelegate.isLoginForFB=NO;
+    
+    self.trackedViewName = @"Login Screen";
+    
+    signIn= [GPPSignIn sharedInstance];
+    
+    signIn.clientID = kClientId;
+    signIn.scopes = [NSArray arrayWithObjects:
+                     kGTLAuthScopePlusLogin,@"https://www.googleapis.com/auth/userinfo.email" ,
+                     nil];
+    signIn.delegate = self;
+    signIn.shouldFetchGoogleUserID=YES;
+    signIn.shouldFetchGoogleUserEmail =YES;
+    
+    //[signIn trySilentAuthentication];
+    
+    
+    self.navigationController.navigationBarHidden=YES;
+    self.view.backgroundColor=[UIColor blackColor];
+    
+    if(appDelegate.isCmgForWelcomeScreen==NO)
+        [self updateView];
+    
+    if (!appDelegate.session.isOpen&&appDelegate.isCmgForWelcomeScreen==NO)
+    {
+        // create a fresh session object
+        appDelegate.session = [[FBSession alloc] init];//WithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
+        
+        //        appDelegate.session = [[FBSession alloc] initWithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions", nil]];
+        
+        // if we don't have a cached token, a call to open here would cause UX for login to
+        // occur; we don't want that to happen unless the user clicks the login button, and so
+        // we check here to make sure we have a token before calling open
+        if (appDelegate.session.state == FBSessionStateCreatedTokenLoaded)
+        {
+            // even though we had a cached token, we need to login to make the session usable
+            [appDelegate.session openWithCompletionHandler:^(FBSession *session,
+                                                             FBSessionState status,
+                                                             NSError *error) {
+                // we recurse here, in order to update buttons and labels
+                [self updateView];
+            }];
+        }
+    }
+    
+    //New UI Design
+    
+    UIImageView *imgBg = [[UIImageView alloc] init];
+    if (IS_IPHONE_5)
+    {
+        imgBg.frame = CGRectMake(0, 0, 320, 568);
+    }
+    else
+    {
+        imgBg.frame = CGRectMake(0, 0, 320, 460);
+    }
+    imgBg.image=[UIImage imageNamed:@"bg.png"];
+    [self.view addSubview:imgBg];
+    [imgBg release];
+
+    UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(42, 35, 239, 47)];
+    imgLogo.image=[UIImage imageNamed:@"logo.png"];
+    [self.view addSubview:imgLogo];
+    [imgLogo release];
+
+    UILabel *lblHeader = [self createLabelWithTitle:@"Check In.Order.Pick up.Socialize" frame:CGRectMake(32, 82, 250, 40) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+    lblHeader.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblHeader];
+
+    UILabel *lblSide = [self createLabelWithTitle:@"Create an Account" frame:CGRectMake(30, 140, 250, 40) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+    lblSide.textAlignment=NSTextAlignmentLeft;
+    [self.view addSubview:lblSide];
+
+    UIButton *btnfb = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"f-sign.png"] frame:CGRectMake(25, 175, 275, 43) tag:0 selector:@selector(btnFBLogin) target:self];
+    [self.view addSubview:btnfb];
+
+    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(25, 225, 275, 43)];
+    [btnGoogle setImage:[UIImage imageNamed:@"g+-sign.png"] forState:UIControlStateNormal];
+    [btnGoogle setImage:[UIImage imageNamed:@"g+-sign.png"] forState:UIControlStateHighlighted];
+    [self.view addSubview:btnGoogle];
+    
+    UIButton *btnEmail = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"mail-signup.png"] frame:CGRectMake(25, 280, 275, 43) tag:0 selector:@selector(btnEmail) target:self];
+    [self.view addSubview:btnEmail];
+    
+    UILabel *lblAccount = [self createLabelWithTitle:@"Already have an account?" frame:CGRectMake(25, 330, 320, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+    lblAccount.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:lblAccount];
+    
+    UIButton *btnLogIn = [self createUIButtonWithTitle:@"Log In" image:nil frame:CGRectMake(22, 340, 50, 43) tag:0 selector:@selector(btnLogin) target:self];
+    btnLogIn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [self.view addSubview:btnLogIn];
+
+    if (IS_IPHONE_5)
+    {
+        UILabel *lblCopyRight1 = [self createLabelWithTitle:@"By joining Bartsy you agree to the " frame:CGRectMake(0, 485, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight1.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:lblCopyRight1];
+        
+        UILabel *lblCopyRight21 = [self createLabelWithTitle:@"Terms of Service" frame:CGRectMake(72, 500, 90, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight21.textAlignment = NSTextAlignmentLeft;
+        [self.view addSubview:lblCopyRight21];
+        
+        UILabel *lblCopyRight22 = [self createLabelWithTitle:@"and" frame:CGRectMake(159.5, 500, 50, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight22.textAlignment = NSTextAlignmentLeft;
+        [self.view addSubview:lblCopyRight22];
+        
+        UILabel *lblCopyRight23 = [self createLabelWithTitle:@"Privacy Policy" frame:CGRectMake(180, 500, 200, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight23.textAlignment = NSTextAlignmentLeft;
+        [self.view addSubview:lblCopyRight23];
+        
+        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc..All rights reserved."] frame:CGRectMake(0, 520, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight2.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:lblCopyRight2];
+    }
+    else
+    {
+        UILabel *lblCopyRight1 = [self createLabelWithTitle:@"By joining Bartsy you agree to the " frame:CGRectMake(0, 400, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight1.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:lblCopyRight1];
+        
+        UILabel *lblCopyRight21 = [self createLabelWithTitle:@"Terms of Service" frame:CGRectMake(72, 415, 90, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight21.textAlignment = NSTextAlignmentLeft;
+        [self.view addSubview:lblCopyRight21];
+        
+        UILabel *lblCopyRight22 = [self createLabelWithTitle:@"and" frame:CGRectMake(159.5, 415, 50, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight22.textAlignment = NSTextAlignmentLeft;
+        [self.view addSubview:lblCopyRight22];
+        
+        UILabel *lblCopyRight23 = [self createLabelWithTitle:@"Privacy Policy" frame:CGRectMake(180, 415, 200, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight23.textAlignment = NSTextAlignmentLeft;
+        [self.view addSubview:lblCopyRight23];
+        
+        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc..All rights reserved."] frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        lblCopyRight2.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:lblCopyRight2];
+  
+    }
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -61,194 +206,6 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         [obj release];
     }
 }
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
-
-    appDelegate.isLoginForFB=NO;
-    
-    self.trackedViewName = @"Login Screen";
-
-    signIn= [GPPSignIn sharedInstance];
-
-    signIn.clientID = kClientId;
-    signIn.scopes = [NSArray arrayWithObjects:
-                     kGTLAuthScopePlusLogin,@"https://www.googleapis.com/auth/userinfo.email" ,
-                     nil];
-    signIn.delegate = self;
-    signIn.shouldFetchGoogleUserID=YES;
-    signIn.shouldFetchGoogleUserEmail =YES;
-    
-    //[signIn trySilentAuthentication];
-
-    
-    self.navigationController.navigationBarHidden=YES;
-    self.view.backgroundColor=[UIColor blackColor];
-    
-    if(appDelegate.isCmgForWelcomeScreen==NO)
-    [self updateView];
-    
-    if (!appDelegate.session.isOpen&&appDelegate.isCmgForWelcomeScreen==NO)
-    {
-        // create a fresh session object
-        appDelegate.session = [[FBSession alloc] init];//WithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
-        
-//        appDelegate.session = [[FBSession alloc] initWithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions", nil]];
-
-        // if we don't have a cached token, a call to open here would cause UX for login to
-        // occur; we don't want that to happen unless the user clicks the login button, and so
-        // we check here to make sure we have a token before calling open
-        if (appDelegate.session.state == FBSessionStateCreatedTokenLoaded)
-        {
-            // even though we had a cached token, we need to login to make the session usable
-            [appDelegate.session openWithCompletionHandler:^(FBSession *session,
-                                                             FBSessionState status,
-                                                             NSError *error) {
-                // we recurse here, in order to update buttons and labels
-                [self updateView];
-            }];
-        }
-    }
-    
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    
-    
-    UIScrollView *scrollView=[[UIScrollView alloc]init];
-    if (screenBounds.size.height == 568)
-    {
-        scrollView.frame=CGRectMake(0, 0, 320, 568);
-    }
-    else
-    {
-        scrollView.frame=CGRectMake(0, 0, 320, 460);
-    }
-    scrollView.contentSize = CGSizeMake(640, scrollView.frame.size.height);
-    scrollView.backgroundColor=[UIColor clearColor];
-    scrollView.showsHorizontalScrollIndicator=NO;
-    [self.view addSubview:scrollView];
-    scrollView.delegate=self;
-    scrollView.tag=111;
-    scrollView.scrollEnabled=YES;
-    
-    UILabel *lblHeader=[self createLabelWithTitle:@"Bartsy is your one stop to nightlife!" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
-    lblHeader.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblHeader];
-    
-    UIButton *btnMap=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"mapicon.png"] frame:CGRectMake(20, 45, 120, 120) tag:0 selector:@selector(buttonMap_TouchUpInside) target:self];
-    [[btnMap layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[btnMap layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-    [[btnMap layer] setShadowRadius:3.0];
-    [[btnMap layer] setShadowOpacity:0.8];
-    [scrollView addSubview:btnMap];
-    
-    UILabel *lblMapText=[self createLabelWithTitle:@"See how busy Bartsy bars are and see who's there for unlocked bars" frame:CGRectMake(10, 165, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
-    lblMapText.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblMapText];
-    
-    
-    UIButton *btnDrinks=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drinks.png"] frame:CGRectMake(180, 45, 120, 120) tag:0 selector:@selector(buttonDrinks_TouchUpInside) target:self];
-    [[btnDrinks layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[btnDrinks layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-    [[btnDrinks layer] setShadowRadius:3.0];
-    [[btnDrinks layer] setShadowOpacity:0.8];
-    [scrollView addSubview:btnDrinks];
-    
-    UILabel *lblDrinksText=[self createLabelWithTitle:@"Order drink for yourself, your friends or other singles at the bar" frame:CGRectMake(170, 165, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
-    lblDrinksText.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblDrinksText];
-    
-    UIButton *btnCreditCard=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"no_cards.png"] frame:CGRectMake(20, 230, 120, 120) tag:0 selector:@selector(btnCreditCard_TouchUpInside) target:self];
-    [[btnCreditCard layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[btnCreditCard layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-    [[btnCreditCard layer] setShadowRadius:3.0];
-    [[btnCreditCard layer] setShadowOpacity:0.8];
-    [scrollView addSubview:btnCreditCard];
-    
-    UILabel *lblCreditCardText=[self createLabelWithTitle:@"Pay direclty within the app, never risking your credit card" frame:CGRectMake(10, 350, 140, 50) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:3];
-    lblCreditCardText.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblCreditCardText];
-    
-    
-    
-    UIButton *btnLoyalityCard=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"loyalty_card.png"] frame:CGRectMake(180, 230, 120, 120) tag:0 selector:@selector(btnLoyalityCard_TouchUpInside) target:self];
-    [[btnLoyalityCard layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[btnLoyalityCard layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-    [[btnLoyalityCard layer] setShadowRadius:3.0];
-    [[btnLoyalityCard layer] setShadowOpacity:0.8];
-    [scrollView addSubview:btnLoyalityCard];
-    
-    UILabel *lblLoyalityCardText=[self createLabelWithTitle:@"Build loyalty and reap rewards like skipping the outside line priviledges, free drinks, etc." frame:CGRectMake(170, 350, 140, 60) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:4];
-    lblLoyalityCardText.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblLoyalityCardText];
-    
-    UIPageControl *pgControl=[[UIPageControl alloc] init];
-    pgControl.numberOfPages=2;
-    [pgControl addTarget:self action:@selector(pgControl_ValueChanged:) forControlEvents:UIControlEventValueChanged];
-    if (screenBounds.size.height == 568)
-    {
-        pgControl.frame=CGRectMake(125, 500, 60, 30);
-    }
-    else
-    {
-        pgControl.frame=CGRectMake(125, 405, 60, 30);
-    }
-    [self.view addSubview:pgControl];
-    pgControl.tag=222;
-    [pgControl release];
-    
-    UILabel *lblCopyRight=[self createLabelWithTitle:@"Bartsy is Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(-8, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor whiteColor] numberOfLines:1];
-    lblCopyRight.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblCopyRight];
-    
-    UIButton *btnRefresh=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"arrow.png"] frame:CGRectMake(285, 415, 30, 40) tag:0 selector:@selector(btnRefresh_TouchUpInside) target:self];
-    [scrollView addSubview:btnRefresh];
-    
-    UIImageView *imgViewLogo=[self createImageViewWithImage:[UIImage imageNamed:@"ic_launcher.png"] frame:CGRectMake(320+80, 10, 124, 124) tag:0];
-    [scrollView addSubview:imgViewLogo];
-    
-    UILabel *lblBartsy=[self createLabelWithTitle:@"Bartsy" frame:CGRectMake(320, 140, 320, 35) tag:0 font:[UIFont boldSystemFontOfSize:30] color:[UIColor whiteColor] numberOfLines:1];
-    lblBartsy.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblBartsy];
-    
-//    UIButton *btnGoogle=[self createUIButtonWithTitle:@"Sign in with Google" image:nil frame:CGRectMake(320+38, 185, 243, 40) tag:0 selector:@selector(btnGoogle_TouchUpInside) target:self];
-//    btnGoogle.backgroundColor=[UIColor darkGrayColor];
-//    [scrollView addSubview:btnGoogle];
-    
-    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(320+38, 185, 243, 40)];
-    [scrollView addSubview:btnGoogle];
-    
-    
-    UIButton *btnfb=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_facebook.png"] frame:CGRectMake(320+38, 235, 243, 40) tag:0 selector:@selector(btnFBLogin) target:self];
-    btnfb.backgroundColor=[UIColor darkGrayColor];
-    [scrollView addSubview:btnfb];
-    
-    UIButton *btnTwitter=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"sign_in_with_twitter.png"] frame:CGRectMake(320+38, 285, 243, 40) tag:0 selector:@selector(btnTwitter_TouchUpInside) target:self];
-    btnTwitter.backgroundColor=[UIColor darkGrayColor];
-    //[scrollView addSubview:btnTwitter];
-    
-    UIButton *btnGetStarted=[self createUIButtonWithTitle:@"Get Started" image:nil frame:CGRectMake(320+5, 340, 100, 40) tag:0 selector:@selector(btnGetStarted_TouchUpInside) target:self];
-    btnGetStarted.titleLabel.font=[UIFont boldSystemFontOfSize:15];
-    [scrollView addSubview:btnGetStarted];
-    
-    UILabel *lblCreateBartsy=[self createLabelWithTitle:@"Create Bartsy Account" frame:CGRectMake(320+14, 370, 180, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:1];
-    [scrollView addSubview:lblCreateBartsy];
-    
-    
-    UIButton *btnSignIn=[self createUIButtonWithTitle:@"Sign In" image:nil frame:CGRectMake(320+180, 340, 50, 40) tag:0 selector:@selector(btnSignIn_TouchUpInside) target:self];
-    btnSignIn.titleLabel.font=[UIFont boldSystemFontOfSize:15];
-    [scrollView addSubview:btnSignIn];
-    
-    UILabel *lblExistingBartsy=[self createLabelWithTitle:@"Existing Bartsy Account" frame:CGRectMake(320+180, 370, 180, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor whiteColor] numberOfLines:1];
-    [scrollView addSubview:lblExistingBartsy];
-    
-    UILabel *lblCopyRight2=[self createLabelWithTitle:@"Copyright (C) Vendsy,Inc. All rights reserved." frame:CGRectMake(320+0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor whiteColor] numberOfLines:1];
-    lblCopyRight2.textAlignment=NSTextAlignmentCenter;
-    [scrollView addSubview:lblCopyRight2];
-    
-}
 
 - (void)finishedWithAuth:(GTMOAuth2Authentication *)auth
                    error:(NSError *)error
@@ -267,69 +224,23 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     [self.navigationController pushViewController:profileScreen animated:YES];
     [profileScreen release];
 }
-
-
--(void)buttonMap_TouchUpInside
-{
-    
-}
-
--(void)buttonDrinks_TouchUpInside
-{
-    
-}
-
--(void)btnCreditCard_TouchUpInside
-{
-    
-}
-
--(void)btnLoyalityCard_TouchUpInside
-{
-    
-}
-
--(void)btnRefresh_TouchUpInside
-{
-    int intCurrentPage=1;
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
-    [scrollView setContentOffset:CGPointMake(intCurrentPage*320, 0) animated:YES];
-}
-
--(void)move
-{
-    int intCurrentPage=1;
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
-    [scrollView setContentOffset:CGPointMake(intCurrentPage*320, 0) animated:YES];
-}
-
--(void)btnGoogle_TouchUpInside
-{
-    
-}
-
--(void)btnTwitter_TouchUpInside
-{
-    
-}
-
--(void)btnGetStarted_TouchUpInside
+-(void)btnEmail
 {
     appDelegate.isLoginForFB=NO;
     ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
     profileScreen.isCmgFromGetStarted=YES;
     [self.navigationController pushViewController:profileScreen animated:YES];
     [profileScreen release];
-}
 
--(void)btnSignIn_TouchUpInside
+}
+-(void)btnLogin
 {
     appDelegate.isLoginForFB=NO;
     ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
     [self.navigationController pushViewController:profileScreen animated:YES];
     [profileScreen release];
-}
 
+}
 // FBSample logic
 // handler for button click, logs sessions in or out
 - (void)btnFBLogin
@@ -368,23 +279,6 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
          }];
     }
 }
-
-
--(void)pgControl_ValueChanged:(UIPageControl*)pageControl
-{
-    int intCurrentPage=pageControl.currentPage;
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
-    [scrollView setContentOffset:CGPointMake(intCurrentPage*320, 0) animated:YES];
-}
-
-- (void) scrollViewDidScroll: (UIScrollView *) aScrollView
-{
-	CGPoint offset = aScrollView.contentOffset;
-    UIPageControl *pgControl=(UIPageControl*)[self.view viewWithTag:222];
-	pgControl.currentPage = offset.x / 320.0f;
-}
-
-
 
 
 // FBSample logic
