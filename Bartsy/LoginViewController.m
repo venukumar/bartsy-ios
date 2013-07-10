@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "AgreementViewController.h"
 #import "WelcomeViewController.h"
+#import "VenueListViewController.h"
 @interface LoginViewController ()
 
 - (void)updateView;
@@ -185,7 +186,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     if(appDelegate.isCmgForWelcomeScreen==YES)
     {
         appDelegate.isCmgForWelcomeScreen=NO;
-        WelcomeViewController *homeObj = [[WelcomeViewController alloc] init];
+        VenueListViewController *homeObj = [[VenueListViewController alloc] init];
         [self.navigationController pushViewController:homeObj animated:YES];
         [homeObj release];
     }

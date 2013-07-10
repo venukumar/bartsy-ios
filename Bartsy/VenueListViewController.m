@@ -36,7 +36,9 @@
     MKMapView *mapView = (MKMapView*)[self.view viewWithTag:222];
     mapView.showsUserLocation = YES;
     [locationManager startUpdatingLocation];
-    
+   
+    self.navigationController.navigationBarHidden=YES;
+
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     [self.sharedController getVenueListWithDelegate:self];
@@ -66,7 +68,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    self.navigationController.navigationBarHidden=NO;
     //    self.navigationItem.leftBarButtonItem=nil;
     //    self.navigationItem.hidesBackButton=YES;
     self.trackedViewName = @"Bartsy Venues";
@@ -75,19 +76,35 @@
     
     arrVenueList=[[NSMutableArray alloc]init];
     
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
+
+    UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
+    imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
+    [self.view addSubview:imgLogo];
+    [imgLogo release];
+    
+    UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
+    [self.view addSubview:btnSearch];
+    
+    UIButton *btnGPS = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"up_arrow.png"] frame:CGRectMake(290, 15.5, 20,19) tag:0 selector:@selector(btnGPS_TouchUpInside:) target:self];
+    [self.view addSubview:btnGPS];
+    
     UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"Check out" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnLogOut;
     
     UILabel *lblHeader=[self createLabelWithTitle:@"Check in at a Bartsy venue to order drinks and see who else is there" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
     lblHeader.backgroundColor=[UIColor lightGrayColor];
     lblHeader.textAlignment=NSTextAlignmentCenter;
-    [self.view addSubview:lblHeader];
+    //[self.view addSubview:lblHeader];
     
-    MKMapView *mapView=[[MKMapView alloc]initWithFrame:CGRectMake(0, 40, 320, 200)];
+    MKMapView *mapView=[[MKMapView alloc]initWithFrame:CGRectMake(0, 50, 320, 190)];
     mapView.showsUserLocation=YES;
     mapView.tag=222;
     [self.view addSubview:mapView];
-    //[mapView release];
+    [mapView release];
     
     locationManager=[[CLLocationManager alloc]init];
     locationManager.delegate=self;
@@ -107,6 +124,16 @@
         tblView.frame=CGRectMake(0, 241, 320, 180+108);
     }
     
+    
+}
+
+-(void)btnSearch_TouchUpInside:(UIButton*)sender
+{
+    
+}
+
+-(void)btnGPS_TouchUpInside:(UIButton*)sender
+{
     
 }
 
@@ -143,40 +170,57 @@
     // Configure the cell...
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-    imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
-    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-    [[imgViewDrink layer] setShadowRadius:3.0];
-    [[imgViewDrink layer] setShadowOpacity:0.8];
-    imgViewDrink.backgroundColor=[UIColor clearColor];
-    [cell.contentView addSubview:imgViewDrink];
+    if((indexPath.row)==0)
+        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"city_tavern_bg.png"]]; //set image for cell 0
+    else
+        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
+
+        
+
+//    UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
+//    imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
+//    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
+//    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
+//    [[imgViewDrink layer] setShadowRadius:3.0];
+//    [[imgViewDrink layer] setShadowOpacity:0.8];
+//    imgViewDrink.backgroundColor=[UIColor clearColor];
+    //[cell.contentView addSubview:imgViewDrink];
     //[imgViewDrink release];
     
-    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(80, 10, 150, 20)];
+    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 240, 20)];
     lblName.backgroundColor=[UIColor clearColor];
     lblName.text=[dict objectForKey:@"venueName"];
     lblName.font=[UIFont boldSystemFontOfSize:14];
+    lblName.textColor=[UIColor whiteColor];
     [cell.contentView addSubview:lblName];
     //[lblName release];
     
     
-    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(80, 30, 150, 50)];
-    lblDescription.numberOfLines=2;
+    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 240, 20)];
+    lblDescription.numberOfLines=1;
     lblDescription.text=[dict objectForKey:@"address"];
     lblDescription.font=[UIFont systemFontOfSize:12];
     lblDescription.backgroundColor=[UIColor clearColor];
+    lblDescription.textColor=[UIColor whiteColor];
     [cell.contentView addSubview:lblDescription];
     //[lblDescription release];
     
     NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
-    UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 15, 60, 50) tag:0 font:[UIFont systemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+    UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 15, 60, 20) tag:0 font:[UIFont systemFontOfSize:16] color:[UIColor blueColor] numberOfLines:1];
     lblDistance.backgroundColor=[UIColor clearColor];
     lblDistance.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblDistance];
     //[lblDistance release];
     
-    UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 40, 60, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+    UILabel *lblDescription2=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 240, 20)];
+    lblDescription2.numberOfLines=1;
+    lblDescription2.text=[dict objectForKey:@"address"];
+    lblDescription2.font=[UIFont systemFontOfSize:12];
+    lblDescription2.backgroundColor=[UIColor clearColor];
+    lblDescription2.textColor=[UIColor whiteColor];
+    [cell.contentView addSubview:lblDescription2];
+    
+    UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 40, 60, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor whiteColor] numberOfLines:1];
     lblMiles.backgroundColor=[UIColor clearColor];
     lblMiles.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblMiles];
@@ -321,6 +365,7 @@
 {
     if([annotation isKindOfClass:[MyAnnotation class]])
     {
+        /*
         MKPinAnnotationView *pinAnn=[[MKPinAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:nil];
         pinAnn.pinColor=MKPinAnnotationColorGreen;
         pinAnn.animatesDrop=YES;
@@ -335,6 +380,48 @@
         pinAnn.rightCalloutAccessoryView=btnDetail;
         
         return pinAnn;
+         */
+        
+        MKAnnotationView *annView=[[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:nil];
+        
+        MyAnnotation *ann=(MyAnnotation*)annotation;
+
+        UIImageView *imgViewBall = [[UIImageView alloc] init];
+        UILabel *lbl = [[UILabel alloc] init];
+
+        if(ann.tagValue==0)
+        {
+            imgViewBall.frame=CGRectMake(0, 0, 25, 44);
+            imgViewBall.image=[UIImage imageNamed:@"map_point_icon.png"];
+            lbl.frame=CGRectMake(0, 0, 25, 20.5);
+        }
+        else
+        {
+            imgViewBall.frame=CGRectMake(0, 0, 20.5, 20.5);
+            imgViewBall.image=[UIImage imageNamed:@"map_circle.png"];
+            lbl.frame=CGRectMake(0, 0, 20.5, 20.5);
+        }
+
+        
+        NSDictionary *dictVenue=[arrVenueList objectAtIndex:ann.tagValue];
+
+        lbl.text=[NSString stringWithFormat:@"%i",[[dictVenue objectForKey:@"checkedInUsers"] integerValue]];
+        lbl.backgroundColor = [UIColor clearColor];
+        lbl.textColor = [UIColor blackColor];
+        lbl.textAlignment=NSTextAlignmentCenter;
+        lbl.font=[UIFont boldSystemFontOfSize:10];
+        [imgViewBall addSubview:lbl];
+        [lbl release];
+        //Following lets the callout still work if you tap on the label...
+        annView.canShowCallout = YES;
+        annView.frame = imgViewBall.frame;
+        
+        [annView addSubview:imgViewBall];
+        [imgViewBall release];
+
+        
+        return annView;
+        
     }
 }
 

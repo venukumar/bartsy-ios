@@ -10,6 +10,7 @@
 #import "UIImageView+WebCache.h"
 #import "HomeViewController.h"
 #import "WelcomeViewController.h"
+
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
 @interface ProfileViewController ()
@@ -1554,14 +1555,14 @@
                 appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
                 
                 
-                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                VenueListViewController *obj=[[VenueListViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
                 
             }
             else
             {
-                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                VenueListViewController *obj=[[VenueListViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
             }
@@ -1616,14 +1617,14 @@
                 
                 [appDelegate startTimerToCheckHeartBeat];
                 
-                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                VenueListViewController *obj=[[VenueListViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
                 
             }
             else
             {
-                WelcomeViewController *obj=[[WelcomeViewController alloc]init];
+                VenueListViewController *obj=[[VenueListViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
             }
