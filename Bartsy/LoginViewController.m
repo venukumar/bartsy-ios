@@ -191,9 +191,6 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     }
     
     self.navigationController.navigationBarHidden=YES;
-    
-    UIScrollView *scrollView=(UIScrollView*)[self.view viewWithTag:111];
-    [scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 -(void)viewDidAppear:(BOOL)animated

@@ -51,9 +51,27 @@
     
     self.trackedViewName = @"Profile Screen";
 
-    dictResult=[[NSMutableDictionary alloc] init];
+    //New UI Design
+    
+    UIImageView *imgBg = [[UIImageView alloc] init];
+    if (IS_IPHONE_5)
+    {
+        imgBg.frame = CGRectMake(0, 0, 320, 568);
+    }
+    else
+    {
+        imgBg.frame = CGRectMake(0, 0, 320, 460);
+    }
+    imgBg.image=[UIImage imageNamed:@"bg.png"];
+    [self.view addSubview:imgBg];
+    [imgBg release];
+   
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
 
-    self.view.backgroundColor=[UIColor lightGrayColor];
+    dictResult=[[NSMutableDictionary alloc] init];
     
     NSLog(@"isLoginForFB is %i, auth is %@,isCmgFromGetStarted is %i",appDelegate.isLoginForFB,auth,isCmgFromGetStarted);
     
@@ -89,9 +107,7 @@
                 tblView.frame=CGRectMake(0, 40, 320, 420);
             else
                 tblView.frame=CGRectMake(0, 15, 320, 445);
-  
-        }
-        
+          }
         
         [tblView release];
         
@@ -125,16 +141,6 @@
     }
     else
     {
-        UILabel *lblHeader=[self createLabelWithTitle:@"Login with existing Bartsy account" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
-        lblHeader.backgroundColor=[UIColor blackColor];
-        lblHeader.textAlignment=NSTextAlignmentCenter;
-        [self.view addSubview:lblHeader];
-        
-        
-        UILabel *lblEmailId=[self createLabelWithTitle:@"Email:" frame:CGRectMake(20, 150, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
-        lblEmailId.textAlignment=NSTextAlignmentLeft;
-        [self.view addSubview:lblEmailId];
-        
         txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 150, 180, 30) tag:111 delegate:self];
 //        if(isReloadingForProfileVisible==NO)
 //            txtFldEmailId.text=[dictResult objectForKey:@"username"];
@@ -167,12 +173,7 @@
         btnSubmit.titleLabel.textColor=[UIColor blackColor];
         btnSubmit.backgroundColor=[UIColor lightGrayColor];
         [self.view addSubview:btnSubmit];
-        
-        
     }
-    
-    
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
