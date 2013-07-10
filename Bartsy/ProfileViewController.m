@@ -71,10 +71,15 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
 
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(10, 12, 12, 20);
+    [btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
+
     dictResult=[[NSMutableDictionary alloc] init];
     
     NSLog(@"isLoginForFB is %i, auth is %@,isCmgFromGetStarted is %i",appDelegate.isLoginForFB,auth,isCmgFromGetStarted);
-    
     
     if(appDelegate.isLoginForFB==YES||auth!=nil||isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
     {
@@ -83,7 +88,6 @@
         UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
         lblHeader.backgroundColor=[UIColor blackColor];
         lblHeader.textAlignment=NSTextAlignmentCenter;
-        
         
         UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 420) style:UITableViewStyleGrouped];
         tblView.backgroundColor=[UIColor clearColor];
@@ -115,8 +119,6 @@
         
         arrGender=[[NSArray alloc]initWithObjects:@"Female",@"Male", nil];
         
-
-        
         arrOrientation=[[NSArray alloc]initWithObjects:@"Straight",@"Gay",@"Bisexual", nil];
         arrStatus=[[NSArray alloc]initWithObjects:@"I'm single",@"I'm seeing someone/here for friends",@"I'm married/here for friends", nil];
         
@@ -137,45 +139,49 @@
         {
             [self googlePlusDetails];
         }
-
     }
     else
     {
-        txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 150, 180, 30) tag:111 delegate:self];
-//        if(isReloadingForProfileVisible==NO)
-//            txtFldEmailId.text=[dictResult objectForKey:@"username"];
-//        else
-//            txtFldEmailId.text=[dictProfileData objectForKey:@"username"];
+        UILabel *lblHeader=[self createLabelWithTitle:@"Login With Bartsy Account" frame:CGRectMake(10, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+        lblHeader.textAlignment=NSTextAlignmentCenter;
+        [self.view addSubview:lblHeader];
+        
+        UIImageView *imgViewEmailId = [[UIImageView alloc] initWithFrame:CGRectMake(25, 110, 274, 58)];
+        imgViewEmailId.image=[UIImage imageNamed:@"txtField.png"];
+        [self.view addSubview:imgViewEmailId];
+        [imgViewEmailId release];
+        
+        UIImageView *imgViewPassword = [[UIImageView alloc] initWithFrame:CGRectMake(25, 175, 274, 58)];
+        imgViewPassword.image=[UIImage imageNamed:@"txtField.png"];
+        [self.view addSubview:imgViewPassword];
+        [imgViewPassword release];
+
+        txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(30, 117, 268, 40) tag:111 delegate:self];
+        txtFldEmailId.clearButtonMode = UITextFieldViewModeWhileEditing;
         txtFldEmailId.text=[[[NSUserDefaults standardUserDefaults]objectForKey:@"LoginDetails"] objectForKey:@"bartsyLogin"];
-        txtFldEmailId.placeholder=@"Email";
+        txtFldEmailId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+    txtFldEmailId.placeholder=@"Email";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
+        txtFldEmailId.borderStyle = UITextBorderStyleNone;
         [self.view addSubview:txtFldEmailId];
         
-        UILabel *lblPassword=[self createLabelWithTitle:@"Password:" frame:CGRectMake(20, 200, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
-        lblPassword.textAlignment=NSTextAlignmentLeft;
-        [self.view addSubview:lblPassword];
-        
-        txtFldPassword=[self createTextFieldWithFrame:CGRectMake(110, 200, 180, 30) tag:222 delegate:self];
+        txtFldPassword = [self createTextFieldWithFrame:CGRectMake(30, 182, 260, 40) tag:222 delegate:self];
+        txtFldPassword.clearButtonMode = UITextFieldViewModeWhileEditing;
         txtFldPassword.secureTextEntry=YES;
-        txtFldPassword.placeholder=@"6 or more characters";
-        txtFldPassword.font=[UIFont systemFontOfSize:15];
+        txtFldPassword.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        txtFldPassword.placeholder = @"6 or more characters";
+        txtFldPassword.font = [UIFont systemFontOfSize:15];
+        txtFldPassword.borderStyle = UITextBorderStyleNone;
         [self.view addSubview:txtFldPassword];
         
-        UIButton *btnCancel=[self createUIButtonWithTitle:@"Cancel" image:nil frame:CGRectMake(20, 250, 100, 40) tag:0 selector:@selector(btnCancel_TouchUpInside) target:self];
-        btnCancel.titleLabel.font=[UIFont boldSystemFontOfSize:18];
-        btnCancel.titleLabel.textColor=[UIColor blackColor];
-        btnCancel.backgroundColor=[UIColor lightGrayColor];
-        [self.view addSubview:btnCancel];
-        
-        
-        UIButton *btnSubmit=[self createUIButtonWithTitle:@"Login" image:nil frame:CGRectMake(110, 250, 150, 40) tag:0 selector:@selector(btnSubmit_TouchUpInside) target:self];
-        btnSubmit.titleLabel.font=[UIFont boldSystemFontOfSize:18];
-        btnSubmit.titleLabel.textColor=[UIColor blackColor];
-        btnSubmit.backgroundColor=[UIColor lightGrayColor];
-        [self.view addSubview:btnSubmit];
+        UIButton *btnSignIn = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"signin-btn.png"] frame:CGRectMake(25, 250, 274, 43) tag:0 selector:@selector(btnSubmit_TouchUpInside) target:self];
+        [self.view addSubview:btnSignIn];
     }
 }
-
+-(void)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 4;
@@ -1389,7 +1395,6 @@
     else
     {
         [self createAlertViewWithTitle:@"" message:@"Username and password should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
-
     }
     
 }
