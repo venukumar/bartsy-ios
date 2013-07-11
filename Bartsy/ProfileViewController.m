@@ -90,11 +90,11 @@
     {
         dictProfileData=[[NSMutableDictionary alloc]init];
         
-        UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(0, 0, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor whiteColor] numberOfLines:1];
-        lblHeader.backgroundColor=[UIColor blackColor];
+        UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(8, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
         lblHeader.textAlignment=NSTextAlignmentCenter;
+        [self.view addSubview:lblHeader];
         
-        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 420) style:UITableViewStyleGrouped];
+        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 46, 320, 420) style:UITableViewStyleGrouped];
         tblView.backgroundColor=[UIColor clearColor];
         tblView.backgroundView=nil;
         tblView.dataSource=self;
@@ -106,14 +106,14 @@
         if (screenBounds.size.height == 568)
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
-            tblView.frame=CGRectMake(0, 40, 320,515);
+            tblView.frame=CGRectMake(0, 46, 320,515);
             else
             tblView.frame=CGRectMake(0, 15, 320,528);
         }
         else
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
-                tblView.frame=CGRectMake(0, 40, 320, 420);
+                tblView.frame=CGRectMake(0, 46, 320, 420);
             else
                 tblView.frame=CGRectMake(0, 15, 320, 445);
           }
