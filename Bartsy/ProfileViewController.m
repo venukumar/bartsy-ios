@@ -73,10 +73,14 @@
     [imgViewForTop release];
 
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(10, 12, 12, 20);
-    [btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
+    btnBack.frame = CGRectMake(5, 0, 50, 40);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
+
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
 
     dictResult=[[NSMutableDictionary alloc] init];
     
@@ -161,7 +165,7 @@
         txtFldEmailId.clearButtonMode = UITextFieldViewModeWhileEditing;
         txtFldEmailId.text=[[[NSUserDefaults standardUserDefaults]objectForKey:@"LoginDetails"] objectForKey:@"bartsyLogin"];
         txtFldEmailId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-    txtFldEmailId.placeholder=@"Email";
+        txtFldEmailId.placeholder=@"Email";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
         txtFldEmailId.borderStyle = UITextBorderStyleNone;
         [self.view addSubview:txtFldEmailId];

@@ -125,8 +125,11 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     lblAccount.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:lblAccount];
     
-    UIButton *btnLogIn = [self createUIButtonWithTitle:@"Log In" image:nil frame:CGRectMake(22, 340, 50, 43) tag:0 selector:@selector(btnLogin) target:self];
+    UIButton *btnLogIn = [self createUIButtonWithTitle:@"Log In" image:nil frame:CGRectMake(22, 340, 140, 50) tag:0 selector:@selector(btnLogin) target:self];
     btnLogIn.titleLabel.font = [UIFont systemFontOfSize:13];
+    btnLogIn.titleLabel.textAlignment = NSTextAlignmentLeft;
+    btnLogIn.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
+    btnLogIn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.view addSubview:btnLogIn];
 
     if (IS_IPHONE_5)
@@ -147,7 +150,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         lblCopyRight23.textAlignment = NSTextAlignmentLeft;
         [self.view addSubview:lblCopyRight23];
         
-        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc..All rights reserved."] frame:CGRectMake(0, 520, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc.All rights reserved."] frame:CGRectMake(0, 520, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight2.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:lblCopyRight2];
     }
