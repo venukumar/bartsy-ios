@@ -68,6 +68,10 @@
         [self.sharedController getNotificationsWithDelegate:self];
     }
 }
+-(void)btnSearch_TouchUpInside:(UIButton*)sender
+{
+    
+}
 #pragma mark - TableView Delegates
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
