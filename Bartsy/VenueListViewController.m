@@ -105,6 +105,15 @@
     [self.view addSubview:mapView];
     [mapView release];
     
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
+    {
+        UIImageView *imgViewToolTip=[self createImageViewWithImage:[UIImage imageNamed:@"select-bartsy.png"] frame:CGRectMake(10, 196, 300, 40) tag:225143];
+        [self.view addSubview:imgViewToolTip];
+        
+        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(removeToolTip) userInfo:nil repeats:NO];
+    }
+    
+    
     locationManager=[[CLLocationManager alloc]init];
     locationManager.delegate=self;
     [locationManager startUpdatingLocation];
@@ -133,7 +142,43 @@
 
 -(void)btnGPS_TouchUpInside:(UIButton*)sender
 {
-    
+    if([[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] integerValue]!=[[[arrVenueList objectAtIndex:0] objectForKey:@"venueId"] integerValue])
+    {
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+        {
+            intIndex=0;
+            NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+            NSString *strMsg=[NSString stringWithFormat:@"You are already checked-in to %@.Do you want to checkout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+            
+            if(appDelegate.intOrderCount!=0)
+            {
+                strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you checkout they will be cancelled and you will still be charged for it.Do you want to checkout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+            }
+            [self createAlertViewWithTitle:@"Please Confirm!" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:143225];
+        }
+        else
+        {
+            intIndex=0;
+            isRequestForCheckIn=YES;
+            self.sharedController=[SharedController sharedController];
+            [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
+            [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:0] objectForKey:@"venueId"] delegate:self];
+        }
+        
+    }
+    else
+    {
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        obj.dictVenue=[arrVenueList objectAtIndex:0];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
+    }
+}
+
+-(void)removeToolTip
+{
+    UIImageView *imgView=(UIImageView*)[self.view viewWithTag:225143];
+    [imgView removeFromSuperview];
 }
 
 -(void)backLogOut_TouchUpInside
@@ -270,6 +315,7 @@
     UIView *viewFooter=[[UIView alloc]init];
     return viewFooter;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     

@@ -222,6 +222,9 @@
 		E0C446E7178EBE9700261B74 /* home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E0C446E3178EBE9700261B74 /* home_icon.png */; };
 		E0C446E9178EC40400261B74 /* footer_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = E0C446E8178EC40400261B74 /* footer_bar.png */; };
 		E0C446EB178EC44700261B74 /* button_hover.png in Resources */ = {isa = PBXBuildFile; fileRef = E0C446EA178EC44700261B74 /* button_hover.png */; };
+		E0C446ED178EDD1B00261B74 /* select-bartsy.png in Resources */ = {isa = PBXBuildFile; fileRef = E0C446EC178EDD1B00261B74 /* select-bartsy.png */; };
+		E0C446F1178EE74200261B74 /* menu-bg-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = E0C446EF178EE74200261B74 /* menu-bg-hover.png */; };
+		E0C446F2178EE74200261B74 /* menu-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E0C446F0178EE74200261B74 /* menu-bg.png */; };
 		E0CDC8CA1758A0360070E31D /* CustomDrinksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CDC8C91758A0360070E31D /* CustomDrinksViewController.m */; };
 		E0CDC8CD1758BBE30070E31D /* RevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CDC8CC1758BBE20070E31D /* RevealController.m */; };
 		E0CDC8D21758BBF60070E31D /* FrontViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0CDC8CF1758BBF40070E31D /* FrontViewController.m */; };
@@ -600,6 +603,9 @@
 		E0C446E3178EBE9700261B74 /* home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home_icon.png; sourceTree = "<group>"; };
 		E0C446E8178EC40400261B74 /* footer_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footer_bar.png; sourceTree = "<group>"; };
 		E0C446EA178EC44700261B74 /* button_hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_hover.png; sourceTree = "<group>"; };
+		E0C446EC178EDD1B00261B74 /* select-bartsy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "select-bartsy.png"; sourceTree = "<group>"; };
+		E0C446EF178EE74200261B74 /* menu-bg-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-bg-hover.png"; sourceTree = "<group>"; };
+		E0C446F0178EE74200261B74 /* menu-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-bg.png"; sourceTree = "<group>"; };
 		E0CDC8C81758A0360070E31D /* CustomDrinksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDrinksViewController.h; sourceTree = "<group>"; };
 		E0CDC8C91758A0360070E31D /* CustomDrinksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDrinksViewController.m; sourceTree = "<group>"; };
 		E0CDC8CB1758BBE00070E31D /* RevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RevealController.h; sourceTree = "<group>"; };
@@ -702,6 +708,7 @@
 				CB10B087178D6F3100CAF6ED /* top_header_bar.png */,
 				CB10B070178D45D100CAF6ED /* bg.png */,
 				CB10B071178D45D100CAF6ED /* bg@2x.png */,
+				E0C446EE178EE72D00261B74 /* Menu */,
 				E02E0176178DC4940022A7F5 /* Venues */,
 				CB10B078178D6AB100CAF6ED /* SignIn */,
 				CB10B063178D3D1200CAF6ED /* LoginScreen */,
@@ -775,6 +782,7 @@
 		E02E0176178DC4940022A7F5 /* Venues */ = {
 			isa = PBXGroup;
 			children = (
+				E0C446EC178EDD1B00261B74 /* select-bartsy.png */,
 				E0C446E0178EBE9700261B74 /* user_icon.png */,
 				E0C446E1178EBE9700261B74 /* chat_icon.png */,
 				E0C446E2178EBE9700261B74 /* star_icon.png */,
@@ -1274,6 +1282,15 @@
 			name = View;
 			sourceTree = "<group>";
 		};
+		E0C446EE178EE72D00261B74 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				E0C446EF178EE74200261B74 /* menu-bg-hover.png */,
+				E0C446F0178EE74200261B74 /* menu-bg.png */,
+			);
+			name = Menu;
+			sourceTree = "<group>";
+		};
 		E0EED06D176715960045CA75 /* CardIO */ = {
 			isa = PBXGroup;
 			children = (
@@ -1522,6 +1539,9 @@
 				E0C446E7178EBE9700261B74 /* home_icon.png in Resources */,
 				E0C446E9178EC40400261B74 /* footer_bar.png in Resources */,
 				E0C446EB178EC44700261B74 /* button_hover.png in Resources */,
+				E0C446ED178EDD1B00261B74 /* select-bartsy.png in Resources */,
+				E0C446F1178EE74200261B74 /* menu-bg-hover.png in Resources */,
+				E0C446F2178EE74200261B74 /* menu-bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

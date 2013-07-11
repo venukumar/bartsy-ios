@@ -64,7 +64,6 @@
 {
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
-    self.navigationController.navigationBarHidden=NO;
 
 }
 
@@ -75,11 +74,31 @@
     
     self.trackedViewName = @"Drinks Screen";
 
-    self.navigationController.navigationBarHidden=NO;
+    self.navigationController.navigationBarHidden=YES;
     // self.navigationItem.leftBarButtonItem=nil;
     //self.navigationItem.hidesBackButton=YES;
     
-    self.title=[dictVenue objectForKey:@"venueName"];
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
+    
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(5, 0, 50, 40);
+    [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
+    
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
+    
+    self.view.backgroundColor=[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:18.0/255.0 alpha:1.0];
+    
+    UILabel *lblVenueName=[self createLabelWithTitle:[dictVenue objectForKey:@"venueName"] frame:CGRectMake(40, 0, 240, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:0];
+    lblVenueName.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblVenueName];
+    
     
     UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"Check out" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnLogOut;
@@ -99,12 +118,12 @@
     arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"Your order was rejected by Bartender",@"Order was accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"Noshow",@"Your order was timedout",@"Your order was rejected",@"Drink offered",@"Past Order", nil];
     arrOrdersOffered=[[NSMutableArray alloc]init];
     
-    NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
-    NSString *strPeopleCount=[NSString stringWithFormat:@"PEOPLE (%i)",appDelegate.intPeopleCount];
+    NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",appDelegate.intOrderCount];
+    NSString *strPeopleCount=[NSString stringWithFormat:@"People (%i)",appDelegate.intPeopleCount];
 
-    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"DRINKS",strPeopleCount,strOrder,@"PAST ORDERS", nil]];
-    segmentControl.frame=CGRectMake(0, 1, 320, 40);
-    UIFont *font = [UIFont boldSystemFontOfSize:10.0f];
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder,@"Past Orders", nil]];
+    segmentControl.frame=CGRectMake(2, 47, 316, 40);
+    UIFont *font = [UIFont systemFontOfSize:12.0f];
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
                                                            forKey:UITextAttributeFont];
     [segmentControl setTitleTextAttributes:attributes
@@ -114,6 +133,31 @@
     segmentControl.tag=1111;
     [segmentControl addTarget:self action:@selector(segmentControl_ValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:segmentControl];
+    
+    [segmentControl setBackgroundImage:[UIImage imageNamed:@"menu-bg.png"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+
+    [segmentControl setBackgroundImage:[UIImage imageNamed:@"menu-bg-hover.png"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    
+    
+    /*
+    int numOfSegments = [segmentControl.subviews count]; //getting the number of all segment sections
+    
+    //removing all segment section images.
+    for( int i = 0; i < numOfSegments; i++ )
+    {
+        if(i==0)
+        {
+            [segmentControl setImage:[UIImage imageNamed:@"menu-bg-hover.png"] forSegmentAtIndex:i];
+        }
+        else
+        {
+            [segmentControl setImage:[UIImage imageNamed:@"menu-bg.png"] forSegmentAtIndex:i];
+        }
+        
+    }
+     */
+    
+
     
     self.sharedController=[SharedController sharedController];
     
@@ -143,16 +187,17 @@
     }
     
     
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 40, 320, 373)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 90, 320, 323)];
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
+    //tblView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:tblView];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        tblView.frame=CGRectMake(0, 40, 320, 373+90);
+        tblView.frame=CGRectMake(0, 40, 320, 323+90);
     }
     
     [tblView release];
@@ -161,6 +206,11 @@
     //    ZooZ * zooz = [ZooZ sharedInstance];
     //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
     [self getPeopleList];
+}
+
+-(void)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)backLogOut_TouchUpInside
@@ -206,7 +256,7 @@
         NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"Date" ascending:NO];
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
-        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
+        NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",[arrOrders count]];
         
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         
@@ -217,11 +267,11 @@
 -(void)reloadDataPeopleAndOrderCount
 {
     UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-    NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",appDelegate.intOrderCount];
+    NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",appDelegate.intOrderCount];
     
     [segmentControl setTitle:strOrder forSegmentAtIndex:2];
     
-    NSString *strPeopleCount=[NSString stringWithFormat:@"PEOPLE (%i)",appDelegate.intPeopleCount];
+    NSString *strPeopleCount=[NSString stringWithFormat:@"People (%i)",appDelegate.intPeopleCount];
     
     [segmentControl setTitle:strPeopleCount forSegmentAtIndex:1];
 }
@@ -270,7 +320,7 @@
             intOrdersCount+=[arrOrder count];
         }
         
-        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",intOrdersCount];
+        NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",intOrdersCount];
         
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         
@@ -421,7 +471,7 @@
 //        [self segmentControl_ValueChanged:segmentControl];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[[result objectForKey:@"orderCount"] integerValue]];
+        NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",[[result objectForKey:@"orderCount"] integerValue]];
         appDelegate.intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         [appDelegate startTimerToCheckOrderStatusUpdate];
@@ -464,7 +514,7 @@
         [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        NSString *strOrder=[NSString stringWithFormat:@"PEOPLE (%i)",[arrPeople count]];
+        NSString *strOrder=[NSString stringWithFormat:@"People (%i)",[arrPeople count]];
         
         [segmentControl setTitle:strOrder forSegmentAtIndex:1];
     }
@@ -600,7 +650,7 @@
         [self loadOrdersView];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        NSString *strOrder=[NSString stringWithFormat:@"ORDERS (%i)",[arrOrders count]];
+        NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",[arrOrders count]];
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         appDelegate.intOrderCount=[arrOrders count];
         
@@ -627,7 +677,7 @@
         [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(reloadTable) userInfo:nil repeats:NO];
         
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        NSString *strOrder=[NSString stringWithFormat:@"PEOPLE (%i)",[arrPeople count]];
+        NSString *strOrder=[NSString stringWithFormat:@"People (%i)",[arrPeople count]];
         [segmentControl setTitle:strOrder forSegmentAtIndex:1];
     }
     else if(isRequestForGettingsOrders==YES)
@@ -847,7 +897,7 @@
     UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
     [scrollViewOld removeFromSuperview];
     
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 40, 320, 375)];
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 90, 320, 375)];
     scrollView.tag=987;
     scrollView.backgroundColor=[UIColor grayColor];
     [self.view addSubview:scrollView];
@@ -855,7 +905,7 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        scrollView.frame=CGRectMake(0, 40, 320, 373+90);
+        scrollView.frame=CGRectMake(0, 90, 320, 327+90);
     }
     
     NSInteger intContentSizeHeight=0;
@@ -1587,7 +1637,7 @@
         if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
         {
             UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.section selector:@selector(btnChat_TouchUpInside:) target:self];
-            //[cell.contentView addSubview:btnChat];
+            [cell.contentView addSubview:btnChat];
         }
 
         //UILabel *lbl

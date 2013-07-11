@@ -242,11 +242,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394986515.130723"
+         timestampString = "395246775.021518"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1074"
-         endingLineNumber = "1074"
+         startingLineNumber = "1124"
+         endingLineNumber = "1124"
          landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -255,11 +255,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394986515.130723"
+         timestampString = "395246775.021518"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1081"
-         endingLineNumber = "1081"
+         startingLineNumber = "1131"
+         endingLineNumber = "1131"
          landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -268,11 +268,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394986515.130723"
+         timestampString = "395246775.021518"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1275"
-         endingLineNumber = "1275"
+         startingLineNumber = "1325"
+         endingLineNumber = "1325"
          landmarkName = "-updateOrderStatusForaOfferedDrinkWithStatus:withOrderId:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -281,11 +281,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394986515.130723"
+         timestampString = "395246775.021518"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1301"
-         endingLineNumber = "1301"
+         startingLineNumber = "1351"
+         endingLineNumber = "1351"
          landmarkName = "-updateOrderStatusForaOfferedDrinkWithStatus:withOrderId:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -307,11 +307,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "394986515.130723"
+         timestampString = "395246775.021518"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1053"
-         endingLineNumber = "1053"
+         startingLineNumber = "1103"
+         endingLineNumber = "1103"
          landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -320,11 +320,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395041042.527237"
+         timestampString = "395246775.021518"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "399"
-         endingLineNumber = "399"
+         startingLineNumber = "449"
+         endingLineNumber = "449"
          landmarkName = "-controllerDidFinishLoadingWithResult:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -372,11 +372,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/VenueListViewController.m"
-         timestampString = "395232476.711976"
+         timestampString = "395240087.7439"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "476"
-         endingLineNumber = "476"
+         startingLineNumber = "522"
+         endingLineNumber = "522"
          landmarkName = "-btnDetail_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -567,12 +567,25 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/VenueListViewController.m"
-         timestampString = "395232476.711976"
+         timestampString = "395240087.7439"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "417"
-         endingLineNumber = "417"
+         startingLineNumber = "463"
+         endingLineNumber = "463"
          landmarkName = "-mapView:viewForAnnotation:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/VenueListViewController.m"
+         timestampString = "395240087.7439"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "320"
+         endingLineNumber = "320"
+         landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
