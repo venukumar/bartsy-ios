@@ -72,7 +72,6 @@
     //    self.navigationItem.hidesBackButton=YES;
     self.trackedViewName = @"Bartsy Venues";
 
-    self.title=@"Bartsy Venues";
     
     arrVenueList=[[NSMutableArray alloc]init];
     
@@ -161,7 +160,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
+    return 85;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -190,8 +189,8 @@
     UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 240, 20)];
     lblName.backgroundColor=[UIColor clearColor];
     lblName.text=[dict objectForKey:@"venueName"];
-    lblName.font=[UIFont boldSystemFontOfSize:14];
-    lblName.textColor=[UIColor whiteColor];
+    lblName.font=[UIFont systemFontOfSize:18];
+    lblName.textColor=[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
     [cell.contentView addSubview:lblName];
     //[lblName release];
     
@@ -201,26 +200,55 @@
     lblDescription.text=[dict objectForKey:@"address"];
     lblDescription.font=[UIFont systemFontOfSize:12];
     lblDescription.backgroundColor=[UIColor clearColor];
-    lblDescription.textColor=[UIColor whiteColor];
+    lblDescription.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
     [cell.contentView addSubview:lblDescription];
     //[lblDescription release];
     
+    if([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"])
+    {
+        UILabel *lblNoOfPeople=[[UILabel alloc]initWithFrame:CGRectMake(5, 50, 15, 20)];
+        lblNoOfPeople.numberOfLines=1;
+        lblNoOfPeople.text=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"checkedInUsers"] integerValue]];
+        lblNoOfPeople.font=[UIFont systemFontOfSize:12];
+        lblNoOfPeople.backgroundColor=[UIColor clearColor];
+        lblNoOfPeople.adjustsFontSizeToFitWidth=YES;
+        lblNoOfPeople.textColor=[UIColor colorWithRed:248.0/255.0 green:58.0/255.0 blue:179.0/255.0 alpha:1.0];
+        [cell.contentView addSubview:lblNoOfPeople];
+        
+        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(20, 50, 200, 20)];
+        lblMsg.numberOfLines=1;
+        lblMsg.text=@"People checked in here";
+        lblMsg.font=[UIFont systemFontOfSize:12];
+        lblMsg.backgroundColor=[UIColor clearColor];
+        lblMsg.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        [cell.contentView addSubview:lblMsg];
+
+    }
+    else
+    {
+        UIImageView *imgViewClosed=[self createImageViewWithImage:[UIImage imageNamed:@"exclamatory_icon.png"] frame:CGRectMake(5, 54, 12.5, 12.5) tag:0];
+        [cell.contentView addSubview:imgViewClosed];
+        
+        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(20, 50, 200, 20)];
+        lblMsg.numberOfLines=1;
+        lblMsg.text=@"Closed";
+        lblMsg.font=[UIFont systemFontOfSize:12];
+        lblMsg.backgroundColor=[UIColor clearColor];
+        lblMsg.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        [cell.contentView addSubview:lblMsg];
+    }
+        
+        
     NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
-    UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 15, 60, 20) tag:0 font:[UIFont systemFontOfSize:16] color:[UIColor blueColor] numberOfLines:1];
+    UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 20, 60, 15) tag:0 font:[UIFont systemFontOfSize:20] color:[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] numberOfLines:1];
+    lblDistance.adjustsFontSizeToFitWidth=YES;
     lblDistance.backgroundColor=[UIColor clearColor];
     lblDistance.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblDistance];
     //[lblDistance release];
+
     
-    UILabel *lblDescription2=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 240, 20)];
-    lblDescription2.numberOfLines=1;
-    lblDescription2.text=[dict objectForKey:@"address"];
-    lblDescription2.font=[UIFont systemFontOfSize:12];
-    lblDescription2.backgroundColor=[UIColor clearColor];
-    lblDescription2.textColor=[UIColor whiteColor];
-    [cell.contentView addSubview:lblDescription2];
-    
-    UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 40, 60, 30) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor whiteColor] numberOfLines:1];
+    UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 35, 60, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] numberOfLines:1];
     lblMiles.backgroundColor=[UIColor clearColor];
     lblMiles.textAlignment=NSTextAlignmentCenter;
     [cell.contentView addSubview:lblMiles];
@@ -237,6 +265,11 @@
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *viewFooter=[[UIView alloc]init];
+    return viewFooter;
+}
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
@@ -398,7 +431,7 @@
         else
         {
             imgViewBall.frame=CGRectMake(0, 0, 20.5, 20.5);
-            imgViewBall.image=[UIImage imageNamed:@"map_circle.png"];
+            imgViewBall.image=[UIImage imageNamed:@"map-circle.png"];
             lbl.frame=CGRectMake(0, 0, 20.5, 20.5);
         }
 
@@ -410,6 +443,7 @@
         lbl.textColor = [UIColor blackColor];
         lbl.textAlignment=NSTextAlignmentCenter;
         lbl.font=[UIFont boldSystemFontOfSize:10];
+        lbl.adjustsFontSizeToFitWidth=YES;
         [imgViewBall addSubview:lbl];
         [lbl release];
         //Following lets the callout still work if you tap on the label...

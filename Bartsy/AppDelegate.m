@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "HomeViewController.h"
-#import "VenueListViewController.h"
+#import "RootViewController.h"
 #import "WelcomeViewController.h"
 #define kEnabled                @"enabled"
 #define kSimulator              @"Simulator"

@@ -13,8 +13,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "1129"
          endingLineNumber = "1129"
-         landmarkName = "@implementation ProfileViewController"
-         landmarkType = "3">
+         landmarkName = "-btnDOB_TouchUpInside"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -91,7 +91,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "648"
          endingLineNumber = "648"
-         landmarkName = "-btnPaypal_TouchUpInside"
+         landmarkName = "-btnLooking_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -372,12 +372,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/VenueListViewController.m"
-         timestampString = "395175596.324264"
+         timestampString = "395232476.711976"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "442"
-         endingLineNumber = "442"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
+         startingLineNumber = "476"
+         endingLineNumber = "476"
+         landmarkName = "-btnDetail_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -560,6 +560,19 @@
          startingLineNumber = "218"
          endingLineNumber = "218"
          landmarkName = "-loadScrollViewWithDrinks"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/VenueListViewController.m"
+         timestampString = "395232476.711976"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "417"
+         endingLineNumber = "417"
+         landmarkName = "-mapView:viewForAnnotation:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

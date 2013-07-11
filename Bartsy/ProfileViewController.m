@@ -1559,14 +1559,14 @@
                 appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
                 
                 
-                VenueListViewController *obj=[[VenueListViewController alloc]init];
+                RootViewController *obj=[[RootViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
                 
             }
             else
             {
-                VenueListViewController *obj=[[VenueListViewController alloc]init];
+                RootViewController *obj=[[RootViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
             }
@@ -1621,14 +1621,14 @@
                 
                 [appDelegate startTimerToCheckHeartBeat];
                 
-                VenueListViewController *obj=[[VenueListViewController alloc]init];
+                RootViewController *obj=[[RootViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
                 
             }
             else
             {
-                VenueListViewController *obj=[[VenueListViewController alloc]init];
+                RootViewController *obj=[[RootViewController alloc]init];
                 [self.navigationController pushViewController:obj animated:YES];
                 [obj release];
             }

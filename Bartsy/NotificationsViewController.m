@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Notifications";
+    //self.title = @"Notifications";
     self.navigationController.navigationBarHidden=NO;
     self.sharedController=[SharedController sharedController];
     
