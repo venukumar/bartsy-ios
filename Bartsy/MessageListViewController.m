@@ -40,10 +40,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Messages";
-    self.navigationController.navigationBarHidden=NO;
+    self.navigationController.navigationBarHidden=YES;
     self.sharedController=[SharedController sharedController];
     
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
+    
+    UILabel *lblHeader=[self createLabelWithTitle:@"Messages" frame:CGRectMake(8, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+    lblHeader.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblHeader];
+
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(5, 0, 50, 40);
+    [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
+
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
+
     NSURL *urlSelf=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]];
     [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:urlSelf]
 queue:[NSOperationQueue mainQueue]
@@ -67,7 +85,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     }
     else
     {
-        viewForTextField.frame = CGRectMake(0, 381, 320, 35);
+        viewForTextField.frame = CGRectMake(0, 376, 320, 35);
     }
     viewForTextField.backgroundColor = [UIColor grayColor];
     [self.view addSubview:viewForTextField];
@@ -91,11 +109,11 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     bubbleTableView = [[UIBubbleTableView alloc]init];
     if (IS_IPHONE_5)
     {
-        bubbleTableView.frame = CGRectMake(0, 0, 320, 465);
+        bubbleTableView.frame = CGRectMake(0, 45, 320, 465);
     }
     else
     {
-        bubbleTableView.frame = CGRectMake(0, 0, 320, 382);
+        bubbleTableView.frame = CGRectMake(0, 45, 320, 382);
     }
     bubbleData = [[NSMutableArray alloc] init];
     
@@ -153,7 +171,10 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     isGetMessageWebService = YES;
     [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
 }
-
+-(void)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 -(void)btnSend_TouchUpInside:(UIButton*)sender
 {
     if ([txtField.text length])
