@@ -106,16 +106,16 @@
         if (screenBounds.size.height == 568)
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
-            tblView.frame=CGRectMake(0, 46, 320,515);
+            tblView.frame=CGRectMake(0, 46, 320,500);
             else
-            tblView.frame=CGRectMake(0, 15, 320,528);
+            tblView.frame=CGRectMake(0, 46, 320,500);
         }
         else
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
                 tblView.frame=CGRectMake(0, 46, 320, 420);
             else
-                tblView.frame=CGRectMake(0, 15, 320, 445);
+                tblView.frame=CGRectMake(0, 46, 320, 410);
           }
         
         [tblView release];
