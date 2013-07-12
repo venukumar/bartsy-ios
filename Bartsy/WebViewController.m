@@ -50,6 +50,12 @@
     lblMsg.text=[strTitle substringToIndex:[strTitle length]];
     [self.view addSubview:lblMsg];
     
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(10, 11, 12, 20);
+    [btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
+    [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
+    
     NSString *strPth = [[NSBundle mainBundle]pathForResource:strHTMLPath ofType:@"html"];
     
     NSString *string = [[NSString alloc] initWithContentsOfFile:strPth];
@@ -68,6 +74,10 @@
 
 }
 
+-(void)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 //starting activity indicator for showing the content loading
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {

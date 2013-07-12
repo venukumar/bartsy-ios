@@ -166,7 +166,7 @@
         }else if (indexPath.row==2){
             WebViewController *obj=[[WebViewController alloc]init];
             obj.strTitle=[NSString stringWithFormat:@"%@",[aryMsg objectAtIndex:indexPath.row]];
-            obj.strHTMLPath=[NSString stringWithFormat:@"%i",3];
+            obj.strHTMLPath=[NSString stringWithFormat:@"%i",4];
             [self.navigationController pushViewController:obj animated:YES];
             [obj release];
         }

@@ -295,10 +295,19 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     
     if (sender.tag==001) {
         
+        WebViewController *obj=[[WebViewController alloc]init];
+        obj.strTitle=[NSString stringWithFormat:@"%@",@"Privacy Policy"];
+        obj.strHTMLPath=[NSString stringWithFormat:@"%i",3];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
         
     }else if (sender.tag==002){
         
-        
+        WebViewController *obj=[[WebViewController alloc]init];
+        obj.strTitle=[NSString stringWithFormat:@"%@",@"Terms of Service"];
+        obj.strHTMLPath=[NSString stringWithFormat:@"%i",4];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
     }
 }
 
