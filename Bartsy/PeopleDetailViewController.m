@@ -85,18 +85,18 @@
     [self.view addSubview:btnShare];
 
 
-    UIView *footerView = [self createViewWithFrame:CGRectMake(0, 360, 320, 50) tag:111];
+    UIView *footerView = [self createViewWithFrame:CGRectMake(0, 350, 320, 65) tag:111];
     if (IS_IPHONE_5)
     {
-        footerView.frame = CGRectMake(0, 360+86, 320, 52);
+        footerView.frame = CGRectMake(0, 360+77, 320, 65);
     }
     footerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"city_tavern_bg.png"]];
     [self.view addSubview:footerView];
     
-    UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 3, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
+    UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 9, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
     [footerView addSubview:btnSendMessage];
 
-    UIButton *btnSendDrink = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-drink-hover.png"] frame:CGRectMake(163, 3, 150, 44) tag:2222 selector:@selector(btnSendDrink_TouchUpInside) target:self];
+    UIButton *btnSendDrink = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-drink-hover.png"] frame:CGRectMake(163, 9, 150, 44) tag:2222 selector:@selector(btnSendDrink_TouchUpInside) target:self];
     [footerView addSubview:btnSendDrink];
 
 }
