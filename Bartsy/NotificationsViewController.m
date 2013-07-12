@@ -46,10 +46,10 @@
     UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
     [self.view addSubview:btnSearch];
 
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 45, 320, 367)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 367)];
     if (IS_IPHONE_5)
     {
-        tblView.frame = CGRectMake(0, 45, 320, 455);
+        tblView.frame = CGRectMake(0, 44, 320, 455);
     }
     tblView.tableFooterView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     tblView.backgroundColor = [UIColor blackColor];
@@ -86,10 +86,7 @@
 {
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    if((indexPath.row)==0)
-        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"city_tavern_bg.png"]]; //set image for cell 0
-    else
-        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
+    cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
     
     if ([arrayForNotifications count])
     {
@@ -97,57 +94,61 @@
         {
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
-            [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-            [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
-            [[cell.imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-            [[cell.imageView layer] setShadowRadius:3.0];
-            [[cell.imageView layer] setShadowOpacity:0.8];
-            
-            UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(61, 5, 250, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor grayColor] numberOfLines:1];
+            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
+            [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+            [imageForPeople.layer setShadowRadius:3.0];
+            [imageForPeople.layer setShadowOpacity:0.8];
+            [cell.contentView addSubview:imageForPeople];
+            [imageForPeople release];
+
+            UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(71, 5, 250, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor grayColor] numberOfLines:1];
             lblVenueName.backgroundColor=[UIColor clearColor];
             lblVenueName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblVenueName];
             //[lblVenueName release];
             
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61,25,250,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(71,25,250,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             //[lblItemName release];
             
-            
-            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(61,65,250,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(71,65,250,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblDate.backgroundColor=[UIColor clearColor];
             lblDate.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblDate];
             //[lblDate release];
-            
             
         }
         else if([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"offer"])
         {
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
-            [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-            [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
-            [[cell.imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-            [[cell.imageView layer] setShadowRadius:3.0];
-            [[cell.imageView layer] setShadowOpacity:0.8];
-            
-            UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(61, 5, 200, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
+            [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+            [imageForPeople.layer setShadowRadius:3.0];
+            [imageForPeople.layer setShadowOpacity:0.8];
+            [cell.contentView addSubview:imageForPeople];
+            [imageForPeople release];
+
+            UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(71, 5, 200, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblVenueName.text=@"VenueName";
             lblVenueName.backgroundColor=[UIColor clearColor];
             lblVenueName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblVenueName];
             //[lblVenueName release];
             
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(61,25,200,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+            UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(71,25,200,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             //[lblItemName release];
             
-            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(61,65,200,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(11,65,200,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblDate.backgroundColor=[UIColor clearColor];
             lblDate.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblDate];
@@ -155,14 +156,13 @@
             
             NSString *strURL1=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"recieverImage"]];
 
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(260, 0, 60, 60)];
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(260, 18, 60, 60)];
             [imgView setImageWithURL:[NSURL URLWithString:[strURL1 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             [[imgView layer] setShadowOffset:CGSizeMake(0, 1)];
             [[imgView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
             [[imgView layer] setShadowRadius:3.0];
             [[imgView layer] setShadowOpacity:0.8];
             [cell.contentView addSubview:imgView];
-
         }
     }
     else
