@@ -1398,7 +1398,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if(isSelectedForDrinks)
-        return 44;
+        return 54;
     else
         return 0;
 }
@@ -1411,7 +1411,7 @@
         if(section!=0)
         object=[arrMenu objectAtIndex:section-1];
         
-        UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+        UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 53)];
         UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
         [headerView addSubview:headerBg];
         
@@ -1435,8 +1435,8 @@
         
         UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 7, 280, 30)];
         [headerTitle setBackgroundColor:[UIColor clearColor]];
-        [headerTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:16]];
-        [headerTitle setTextColor:[UIColor blackColor]];
+        [headerTitle setFont:[UIFont systemFontOfSize:16]];
+        [headerTitle setTextColor:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0]];
         if(section==0)
         {
             headerTitle.text= @"Custom Drinks";
@@ -1565,6 +1565,8 @@
         //        [cell.contentView addSubview:imgViewDrink];
         //        [imgViewDrink release];
         
+        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
+
         UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 295, 20)];
         id object=[arrMenu objectAtIndex:indexPath.section-1];
         if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
@@ -1580,6 +1582,8 @@
         }
         
         lblName.font=[UIFont systemFontOfSize:14];
+        lblName.backgroundColor=[UIColor clearColor];
+        lblName.textColor=[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
         [cell.contentView addSubview:lblName];
         [lblName release];
         
@@ -1599,6 +1603,8 @@
         }
         
         lblDescription.font=[UIFont systemFontOfSize:12];
+        lblDescription.backgroundColor=[UIColor clearColor];
+        lblDescription.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
         [cell.contentView addSubview:lblDescription];
         [lblDescription release];
         
@@ -1616,6 +1622,8 @@
         }
         
         lblPrice.font=[UIFont boldSystemFontOfSize:14];
+        lblPrice.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
+        lblPrice.backgroundColor=[UIColor clearColor];
         [cell.contentView addSubview:lblPrice];
         [lblPrice release];
     }

@@ -194,9 +194,7 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "129"
-         endingLineNumber = "129"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
-         landmarkType = "5">
+         endingLineNumber = "129">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
