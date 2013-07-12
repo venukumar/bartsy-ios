@@ -53,6 +53,9 @@
     [btnBack addSubview:imgViewBack];
     [imgViewBack release];
 
+    UIButton *btnTopShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"right-arrow-top.png"] frame:CGRectMake(285, 12, 25, 20) tag:3333 selector:@selector(btnTopShare_TouchUpInside) target:self];
+    [self.view addSubview:btnTopShare];
+
     UILabel *lblHeader=[self createLabelWithTitle:[dictPeople objectForKey:@"nickName"] frame:CGRectMake(5, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblHeader];
@@ -67,28 +70,54 @@
     [imageForPeople.layer setShadowOpacity:0.8];
     [self.view addSubview:imageForPeople];
     [imageForPeople release];
+    
+    UIButton *btnLike = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"liked-btn@2x.png"] frame:CGRectMake(165, 60, 126, 44) tag:1122 selector:@selector(btnLike_TouchUpInside) target:self];
+    [self.view addSubview:btnLike];
+    
+    UIButton *btnShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"share@2x.png"] frame:CGRectMake(165, 115, 126, 44) tag:2233 selector:@selector(btnShare_TouchUpInside) target:self];
+    [self.view addSubview:btnShare];
 
 
     UIView *footerView = [self createViewWithFrame:CGRectMake(0, 360, 320, 50) tag:111];
     if (IS_IPHONE_5)
     {
-        footerView.frame = CGRectMake(0, 360+88, 320, 50);
+        footerView.frame = CGRectMake(0, 360+86, 320, 52);
     }
     footerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"city_tavern_bg.png"]];
     [self.view addSubview:footerView];
     
-    
-    UIButton *btnSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnSendMessage.frame = CGRectMake(5, 2, 140, 40);
-    [btnSendMessage addTarget:self action:@selector(btnSendMessage_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 3, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
     [footerView addSubview:btnSendMessage];
-    
-    
-    UIButton *btnSendDrink = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnSendDrink.frame = CGRectMake(150, 2, 140, 40);
-    [btnSendDrink addTarget:self action:@selector(btnSendDrink_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+
+    UIButton *btnSendDrink = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-drink-hover.png"] frame:CGRectMake(163, 3, 150, 44) tag:2222 selector:@selector(btnSendDrink_TouchUpInside) target:self];
     [footerView addSubview:btnSendDrink];
 
+}
+-(void)btnTopShare_TouchUpInside
+{
+    UIActionSheet *actionSheet=[[UIActionSheet alloc]initWithTitle:@"" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Block User",@"Report as Spam",nil];
+    actionSheet.tag = 1;
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    [actionSheet release];
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if(actionSheet.tag == 1 && buttonIndex ==0)
+    {
+    }
+    if(actionSheet.tag == 1 && buttonIndex ==1)
+    {
+    }
+
+}
+-(void)btnLike_TouchUpInside
+{
+    
+}
+-(void)btnShare_TouchUpInside
+{
+    
 }
 -(void)btnSendMessage_TouchUpInside
 {
@@ -99,7 +128,6 @@
 }
 -(void)btnSendDrink_TouchUpInside
 {
-    
 }
 -(void)btnBack_TouchUpInside
 {

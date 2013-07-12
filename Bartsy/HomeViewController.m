@@ -1806,19 +1806,11 @@
         }
         else
         {
-            
-            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to the drinks tab to place some" frame:CGRectMake(10, 2, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
+            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to the drinks tab to place some" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentCenter;
             [cell.contentView addSubview:lblItemName];
-
-//            cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some";
-//            cell.textLabel.numberOfLines=5;
-//            cell.textLabel.backgroundColor = [UIColor clearColor];
-//            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-//            cell.textLabel.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         }
-        
     }
     else
     {
