@@ -53,8 +53,15 @@
     [btnBack addSubview:imgViewBack];
     [imgViewBack release];
 
-    UIButton *btnTopShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"right-arrow-top.png"] frame:CGRectMake(285, 12, 25, 20) tag:3333 selector:@selector(btnTopShare_TouchUpInside) target:self];
+    UIButton *btnTopShare = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnTopShare.frame = CGRectMake(260, 0, 50, 40);
+    [btnTopShare addTarget:self action:@selector(btnTopShare_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnTopShare];
+    
+    UIImageView *imgViewTopShare = [[UIImageView alloc] initWithFrame:CGRectMake(18, 12, 25, 20)];
+    imgViewTopShare.image = [UIImage imageNamed:@"right-arrow-top.png"];
+    [btnTopShare addSubview:imgViewTopShare];
+    [imgViewTopShare release];
 
     UILabel *lblHeader=[self createLabelWithTitle:[dictPeople objectForKey:@"nickName"] frame:CGRectMake(5, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
