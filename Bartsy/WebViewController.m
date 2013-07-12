@@ -13,7 +13,7 @@
 @end
 
 @implementation WebViewController
-@synthesize strTitle,strHTMLPath;
+@synthesize strTitle,strHTMLPath,viewtype;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,8 +62,16 @@
     
     
 	UIWebView *webView=[[UIWebView alloc]initWithFrame:CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-104)];
+    if (viewtype==2) {
+        webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-65);
+    }
     if (IS_IPHONE_5) {
-        webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-100);
+        if (viewtype==1) {
+            webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-55);
+        }else if (viewtype==2){
+            webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-100);
+        }
+        
     }
 	webView.delegate=self;
 	webView.tag=333;

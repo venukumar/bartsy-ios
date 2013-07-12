@@ -9,11 +9,21 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "Constants.h"
+
+ enum{
+    
+    loginview=1,
+    profileview=2
+    
+};
+typedef NSInteger viewtype;
 @interface WebViewController :BaseViewController <UIWebViewDelegate>
 {
     NSString *strTitle;
     NSString *strHTMLPath;
+    NSInteger viewtype;
 }
 @property(nonatomic,retain)NSString *strTitle;
 @property(nonatomic,retain)NSString *strHTMLPath;
+@property(nonatomic,assign)NSInteger viewtype;
 @end
