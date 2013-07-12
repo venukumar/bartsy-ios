@@ -46,7 +46,7 @@
     UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
     [self.view addSubview:btnSearch];
 
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 45, 320, 415)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 45, 320, 367)];
     if (IS_IPHONE_5)
     {
         tblView.frame = CGRectMake(0, 45, 320, 455);
