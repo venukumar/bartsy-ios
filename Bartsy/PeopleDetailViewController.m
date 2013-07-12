@@ -7,6 +7,7 @@
 //
 
 #import "PeopleDetailViewController.h"
+#import "MessageListViewController.h"
 #import "QuartzCore/QuartzCore.h"
 #import "UIImageView+WebCache.h"
 #import "Constants.h"
@@ -55,6 +56,18 @@
     UILabel *lblHeader=[self createLabelWithTitle:[dictPeople objectForKey:@"nickName"] frame:CGRectMake(5, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblHeader];
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
+    
+    UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(15, 60, 130, 130)];
+    [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+    [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+    [imageForPeople.layer setShadowRadius:3.0];
+    [imageForPeople.layer setShadowOpacity:0.8];
+    [self.view addSubview:imageForPeople];
+    [imageForPeople release];
+
 
     UIView *footerView = [self createViewWithFrame:CGRectMake(0, 360, 320, 50) tag:111];
     if (IS_IPHONE_5)
@@ -64,17 +77,30 @@
     footerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"city_tavern_bg.png"]];
     [self.view addSubview:footerView];
     
-//    UIImageView *imgViewProfilePicture=(UIImageView*)[self.view viewWithTag:111];
-//    
-//    NSString *urlReceiver=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
-//    [imgViewProfilePicture setImageWithURL:[NSURL URLWithString:urlReceiver]];
-//    [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
-//    [[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
-//    [[imgViewProfilePicture layer] setShadowRadius:3.0];
-//    [[imgViewProfilePicture layer] setShadowOpacity:0.8];
+    
+    UIButton *btnSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnSendMessage.frame = CGRectMake(5, 2, 140, 40);
+    [btnSendMessage addTarget:self action:@selector(btnSendMessage_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [footerView addSubview:btnSendMessage];
+    
+    
+    UIButton *btnSendDrink = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnSendDrink.frame = CGRectMake(150, 2, 140, 40);
+    [btnSendDrink addTarget:self action:@selector(btnSendDrink_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [footerView addSubview:btnSendDrink];
+
+}
+-(void)btnSendMessage_TouchUpInside
+{
+    MessageListViewController *obj = [[MessageListViewController alloc] init];
+    obj.dictForReceiver = dictPeople;
+    [self.navigationController pushViewController:obj animated:YES];
+    [obj release];
+}
+-(void)btnSendDrink_TouchUpInside
+{
     
 }
-
 -(void)btnBack_TouchUpInside
 {
     [self.navigationController popViewControllerAnimated:YES];

@@ -83,14 +83,14 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     bubbleTableView = [[UIBubbleTableView alloc]init];
     if (IS_IPHONE_5)
     {
-        bubbleTableView.frame = CGRectMake(0, 45, 320, 465);
+        bubbleTableView.frame = CGRectMake(0, 44, 320, 420);
     }
     else
     {
-        bubbleTableView.frame = CGRectMake(0, 45, 320, 370);
+        bubbleTableView.frame = CGRectMake(0, 44, 320, 332);
     }
     bubbleData = [[NSMutableArray alloc] init];
-    
+    bubbleTableView.backgroundColor = [UIColor blackColor];
     bubbleTableView.bubbleDataSource = self;
     // The line below sets the snap interval in seconds. This defines how the bubbles will be grouped in time.
     // Interval of 120 means that if the next messages comes in 2 minutes since the last message, it will be added into the same group.
@@ -128,7 +128,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     viewForTextField = [[UIView alloc] init];
     if (IS_IPHONE_5)
     {
-        viewForTextField.frame = CGRectMake(0, 469, 320, 35);
+        viewForTextField.frame = CGRectMake(0, 464, 320, 35);
     }
     else
     {
@@ -151,7 +151,6 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     
-
 }
 
 
@@ -203,21 +202,34 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         
         CGRect frame = viewForTextField.frame;
         frame.origin.y -= kbSize.height;
-        viewForTextField.frame = frame;
-        
+        if (IS_IPHONE_5)
+        {
+            viewForTextField.frame = CGRectMake(0, 296.5, 320, 35);
+        }
+        else
+        {
+            viewForTextField.frame = CGRectMake(0, 209, 320, 35);
+        }
         frame = bubbleTableView.frame;
         frame.size.height -= kbSize.height;
-        bubbleTableView.frame = frame;
+        if (IS_IPHONE_5)
+        {
+            bubbleTableView.frame = CGRectMake(0, 44, 320, 255);
+        }
+        else
+        {
+            bubbleTableView.frame = CGRectMake(0, 44, 320, 165);
+        }
     }];
     
     if (IS_IPHONE_5)
     {
-        if(intHeight>252)
+        if(intHeight>465)
         {
-            [bubbleTableView setContentOffset:CGPointMake(0, intHeight-252) animated:YES];
+            [bubbleTableView setContentOffset:CGPointMake(0, intHeight-400) animated:YES];
         }
     }
-    else if(intHeight>144)
+    else if(intHeight>262)
     {
         [bubbleTableView setContentOffset:CGPointMake(0,intHeight-160) animated:YES];
     }
@@ -232,11 +244,25 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         
         CGRect frame = viewForTextField.frame;
         frame.origin.y += kbSize.height;
-        viewForTextField.frame = frame;
+        if (IS_IPHONE_5)
+        {
+            viewForTextField.frame = CGRectMake(0, 464, 320, 35);
+        }
+        else
+        {
+            viewForTextField.frame = CGRectMake(0, 376, 320, 35);
+        }
         
         frame = bubbleTableView.frame;
         frame.size.height += kbSize.height;
-        bubbleTableView.frame = frame;
+        if (IS_IPHONE_5)
+        {
+            bubbleTableView.frame = CGRectMake(0, 45, 320, 420);
+        }
+        else
+        {
+            bubbleTableView.frame = CGRectMake(0, 44, 320, 332);
+        }
     }];
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;              // called when 'return' key pressed. return NO to ignore.
@@ -304,7 +330,6 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
             NSDate *date    = [dateFormatter dateFromString:[dictMsg objectForKey:@"date"]];
             
             BOOL isSentByMe=NO;
-            
             
             NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
             if([strBartsyId doubleValue] ==[[dictMsg objectForKey:@"senderId"]doubleValue])

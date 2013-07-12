@@ -47,7 +47,7 @@
     self.label.textAlignment = NSTextAlignmentCenter;
     self.label.shadowOffset = CGSizeMake(0, 1);
     self.label.shadowColor = [UIColor whiteColor];
-    self.label.textColor = [UIColor darkGrayColor];
+    self.label.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.label.backgroundColor = [UIColor clearColor];
     [self addSubview:self.label];
 }

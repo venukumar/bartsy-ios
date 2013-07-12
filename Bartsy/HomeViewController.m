@@ -1626,7 +1626,6 @@
         NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
 
         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
-        NSLog(@"people is %@",dictPeople);
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
       
         UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 54, 54)];
