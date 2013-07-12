@@ -189,15 +189,15 @@
     
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 90, 320, 323)];
     tblView.dataSource=self;
+    tblView.backgroundColor = [UIColor blackColor];
     tblView.delegate=self;
     tblView.tag=111;
-    //tblView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:tblView];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        tblView.frame=CGRectMake(0, 40, 320, 323+90);
+        tblView.frame=CGRectMake(0, 90, 320, 323+90);
     }
     
     [tblView release];
@@ -1377,7 +1377,7 @@
     if(isSelectedForDrinks)
         return [arrMenu count]+1;
     else if(isSelectedForPeople)
-        return [arrPeople count];
+        return 1;
     else
     {
         if([arrBundledOrders count]||[arrOrdersTimedOut count])
@@ -1503,6 +1503,10 @@
             return 1;
         }
     }
+    else if(isSelectedForPeople)
+    {
+        return [arrPeople count];
+    }
     else
     {
         return 1;
@@ -1514,7 +1518,7 @@
     if(isSelectedForDrinks)
         return 80;
     else if(isSelectedForPeople)
-        return 60;
+        return 75;
     else if(isSelectedForPastOrders == YES)
     {
         return 150;
@@ -1618,26 +1622,63 @@
     else if(isSelectedForPeople)
     {
         cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-
-//        [cell setUserInteractionEnabled:NO];
+        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
         NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
 
-        NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.section];
-        
+        NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
+        NSLog(@"people is %@",dictPeople);
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
-        [cell.imageView setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-        [[cell.imageView layer] setShadowOffset:CGSizeMake(0, 1)];
-        [[cell.imageView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-        [[cell.imageView layer] setShadowRadius:3.0];
-        [[cell.imageView layer] setShadowOpacity:0.8];
+      
+        UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 54, 54)];
+        [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+        [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+        [imageForPeople.layer setShadowRadius:3.0];
+        [imageForPeople.layer setShadowOpacity:0.8];
+        [cell.contentView addSubview:imageForPeople];
+        [imageForPeople release];
+
+        UILabel *lblForPeopleName = [[UILabel alloc]initWithFrame:CGRectMake(75, -2, 220, 35)];
+        lblForPeopleName.text = [dictPeople objectForKey:@"nickName"];
+        lblForPeopleName.font = [UIFont boldSystemFontOfSize:16];
+        lblForPeopleName.backgroundColor = [UIColor clearColor];
+        lblForPeopleName.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+        [cell.contentView addSubview:lblForPeopleName];
+        [lblForPeopleName release];
+
+        UIImageView *imgTickMark = [[UIImageView alloc] initWithFrame:CGRectMake(75, 30, 15, 15)];
+        imgTickMark.image=[UIImage imageNamed:@"tickmark.png"];
+        [cell.contentView addSubview:imgTickMark];
+        [imgTickMark release];
         
-        cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
-        cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
+        UIImageView *imgForRightArrow = [[UIImageView alloc] initWithFrame:CGRectMake(300, 28, 10, 15)];
+        imgForRightArrow.image=[UIImage imageNamed:@"right-arrow.png"];
+        [cell.contentView addSubview:imgForRightArrow];
+        [imgForRightArrow release];
+
+        UILabel *lblForCheckIn = [[UILabel alloc]initWithFrame:CGRectMake(93, 20, 100, 35)];
+        lblForCheckIn.text = @"Checked In";
+        lblForCheckIn.font = [UIFont systemFontOfSize:11];
+        lblForCheckIn.backgroundColor = [UIColor clearColor];
+        lblForCheckIn.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+        [cell.contentView addSubview:lblForCheckIn];
+        [lblForCheckIn release];
+
+        UILabel *lblForPeopleGender = [[UILabel alloc]initWithFrame:CGRectMake(75, 40, 220, 35)];
+        lblForPeopleGender.text = [dictPeople objectForKey:@"gender"];
+        lblForPeopleGender.font = [UIFont systemFontOfSize:12];
+        lblForPeopleGender.backgroundColor = [UIColor clearColor];
+        lblForPeopleGender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+        [cell.contentView addSubview:lblForPeopleGender];
+        [lblForPeopleGender release];
+
+//        cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
+//        cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
         
         if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
         {
-            UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.section selector:@selector(btnChat_TouchUpInside:) target:self];
-            [cell.contentView addSubview:btnChat];
+            UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"icon_chat.png"] frame:CGRectMake(280, 5, 32, 32) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
+//            [cell.contentView addSubview:btnChat];
         }
 
         //UILabel *lbl
@@ -1645,6 +1686,8 @@
     else if (isSelectedForPastOrders == YES)
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+
+        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
 
         if ([arrPastOrders count])
         {
@@ -1764,6 +1807,9 @@
         {
             cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some";
             cell.textLabel.numberOfLines=5;
+            cell.textLabel.backgroundColor = [UIColor clearColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         }
         
     }
@@ -2583,6 +2629,12 @@
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *viewFooter=[[UIView alloc]init];
+    return viewFooter;
+}
+
 -(void)btnChat_TouchUpInside:(UIButton*)sender
 {
     MessageListViewController *obj = [[MessageListViewController alloc] init];
@@ -2948,9 +3000,8 @@
     }
     else if(isSelectedForPeople)
     {
-        
         PeopleDetailViewController *obj = [[PeopleDetailViewController alloc] init];
-        obj.dictPeople = [arrPeople objectAtIndex:indexPath.section];
+        obj.dictPeople = [arrPeople objectAtIndex:indexPath.row];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }

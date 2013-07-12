@@ -78,32 +78,6 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
          imgReceiver=[[UIImage alloc] initWithData:dataOrder1];
      }];
     
-    viewForTextField = [[UIView alloc] init];
-    if (IS_IPHONE_5)
-    {
-        viewForTextField.frame = CGRectMake(0, 469, 320, 35);
-    }
-    else
-    {
-        viewForTextField.frame = CGRectMake(0, 376, 320, 35);
-    }
-    viewForTextField.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:viewForTextField];
-    
-    txtField = [[UITextField alloc] initWithFrame:CGRectMake(2,3, 275, 30)];
-    txtField.borderStyle = UITextBorderStyleRoundedRect;
-    txtField.placeholder=@"Type Message";
-    txtField.delegate = self;
-    txtField.autocorrectionType = UITextAutocorrectionTypeNo;
-    txtField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    [viewForTextField addSubview:txtField];
-
-    UIButton *btnSend = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"arrow_chat.png"] frame:CGRectMake(285, 3, 28, 28) tag:1111 selector:@selector(btnSend_TouchUpInside:) target:self];
-    [viewForTextField addSubview:btnSend];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
-
     
     //Adding Bubble View Table View Code
     bubbleTableView = [[UIBubbleTableView alloc]init];
@@ -113,7 +87,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     }
     else
     {
-        bubbleTableView.frame = CGRectMake(0, 45, 320, 382);
+        bubbleTableView.frame = CGRectMake(0, 45, 320, 370);
     }
     bubbleData = [[NSMutableArray alloc] init];
     
@@ -150,6 +124,34 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     UIBarButtonItem *btnRefresh=[[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"refresh.png"] style:UIBarButtonItemStylePlain target:self action:@selector(btnRefresh_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnRefresh;
     
+    
+    viewForTextField = [[UIView alloc] init];
+    if (IS_IPHONE_5)
+    {
+        viewForTextField.frame = CGRectMake(0, 469, 320, 35);
+    }
+    else
+    {
+        viewForTextField.frame = CGRectMake(0, 376, 320, 35);
+    }
+    viewForTextField.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:viewForTextField];
+    
+    txtField = [[UITextField alloc] initWithFrame:CGRectMake(2,3, 275, 30)];
+    txtField.borderStyle = UITextBorderStyleRoundedRect;
+    txtField.placeholder=@"Type Message";
+    txtField.delegate = self;
+    txtField.autocorrectionType = UITextAutocorrectionTypeNo;
+    txtField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    [viewForTextField addSubview:txtField];
+    
+    UIButton *btnSend = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"arrow_chat.png"] frame:CGRectMake(285, 3, 28, 28) tag:1111 selector:@selector(btnSend_TouchUpInside:) target:self];
+    [viewForTextField addSubview:btnSend];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+    
+
 }
 
 
@@ -217,7 +219,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     }
     else if(intHeight>144)
     {
-        [bubbleTableView setContentOffset:CGPointMake(0,intHeight-144) animated:YES];
+        [bubbleTableView setContentOffset:CGPointMake(0,intHeight-160) animated:YES];
     }
 }
 

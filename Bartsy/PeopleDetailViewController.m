@@ -35,86 +35,50 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
-   
-    self.title=[dictPeople objectForKey:@"nickName"];
+    self.view.backgroundColor = [UIColor blackColor];
     
-    UIImageView *imgViewProfilePicture=(UIImageView*)[self.view viewWithTag:111];
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
     
-    NSString *urlReceiver=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
-    [imgViewProfilePicture setImageWithURL:[NSURL URLWithString:urlReceiver]];
-    [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
-    [[imgViewProfilePicture layer] setShadowRadius:3.0];
-    [[imgViewProfilePicture layer] setShadowOpacity:0.8];
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(5, 0, 50, 40);
+    [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack];
     
-    UIView *viewBg=(UIView*)[self.view viewWithTag:143225];
-    UILabel *lblAgeGenderOrientationStatus=(UILabel*)[viewBg viewWithTag:222];
-    lblAgeGenderOrientationStatus.textColor=[UIColor blackColor];
-    NSMutableString *str=[[NSMutableString alloc]init];
-    if([[dictPeople objectForKey:@"dateOfBirth"] length])
-    {
-        /*
-        NSDateFormatter *dateFormater=[[NSDateFormatter alloc]init];
-        [dateFormater setDateFormat:@"MM/DD/YYYY"];
-        NSDate *dateDOB=[dateFormater dateFromString:[dictPeople objectForKey:@"dateOfBirth"]];
-        
-        NSDate *currentDate=[NSDate date];
-         */
-        NSString *strDOB=[NSString stringWithFormat:@"%@/",[dictPeople objectForKey:@"dateOfBirth"]];
-        [str appendString:strDOB];
-    }
-    
-    if([[dictPeople objectForKey:@"gender"] length])
-    {
-        NSString *strGender=[NSString stringWithFormat:@"%@/",[dictPeople objectForKey:@"gender"]];
-        [str appendString:strGender];
-    }
-    
-    if([[dictPeople objectForKey:@"orientation"] length])
-    {
-        NSString *strOrientation=[NSString stringWithFormat:@"%@/",[dictPeople objectForKey:@"orientation"]];
-        [str appendString:strOrientation];
-    }
-    if([str length])
-    lblAgeGenderOrientationStatus.text=[str substringToIndex:[str length]-1];
-    NSLog(@"Text is %@, %@",lblAgeGenderOrientationStatus.text,str);
-    
-    UILabel *lblAddress=(UILabel*)[viewBg viewWithTag:333];
-    lblAddress.textColor=[UIColor blackColor];
-    lblAddress.text=@"Address:";//[dictPeople objectForKey:@"address"];
-    
-    UILabel *lblStatus=(UILabel*)[viewBg viewWithTag:444];
-    lblStatus.textColor=[UIColor blackColor];
-    lblStatus.text=@"You like each other";
-    
-    UILabel *lblMessages=(UILabel*)[viewBg viewWithTag:555];
-    lblMessages.textColor=[UIColor blackColor];
-    lblMessages.text=@"Messages";
-    
-    
-    UITextView *txtViewDescription=(UITextView*)[self.view viewWithTag:666];
-    txtViewDescription.text=[dictPeople objectForKey:@"description"];
-    
-    UIButton *btnLike=(UIButton*)[self.view viewWithTag:777];
-    intLikeStatus=[[dictPeople objectForKey:@"like"] integerValue];
-    if([[dictPeople objectForKey:@"like"] integerValue]==1)
-    {
-        [btnLike setImage:[UIImage imageNamed:@"icon_favourite_unselect.png"] forState:UIControlStateNormal];
-    }
-    else
-    {
-        [btnLike setImage:[UIImage imageNamed:@"icon_favorites.png"] forState:UIControlStateNormal];
-    }
-    [btnLike addTarget:self action:@selector(btnLike_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
 
-    lblAddress.hidden=YES;
-    lblStatus.hidden=YES;
-    lblMessages.hidden=YES;
-    btnLike.hidden=YES;
-    
+    UILabel *lblHeader=[self createLabelWithTitle:[dictPeople objectForKey:@"nickName"] frame:CGRectMake(5, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+    lblHeader.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblHeader];
 
+    UIView *footerView = [self createViewWithFrame:CGRectMake(0, 360, 320, 50) tag:111];
+    if (IS_IPHONE_5)
+    {
+        footerView.frame = CGRectMake(0, 360+88, 320, 50);
+    }
+    footerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"city_tavern_bg.png"]];
+    [self.view addSubview:footerView];
+    
+//    UIImageView *imgViewProfilePicture=(UIImageView*)[self.view viewWithTag:111];
+//    
+//    NSString *urlReceiver=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
+//    [imgViewProfilePicture setImageWithURL:[NSURL URLWithString:urlReceiver]];
+//    [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
+//    [[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
+//    [[imgViewProfilePicture layer] setShadowRadius:3.0];
+//    [[imgViewProfilePicture layer] setShadowOpacity:0.8];
+    
 }
 
+-(void)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 -(void)btnLike_TouchUpInside:(UIButton*)sender
 {

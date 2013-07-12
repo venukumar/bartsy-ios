@@ -48,6 +48,10 @@
 		CB8AB50B1774583300445934 /* typingSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5011774583300445934 /* typingSomeone@2x.png */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
+		CBFE3C1D178FD95700DF6F50 /* tickmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C1C178FD95600DF6F50 /* tickmark@2x.png */; };
+		CBFE3C1F178FD98B00DF6F50 /* tickmark.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C1E178FD98B00DF6F50 /* tickmark.png */; };
+		CBFE3C22178FE1E300DF6F50 /* right-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C20178FE1E000DF6F50 /* right-arrow.png */; };
+		CBFE3C23178FE1E300DF6F50 /* right-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C21178FE1E100DF6F50 /* right-arrow@2x.png */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
 		E005DE371743D71C00EDDCFB /* welcomebartsy.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE361743D71000EDDCFB /* welcomebartsy.png */; };
 		E005DE391743FCC900EDDCFB /* box.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE381743FCBB00EDDCFB /* box.png */; };
@@ -318,6 +322,10 @@
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
+		CBFE3C1C178FD95600DF6F50 /* tickmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tickmark@2x.png"; sourceTree = "<group>"; };
+		CBFE3C1E178FD98B00DF6F50 /* tickmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tickmark.png; sourceTree = "<group>"; };
+		CBFE3C20178FE1E000DF6F50 /* right-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow.png"; sourceTree = "<group>"; };
+		CBFE3C21178FE1E100DF6F50 /* right-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow@2x.png"; sourceTree = "<group>"; };
 		E005DE331743D2B200EDDCFB /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		E005DE341743D2B300EDDCFB /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		E005DE361743D71000EDDCFB /* welcomebartsy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcomebartsy.png; sourceTree = "<group>"; };
@@ -708,6 +716,10 @@
 				CB10B087178D6F3100CAF6ED /* top_header_bar.png */,
 				CB10B070178D45D100CAF6ED /* bg.png */,
 				CB10B071178D45D100CAF6ED /* bg@2x.png */,
+				CBFE3C1C178FD95600DF6F50 /* tickmark@2x.png */,
+				CBFE3C1E178FD98B00DF6F50 /* tickmark.png */,
+				CBFE3C20178FE1E000DF6F50 /* right-arrow.png */,
+				CBFE3C21178FE1E100DF6F50 /* right-arrow@2x.png */,
 				E0C446EE178EE72D00261B74 /* Menu */,
 				E02E0176178DC4940022A7F5 /* Venues */,
 				CB10B078178D6AB100CAF6ED /* SignIn */,
@@ -1542,6 +1554,10 @@
 				E0C446ED178EDD1B00261B74 /* select-bartsy.png in Resources */,
 				E0C446F1178EE74200261B74 /* menu-bg-hover.png in Resources */,
 				E0C446F2178EE74200261B74 /* menu-bg.png in Resources */,
+				CBFE3C1D178FD95700DF6F50 /* tickmark@2x.png in Resources */,
+				CBFE3C1F178FD98B00DF6F50 /* tickmark.png in Resources */,
+				CBFE3C22178FE1E300DF6F50 /* right-arrow.png in Resources */,
+				CBFE3C23178FE1E300DF6F50 /* right-arrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
