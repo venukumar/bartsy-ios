@@ -1421,7 +1421,7 @@
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
         if(section==0)
         {
-            [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];   
+            [button setImage:[UIImage imageNamed:@"right-arrow.png"] forState:UIControlStateNormal];   
         }
         else if([[object objectForKey:@"Arrow"] integerValue]==0)
         {
