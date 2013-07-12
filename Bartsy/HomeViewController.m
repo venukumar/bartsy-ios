@@ -1691,12 +1691,14 @@
 
         if ([arrPastOrders count])
         {
-            UILabel *lblItemName = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"itemName"] frame:CGRectMake(10, 2, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor blackColor] numberOfLines:1];
+            NSDictionary *dictForOrder = [arrPastOrders objectAtIndex:indexPath.row];
+            
+            UILabel *lblItemName = [self createLabelWithTitle:[dictForOrder objectForKey:@"itemName"] frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             
-            UILabel *lbldescription = [self createLabelWithTitle:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor grayColor] numberOfLines:2];
+            UILabel *lbldescription = [self createLabelWithTitle:[dictForOrder objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
             lbldescription.backgroundColor=[UIColor clearColor];
             lbldescription.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lbldescription];
@@ -1704,7 +1706,7 @@
             
             NSDateFormatter *dateFormatter = [NSDateFormatter new];
             dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
-            NSDate *date    = [dateFormatter dateFromString:[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"dateCreated"]];
+            NSDate *date    = [dateFormatter dateFromString:[dictForOrder objectForKey:@"dateCreated"]];
             
             
             NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -1757,27 +1759,27 @@
             lblTime.text = strDate1;
             lblTime.tag = 1234234567;
             lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor blackColor] ;
+            lblTime.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
             lblTime.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblTime];
             [lblTime release];
             
             UILabel *lblSender = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
             lblSender.font = [UIFont systemFontOfSize:14];
-            lblSender.text = [NSString stringWithFormat:@"Sender : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderNickname"]];
+            lblSender.text = [NSString stringWithFormat:@"Sender : %@",[dictForOrder objectForKey:@"senderNickname"]];
             lblSender.tag = 1234234567;
             lblSender.backgroundColor = [UIColor clearColor];
-            lblSender.textColor = [UIColor blackColor] ;
+            lblSender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
             lblSender.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblSender];
             [lblSender release];
             
             UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
             lblRecepient.font = [UIFont systemFontOfSize:14];
-            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"recipientNickname"]];
+            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
             lblRecepient.tag = 1234234567;
             lblRecepient.backgroundColor = [UIColor clearColor];
-            lblRecepient.textColor = [UIColor blackColor] ;
+            lblRecepient.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
             lblRecepient.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblRecepient];
             [lblRecepient release];
@@ -1785,9 +1787,9 @@
             
             if([[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"] integerValue]!=1)
             {
-                NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"totalPrice"] floatValue]];
+                NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[dictForOrder objectForKey:@"totalPrice"] floatValue]];
                 
-                UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor blackColor] numberOfLines:1];
+                UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
                 lblTotalPrice.backgroundColor=[UIColor clearColor];
                 lblTotalPrice.textAlignment = NSTextAlignmentLeft;
                 [cell.contentView addSubview:lblTotalPrice];
@@ -1795,9 +1797,9 @@
             
             UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
             lblOrderId.font = [UIFont systemFontOfSize:14];
-            lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"orderId"]];
+            lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[dictForOrder objectForKey:@"orderId"]];
             lblOrderId.backgroundColor = [UIColor clearColor];
-            lblOrderId.textColor = [UIColor blackColor] ;
+            lblOrderId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
             lblOrderId.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblOrderId];
             [lblOrderId release];
@@ -1805,11 +1807,17 @@
         }
         else
         {
-            cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some";
-            cell.textLabel.numberOfLines=5;
-            cell.textLabel.backgroundColor = [UIColor clearColor];
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+            
+            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to the drinks tab to place some" frame:CGRectMake(10, 2, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
+            lblItemName.backgroundColor=[UIColor clearColor];
+            lblItemName.textAlignment = NSTextAlignmentCenter;
+            [cell.contentView addSubview:lblItemName];
+
+//            cell.textLabel.text=@"No past orders\nGo to the drinks tab to place some";
+//            cell.textLabel.numberOfLines=5;
+//            cell.textLabel.backgroundColor = [UIColor clearColor];
+//            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+//            cell.textLabel.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         }
         
     }
