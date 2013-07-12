@@ -141,6 +141,8 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         UILabel *lblCopyRight21 = [self createLabelWithTitle:@"Terms of Service" frame:CGRectMake(72, 500, 90, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight21.textAlignment = NSTextAlignmentLeft;
         [self.view addSubview:lblCopyRight21];
+        UIButton *termsBtn=[self createUIButtonWithTitle:@"" image:nil frame:lblCopyRight21.bounds tag:001 selector:@selector(Button_Action:) target:self];
+        [self.view addSubview:termsBtn];
         
         UILabel *lblCopyRight22 = [self createLabelWithTitle:@"and" frame:CGRectMake(159.5, 500, 50, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight22.textAlignment = NSTextAlignmentLeft;
@@ -149,7 +151,8 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         UILabel *lblCopyRight23 = [self createLabelWithTitle:@"Privacy Policy" frame:CGRectMake(180, 500, 200, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight23.textAlignment = NSTextAlignmentLeft;
         [self.view addSubview:lblCopyRight23];
-        
+        UIButton *policyBtn=[self createUIButtonWithTitle:@"" image:nil frame:lblCopyRight23.bounds tag:002 selector:@selector(Button_Action:) target:self];
+        [self.view addSubview:policyBtn];
         UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc.All rights reserved."] frame:CGRectMake(0, 520, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight2.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:lblCopyRight2];
@@ -163,6 +166,8 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         UILabel *lblCopyRight21 = [self createLabelWithTitle:@"Terms of Service" frame:CGRectMake(72, 415, 90, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight21.textAlignment = NSTextAlignmentLeft;
         [self.view addSubview:lblCopyRight21];
+        UIButton *termsBtn=[self createUIButtonWithTitle:@"" image:nil frame:lblCopyRight21.bounds tag:001 selector:@selector(Button_Action:) target:self];
+        [self.view addSubview:termsBtn];
         
         UILabel *lblCopyRight22 = [self createLabelWithTitle:@"and" frame:CGRectMake(159.5, 415, 50, 25) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight22.textAlignment = NSTextAlignmentLeft;
@@ -171,6 +176,9 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         UILabel *lblCopyRight23 = [self createLabelWithTitle:@"Privacy Policy" frame:CGRectMake(180, 415, 200, 25) tag:0 font:[UIFont boldSystemFontOfSize:10.5] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight23.textAlignment = NSTextAlignmentLeft;
         [self.view addSubview:lblCopyRight23];
+        UIButton *policyBtn=[self createUIButtonWithTitle:@"" image:nil frame:lblCopyRight23.bounds tag:002 selector:@selector(Button_Action:) target:self];
+        [self.view addSubview:policyBtn];
+        
         
         UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc..All rights reserved."] frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight2.textAlignment = NSTextAlignmentCenter;
@@ -281,6 +289,18 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     }
 }
 
+#pragma mark-------------Button Actions
+
+-(void)Button_Action:(UIButton*)sender{
+    
+    if (sender.tag==001) {
+        
+        
+    }else if (sender.tag==002){
+        
+        
+    }
+}
 
 // FBSample logic
 // main helper method to update the UI to reflect the current state of the session.

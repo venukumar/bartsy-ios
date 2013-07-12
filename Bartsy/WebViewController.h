@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface WebViewController : UIViewController<UIWebViewDelegate>
+#import "BaseViewController.h"
+#import "Constants.h"
+@interface WebViewController :BaseViewController <UIWebViewDelegate>
 {
     NSString *strTitle;
     NSString *strHTMLPath;

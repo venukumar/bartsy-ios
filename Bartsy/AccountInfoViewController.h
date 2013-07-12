@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface AccountInfoViewController : UIViewController
+#import "BaseViewController.h"
+#import "UIImageView+WebCache.h"
+#import "AccountSettingsViewController.h"
+@interface AccountInfoViewController : BaseViewController{
+    
+    
+}
 
 @end

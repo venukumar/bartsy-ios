@@ -23,21 +23,42 @@
     }
     return self;
 }
+-(void)viewDidAppear:(BOOL)animated{
+    
+    [super viewDidAppear:YES];
+    self.navigationController.navigationBarHidden=YES;
+}
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:YES];
+    self.navigationController.navigationBarHidden=YES;
 
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+
+	//self.navigationItem.title=[strTitle substringToIndex:[strTitle length]];
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
     
-	self.navigationItem.title=[strTitle substringToIndex:[strTitle length]-3];
-	
+    UILabel *lblMsg=[self createLabelWithTitle:@"Account Settings" frame:CGRectMake(0, 0, 320, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:1];
+    lblMsg.textAlignment=NSTextAlignmentCenter;
+    lblMsg.text=[strTitle substringToIndex:[strTitle length]];
+    [self.view addSubview:lblMsg];
     
     NSString *strPth = [[NSBundle mainBundle]pathForResource:strHTMLPath ofType:@"html"];
     
     NSString *string = [[NSString alloc] initWithContentsOfFile:strPth];
     
     
-	UIWebView *webView=[[UIWebView alloc]initWithFrame:CGRectMake(0, 0, 320, [UIScreen mainScreen].bounds.size.height-60)];
+	UIWebView *webView=[[UIWebView alloc]initWithFrame:CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-104)];
+    if (IS_IPHONE_5) {
+        webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-100);
+    }
 	webView.delegate=self;
 	webView.tag=333;
 	webView.scalesPageToFit=YES;
