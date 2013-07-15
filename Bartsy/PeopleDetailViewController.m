@@ -63,13 +63,14 @@
     [btnTopShare addSubview:imgViewTopShare];
     [imgViewTopShare release];
 
+    NSLog(@"People details is %@",dictPeople);
     UILabel *lblHeader=[self createLabelWithTitle:[dictPeople objectForKey:@"nickName"] frame:CGRectMake(5, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblHeader];
     
     NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
     
-    UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(15, 60, 130, 130)];
+    UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(20, 60, 130, 130)];
     [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
     [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
@@ -83,6 +84,23 @@
     
     UIButton *btnShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"share@2x.png"] frame:CGRectMake(165, 115, 126, 44) tag:2233 selector:@selector(btnShare_TouchUpInside) target:self];
     [self.view addSubview:btnShare];
+
+    UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(20,200, 320, 50)];
+    lblName.backgroundColor=[UIColor clearColor];
+    lblName.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+    lblName.text = [dictPeople objectForKey:@"nickName"];
+    lblName.font=[UIFont boldSystemFontOfSize:20];
+    lblName.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:lblName];
+    
+    
+    UITextView *txtViewDesc = [[UITextView alloc]initWithFrame:CGRectMake(12,250, 320, 60)];
+    txtViewDesc.backgroundColor=[UIColor clearColor];
+    txtViewDesc.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+//    txtViewDesc.text = [NSString stringWithFormat:@"Orientation:%@\nStatus: %@",[dictPeople objectForKey:@"orientation"],[dictPeople objectForKey:@"status"]];
+    txtViewDesc.font=[UIFont boldSystemFontOfSize:12];
+    txtViewDesc.textAlignment = NSTextAlignmentLeft;
+    [self.view addSubview:txtViewDesc];
 
 
     UIView *footerView = [self createViewWithFrame:CGRectMake(0, 350, 320, 65) tag:111];

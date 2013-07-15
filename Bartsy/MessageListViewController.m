@@ -48,7 +48,7 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
     
-    UILabel *lblHeader=[self createLabelWithTitle:@"Messages" frame:CGRectMake(8, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+    UILabel *lblHeader=[self createLabelWithTitle:@"Messages" frame:CGRectMake(0, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblHeader];
 
@@ -320,6 +320,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     {
         isGetMessageWebService=NO;
         [bubbleData removeAllObjects];
+        NSLog(@"messages is %@",[result objectForKey:@"messages"]);
         NSMutableArray *arrayForMessages = [[NSMutableArray alloc] initWithArray:[result objectForKey:@"messages"]];
         
         for (int i = 0 ; i<[arrayForMessages count]; i++)

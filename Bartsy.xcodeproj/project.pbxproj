@@ -52,6 +52,7 @@
 		CBFE3C1F178FD98B00DF6F50 /* tickmark.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C1E178FD98B00DF6F50 /* tickmark.png */; };
 		CBFE3C22178FE1E300DF6F50 /* right-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C20178FE1E000DF6F50 /* right-arrow.png */; };
 		CBFE3C23178FE1E300DF6F50 /* right-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C21178FE1E100DF6F50 /* right-arrow@2x.png */; };
+		CBFE3C431790413D00DF6F50 /* AccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFE3C421790413D00DF6F50 /* AccountSettingsViewController.m */; };
 		E005DE351743D2B400EDDCFB /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E005DE341743D2B300EDDCFB /* WelcomeViewController.m */; };
 		E005DE371743D71C00EDDCFB /* welcomebartsy.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE361743D71000EDDCFB /* welcomebartsy.png */; };
 		E005DE391743FCC900EDDCFB /* box.png in Resources */ = {isa = PBXBuildFile; fileRef = E005DE381743FCBB00EDDCFB /* box.png */; };
@@ -326,6 +327,8 @@
 		CBFE3C1E178FD98B00DF6F50 /* tickmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tickmark.png; sourceTree = "<group>"; };
 		CBFE3C20178FE1E000DF6F50 /* right-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow.png"; sourceTree = "<group>"; };
 		CBFE3C21178FE1E100DF6F50 /* right-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "right-arrow@2x.png"; sourceTree = "<group>"; };
+		CBFE3C411790413D00DF6F50 /* AccountSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountSettingsViewController.h; sourceTree = "<group>"; };
+		CBFE3C421790413D00DF6F50 /* AccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountSettingsViewController.m; sourceTree = "<group>"; };
 		E005DE331743D2B200EDDCFB /* WelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		E005DE341743D2B300EDDCFB /* WelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		E005DE361743D71000EDDCFB /* welcomebartsy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcomebartsy.png; sourceTree = "<group>"; };
@@ -1290,6 +1293,8 @@
 				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
 				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
 				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
+				CBFE3C411790413D00DF6F50 /* AccountSettingsViewController.h */,
+				CBFE3C421790413D00DF6F50 /* AccountSettingsViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1680,6 +1685,7 @@
 				E0C446D5178EB90B00261B74 /* RootViewController.m in Sources */,
 				E0C446D8178EBCC200261B74 /* RewardsViewController.m in Sources */,
 				E0C446DB178EBD4400261B74 /* AccountInfoViewController.m in Sources */,
+				CBFE3C431790413D00DF6F50 /* AccountSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
