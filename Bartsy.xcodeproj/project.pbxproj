@@ -56,6 +56,8 @@
 		CBF2916C1793D3ED00E54F4A /* send-message-hover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF291641793D3ED00E54F4A /* send-message-hover@2x.png */; };
 		CBF2916D1793D3ED00E54F4A /* send-message.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF291651793D3ED00E54F4A /* send-message.png */; };
 		CBF2916E1793D3ED00E54F4A /* send-message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF291661793D3ED00E54F4A /* send-message@2x.png */; };
+		CBF291711793D57B00E54F4A /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF2916F1793D57B00E54F4A /* share.png */; };
+		CBF291721793D57B00E54F4A /* share@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF291701793D57B00E54F4A /* share@2x.png */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		CBFE3C1D178FD95700DF6F50 /* tickmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C1C178FD95600DF6F50 /* tickmark@2x.png */; };
@@ -340,6 +342,8 @@
 		CBF291641793D3ED00E54F4A /* send-message-hover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-message-hover@2x.png"; sourceTree = "<group>"; };
 		CBF291651793D3ED00E54F4A /* send-message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-message.png"; sourceTree = "<group>"; };
 		CBF291661793D3ED00E54F4A /* send-message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-message@2x.png"; sourceTree = "<group>"; };
+		CBF2916F1793D57B00E54F4A /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share.png; sourceTree = "<group>"; };
+		CBF291701793D57B00E54F4A /* share@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share@2x.png"; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -818,6 +822,8 @@
 		CBF2915A1793D38400E54F4A /* PeopeDetail */ = {
 			isa = PBXGroup;
 			children = (
+				CBF2916F1793D57B00E54F4A /* share.png */,
+				CBF291701793D57B00E54F4A /* share@2x.png */,
 				CBF2915B1793D39500E54F4A /* liked-btn.png */,
 				CBF2915C1793D39500E54F4A /* liked-btn@2x.png */,
 				CBF2915F1793D3ED00E54F4A /* send-drink-hover.png */,
@@ -1611,6 +1617,8 @@
 				CBF2916C1793D3ED00E54F4A /* send-message-hover@2x.png in Resources */,
 				CBF2916D1793D3ED00E54F4A /* send-message.png in Resources */,
 				CBF2916E1793D3ED00E54F4A /* send-message@2x.png in Resources */,
+				CBF291711793D57B00E54F4A /* share.png in Resources */,
+				CBF291721793D57B00E54F4A /* share@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
