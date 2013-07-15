@@ -156,7 +156,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         UIButton *policyBtn=[self createUIButtonWithTitle:@"" image:nil frame:lblCopyRight23.bounds tag:002 selector:@selector(Button_Action:) target:self];
         [lblCopyRight23 addSubview:policyBtn];
         
-        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc.All rights reserved."] frame:CGRectMake(0, 520, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc. All rights reserved."] frame:CGRectMake(0, 520, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight2.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:lblCopyRight2];
     }
@@ -185,7 +185,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         [lblCopyRight23 addSubview:policyBtn];
         
         
-        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc..All rights reserved."] frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+        UILabel *lblCopyRight2 = [self createLabelWithTitle:[NSString stringWithFormat:@"\u00A9 Vendsy,Inc. All rights reserved."] frame:CGRectMake(0, 435, 320, 25) tag:0 font:[UIFont systemFontOfSize:10] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
         lblCopyRight2.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:lblCopyRight2];
   
@@ -303,7 +303,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         WebViewController *obj=[[WebViewController alloc]init];
         //obj.hidesBottomBarWhenPushed=YES;
         obj.viewtype=1;
-        obj.strTitle=[NSString stringWithFormat:@"%@",@"Privacy Policy"];
+        obj.strTitle=[NSString stringWithFormat:@"Terms of Service"];
         obj.strHTMLPath=[NSString stringWithFormat:@"%i",3];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
@@ -313,7 +313,7 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         WebViewController *obj=[[WebViewController alloc]init];
         //obj.hidesBottomBarWhenPushed=YES;
         obj.viewtype=1;
-        obj.strTitle=[NSString stringWithFormat:@"%@",@"Terms of Service"];
+        obj.strTitle=[NSString stringWithFormat:@"Privacy Policy"];
         obj.strHTMLPath=[NSString stringWithFormat:@"%i",4];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
