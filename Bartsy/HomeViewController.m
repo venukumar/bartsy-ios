@@ -116,6 +116,11 @@
     self.navigationItem.rightBarButtonItem=btnLogOut;
     
    
+    UIButton *btnCheckOut=[self createUIButtonWithTitle:@"Checkout" image:nil frame:CGRectMake(250, 5, 65, 35) tag:0 selector:@selector(backLogOut_TouchUpInside) target:self];
+    btnCheckOut.titleLabel.font=[UIFont systemFontOfSize:14];
+    [btnCheckOut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.view addSubview:btnCheckOut];
+    
     // Do any additional setup after loading the view, typically from a nib.
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -883,8 +888,8 @@
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
         [[NSUserDefaults standardUserDefaults]synchronize];
-
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"logOut" object:nil];
     }
 }
 

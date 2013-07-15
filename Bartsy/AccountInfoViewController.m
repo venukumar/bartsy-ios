@@ -24,7 +24,7 @@
 @end
 
 @implementation AccountInfoViewController
-
+@synthesize resultAccountInfo;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -82,6 +82,7 @@
     profileImg=[[UIImageView alloc]initWithFrame:CGRectMake(20,imgViewForTop.frame.size.height+20,90, 90)];
     profileImg.layer.borderColor=[UIColor whiteColor].CGColor;
     profileImg.image=[UIImage imageNamed:@"logo_Header"];
+    [self.view addSubview:profileImg];
     
     profileName=[self createLabelWithTitle:@"" frame:CGRectMake(20, profileImg.frame.size.height+profileImg.frame.origin.y+2, 300, 70) tag:0 font:[UIFont systemFontOfSize:30] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:1];
     [self.view addSubview:profileName];
@@ -254,12 +255,15 @@
         if ([result isKindOfClass:[NSDictionary class]]) {
         
         
-            NSLog(@"Dictionary %@",result);
+            NSLog(@"Dictionary %@  \n URL is %@",result,[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]);
         
-        
+            resultAccountInfo=[result retain];
+            
             [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
             profileName.text=[result valueForKey:@"nickname"];
             aboutme.text=[result valueForKey:@"description"];
+            
+            [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadPIC) userInfo:nil repeats:NO];
         
         }else if ([result isKindOfClass:[NSArray class]]){
         
@@ -302,6 +306,11 @@
     
     [self createAlertViewWithTitle:@"Error" message:[error localizedDescription] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
     
+}
+
+-(void)reloadPIC
+{
+    [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[resultAccountInfo valueForKey:@"userImage"]]]];
 }
 
 -(void)dealloc{

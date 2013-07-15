@@ -13,7 +13,7 @@
 #import "PastOrdersCell.h"
 @interface AccountInfoViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>{
     
-    
+    id resultAccountInfo;
 }
-
+@property(nonatomic,retain)id resultAccountInfo;
 @end
