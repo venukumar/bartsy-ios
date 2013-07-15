@@ -9,7 +9,7 @@
 #import "PastOrdersCell.h"
 
 @implementation PastOrdersCell
-@synthesize statusimage,title,address,no_drinks,drinkslbl;
+@synthesize statusimage,title,description,lblTotalPrice,lblOrderId,lblRecepient,lblSender,lblTime;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -20,32 +20,64 @@
         statusimage=[[UIImageView alloc]initWithFrame:CGRectMake(10, 10,25,25)];
         [self.contentView addSubview:statusimage];
         
-        title=[[UILabel alloc]initWithFrame:CGRectMake(50,2,200,30)];
+        title=[[UILabel alloc]initWithFrame:CGRectMake(10, 3, 250, 15)];
         title.textAlignment=NSTextAlignmentLeft;
-        title.textColor=[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
+        title.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        title.font=[UIFont systemFontOfSize:13];
         title.backgroundColor=[UIColor clearColor];
         [self.contentView addSubview:title ];
         
-        address=[[UILabel alloc]initWithFrame:CGRectMake(50,27,250,25)];
-        address.textAlignment=NSTextAlignmentLeft;
-        address.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
-        address.font=[UIFont systemFontOfSize:13];
-        address.backgroundColor=[UIColor clearColor];
-        [self.contentView addSubview:address];
+        description=[[UILabel alloc]initWithFrame:CGRectMake(10, 20,250, 35)];
+        description.textAlignment=NSTextAlignmentLeft;
+        description.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        description.font=[UIFont systemFontOfSize:15];
+        description.backgroundColor=[UIColor clearColor];
+        description.numberOfLines=2;
+        [self.contentView addSubview:description];
         
-        no_drinks=[[UILabel alloc]initWithFrame:CGRectMake(290,2,50,30)];
-        no_drinks.textAlignment=NSTextAlignmentLeft;
-        no_drinks.textColor=[UIColor colorWithRed:0 green:0.686f blue:0.87f alpha:1.0];
-        no_drinks.backgroundColor=[UIColor clearColor];
-        no_drinks.font=[UIFont systemFontOfSize:22];
-        [self.contentView addSubview:no_drinks ];
+        lblTime=[[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
+        lblTime.textAlignment=NSTextAlignmentLeft;
+        lblTime.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        lblTime.backgroundColor=[UIColor clearColor];
+        lblTime.font=[UIFont systemFontOfSize:14];
+        lblTime.tag = 1234234567;
+        [self.contentView addSubview:lblTime ];
         
-        drinkslbl=[[UILabel alloc]initWithFrame:CGRectMake(275,26,70,30)];
-        drinkslbl.textAlignment=NSTextAlignmentLeft;
-        drinkslbl.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
-        drinkslbl.backgroundColor=[UIColor clearColor];
-        drinkslbl.font=[UIFont systemFontOfSize:14];
-        [self.contentView addSubview:drinkslbl ];
+        lblSender=[[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
+        lblSender.textAlignment=NSTextAlignmentLeft;
+        lblSender.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        lblSender.backgroundColor=[UIColor clearColor];
+        lblSender.font=[UIFont systemFontOfSize:14];
+        lblSender.tag = 1234234567;
+        [self.contentView addSubview:lblSender ];
+        [lblSender release];
+        
+        lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
+        lblRecepient.font = [UIFont systemFontOfSize:14];
+        //lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
+        lblRecepient.tag = 1234234567;
+        lblRecepient.backgroundColor = [UIColor clearColor];
+        lblRecepient.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+        lblRecepient.textAlignment = NSTextAlignmentLeft;
+        [self.contentView addSubview:lblRecepient];
+        [lblRecepient release];
+        
+        lblTotalPrice= [[UILabel alloc]initWithFrame:CGRectMake(270, 2, 200, 15)];
+        lblTotalPrice.font=[UIFont systemFontOfSize:11];
+        lblTotalPrice.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        lblTotalPrice.backgroundColor=[UIColor clearColor];
+        lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+        [self.contentView addSubview:lblTotalPrice];
+        [lblTotalPrice release];
+        
+        lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
+        lblOrderId.font = [UIFont systemFontOfSize:14];
+        lblOrderId.backgroundColor = [UIColor clearColor];
+        lblOrderId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        lblOrderId.textAlignment = NSTextAlignmentLeft;
+        [self.contentView addSubview:lblOrderId];
+        [lblOrderId release];
+
     }
     return self;
 }
@@ -53,11 +85,8 @@
 -(void)dealloc{
     
     [super dealloc];
-    [statusimage release];
-    [title release];
-    [address release];
-    [no_drinks release];
-    [drinkslbl release];
+    
+       
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {

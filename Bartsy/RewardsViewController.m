@@ -27,6 +27,19 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    self.navigationController.navigationBarHidden=YES;
+    
+    self.view.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [self.view addSubview:imgViewForTop];
+    [imgViewForTop release];
+    
+    UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
+    imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
+    [self.view addSubview:imgLogo];
+    [imgLogo release];
 }
 
 - (void)didReceiveMemoryWarning

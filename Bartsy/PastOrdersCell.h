@@ -13,13 +13,19 @@
     UIImageView *statusimage;
     
     UILabel *title;
-    UILabel *address;
-    UILabel *no_drinks;
-    UILabel *drinkslbl;
+    UILabel *description;
+    UILabel *lblTime;
+    UILabel *lblSender;
+    UILabel *lblRecepient;
+    UILabel *lblTotalPrice;
+    UILabel *lblOrderId;
 }
 @property(nonatomic,retain)UIImageView *statusimage;
 @property(nonatomic,retain)UILabel *title;
-@property(nonatomic,retain)UILabel *address;
-@property(nonatomic,retain)UILabel *no_drinks;
-@property(nonatomic,retain)UILabel *drinkslbl;
+@property(nonatomic,retain)UILabel *description;
+@property(nonatomic,retain)UILabel *lblTime;
+@property(nonatomic,retain)UILabel *lblSender;
+@property(nonatomic,retain)UILabel *lblRecepient;
+@property(nonatomic,retain)UILabel *lblTotalPrice;
+@property(nonatomic,retain)UILabel *lblOrderId;
 @end

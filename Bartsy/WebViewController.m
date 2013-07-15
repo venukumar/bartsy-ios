@@ -62,12 +62,10 @@
     
     
 	UIWebView *webView=[[UIWebView alloc]initWithFrame:CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-65)];
-    if (viewtype==2)
-    {
+    if (viewtype==2) {
         webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-104);
     }
-    if (IS_IPHONE_5)
-    {
+    if (IS_IPHONE_5) {
         if (viewtype==1) {
             webView.frame=CGRectMake(0, imgViewForTop.frame.size.height, 320, [UIScreen mainScreen].bounds.size.height-55);
         }else if (viewtype==2){

@@ -109,17 +109,17 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     UILabel *lblSide = [self createLabelWithTitle:@"Create an Account" frame:CGRectMake(30, 140, 250, 40) tag:0 font:[UIFont systemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
     lblSide.textAlignment=NSTextAlignmentLeft;
     [self.view addSubview:lblSide];
-
-    UIButton *btnfb = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"f-sign.png"] frame:CGRectMake(25, 175, 275, 43) tag:0 selector:@selector(btnFBLogin) target:self];
+       
+    UIButton *btnEmail = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"signup-bartsy.png"] frame:CGRectMake(25, 175, 275, 43) tag:0 selector:@selector(btnEmail) target:self];
+    [self.view addSubview:btnEmail];
+    
+    UIButton *btnfb = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"f-sign.png"] frame:CGRectMake(25, 230, 275, 43) tag:0 selector:@selector(btnFBLogin) target:self];
     [self.view addSubview:btnfb];
 
-    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(25, 225, 275, 43)];
+    GPPSignInButton *btnGoogle=[[GPPSignInButton alloc]initWithFrame:CGRectMake(25, 280, 275, 43)];
     [btnGoogle setImage:[UIImage imageNamed:@"g+-sign.png"] forState:UIControlStateNormal];
     [btnGoogle setImage:[UIImage imageNamed:@"g+-sign.png"] forState:UIControlStateHighlighted];
     [self.view addSubview:btnGoogle];
-    
-    UIButton *btnEmail = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"mail-signup.png"] frame:CGRectMake(25, 280, 275, 43) tag:0 selector:@selector(btnEmail) target:self];
-    [self.view addSubview:btnEmail];
     
     UILabel *lblAccount = [self createLabelWithTitle:@"Already have an account?" frame:CGRectMake(25, 330, 320, 25) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
     lblAccount.textAlignment = NSTextAlignmentLeft;

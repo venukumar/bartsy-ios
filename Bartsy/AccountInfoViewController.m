@@ -39,7 +39,9 @@
     [super viewDidAppear:YES];
     
     self.navigationController.navigationBarHidden=YES;
-    [self.sharedController getPastOrderbbybartsyId:[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"] delegate:self];
+    
+    [self.sharedController getUserProfileWithBartsyId:[[NSUserDefaults standardUserDefaults] valueForKey:@"bartsyId"] delegate:self];
+    
 }
 - (void)viewDidLoad
 {
@@ -65,8 +67,6 @@
     [self.view addSubview:settingBtn];
     
     is_pastOrders=NO;
-    [self.sharedController getUserProfileWithBartsyId:[[NSUserDefaults standardUserDefaults] valueForKey:@"bartsyId"] delegate:self];
-    
     
     profileImg=[[UIImageView alloc]initWithFrame:CGRectMake(20,imgViewForTop.frame.size.height+20,90, 90)];
     profileImg.layer.borderColor=[UIColor whiteColor].CGColor;
@@ -122,8 +122,9 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 60;
+    return 150;
 }
+/*
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     
@@ -148,32 +149,87 @@
     [headerview addSubview:checkinlbl ];
     [checkinlbl release];
     return [headerview autorelease];
-}
+}*/
 - (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *MyIdentifier = @"cell";
      PastOrdersCell *cell = [tableView1 dequeueReusableCellWithIdentifier:MyIdentifier];
-    NSDictionary *tempdic=[pastorderArray objectAtIndex:indexPath.row];
+    NSDictionary *dictForOrder=[pastorderArray objectAtIndex:indexPath.row];
     if (cell == nil)
     {
         cell = [[PastOrdersCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                     reuseIdentifier:MyIdentifier];
-    }
+    
     UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
     cell.backgroundView = bg;
     [bg release];
-    if ([tempdic valueForKey:@"authApproved"]) {
-        
-        cell.statusimage.image=[UIImage imageNamed:@"tickmark"];
-
-    }else{
-        cell.statusimage.image=nil;
     }
-    cell.title.text=[tempdic valueForKey:@"venueName"];
-    cell.address.text=@"sdfk sdfl sdkmf sdlm";
-    cell.no_drinks.text=@"3";
-    cell.drinkslbl.text=@"drinks";
+    cell.title.text= [dictForOrder objectForKey:@"itemName"];
+    cell.description.text=[dictForOrder objectForKey:@"description"];
+    
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
+    NSDate *date    = [dateFormatter dateFromString:[dictForOrder objectForKey:@"dateCreated"]];
+    
+    
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
+    
+    NSString *newDateString = [outputFormatter stringFromDate:date];
+    
+    NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
+    
+    if([arrDateComps count]==5)
+    {
+        NSString *strMeridian;
+        NSString *strTime=[arrDateComps objectAtIndex:0];
+        NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
+        if(intHours>=12)
+        {
+            strMeridian=[NSString stringWithFormat:@"PM"];
+            NSString *strTime;
+            
+            if(intHours==12)
+            {
+                strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
+            }
+            else
+            {
+                strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
+                
+            }
+            [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
+        }
+        else
+        {
+            strMeridian=[NSString stringWithFormat:@"AM"];
+        }
+        [arrDateComps insertObject:strMeridian atIndex:0];
+    }
+    
+    
+    NSCalendar * cal = [NSCalendar currentCalendar];
+    NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
+    
+    if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
+        comps.hour-=12;
+    
+    NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
+    
+    cell.lblTime.text=strDate1;
+    cell.lblSender.text = [NSString stringWithFormat:@"Sender : %@",[dictForOrder objectForKey:@"senderNickname"]];
+    cell.lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
+   
+    if([[[pastorderArray objectAtIndex:indexPath.row] objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[pastorderArray objectAtIndex:indexPath.row] objectForKey:@"lastState"]!=(id)[NSNull null]&&[[[pastorderArray objectAtIndex:indexPath.row] objectForKey:@"lastState"] integerValue]!=1)
+    {
+        NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[dictForOrder objectForKey:@"totalPrice"] floatValue]];
+        cell.lblTotalPrice.text=stringFortotalPrice;
+    }
+    
+     cell.lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[dictForOrder objectForKey:@"orderId"]];
+    
+
     return cell;
 }
 
@@ -199,6 +255,8 @@
     
         }
         is_pastOrders=YES;
+        [pastorderArray removeAllObjects];
+        [self.sharedController getPastOrderbbybartsyId:[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"] delegate:self];
     }else{
         if ([result isKindOfClass:[NSDictionary class]]) {
             
@@ -215,7 +273,7 @@
                 }
                 [pastordersTbl reloadData];
             }else{
-                [self createAlertViewWithTitle:@"Error" message:@"oops!" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+                [self createAlertViewWithTitle:@"Error" message:@"Oops no orders found!" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
             }
             
         }else if ([result isKindOfClass:[NSArray class]]){
@@ -224,7 +282,7 @@
             NSLog(@"Array %@",result);
             
         }
-
+        is_pastOrders=NO;
     }
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error{
