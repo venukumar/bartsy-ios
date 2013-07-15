@@ -64,6 +64,18 @@
 {
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
+    
+    if(appDelegate.isComingForOrders==YES)
+    {
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        appDelegate.isComingForOrders=NO;
+        [arrOrdersTimedOut removeAllObjects];
+        [arrOrdersTimedOut addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
+        [segmentControl setSelectedSegmentIndex:2];
+        [self segmentControl_ValueChanged:segmentControl];
+        return;
+        
+    }
 
 }
 
@@ -372,11 +384,13 @@
         strTip=[NSString stringWithFormat:@"%i",[txtFld.text integerValue]];
     }
     
-    
-    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+9)))/100;
+    //Tax on item
+    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+9.5)))/100;
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
     
+    //Tip on item
     float tipTotal = ([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*[strTip floatValue])/100;
+    
     NSString *strTipTotal=[NSString stringWithFormat:@"%.2f",tipTotal];
     
     NSLog(@"Tip is %@",strTipTotal);
@@ -563,10 +577,18 @@
         [arrOrders sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
         
         [arrBundledOrders removeAllObjects];
-        
+        //[arrBundledOrders addObjectsFromArray:arrOrders];
         NSMutableArray *arrTemp1=[[NSMutableArray alloc]initWithArray:arrOrders]; //Array for Loop
         NSMutableArray *arrTemp2=[[NSMutableArray alloc]initWithArray:arrOrders]; //Array to remove the added orders to bundled array
-
+        
+        for (int i=0; i<[arrTemp1 count]; i++)
+        {
+            NSArray *arrayOrder=[[NSArray alloc] initWithObjects:[arrTemp1 objectAtIndex:i], nil];
+            [arrBundledOrders addObject:arrayOrder];
+            [arrayOrder release];
+        }
+        
+        /*
         for (int i=0; i<[arrTemp1 count]; i++)
         {
             //Array to sort for a particular order status
@@ -633,7 +655,7 @@
             
             [arrTemp3 release];
         }
-        
+        */
         NSLog(@"Orders %@",arrBundledOrders);
 
         [[NSUserDefaults standardUserDefaults]setObject:arrBundledOrders forKey:@"Orders"];
@@ -952,14 +974,24 @@
         [viewBg2 addSubview:imgViewPhoto];
         [imgViewPhoto release];
         
-        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(61, 0, 180, 40)];
-        lblOrderId.font = [UIFont boldSystemFontOfSize:38];
+        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(61, 0, 180, 25)];
+        lblOrderId.font = [UIFont boldSystemFontOfSize:30];
         lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
+        lblOrderId.adjustsFontSizeToFitWidth=YES;
         lblOrderId.backgroundColor = [UIColor clearColor];
         lblOrderId.textColor = [UIColor whiteColor] ;
         lblOrderId.textAlignment = NSTextAlignmentLeft;
         [viewBg2 addSubview:lblOrderId];
         [lblOrderId release];
+        
+        UILabel *lblCode = [[UILabel alloc]initWithFrame:CGRectMake(61, 30, 200, 10)];
+        lblCode.font = [UIFont boldSystemFontOfSize:12];
+        lblCode.text = [NSString stringWithFormat:@"Pickup Code: %@",[dict objectForKey:@"userSessionCode"]];
+        lblCode.backgroundColor = [UIColor clearColor];
+        lblCode.textColor = [UIColor whiteColor] ;
+        lblCode.textAlignment = NSTextAlignmentLeft;
+        [viewBg2 addSubview:lblCode];
+        [lblCode release];
         
         UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(61, 40, 200, 15)];
         lblName.font = [UIFont boldSystemFontOfSize:12];
@@ -1080,7 +1112,7 @@
         intContentSizeHeight+=123+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks;
     }
     
-    scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+10);
+    scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+10+50);
     [scrollView release];
 }
 
@@ -1094,49 +1126,52 @@
     if(appDelegate.internetActive)
     {
         NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:sender.tag];
+        NSMutableArray *arrOrderIds=[[NSMutableArray alloc]init];
         for (int i=0; i<[arrBundledOrdersObject count]; i++)
         {
-            NSDictionary *dictOrder=[arrBundledOrdersObject objectAtIndex:i];
-            NSMutableDictionary *dictJSON=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[dictOrder objectForKey:@"orderId"],@"orderId",@"10",@"orderStatus", nil];
-            [dictJSON setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
-            [dictJSON setValue:KAPIVersionNumber forKey:@"apiVersion"];
-                        
-            SBJSON *jsonObj=[SBJSON new];
-            NSString *strJson=[jsonObj stringWithObject:dictJSON];
-            NSData *dataJSON=[strJson dataUsingEncoding:NSUTF8StringEncoding];
-            
-            NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateOrderStatus",KServerURL];
-            NSURL *url=[[NSURL alloc]initWithString:strURL];
-            NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
-            [request setHTTPMethod:@"POST"];
-            [request setHTTPBody:dataJSON];
-            [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
-            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-
-            [NSURLConnection sendAsynchronousRequest:request
-                                               queue:[NSOperationQueue mainQueue]
-                                   completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+            NSDictionary *dictOrder=[[NSDictionary alloc]initWithObjectsAndKeys:[[arrBundledOrdersObject objectAtIndex:i] objectForKey:@"orderId"],@"orderId",@"10",@"orderStatus",@"",@"errorReason", nil];
+            [arrOrderIds addObject:dictOrder];
+        }
+        
+        NSMutableDictionary *dictJSON=[[NSMutableDictionary alloc] initWithObjectsAndKeys:arrOrderIds,@"orderList",nil];
+        [dictJSON setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+        [dictJSON setValue:KAPIVersionNumber forKey:@"apiVersion"];
+        
+        SBJSON *jsonObj=[SBJSON new];
+        NSString *strJson=[jsonObj stringWithObject:dictJSON];
+        NSData *dataJSON=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/updateOrderStatus",KServerURL];
+        NSURL *url=[[NSURL alloc]initWithString:strURL];
+        NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:dataJSON];
+        [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        
+        [NSURLConnection sendAsynchronousRequest:request
+                                           queue:[NSOperationQueue mainQueue]
+                               completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+         {
+             if(error==nil)
              {
-                 if(error==nil)
-                 {
-                     
-                     SBJSON *jsonParser = [[SBJSON new] autorelease];
-                     NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
-                     id result = [jsonParser objectWithString:jsonString error:nil];
-                     NSLog(@"Result is %@",result);
-                     
-                 }
-                 else
-                 {
-                     NSLog(@"Error is %@",error);
-                 }
+                 
+                 SBJSON *jsonParser = [[SBJSON new] autorelease];
+                 NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+                 id result = [jsonParser objectWithString:jsonString error:nil];
+                 NSLog(@"Result is %@",result);
                  
              }
-             ];
-            
-            [url release];
-            [request release];
-        }
+             else
+             {
+                 NSLog(@"Error is %@",error);
+             }
+             
+         }
+         ];
+        
+        [url release];
+        [request release];
 
         
         [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(getOpenOrders) userInfo:nil repeats:NO];
@@ -1524,28 +1559,7 @@
         return 150;
     }
     else
-    {
-        BOOL isOrderTimeoutCell=NO;
-        if([arrOrdersTimedOut count]&&indexPath.section==[arrBundledOrders count]+([arrOrdersOffered count]>=1?1:0))
-            isOrderTimeoutCell=YES;
-        
-        if([arrBundledOrders count]-1==indexPath.section&&isOrderTimeoutCell==NO)
-        {
-            return [[arrBundledOrders objectAtIndex:indexPath.section] count]*70+170+70;
-        }
-        else if([arrOrdersOffered count]&&isOrderTimeoutCell==NO)
-        {
-           return [arrOrdersOffered  count]*70+170+70;
-        }
-        else if(isOrderTimeoutCell)
-        {
-            return [arrOrdersTimedOut  count]*70+170+70;
-        }
-        else
-        {
-            return 100;
-        }
-    }
+        return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1589,7 +1603,7 @@
         
         
         UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 255, 50)];
-        lblDescription.numberOfLines=2;
+        lblDescription.numberOfLines=3;
         if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
         {
             NSDictionary *dict=[object objectAtIndex:indexPath.row];
@@ -1608,7 +1622,7 @@
         [cell.contentView addSubview:lblDescription];
         [lblDescription release];
         
-        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(280, 0, 40, 50)];
+        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 20, 50, 25)];
         if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
         {
             NSDictionary *dict=[object objectAtIndex:indexPath.row];
@@ -1623,9 +1637,21 @@
         
         lblPrice.font=[UIFont systemFontOfSize:22];
         lblPrice.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
+        lblPrice.adjustsFontSizeToFitWidth=YES;
         lblPrice.backgroundColor=[UIColor clearColor];
         [cell.contentView addSubview:lblPrice];
         [lblPrice release];
+        
+        
+        UILabel *lblDollars=[[UILabel alloc]initWithFrame:CGRectMake(275, 45, 50, 10)];
+        lblDollars.text=@"dollars";        
+        lblDollars.font=[UIFont systemFontOfSize:10];
+        lblDollars.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        lblDollars.adjustsFontSizeToFitWidth=YES;
+        lblDollars.backgroundColor=[UIColor clearColor];
+        [cell.contentView addSubview:lblDollars];
+        [lblDollars release];
+
     }
     else if(isSelectedForPeople)
     {
@@ -1823,814 +1849,6 @@
     else
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-
-        BOOL isOrderTimeoutCell=NO;
-        if([arrOrdersTimedOut count]&&indexPath.section==[arrBundledOrders count]+([arrOrdersOffered count]>=1?1:0))
-            isOrderTimeoutCell=YES;
-        
-        if([arrBundledOrders count]&&isOrderTimeoutCell==NO)
-        {
-            NSDictionary *dict=[[arrBundledOrders objectAtIndex:indexPath.section] lastObject];
-            //cell.textLabel.text=[dict objectForKey:@"itemName"];
-            //[cell setUserInteractionEnabled:NO];
-            
-            UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, [[arrBundledOrders objectAtIndex:indexPath.section] count]*70+160+70)];
-            viewBorder.backgroundColor = [UIColor clearColor];
-            viewBorder.layer.borderWidth = 1;
-            viewBorder.layer.cornerRadius = 6;
-            viewBorder.layer.borderColor = [UIColor grayColor].CGColor;
-            viewBorder.layer.backgroundColor=[UIColor whiteColor].CGColor;
-            viewBorder.tag = 101;
-            [cell.contentView addSubview:viewBorder];
-            [viewBorder release];
-            
-            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 48+20)];
-            if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
-                viewHeader.backgroundColor = [UIColor colorWithRed:187.0/255.0 green:85.0/255.0 blue:85.0/255.0 alpha:1.0];
-            else if ([[dict objectForKey:@"orderStatus"] isEqualToString:@"2"])
-                viewHeader.backgroundColor = [UIColor orangeColor];
-            else
-                viewHeader.backgroundColor = [UIColor greenColor];
-            viewHeader.layer.cornerRadius = 6;
-            viewHeader.tag = 11;
-            [viewBorder addSubview:viewHeader];
-            [viewHeader release];
-            
-            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"recieverBartsyId"]]];
-            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,15,60,60)];
-            [imgViewPhoto setImageWithURL:urlPhoto];
-            [viewBorder addSubview:imgViewPhoto];
-            [imgViewPhoto release];
-            
-            
-            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(100, 10, 180, 40)];
-            lblOrderId.font = [UIFont boldSystemFontOfSize:38];
-            lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
-            lblOrderId.backgroundColor = [UIColor clearColor];
-            lblOrderId.textColor = [UIColor whiteColor] ;
-            lblOrderId.textAlignment = NSTextAlignmentLeft;
-            [viewBorder addSubview:lblOrderId];
-            [lblOrderId release];
-            
-            NSMutableArray *arrPeopleTemp=[[NSMutableArray alloc]initWithArray:arrPeople];
-            NSPredicate *pred=[NSPredicate predicateWithFormat:@"bartsyId ==[c] %@",[dict objectForKey:@"recieverBartsyId"]];
-            [arrPeopleTemp filterUsingPredicate:pred];
-            
-            if([arrPeopleTemp count])
-            {
-                UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(100, 50, 200, 28)];
-                lblName.font = [UIFont boldSystemFontOfSize:20];
-                lblName.text = [NSString stringWithFormat:@"%@",[[arrPeopleTemp objectAtIndex:0] objectForKey:@"nickName"]];
-                lblName.backgroundColor = [UIColor clearColor];
-                lblName.textColor = [UIColor whiteColor] ;
-                lblName.textAlignment = NSTextAlignmentLeft;
-                [viewBorder addSubview:lblName];
-                [lblName release];
-            }
-            
-            UIView *viewStatus = [[UIView alloc]initWithFrame:CGRectMake(5, 85, 290, 30)];
-            viewStatus.backgroundColor = [UIColor whiteColor];
-            viewStatus.layer.borderWidth = 1;
-            viewStatus.layer.borderColor = [UIColor grayColor].CGColor;
-            viewStatus.layer.cornerRadius = 6;
-            [viewBorder addSubview:viewStatus];
-            [viewStatus release];
-            
-            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 280, 30)];
-            lblTitle.numberOfLines=2;
-            lblTitle.font = [UIFont boldSystemFontOfSize:18];
-            if([[dict objectForKey:@"orderStatus"] isEqualToString:@"0"])
-                lblTitle.text = [NSString stringWithFormat:@"Waiting for bartender to accept"];
-            else
-               // lblTitle.text = [NSString stringWithFormat:@"%@",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2]];
-            lblTitle.tag = 1234;
-            lblTitle.backgroundColor = [UIColor clearColor];
-            lblTitle.textColor = [UIColor blackColor] ;
-            lblTitle.textAlignment = NSTextAlignmentCenter;
-            lblTitle.adjustsFontSizeToFitWidth=YES;
-            [viewStatus addSubview:lblTitle];
-            [lblTitle release];
-            
-            UIView *viewDate = [[UIView alloc]initWithFrame:CGRectMake(5, 66+60, 290, 30)];
-            viewDate.backgroundColor = [UIColor whiteColor];
-            viewDate.layer.borderWidth = 1;
-            viewDate.layer.borderColor = [UIColor grayColor].CGColor;
-            viewDate.layer.cornerRadius = 6;
-            viewDate.tag = 12;
-            [viewBorder addSubview:viewDate];
-            [viewDate release];
-            
-            NSDate *date=[dict objectForKey:@"Date"];
-            
-            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
-            
-            
-            NSString *newDateString = [outputFormatter stringFromDate:date];
-            
-            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
-            NSLog(@"newDateString %@", newDateString);
-            
-            if([arrDateComps count]==5)
-            {
-                NSString *strMeridian;
-                NSString *strTime=[arrDateComps objectAtIndex:0];
-                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
-                if(intHours>=12)
-                {
-                    strMeridian=[NSString stringWithFormat:@"PM"];
-                    NSString *strTime;
-
-                    if(intHours==12)
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
-                    }
-                    else
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
-
-                    }
-                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
-
-                }
-                else
-                {
-                    strMeridian=[NSString stringWithFormat:@"AM"];
-                }
-                [arrDateComps insertObject:strMeridian atIndex:0];
-            }
-            
-            
-            NSCalendar * cal = [NSCalendar currentCalendar];
-            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
-            
-            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
-                comps.hour-=12;
-            
-            NSString *strDate=[NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
-            
-            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
-            lblTime.font = [UIFont systemFontOfSize:14];
-            lblTime.text = strDate;
-            lblTime.tag = 1234234567;
-            lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor blackColor] ;
-            lblTime.textAlignment = NSTextAlignmentLeft;
-            [viewDate addSubview:lblTime];
-            [lblTime release];
-            
-            UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 111+60, 290, [[arrBundledOrders objectAtIndex:indexPath.section] count]*70)];
-            viewDescription.backgroundColor = [UIColor whiteColor];
-            viewDescription.layer.borderWidth = 1;
-            viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
-            viewDescription.layer.cornerRadius = 6;
-            viewDescription.tag = 13;
-            [viewBorder addSubview:viewDescription];
-            [viewDescription release];
-            
-            NSArray *arrSubSectionOrders=[arrBundledOrders objectAtIndex:indexPath.section] ;
-            
-            float floatPrice=0;
-            float floatTotalPrice=0;
-            float floatTipTaxFee=0;
-            
-            for (int i=0; i<[arrSubSectionOrders count]; i++)
-            {
-                NSDictionary *dictTempOrder=[arrSubSectionOrders objectAtIndex:i];
-                
-                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
-                lblDescription1.font = [UIFont boldSystemFontOfSize:14];
-                lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
-                lblDescription1.tag = 1234234567;
-                lblDescription1.numberOfLines = 1;
-                lblDescription1.backgroundColor = [UIColor clearColor];
-                lblDescription1.textColor = [UIColor blackColor] ;
-                lblDescription1.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblDescription1];
-                
-                
-                UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 21+(i*70), 245, 40)];
-                lblDescription2.font = [UIFont systemFontOfSize:14];
-                lblDescription2.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"description"]];
-                lblDescription2.numberOfLines = 2;
-                lblDescription2.tag = 12347890;
-                lblDescription2.backgroundColor = [UIColor clearColor];
-                lblDescription2.textColor = [UIColor blackColor] ;
-                lblDescription2.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblDescription2];
-                
-                
-                UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
-                lblPrice.font = [UIFont systemFontOfSize:12];
-                lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
-                lblPrice.numberOfLines = 1;
-                lblPrice.backgroundColor = [UIColor clearColor];
-                lblPrice.textColor = [UIColor blackColor] ;
-                lblPrice.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblPrice];
-                
-                NSLog(@"ID's %@,%@",[dictTempOrder objectForKey:@"senderBartsyId"],[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
-                
-                if([[dictTempOrder objectForKey:@"senderBartsyId"]isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
-                {
-                    floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
-                    floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
-                    floatTipTaxFee+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
-                }
-                else
-                {
-                    lblPrice.text=@"-";
-                }
-                
-                [lblDescription1 release];
-                [lblDescription2 release];
-                [lblPrice release];
-                
-
-            }
-            
-            UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 111+[[arrBundledOrders objectAtIndex:indexPath.section] count]*70+15+60, 290, 30)];
-            viewPrice.backgroundColor = [UIColor whiteColor];
-            viewPrice.layer.borderWidth = 1;
-            viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
-            viewPrice.layer.cornerRadius = 6;
-            viewPrice.tag = 12;
-            [viewBorder addSubview:viewPrice];
-            
-            
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(3, 0, 82, 30)];
-            lblPrice.font = [UIFont systemFontOfSize:11];
-            if(floatPrice>0.01)
-            lblPrice.text = [NSString stringWithFormat:@"Price: $%.2f",floatPrice];
-            else
-            lblPrice.text = [NSString stringWithFormat:@"Price: -"];
-            lblPrice.tag = 12347890;
-            lblPrice.backgroundColor = [UIColor clearColor];
-            lblPrice.textColor = [UIColor blackColor] ;
-            lblPrice.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblPrice];
-            [lblPrice release];
-            
-            UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(80, 0, 130, 30)];
-            lblTipTaxFee.font = [UIFont systemFontOfSize:11];
-            if(floatTipTaxFee>0.01)
-            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
-            else
-            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: -"];
-            lblTipTaxFee.tag = 12347890;
-            lblTipTaxFee.backgroundColor = [UIColor clearColor];
-            lblTipTaxFee.textColor = [UIColor blackColor] ;
-            lblTipTaxFee.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblTipTaxFee];
-            [lblTipTaxFee release];
-            
-            UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(215, 0, 100, 30)];
-            lblTotalPrice.font = [UIFont systemFontOfSize:11];
-            if(floatTotalPrice>0.01)
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
-            else
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
-            lblTotalPrice.tag = 12347890;
-            lblTotalPrice.backgroundColor = [UIColor clearColor];
-            lblTotalPrice.textColor = [UIColor blackColor] ;
-            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblTotalPrice];
-            [lblTotalPrice release];
-            
-            [viewPrice release];
-
-            
-        }
-        else if([arrOrdersOffered count]&&isOrderTimeoutCell==NO)
-        {
-            //For Drinks Offered
-            NSDictionary *dict=[arrOrdersTimedOut  objectAtIndex:0];
-            
-            UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, [arrOrdersOffered count]*70+160+70)];
-            viewBorder.backgroundColor = [UIColor clearColor];
-            viewBorder.layer.borderWidth = 1;
-            viewBorder.layer.cornerRadius = 6;
-            viewBorder.layer.borderColor = [UIColor grayColor].CGColor;
-            viewBorder.layer.backgroundColor=[UIColor whiteColor].CGColor;
-            viewBorder.tag = 101;
-            [cell.contentView addSubview:viewBorder];
-            [viewBorder release];
-            
-            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 48+20)];
-            viewHeader.backgroundColor = [UIColor redColor];
-            viewHeader.layer.cornerRadius = 6;
-            viewHeader.tag = 11;
-            [viewBorder addSubview:viewHeader];
-            [viewHeader release];
-            
-            NSURL *urlPhoto=nil;
-            if([[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] isEqualToString:[dict objectForKey:@"senderBartsyId"]])
-                urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dict objectForKey:@"recieverBartsyId"]]];
-            else
-                urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dict objectForKey:@"senderBartsyId"]]];
-   
-            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,15,60,60)];
-            [imgViewPhoto setImageWithURL:urlPhoto];
-            [viewBorder addSubview:imgViewPhoto];
-            [imgViewPhoto release];
-            
-            
-            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(100, 10, 180, 40)];
-            lblOrderId.font = [UIFont boldSystemFontOfSize:38];
-            lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
-            lblOrderId.backgroundColor = [UIColor clearColor];
-            lblOrderId.textColor = [UIColor whiteColor] ;
-            lblOrderId.textAlignment = NSTextAlignmentLeft;
-            [viewBorder addSubview:lblOrderId];
-            [lblOrderId release];
-            
-            UIView *viewStatus = [[UIView alloc]initWithFrame:CGRectMake(5, 83, 290, 60)];
-            viewStatus.backgroundColor = [UIColor whiteColor];
-            viewStatus.layer.borderWidth = 1;
-            viewStatus.layer.borderColor = [UIColor grayColor].CGColor;
-            viewStatus.layer.cornerRadius = 6;
-            [viewBorder addSubview:viewStatus];
-            [viewStatus release];
-            
-            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 280, 40)];
-            lblTitle.numberOfLines=3;
-            lblTitle.font = [UIFont boldSystemFontOfSize:12];
-            if([[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] isEqualToString:[dict objectForKey:@"senderBartsyId"]])
-            lblTitle.text=[NSString stringWithFormat:@"waiting for %@ to accept",[dict objectForKey:@"receiverName"]];
-            else
-            lblTitle.text=[NSString stringWithFormat:@"You have a new drink offer from %@. Click to accept it!",[dict objectForKey:@"senderName"]];
-            lblTitle.tag = 1234;
-            lblTitle.backgroundColor = [UIColor clearColor];
-            lblTitle.textColor = [UIColor blackColor] ;
-            lblTitle.textAlignment = NSTextAlignmentCenter;
-            lblTitle.adjustsFontSizeToFitWidth=YES;
-            [viewStatus addSubview:lblTitle];
-            [lblTitle release];
-            
-            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(5, 38, 130, 20) tag:123 selector:@selector(btnOrderOffered_TouchUpInside:) target:self];
-            btnAccept.titleLabel.font=[UIFont systemFontOfSize:18];
-            [btnAccept setTitleColor:[UIColor lightTextColor] forState:UIControlStateNormal];
-            btnAccept.backgroundColor=[UIColor grayColor];
-            [viewStatus addSubview:btnAccept];
-            
-            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(140, 38, 130, 20) tag:321 selector:@selector(btnOrderOffered_TouchUpInside:) target:self];
-            btnReject.titleLabel.font=[UIFont systemFontOfSize:18];
-            [btnReject setTitleColor:[UIColor lightTextColor] forState:UIControlStateNormal];
-            btnReject.backgroundColor=[UIColor grayColor];
-            [viewStatus addSubview:btnReject];
-            
-            UIView *viewDate = [[UIView alloc]initWithFrame:CGRectMake(5, 66+60+20, 290, 30)];
-            viewDate.backgroundColor = [UIColor whiteColor];
-            viewDate.layer.borderWidth = 1;
-            viewDate.layer.borderColor = [UIColor grayColor].CGColor;
-            viewDate.layer.cornerRadius = 6;
-            viewDate.tag = 12;
-            [viewBorder addSubview:viewDate];
-            [viewDate release];
-            
-            NSDate *date=[dict objectForKey:@"Time"];
-            
-            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
-            
-            
-            NSString *newDateString = [outputFormatter stringFromDate:date];
-            
-            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
-            NSLog(@"newDateString %@", newDateString);
-            
-            if([arrDateComps count]==5)
-            {
-                NSString *strMeridian;
-                NSString *strTime=[arrDateComps objectAtIndex:0];
-                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
-                if(intHours>=12)
-                {
-                    strMeridian=[NSString stringWithFormat:@"PM"];
-                    NSString *strTime;
-                    
-                    if(intHours==12)
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
-                    }
-                    else
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
-                        
-                    }
-                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
-                    
-                }
-                else
-                {
-                    strMeridian=[NSString stringWithFormat:@"AM"];
-                }
-                [arrDateComps insertObject:strMeridian atIndex:0];
-            }
-            
-            
-            NSCalendar * cal = [NSCalendar currentCalendar];
-            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
-            
-            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
-                comps.hour-=12;
-            
-            NSString *strDate=[NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
-            
-            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
-            lblTime.font = [UIFont systemFontOfSize:14];
-            lblTime.text = strDate;
-            lblTime.tag = 1234234567;
-            lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor blackColor] ;
-            lblTime.textAlignment = NSTextAlignmentLeft;
-            [viewDate addSubview:lblTime];
-            [lblTime release];
-            
-            UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 111+60+10, 290, [arrOrdersOffered count]*70)];
-            viewDescription.backgroundColor = [UIColor whiteColor];
-            viewDescription.layer.borderWidth = 1;
-            viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
-            viewDescription.layer.cornerRadius = 6;
-            viewDescription.tag = 13;
-            [viewBorder addSubview:viewDescription];
-            [viewDescription release];
-            
-            
-            float floatPrice=0;
-            float floatTotalPrice=0;
-            float floatTipTaxFee=0;
-            
-            for (int i=0; i<[arrOrdersOffered count]; i++)
-            {
-                NSDictionary *dictTempOrder=[arrOrdersOffered objectAtIndex:i];
-                
-                
-                
-                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
-                lblDescription1.font = [UIFont boldSystemFontOfSize:14];
-                lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"name"]];
-                lblDescription1.tag = 1234234567;
-                lblDescription1.numberOfLines = 1;
-                lblDescription1.backgroundColor = [UIColor clearColor];
-                lblDescription1.textColor = [UIColor blackColor] ;
-                lblDescription1.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblDescription1];
-                
-                
-                UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 21+(i*70), 245, 40)];
-                lblDescription2.font = [UIFont systemFontOfSize:14];
-                lblDescription2.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"description"]];
-                lblDescription2.numberOfLines = 2;
-                lblDescription2.tag = 12347890;
-                lblDescription2.backgroundColor = [UIColor clearColor];
-                lblDescription2.textColor = [UIColor blackColor] ;
-                lblDescription2.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblDescription2];
-                
-                
-                UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
-                lblPrice.font = [UIFont systemFontOfSize:12];
-                lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
-                lblPrice.numberOfLines = 1;
-                lblPrice.backgroundColor = [UIColor clearColor];
-                lblPrice.textColor = [UIColor blackColor] ;
-                lblPrice.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblPrice];
-                
-                
-                if(0)//[[dictTempOrder objectForKey:@"senderBartsyId"]isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
-                {
-                    floatPrice+=[[dictTempOrder objectForKey:@"price"] floatValue];
-                    
-                    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([[dict objectForKey:@"tipPercentage"] integerValue]+9)))/100;
-                    
-                    floatTotalPrice+=floatPrice+subTotal;
-                    floatTipTaxFee+=subTotal;
-                }
-                else
-                {
-                    lblPrice.text=@"-";
-                }
-                
-                [lblDescription1 release];
-                [lblDescription2 release];
-                [lblPrice release];
-                
-            }
-            
-            UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 111+[arrOrdersTimedOut count]*70+15+60+10, 290, 30)];
-            viewPrice.backgroundColor = [UIColor whiteColor];
-            viewPrice.layer.borderWidth = 1;
-            viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
-            viewPrice.layer.cornerRadius = 6;
-            viewPrice.tag = 12;
-            [viewBorder addSubview:viewPrice];
-            
-            
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(3, 0, 82, 30)];
-            lblPrice.font = [UIFont systemFontOfSize:11];
-            if(0)//floatPrice>0.01)
-                lblPrice.text = [NSString stringWithFormat:@"Price: $%.2f",floatPrice];
-            else
-                lblPrice.text = [NSString stringWithFormat:@"Price: -"];
-            lblPrice.tag = 12347890;
-            lblPrice.backgroundColor = [UIColor clearColor];
-            lblPrice.textColor = [UIColor blackColor] ;
-            lblPrice.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblPrice];
-            [lblPrice release];
-            
-            UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(80, 0, 130, 30)];
-            lblTipTaxFee.font = [UIFont systemFontOfSize:11];
-            if(0)//floatTipTaxFee>0.01)
-                lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
-            else
-                lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: -"];
-            lblTipTaxFee.tag = 12347890;
-            lblTipTaxFee.backgroundColor = [UIColor clearColor];
-            lblTipTaxFee.textColor = [UIColor blackColor] ;
-            lblTipTaxFee.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblTipTaxFee];
-            [lblTipTaxFee release];
-            
-            UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(215, 0, 100, 30)];
-            lblTotalPrice.font = [UIFont systemFontOfSize:11];
-            if(0)//floatTotalPrice>0.01)
-                lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
-            else
-                lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
-            lblTotalPrice.tag = 12347890;
-            lblTotalPrice.backgroundColor = [UIColor clearColor];
-            lblTotalPrice.textColor = [UIColor blackColor] ;
-            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblTotalPrice];
-            [lblTotalPrice release];
-            
-            [viewPrice release];
-        }
-        else if(isOrderTimeoutCell)
-        {
-            NSDictionary *dict=[arrOrdersTimedOut  objectAtIndex:0];
-            //cell.textLabel.text=[dict objectForKey:@"itemName"];
-            //[cell setUserInteractionEnabled:NO];
-            
-            UIView *viewBorder = [[UIView alloc]initWithFrame:CGRectMake(9, 5, 300, [arrOrdersTimedOut count]*70+160+70)];
-            viewBorder.backgroundColor = [UIColor clearColor];
-            viewBorder.layer.borderWidth = 1;
-            viewBorder.layer.cornerRadius = 6;
-            viewBorder.layer.borderColor = [UIColor grayColor].CGColor;
-            viewBorder.layer.backgroundColor=[UIColor whiteColor].CGColor;
-            viewBorder.tag = 101;
-            [cell.contentView addSubview:viewBorder];
-            [viewBorder release];
-            
-            UIView *viewHeader = [[UIView alloc]initWithFrame:CGRectMake(5, 10, 290, 48+20)];
-            viewHeader.backgroundColor = [UIColor redColor];
-            viewHeader.layer.cornerRadius = 6;
-            viewHeader.tag = 11;
-            [viewBorder addSubview:viewHeader];
-            [viewHeader release];
-            
-            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/Bartsy/userImages/%@",KServerURL,[dict objectForKey:@"recieverBartsyId"]]];
-            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,15,60,60)];
-            [imgViewPhoto setImageWithURL:urlPhoto];
-            [viewBorder addSubview:imgViewPhoto];
-            [imgViewPhoto release];
-            
-            
-            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(100, 10, 180, 40)];
-            lblOrderId.font = [UIFont boldSystemFontOfSize:38];
-            lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
-            lblOrderId.backgroundColor = [UIColor clearColor];
-            lblOrderId.textColor = [UIColor whiteColor] ;
-            lblOrderId.textAlignment = NSTextAlignmentLeft;
-            [viewBorder addSubview:lblOrderId];
-            [lblOrderId release];
-            
-            UIView *viewStatus = [[UIView alloc]initWithFrame:CGRectMake(5, 83, 290, 60)];
-            viewStatus.backgroundColor = [UIColor whiteColor];
-            viewStatus.layer.borderWidth = 1;
-            viewStatus.layer.borderColor = [UIColor grayColor].CGColor;
-            viewStatus.layer.cornerRadius = 6;
-            [viewBorder addSubview:viewStatus];
-            [viewStatus release];
-            
-            UILabel *lblTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 280, 40)];
-            lblTitle.numberOfLines=3;
-            lblTitle.font = [UIFont boldSystemFontOfSize:12];
-            lblTitle.text=@"Something is wrong with this order. Please check with your bartender";
-            lblTitle.tag = 1234;
-            lblTitle.backgroundColor = [UIColor clearColor];
-            lblTitle.textColor = [UIColor blackColor] ;
-            lblTitle.textAlignment = NSTextAlignmentCenter;
-            lblTitle.adjustsFontSizeToFitWidth=YES;
-            [viewStatus addSubview:lblTitle];
-            [lblTitle release];
-            
-            UIButton *btnGoToPastOrders=[self createUIButtonWithTitle:@"OK - save order(s) to past orders" image:nil frame:CGRectMake(5, 38, 280, 20) tag:0 selector:@selector(btnGoToPastOrders_TouchUpInside) target:self];
-            btnGoToPastOrders.titleLabel.font=[UIFont systemFontOfSize:18];
-            [btnGoToPastOrders setTitleColor:[UIColor lightTextColor] forState:UIControlStateNormal];
-            btnGoToPastOrders.backgroundColor=[UIColor grayColor];
-            [viewStatus addSubview:btnGoToPastOrders];
-            
-            UIView *viewDate = [[UIView alloc]initWithFrame:CGRectMake(5, 66+60+20, 290, 30)];
-            viewDate.backgroundColor = [UIColor whiteColor];
-            viewDate.layer.borderWidth = 1;
-            viewDate.layer.borderColor = [UIColor grayColor].CGColor;
-            viewDate.layer.cornerRadius = 6;
-            viewDate.tag = 12;
-            [viewBorder addSubview:viewDate];
-            [viewDate release];
-            
-            NSDate *date=[dict objectForKey:@"Time"];
-            
-            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
-            
-            
-            NSString *newDateString = [outputFormatter stringFromDate:date];
-            
-            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
-            NSLog(@"newDateString %@", newDateString);
-            
-            if([arrDateComps count]==5)
-            {
-                NSString *strMeridian;
-                NSString *strTime=[arrDateComps objectAtIndex:0];
-                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
-                if(intHours>=12)
-                {
-                    strMeridian=[NSString stringWithFormat:@"PM"];
-                    NSString *strTime;
-                    
-                    if(intHours==12)
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
-                    }
-                    else
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
-                        
-                    }
-                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
-                    
-                }
-                else
-                {
-                    strMeridian=[NSString stringWithFormat:@"AM"];
-                }
-                [arrDateComps insertObject:strMeridian atIndex:0];
-            }
-            
-            
-            NSCalendar * cal = [NSCalendar currentCalendar];
-            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
-            
-            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
-                comps.hour-=12;
-            
-            NSString *strDate=[NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
-            
-            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(7, 3, 280, 30)];
-            lblTime.font = [UIFont systemFontOfSize:14];
-            lblTime.text = strDate;
-            lblTime.tag = 1234234567;
-            lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor blackColor] ;
-            lblTime.textAlignment = NSTextAlignmentLeft;
-            [viewDate addSubview:lblTime];
-            [lblTime release];
-            
-            UIView *viewDescription = [[UIView alloc]initWithFrame:CGRectMake(5, 111+60+10, 290, [arrOrdersTimedOut count]*70)];
-            viewDescription.backgroundColor = [UIColor whiteColor];
-            viewDescription.layer.borderWidth = 1;
-            viewDescription.layer.borderColor = [UIColor grayColor].CGColor;
-            viewDescription.layer.cornerRadius = 6;
-            viewDescription.tag = 13;
-            [viewBorder addSubview:viewDescription];
-            [viewDescription release];
-            
-            
-            float floatPrice=0;
-            float floatTotalPrice=0;
-            float floatTipTaxFee=0;
-            
-            for (int i=0; i<[arrOrdersTimedOut count]; i++)
-            {
-                NSDictionary *dictTempOrder=[arrOrdersTimedOut objectAtIndex:i];
-                
-                
-                
-                UILabel *lblDescription1 = [[UILabel alloc]initWithFrame:CGRectMake(7, 1+(i*70), 242, 20)];
-                lblDescription1.font = [UIFont boldSystemFontOfSize:14];
-                lblDescription1.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"name"]];
-                lblDescription1.tag = 1234234567;
-                lblDescription1.numberOfLines = 1;
-                lblDescription1.backgroundColor = [UIColor clearColor];
-                lblDescription1.textColor = [UIColor blackColor] ;
-                lblDescription1.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblDescription1];
-                
-                
-                UILabel *lblDescription2 = [[UILabel alloc]initWithFrame:CGRectMake(7, 21+(i*70), 245, 40)];
-                lblDescription2.font = [UIFont systemFontOfSize:14];
-                lblDescription2.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"description"]];
-                lblDescription2.numberOfLines = 2;
-                lblDescription2.tag = 12347890;
-                lblDescription2.backgroundColor = [UIColor clearColor];
-                lblDescription2.textColor = [UIColor blackColor] ;
-                lblDescription2.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblDescription2];
-                
-                
-                UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(248, 1+(i*70), 42, 20)];
-                lblPrice.font = [UIFont systemFontOfSize:12];
-                lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
-                lblPrice.numberOfLines = 1;
-                lblPrice.backgroundColor = [UIColor clearColor];
-                lblPrice.textColor = [UIColor blackColor] ;
-                lblPrice.textAlignment = NSTextAlignmentLeft;
-                [viewDescription addSubview:lblPrice];
-                
-                
-                if([[dictTempOrder objectForKey:@"senderBartsyId"]isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
-                {
-                    floatPrice+=[[dictTempOrder objectForKey:@"price"] floatValue];
-                    
-                    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([[dict objectForKey:@"tipPercentage"] integerValue]+9)))/100;
-                    
-                    floatTotalPrice+=floatPrice+subTotal;
-                    floatTipTaxFee+=subTotal;
-                }
-                else
-                {
-                    lblPrice.text=@"-";
-                }
-                
-                [lblDescription1 release];
-                [lblDescription2 release];
-                [lblPrice release];
-                
-            }
-            
-            UIView *viewPrice = [[UIView alloc]initWithFrame:CGRectMake(5, 111+[arrOrdersTimedOut count]*70+15+60+10, 290, 30)];
-            viewPrice.backgroundColor = [UIColor whiteColor];
-            viewPrice.layer.borderWidth = 1;
-            viewPrice.layer.borderColor = [UIColor grayColor].CGColor;
-            viewPrice.layer.cornerRadius = 6;
-            viewPrice.tag = 12;
-            [viewBorder addSubview:viewPrice];
-            
-            
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(3, 0, 82, 30)];
-            lblPrice.font = [UIFont systemFontOfSize:11];
-            if(floatPrice>0.01)
-            lblPrice.text = [NSString stringWithFormat:@"Price: $%.2f",floatPrice];
-            else
-                lblPrice.text = [NSString stringWithFormat:@"Price: -"];
-            lblPrice.tag = 12347890;
-            lblPrice.backgroundColor = [UIColor clearColor];
-            lblPrice.textColor = [UIColor blackColor] ;
-            lblPrice.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblPrice];
-            [lblPrice release];
-            
-            UILabel *lblTipTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(80, 0, 130, 30)];
-            lblTipTaxFee.font = [UIFont systemFontOfSize:11];
-            if(floatTipTaxFee>0.01)
-            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: $%.2f",floatTipTaxFee];
-            else
-            lblTipTaxFee.text = [NSString stringWithFormat:@"Tip,tax and fees: -"];   
-            lblTipTaxFee.tag = 12347890;
-            lblTipTaxFee.backgroundColor = [UIColor clearColor];
-            lblTipTaxFee.textColor = [UIColor blackColor] ;
-            lblTipTaxFee.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblTipTaxFee];
-            [lblTipTaxFee release];
-            
-            UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(215, 0, 100, 30)];
-            lblTotalPrice.font = [UIFont systemFontOfSize:11];
-            if(floatTotalPrice>0.01)
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
-            else
-                lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
-            lblTotalPrice.tag = 12347890;
-            lblTotalPrice.backgroundColor = [UIColor clearColor];
-            lblTotalPrice.textColor = [UIColor blackColor] ;
-            lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-            [viewPrice addSubview:lblTotalPrice];
-            [lblTotalPrice release];
-            
-            [viewPrice release];
-        }
-        else
-        {
-            cell.imageView.image=nil;
-            [cell.textLabel setNumberOfLines:0];
-            cell.textLabel.lineBreakMode =NSLineBreakByWordWrapping;
-            cell.textLabel.text=@"No open orders\nGo to the drinks tab to place some\nGo to menu for Past Orders...";
-        }
     }
     
     return cell;

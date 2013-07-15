@@ -20,6 +20,7 @@
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
 @synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
+@synthesize  tabBar;
 
 - (void)dealloc
 {
@@ -207,6 +208,8 @@
 
 -(void)checkOrderStatusUpdate
 {
+    return;
+    
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -598,6 +601,18 @@
     {
         isComingForOrders=YES;
         
+        if(tabBar.selectedIndex==0)
+        {
+            [delegateForCurrentViewController viewWillAppear:YES];
+
+        }
+        else
+        {
+            [tabBar setSelectedIndex:0];
+            [delegateForCurrentViewController viewWillAppear:YES];
+        }
+        
+        /*
         if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
         {
             [delegateForCurrentViewController reloadData];
@@ -616,6 +631,7 @@
             [obj release];
             
         }
+         */
     }
 //    else if(alertView1.tag==225)
 //    {

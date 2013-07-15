@@ -46,7 +46,6 @@
 		CB8AB50A1774583300445934 /* typingSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5001774583300445934 /* typingSomeone.png */; };
 		CB8AB50B1774583300445934 /* typingSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5011774583300445934 /* typingSomeone@2x.png */; };
 		CBF8F3431793C0D8008EBBB8 /* AccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */; };
-		CBF8F3461793C522008EBBB8 /* PastOrdersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF8F3451793C521008EBBB8 /* PastOrdersCell.m */; };
 		CBF8F34C179409DC008EBBB8 /* signup-bartsy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8F34B179409DC008EBBB8 /* signup-bartsy@2x.png */; };
 		CBF8F34E17940A76008EBBB8 /* mail-signup.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8F34D17940A76008EBBB8 /* mail-signup.png */; };
 		CBF8F350179411CF008EBBB8 /* signup-bartsy.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8F34F179411CF008EBBB8 /* signup-bartsy.png */; };
@@ -263,6 +262,7 @@
 		E0F956D11778587200F1EB71 /* PeopleDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0F956CF1778586C00F1EB71 /* PeopleDetailViewController.xib */; };
 		E0F956D317785C9900F1EB71 /* icon_favorites.png in Resources */ = {isa = PBXBuildFile; fileRef = E0F956D217785C9800F1EB71 /* icon_favorites.png */; };
 		E0F956D5177881F900F1EB71 /* icon_chat.png in Resources */ = {isa = PBXBuildFile; fileRef = E0F956D4177881F800F1EB71 /* icon_chat.png */; };
+		E0FD62B21794292800776EE0 /* PastOrdersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E0FD62B11794292800776EE0 /* PastOrdersCell.m */; };
 		E0FD8676172FD9BA006CB0A8 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8630172FD9BA006CB0A8 /* arrow.png */; };
 		E0FD867F172FD9BA006CB0A8 /* drinks.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8639172FD9BA006CB0A8 /* drinks.png */; };
 		E0FD868A172FD9BA006CB0A8 /* ic_checked_in.png in Resources */ = {isa = PBXBuildFile; fileRef = E0FD8644172FD9BA006CB0A8 /* ic_checked_in.png */; };
@@ -326,8 +326,6 @@
 		CB8AB5011774583300445934 /* typingSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingSomeone@2x.png"; sourceTree = "<group>"; };
 		CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountSettingsViewController.h; sourceTree = "<group>"; };
 		CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountSettingsViewController.m; sourceTree = "<group>"; };
-		CBF8F3441793C521008EBBB8 /* PastOrdersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersCell.h; sourceTree = "<group>"; };
-		CBF8F3451793C521008EBBB8 /* PastOrdersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersCell.m; sourceTree = "<group>"; };
 		CBF8F34B179409DC008EBBB8 /* signup-bartsy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signup-bartsy@2x.png"; sourceTree = "<group>"; };
 		CBF8F34D17940A76008EBBB8 /* mail-signup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mail-signup.png"; sourceTree = "<group>"; };
 		CBF8F34F179411CF008EBBB8 /* signup-bartsy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signup-bartsy.png"; sourceTree = "<group>"; };
@@ -665,6 +663,8 @@
 		E0F956CF1778586C00F1EB71 /* PeopleDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PeopleDetailViewController.xib; sourceTree = "<group>"; };
 		E0F956D217785C9800F1EB71 /* icon_favorites.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_favorites.png; sourceTree = "<group>"; };
 		E0F956D4177881F800F1EB71 /* icon_chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_chat.png; sourceTree = "<group>"; };
+		E0FD62B01794292800776EE0 /* PastOrdersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersCell.h; sourceTree = "<group>"; };
+		E0FD62B11794292800776EE0 /* PastOrdersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersCell.m; sourceTree = "<group>"; };
 		E0FD8630172FD9BA006CB0A8 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
 		E0FD8639172FD9BA006CB0A8 /* drinks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drinks.png; sourceTree = "<group>"; };
 		E0FD8644172FD9BA006CB0A8 /* ic_checked_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_checked_in.png; sourceTree = "<group>"; };
@@ -1316,10 +1316,10 @@
 				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
 				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
 				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
-				CBF8F3441793C521008EBBB8 /* PastOrdersCell.h */,
-				CBF8F3451793C521008EBBB8 /* PastOrdersCell.m */,
 				CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */,
 				CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */,
+				E0FD62B01794292800776EE0 /* PastOrdersCell.h */,
+				E0FD62B11794292800776EE0 /* PastOrdersCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1715,7 +1715,7 @@
 				E0C446D8178EBCC200261B74 /* RewardsViewController.m in Sources */,
 				E0C446DB178EBD4400261B74 /* AccountInfoViewController.m in Sources */,
 				CBF8F3431793C0D8008EBBB8 /* AccountSettingsViewController.m in Sources */,
-				CBF8F3461793C522008EBBB8 /* PastOrdersCell.m in Sources */,
+				E0FD62B21794292800776EE0 /* PastOrdersCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

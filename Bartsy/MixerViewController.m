@@ -25,6 +25,14 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    if(appDelegate.isComingForOrders)
+    {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"Back" object:nil];
+        return;
+    }}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -465,12 +473,13 @@
         strTip=[NSString stringWithFormat:@"%i",[txtFld.text integerValue]];
     }
     
-    
-    float subTotal=(floatBasePrice*(([strTip floatValue]+9)))/100;
+    //Tax on item
+    float subTotal=(floatBasePrice*(([strTip floatValue]+9.5)))/100;
     float totalPrice=floatBasePrice+subTotal;
     
     NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
-    
+
+    //Tip on item
     float tipTotal = ([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*[strTip floatValue])/100;
     NSString *strTipTotal=[NSString stringWithFormat:@"%.2f",tipTotal];
     

@@ -74,6 +74,16 @@
  * the code easier to understand I decided to go with self.navigationController.
  *
  */
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    if(appDelegate.isComingForOrders)
+    {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"Back" object:nil];
+        return;
+    }
+}
+
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
@@ -300,6 +310,7 @@
     {
         [arrCategories removeAllObjects];
         [arrCategories addObjectsFromArray:[result objectForKey:@"ingredients"]];
+        NSLog(@"Categories is %@",arrCategories); 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"Categories" object:result];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"CategoryClicked" object:[NSNumber numberWithInteger:0]];
     }

@@ -17,7 +17,6 @@
 @end
 
 @implementation RootViewController
-@synthesize  tabBar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,7 +32,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    tabBar=[[UITabBarController alloc]init];
+    appDelegate.tabBar=[[UITabBarController alloc]init];
+    appDelegate.tabBar.delegate=self;
     
     UIView *view=[[UIView alloc]initWithFrame:CGRectMake(0, -20, 320, 600)];
     self.navigationController.navigationBarHidden=YES;
@@ -69,33 +69,33 @@
     [[UITabBar appearance] setBackgroundImage:tabBarBackground];
     [[UITabBar appearance]setSelectionIndicatorImage:[UIImage imageNamed:@"button_hover.png"]];
     
-    [tabBar setViewControllers:viewControllers];
+    [appDelegate.tabBar setViewControllers:viewControllers];
     [viewControllers release];
     
-    tabBar.tabBarController.view.frame=CGRectMake(0, 0, 320, 480);
-    [view addSubview:tabBar.view];
+    appDelegate.tabBar.tabBarController.view.frame=CGRectMake(0, 0, 320, 480);
+    [view addSubview:appDelegate.tabBar.view];
     
     [self.view addSubview:view];
 
     
     UIImageView *imgView1=[[UIImageView alloc]initWithFrame:CGRectMake(25, 12, 29.5, 25.5)];
     imgView1.image=[UIImage imageNamed:@"home_icon.png"];
-    [tabBar.tabBar addSubview:imgView1];
+    [appDelegate.tabBar.tabBar addSubview:imgView1];
     [imgView1 release];
     
     UIImageView *imgView2=[[UIImageView alloc]initWithFrame:CGRectMake(107, 12, 26.5, 25)];
     imgView2.image=[UIImage imageNamed:@"star_icon.png"];
-    [tabBar.tabBar addSubview:imgView2];
+    [appDelegate.tabBar.tabBar addSubview:imgView2];
     [imgView2 release];
     
     UIImageView *imgView3=[[UIImageView alloc]initWithFrame:CGRectMake(184, 13, 31, 23.5)];
     imgView3.image=[UIImage imageNamed:@"chat_icon.png"];
-    [tabBar.tabBar addSubview:imgView3];
+    [appDelegate.tabBar.tabBar addSubview:imgView3];
     [imgView3 release];
     
     UIImageView *imgView4=[[UIImageView alloc]initWithFrame:CGRectMake(265, 14, 30, 21.5)];
     imgView4.image=[UIImage imageNamed:@"user_icon.png"];
-    [tabBar.tabBar addSubview:imgView4];
+    [appDelegate.tabBar.tabBar addSubview:imgView4];
     [imgView4 release];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(logOut) name:@"logOut" object:nil];
@@ -106,6 +106,7 @@
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
 
 - (void)didReceiveMemoryWarning
 {

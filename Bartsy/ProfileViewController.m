@@ -107,14 +107,14 @@
         if (screenBounds.size.height == 568)
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
-            tblView.frame=CGRectMake(0, 46, 320,500);
+            tblView.frame=CGRectMake(0, 46, 320,500-50);
             else
             tblView.frame=CGRectMake(0, 46, 320,500);
         }
         else
         {
             if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
-                tblView.frame=CGRectMake(0, 46, 320, 420);
+                tblView.frame=CGRectMake(0, 46, 320, 420-50);
             else
                 tblView.frame=CGRectMake(0, 46, 320, 410);
           }
@@ -418,21 +418,21 @@
         [tap setNumberOfTapsRequired:1];
         [lblCreditCard addGestureRecognizer:tap];
         
-        UIView *viewLine=[[UIView alloc]initWithFrame:CGRectMake(180, 18, 1, 20)];
-        viewLine.backgroundColor=[UIColor lightGrayColor];
-        [cell.contentView addSubview:viewLine];
-        [viewLine release];
-        
-        UILabel *lblPaypal=[self createLabelWithTitle:@"Add PayPal..." frame:CGRectMake(184, 5, 115, 40) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
-        lblPaypal.textAlignment=NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblPaypal];
-        
-        [lblPaypal setUserInteractionEnabled:YES];
-        
-        UITapGestureRecognizer *tapForPaypal = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(btnPaypal_TouchUpInside)];
-        [tapForPaypal setNumberOfTouchesRequired:1];
-        [tapForPaypal setNumberOfTapsRequired:1];
-        [lblPaypal addGestureRecognizer:tapForPaypal];
+//        UIView *viewLine=[[UIView alloc]initWithFrame:CGRectMake(180, 18, 1, 20)];
+//        viewLine.backgroundColor=[UIColor lightGrayColor];
+//        [cell.contentView addSubview:viewLine];
+//        [viewLine release];
+//        
+//        UILabel *lblPaypal=[self createLabelWithTitle:@"Add PayPal..." frame:CGRectMake(184, 5, 115, 40) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+//        lblPaypal.textAlignment=NSTextAlignmentLeft;
+//        [cell.contentView addSubview:lblPaypal];
+//        
+//        [lblPaypal setUserInteractionEnabled:YES];
+//        
+//        UITapGestureRecognizer *tapForPaypal = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(btnPaypal_TouchUpInside)];
+//        [tapForPaypal setNumberOfTouchesRequired:1];
+//        [tapForPaypal setNumberOfTapsRequired:1];
+//        [lblPaypal addGestureRecognizer:tapForPaypal];
         
         if([creditCardInfo.redactedCardNumber length])
         {

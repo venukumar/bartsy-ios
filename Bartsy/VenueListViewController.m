@@ -33,6 +33,15 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
+    if(appDelegate.isComingForOrders&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
+    {
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        obj.dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
+        return;
+    }
+    
     MKMapView *mapView = (MKMapView*)[self.view viewWithTag:222];
     mapView.showsUserLocation = YES;
     [locationManager startUpdatingLocation];
@@ -352,6 +361,7 @@
         [obj release];
     }
     
+    NSLog(@"Index is %i",intIndex);
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -548,6 +558,9 @@
     }
     else
     {
+        NSLog(@"Venue List is %@",arrVenueList);
+        NSLog(@"Index is %i",intIndex);
+
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         isRequestForCheckIn=NO;

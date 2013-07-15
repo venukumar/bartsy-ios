@@ -69,7 +69,8 @@
     NSArray *arrIngredients=[[NSArray alloc]initWithArray:[dictTemp objectForKey:@"ingredients"]];
     
     navBar.topItem.title=[[arrIngredients objectAtIndex:0] objectForKey:@"typeName"];
-    
+    NSLog(@"Categories is %@",arrCategories);
+
     [arrCategories removeAllObjects];
     [arrCategories addObjectsFromArray:[[arrIngredients objectAtIndex:0] objectForKey:@"categories"]];
     [_rearTableView reloadData];

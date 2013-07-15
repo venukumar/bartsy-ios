@@ -80,10 +80,10 @@
     [imageForPeople release];
     
     UIButton *btnLike = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"liked-btn@2x.png"] frame:CGRectMake(165, 60, 126, 44) tag:1122 selector:@selector(btnLike_TouchUpInside) target:self];
-    [self.view addSubview:btnLike];
+    //[self.view addSubview:btnLike];
     
     UIButton *btnShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"share@2x.png"] frame:CGRectMake(165, 115, 126, 44) tag:2233 selector:@selector(btnShare_TouchUpInside) target:self];
-    [self.view addSubview:btnShare];
+    //[self.view addSubview:btnShare];
 
     UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(20,200, 320, 50)];
     lblName.backgroundColor=[UIColor clearColor];
@@ -97,6 +97,7 @@
     UITextView *txtViewDesc = [[UITextView alloc]initWithFrame:CGRectMake(12,250, 320, 60)];
     txtViewDesc.backgroundColor=[UIColor clearColor];
     txtViewDesc.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+    txtViewDesc.editable=NO;
 //    txtViewDesc.text = [NSString stringWithFormat:@"Orientation:%@\nStatus: %@",[dictPeople objectForKey:@"orientation"],[dictPeople objectForKey:@"status"]];
     txtViewDesc.font=[UIFont boldSystemFontOfSize:12];
     txtViewDesc.textAlignment = NSTextAlignmentLeft;

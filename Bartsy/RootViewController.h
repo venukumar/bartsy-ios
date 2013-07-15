@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 
-@interface RootViewController : BaseViewController
+@interface RootViewController : BaseViewController<UITabBarControllerDelegate>
 {
-    UITabBarController *tabBar;
 }
-@property (nonatomic,retain)UITabBarController *tabBar;
 @end
