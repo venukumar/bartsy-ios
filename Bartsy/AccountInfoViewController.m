@@ -63,8 +63,19 @@
     [imgLogo release];
     
     //Setting's Button declaration
-    UIButton *settingBtn=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"settings"] frame:CGRectMake(280,12.5,23, 22.5) tag:401 selector:@selector(Button_Action:) target:self];
+    
+    
+    UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    settingBtn.frame = CGRectMake(280, 0, 50, 40);
+    [settingBtn addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
+    settingBtn.tag=401;
     [self.view addSubview:settingBtn];
+    
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 22, 22)];
+    imgViewBack.image = [UIImage imageNamed:@"settings"];
+    [settingBtn addSubview:imgViewBack];
+    [imgViewBack release];
+  
     
     is_pastOrders=NO;
     
@@ -165,6 +176,8 @@
     cell.backgroundView = bg;
     [bg release];
     }
+    cell.selectionStyle=UITableViewCellSelectionStyleNone;
+
     cell.title.text= [dictForOrder objectForKey:@"itemName"];
     cell.description.text=[dictForOrder objectForKey:@"description"];
     

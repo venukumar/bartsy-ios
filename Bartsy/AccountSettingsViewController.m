@@ -29,6 +29,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+
     self.view.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
     
     arySettings = [[NSMutableArray alloc]initWithObjects:@"Edit Profile",@"Privacy",@"Share Settings",@"Push Notifications",@"Log Out", nil];
@@ -44,10 +46,15 @@
     [self.view addSubview:lblMsg];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(10, 11, 12, 20);
-    [btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
+    btnBack.frame = CGRectMake(10, 0, 50, 40);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
+    
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
+
     
     UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,44,320,400) style:UITableViewStyleGrouped];
     
@@ -103,6 +110,7 @@
     bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
     cell.backgroundView = bg;
     [bg release];
+    cell.selectionStyle=UITableViewCellSelectionStyleNone;
 //    if(indexPath.section == 1 && indexPath.row == 4)
 //    {
 //        cell.accessoryType = UITableViewCellAccessoryNone;
@@ -154,8 +162,18 @@
 - (void)tableView:(UITableView *)tableView1 didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView1 deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (indexPath.section==2) {
+    if (indexPath.section==1) {
+      
+        if (indexPath.row==0) {
+            
+            appDelegate.isLoginForFB=NO;
+            ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+            profileScreen.isCmgFromGetStarted=NO;
+            profileScreen.isCmgForEditProfile=YES;
+            [self.navigationController pushViewController:profileScreen animated:YES];
+            [profileScreen release];
+        }
+    }else if (indexPath.section==2) {
         
         if (indexPath.row==1) {
             WebViewController *obj=[[WebViewController alloc]init];

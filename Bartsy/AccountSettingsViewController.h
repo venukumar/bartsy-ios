@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "WebViewController.h"
+#import "ProfileViewController.h"
 @interface AccountSettingsViewController : BaseViewController<UITableViewDelegate,UITableViewDataSource>
 {
     NSMutableArray *arySettings;
