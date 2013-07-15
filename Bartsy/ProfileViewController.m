@@ -65,7 +65,6 @@
     }
     imgBg.image=[UIImage imageNamed:@"bg.png"];
     [self.view addSubview:imgBg];
-    [imgBg release];
    
     UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
@@ -88,6 +87,8 @@
     
     if(appDelegate.isLoginForFB==YES||auth!=nil||isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
     {
+        imgBg.hidden=YES;
+        
         dictProfileData=[[NSMutableDictionary alloc]init];
         
         UILabel *lblHeader=[self createLabelWithTitle:@"Edit your profile" frame:CGRectMake(8, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
@@ -182,6 +183,9 @@
         UIButton *btnSignIn = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"signin-btn.png"] frame:CGRectMake(25, 250, 274, 43) tag:0 selector:@selector(btnSubmit_TouchUpInside) target:self];
         [self.view addSubview:btnSignIn];
     }
+    
+    [imgBg release];
+
 }
 -(void)btnBack_TouchUpInside
 {

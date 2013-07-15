@@ -1583,7 +1583,7 @@
         
         lblName.font=[UIFont systemFontOfSize:14];
         lblName.backgroundColor=[UIColor clearColor];
-        lblName.textColor=[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
+        lblName.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         [cell.contentView addSubview:lblName];
         [lblName release];
         
@@ -1608,7 +1608,7 @@
         [cell.contentView addSubview:lblDescription];
         [lblDescription release];
         
-        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 80)];
+        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(280, 0, 40, 50)];
         if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
         {
             NSDictionary *dict=[object objectAtIndex:indexPath.row];
@@ -1621,7 +1621,7 @@
             lblPrice.text=[dict objectForKey:@"price"];
         }
         
-        lblPrice.font=[UIFont boldSystemFontOfSize:14];
+        lblPrice.font=[UIFont systemFontOfSize:22];
         lblPrice.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
         lblPrice.backgroundColor=[UIColor clearColor];
         [cell.contentView addSubview:lblPrice];
