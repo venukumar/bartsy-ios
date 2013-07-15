@@ -864,6 +864,34 @@ static SharedController *sharedController;
     
     [request release];
 }
+
+-(void)getPastOrderbbybartsyId:(NSString*)strbartsyId delegate:(id)aDelegate;
+{
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/getPastOrders",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    [dictCheckIn setObject:strbartsyId forKey:@"bartsyId"];
+
+    NSLog(@"dict is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+    
+}
+
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

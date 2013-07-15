@@ -10,7 +10,8 @@
 #import "BaseViewController.h"
 #import "UIImageView+WebCache.h"
 #import "AccountSettingsViewController.h"
-@interface AccountInfoViewController : BaseViewController{
+#import "PastOrdersCell.h"
+@interface AccountInfoViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>{
     
     
 }

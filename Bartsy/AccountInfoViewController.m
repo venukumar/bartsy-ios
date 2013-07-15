@@ -13,6 +13,12 @@
     UIImageView *profileImg;
     UILabel *profileName;
     UITextView *aboutme;
+    
+    UITableView *pastordersTbl;
+    
+    BOOL is_pastOrders;
+    
+    NSMutableArray *pastorderArray;
 }
 
 @end
@@ -33,6 +39,7 @@
     [super viewDidAppear:YES];
     
     self.navigationController.navigationBarHidden=YES;
+    [self.sharedController getPastOrderbbybartsyId:[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"] delegate:self];
 }
 - (void)viewDidLoad
 {
@@ -57,14 +64,13 @@
     UIButton *settingBtn=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"settings"] frame:CGRectMake(280,12.5,23, 22.5) tag:401 selector:@selector(Button_Action:) target:self];
     [self.view addSubview:settingBtn];
     
+    is_pastOrders=NO;
     [self.sharedController getUserProfileWithBartsyId:[[NSUserDefaults standardUserDefaults] valueForKey:@"bartsyId"] delegate:self];
     
     
     profileImg=[[UIImageView alloc]initWithFrame:CGRectMake(20,imgViewForTop.frame.size.height+20,90, 90)];
     profileImg.layer.borderColor=[UIColor whiteColor].CGColor;
     profileImg.image=[UIImage imageNamed:@"logo_Header"];
-    //[profileImg setImageWithURL:[NSURL URLWithString:@"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/c66.66.828.828/s160x160/481820_455686467802237_684943127_n.jpg"]];
-    [self.view addSubview:profileImg];
     
     profileName=[self createLabelWithTitle:@"" frame:CGRectMake(20, profileImg.frame.size.height+profileImg.frame.origin.y+2, 300, 70) tag:0 font:[UIFont systemFontOfSize:30] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:1];
     [self.view addSubview:profileName];
@@ -75,6 +81,22 @@
     aboutme.font=[UIFont systemFontOfSize:14];
     aboutme.textAlignment=NSTextAlignmentLeft;
     [self.view addSubview:aboutme];
+    
+    pastorderArray=[[NSMutableArray alloc]init];
+    
+    pastordersTbl=[[[UITableView alloc]initWithFrame:CGRectMake(0, aboutme.frame.origin.y+aboutme.frame.size.height, 320, 133) style:UITableViewStylePlain] autorelease];
+    if (IS_IPHONE_5) {
+        
+        pastordersTbl.frame=CGRectMake(0, aboutme.frame.origin.y+aboutme.frame.size.height, 320, 230);
+    }
+	pastordersTbl.delegate=self;
+	pastordersTbl.dataSource=self;
+    pastordersTbl.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
+    [pastordersTbl setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    [pastordersTbl setShowsVerticalScrollIndicator:NO];
+	[self.view addSubview:pastordersTbl];
+    
+    
 }
 
 #pragma mark-----------Button Actions
@@ -90,23 +112,120 @@
     
 }
 
+#pragma mark-----------Tableview Delegates
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+        
+    return pastorderArray.count;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    return 60;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    
+    UIView *headerview=[[UIView alloc]initWithFrame:CGRectMake(0,0, 320,60)];
+    headerview.backgroundColor=[UIColor blackColor];
+
+   UILabel *title=[[UILabel alloc]initWithFrame:CGRectMake(20,-5,200,30)];
+    title.textAlignment=NSTextAlignmentLeft;
+    title.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+    title.text=@"Past Orders";
+    title.backgroundColor=[UIColor clearColor];
+    title.font=[UIFont systemFontOfSize:12];
+    [headerview addSubview:title ];
+    [title release];
+    
+    UILabel *checkinlbl=[[UILabel alloc]initWithFrame:CGRectMake(260,-5,60,30)];
+    checkinlbl.textAlignment=NSTextAlignmentLeft;
+    checkinlbl.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+    checkinlbl.text=@"Check-ins";
+    checkinlbl.backgroundColor=[UIColor clearColor];
+    checkinlbl.font=[UIFont systemFontOfSize:12];
+    [headerview addSubview:checkinlbl ];
+    [checkinlbl release];
+    return [headerview autorelease];
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *MyIdentifier = @"cell";
+     PastOrdersCell *cell = [tableView1 dequeueReusableCellWithIdentifier:MyIdentifier];
+    NSDictionary *tempdic=[pastorderArray objectAtIndex:indexPath.row];
+    if (cell == nil)
+    {
+        cell = [[PastOrdersCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+                                    reuseIdentifier:MyIdentifier];
+    }
+    UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+    bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
+    cell.backgroundView = bg;
+    [bg release];
+    if ([tempdic valueForKey:@"authApproved"]) {
+        
+        cell.statusimage.image=[UIImage imageNamed:@"tickmark"];
+
+    }else{
+        cell.statusimage.image=nil;
+    }
+    cell.title.text=[tempdic valueForKey:@"venueName"];
+    cell.address.text=@"sdfk sdfl sdkmf sdlm";
+    cell.no_drinks.text=@"3";
+    cell.drinkslbl.text=@"drinks";
+    return cell;
+}
+
+
 #pragma mark-----------Sharedcontroller Delegate
 -(void)controllerDidFinishLoadingWithResult:(id)result{
+    if (!is_pastOrders) {
+        
+        if ([result isKindOfClass:[NSDictionary class]]) {
+        
+        
+            NSLog(@"Dictionary %@",result);
+        
+        
+            [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
+            profileName.text=[result valueForKey:@"nickname"];
+            aboutme.text=[result valueForKey:@"description"];
+        
+        }else if ([result isKindOfClass:[NSArray class]]){
+        
+        
+            NSLog(@"Array %@",result);
     
-    if ([result isKindOfClass:[NSDictionary class]]) {
-        
-        NSLog(@"Dictionary %@",result);
-        
-        [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
-        profileName.text=[result valueForKey:@"nickname"];
-        aboutme.text=[result valueForKey:@"description"];
-        
-        
-    }else if ([result isKindOfClass:[NSArray class]]){
-        
-        NSLog(@"Array %@",result);
+        }
+        is_pastOrders=YES;
+    }else{
+        if ([result isKindOfClass:[NSDictionary class]]) {
+            
+            
+            NSLog(@"Dictionary %@",result);
+            if ([[result valueForKey:@"errorCode"]integerValue]==0) {
+                
+              NSArray  *resultarray=[result valueForKey:@"pastOrders"];
+                
+                for (NSDictionary *dic in resultarray) {
+                    
+                    [pastorderArray addObject:dic];
+                    
+                }
+                [pastordersTbl reloadData];
+            }else{
+                [self createAlertViewWithTitle:@"Error" message:@"oops!" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+            }
+            
+        }else if ([result isKindOfClass:[NSArray class]]){
+            
+            
+            NSLog(@"Array %@",result);
+            
+        }
+
     }
-    
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error{
     
@@ -120,6 +239,7 @@
     [profileImg release];
     [profileName release];
     [aboutme release];
+    [pastorderArray release];
 }
 - (void)didReceiveMemoryWarning
 {
