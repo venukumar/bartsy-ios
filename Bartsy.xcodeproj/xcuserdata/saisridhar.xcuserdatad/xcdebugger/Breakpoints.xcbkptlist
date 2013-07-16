@@ -240,11 +240,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         timestampString = "395631891.246878"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1138"
-         endingLineNumber = "1138"
+         startingLineNumber = "1141"
+         endingLineNumber = "1141"
          landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -253,11 +253,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         timestampString = "395631891.246878"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1138"
-         endingLineNumber = "1138"
+         startingLineNumber = "1141"
+         endingLineNumber = "1141"
          landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -266,11 +266,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         timestampString = "395631891.246878"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1365"
-         endingLineNumber = "1365"
+         startingLineNumber = "1368"
+         endingLineNumber = "1368"
          landmarkName = "-updateOrderStatusForaOfferedDrinkWithStatus:withOrderId:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -279,11 +279,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         timestampString = "395631891.246878"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1391"
-         endingLineNumber = "1391"
+         startingLineNumber = "1394"
+         endingLineNumber = "1394"
          landmarkName = "-updateOrderStatusForaOfferedDrinkWithStatus:withOrderId:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -305,11 +305,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         timestampString = "395631891.246878"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1138"
-         endingLineNumber = "1138"
+         startingLineNumber = "1141"
+         endingLineNumber = "1141"
          landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -591,25 +591,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         timestampString = "395631891.246878"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1141"
-         endingLineNumber = "1141"
+         startingLineNumber = "1144"
+         endingLineNumber = "1144"
          landmarkName = "-btnDismiss_TouchUpInside:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/AppDelegate.m"
-         timestampString = "395630207.159098"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "316"
-         endingLineNumber = "316"
-         landmarkName = "-checkOrderStatusUpdate"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

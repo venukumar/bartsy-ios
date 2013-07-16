@@ -979,8 +979,20 @@
         [viewBg2 addSubview:imgViewPhoto];
         [imgViewPhoto release];
         
-        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(61, 0, 180, 25)];
-        lblOrderId.font = [UIFont boldSystemFontOfSize:30];
+        
+        
+        UILabel *lblCode = [[UILabel alloc]initWithFrame:CGRectMake(61, 17, 200, 23)];
+        lblCode.font = [UIFont boldSystemFontOfSize:22];
+        lblCode.text = [NSString stringWithFormat:@"Pickup Code: %@",[dict objectForKey:@"userSessionCode"]];
+        lblCode.adjustsFontSizeToFitWidth=YES;
+        lblCode.backgroundColor = [UIColor clearColor];
+        lblCode.textColor = [UIColor whiteColor] ;
+        lblCode.textAlignment = NSTextAlignmentLeft;
+        [viewBg2 addSubview:lblCode];
+        [lblCode release];
+        
+        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(61, 1, 180, 15)];
+        lblOrderId.font = [UIFont boldSystemFontOfSize:25];
         lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
         lblOrderId.adjustsFontSizeToFitWidth=YES;
         lblOrderId.backgroundColor = [UIColor clearColor];
@@ -988,15 +1000,6 @@
         lblOrderId.textAlignment = NSTextAlignmentLeft;
         [viewBg2 addSubview:lblOrderId];
         [lblOrderId release];
-        
-        UILabel *lblCode = [[UILabel alloc]initWithFrame:CGRectMake(61, 30, 200, 10)];
-        lblCode.font = [UIFont boldSystemFontOfSize:12];
-        lblCode.text = [NSString stringWithFormat:@"Pickup Code: %@",[dict objectForKey:@"userSessionCode"]];
-        lblCode.backgroundColor = [UIColor clearColor];
-        lblCode.textColor = [UIColor whiteColor] ;
-        lblCode.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblCode];
-        [lblCode release];
         
         UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(61, 40, 200, 15)];
         lblName.font = [UIFont boldSystemFontOfSize:12];

@@ -312,8 +312,6 @@
                  }
              }
              
-             NSLog(@"Updated Orders is %@",arrOrdersTimer);
-             
              [arrOrdersTimer removeObjectsInArray:arrOrders];
 
              if([arrOrdersTimer count])
@@ -325,7 +323,7 @@
                  {
                      NSDictionary *dict=[arrOrdersTimer objectAtIndex:i];
 
-                     if([[dict objectForKey:@"orderStatus"] integerValue]!=0)
+                     if([[dict objectForKey:@"orderStatus"] integerValue]!=0&&[[dict objectForKey:@"orderStatus"] integerValue]!=9)
                      {
                          //Checking weather this order is already shown or not
                          NSMutableArray *arrOrderIdsAndStatus=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrderIdsAndStatus"]];
