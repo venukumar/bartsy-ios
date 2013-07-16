@@ -19,6 +19,7 @@
     NSArray *arrStatus;
     id delegateForCurrentViewController;
     BOOL isComingForOrders;
+    BOOL isComingForPeople;
     UIAlertView *alertView;
     BOOL isLoginForFB;
     NSInteger intPeopleCount;
@@ -50,6 +51,7 @@
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (strong, nonatomic) FBSession *session;
 @property (nonatomic,assign)BOOL isComingForOrders;
+@property (nonatomic,assign)BOOL isComingForPeople;
 @property(nonatomic,assign)NSInteger intPeopleCount;
 @property(nonatomic,assign)NSInteger intOrderCount;
 @property BOOL internetActive;

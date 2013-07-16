@@ -33,7 +33,7 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
-    if(appDelegate.isComingForOrders&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
+    if(appDelegate.isComingForOrders||appDelegate.isComingForPeople)//&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
     {
         HomeViewController *obj=[[HomeViewController alloc]init];
         obj.dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];

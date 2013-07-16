@@ -45,6 +45,7 @@
 		CB8AB5091774583300445934 /* typingMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4FF1774583300445934 /* typingMine@2x.png */; };
 		CB8AB50A1774583300445934 /* typingSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5001774583300445934 /* typingSomeone.png */; };
 		CB8AB50B1774583300445934 /* typingSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB5011774583300445934 /* typingSomeone@2x.png */; };
+		CBF8437E17958176004D8340 /* mail.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8437D17958176004D8340 /* mail.png */; };
 		CBF8F3431793C0D8008EBBB8 /* AccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */; };
 		CBF8F34C179409DC008EBBB8 /* signup-bartsy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8F34B179409DC008EBBB8 /* signup-bartsy@2x.png */; };
 		CBF8F34E17940A76008EBBB8 /* mail-signup.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8F34D17940A76008EBBB8 /* mail-signup.png */; };
@@ -324,6 +325,7 @@
 		CB8AB4FF1774583300445934 /* typingMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingMine@2x.png"; sourceTree = "<group>"; };
 		CB8AB5001774583300445934 /* typingSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = typingSomeone.png; sourceTree = "<group>"; };
 		CB8AB5011774583300445934 /* typingSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "typingSomeone@2x.png"; sourceTree = "<group>"; };
+		CBF8437D17958176004D8340 /* mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mail.png; sourceTree = "<group>"; };
 		CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountSettingsViewController.h; sourceTree = "<group>"; };
 		CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountSettingsViewController.m; sourceTree = "<group>"; };
 		CBF8F34B179409DC008EBBB8 /* signup-bartsy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signup-bartsy@2x.png"; sourceTree = "<group>"; };
@@ -726,6 +728,7 @@
 			children = (
 				CBF8F35317941C35008EBBB8 /* AccountInfoimages */,
 				CB10B08B178D700300CAF6ED /* arrow-left.png */,
+				CBF8437D17958176004D8340 /* mail.png */,
 				CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */,
 				CB10B085178D6E1500CAF6ED /* top_header_bar@2x.png */,
 				CB10B087178D6F3100CAF6ED /* top_header_bar.png */,
@@ -1592,6 +1595,7 @@
 				CBF8F350179411CF008EBBB8 /* signup-bartsy.png in Resources */,
 				CBF8F35517941C70008EBBB8 /* settings.png in Resources */,
 				CBF8F35717941CB0008EBBB8 /* listarrow.png in Resources */,
+				CBF8437E17958176004D8340 /* mail.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1825,8 +1829,8 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "40C8EA7C-651F-461A-A34E-8CB6BD29F9F2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "40C8EA7C-651F-461A-A34E-8CB6BD29F9F2";
+				PROVISIONING_PROFILE = "086EE67E-FABA-414C-BC86-DE0F2818E0FC";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "086EE67E-FABA-414C-BC86-DE0F2818E0FC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1863,7 +1867,7 @@
 					"-lc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "40C8EA7C-651F-461A-A34E-8CB6BD29F9F2";
+				PROVISIONING_PROFILE = "2D1358F3-7294-4F29-9FA4-A25459331855";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "40C8EA7C-651F-461A-A34E-8CB6BD29F9F2";
 				WRAPPER_EXTENSION = app;
 			};

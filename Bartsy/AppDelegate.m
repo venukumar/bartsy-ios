@@ -21,7 +21,7 @@
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
 @synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
 @synthesize  tabBar;
-
+@synthesize isComingForPeople;
 - (void)dealloc
 {
     [_window release];
@@ -325,7 +325,7 @@
 
                      if([[dict objectForKey:@"orderStatus"] integerValue]!=0&&[[dict objectForKey:@"orderStatus"] integerValue]!=9)
                      {
-                         //Checking weather this order is already shown or not
+                         //Checking weather this order is already shown or not for that orderstatus
                          NSMutableArray *arrOrderIdsAndStatus=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrderIdsAndStatus"]];
                          
                          NSPredicate *pred1=[NSPredicate predicateWithFormat:[self getPredicateWithOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]]];
@@ -642,6 +642,19 @@
         
         alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alertView show];
+    }else if ([[userInfo objectForKey:@"messageType"] isEqualToString:@"message"]){
+        
+        AudioServicesPlaySystemSound(1007);
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alertView.tag=6666;
+        [alertView show];
     }
 }
 
@@ -654,7 +667,6 @@
         if(tabBar.selectedIndex==0)
         {
             [delegateForCurrentViewController viewWillAppear:YES];
-
         }
         else
         {
@@ -682,6 +694,22 @@
             
         }
          */
+    }else if (alertView1.tag==6666)
+    {
+        
+        isComingForPeople=YES;
+        
+        if(tabBar.selectedIndex==0)
+        {
+            [delegateForCurrentViewController viewWillAppear:YES];
+        }
+        else
+        {
+            [tabBar setSelectedIndex:0];
+            [delegateForCurrentViewController viewWillAppear:YES];
+        }
+
+        
     }
 //    else if(alertView1.tag==225)
 //    {
