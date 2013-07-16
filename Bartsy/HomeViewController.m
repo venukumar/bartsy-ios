@@ -992,7 +992,7 @@
         [lblCode release];
         
         UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(61, 1, 180, 15)];
-        lblOrderId.font = [UIFont boldSystemFontOfSize:25];
+        lblOrderId.font = [UIFont boldSystemFontOfSize:12];
         lblOrderId.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"orderId"]];
         lblOrderId.adjustsFontSizeToFitWidth=YES;
         lblOrderId.backgroundColor = [UIColor clearColor];
