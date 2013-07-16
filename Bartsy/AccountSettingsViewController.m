@@ -59,11 +59,11 @@
     UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,44,320,400) style:UITableViewStyleGrouped];
     
     if (IS_IPHONE_5) {
-        tableView.frame = CGRectMake(0,44,320,500);
+        tableView.frame = CGRectMake(0,44,320,364+100);
     }
     else
     {
-        tableView.frame = CGRectMake(0,44,320,400);
+        tableView.frame = CGRectMake(0,44,320,364);
     }
     tableView.tag=111;
     tableView.tableFooterView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];

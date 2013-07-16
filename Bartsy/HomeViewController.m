@@ -967,7 +967,7 @@
         UIImageView *statusImg=[self createImageViewWithImage:[UIImage imageNamed:@"exclamatory_icon"] frame:CGRectMake(20, 5, 20, 20) tag:0];
         [viewBg addSubview:statusImg];
         
-        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(55, 0, 250, 30) tag:0 font:[UIFont boldSystemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
+        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(55, 0, 250, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
         lblOrderStatus.text = [self getTheStatusMessageForOrder:dict];
         lblOrderStatus.adjustsFontSizeToFitWidth=YES;
         lblOrderStatus.textAlignment = NSTextAlignmentLeft;
@@ -1035,28 +1035,28 @@
         [dateFormatter release];
         UILabel *lblplacedtime = [[UILabel alloc]initWithFrame:CGRectMake(69, lblCode.frame.origin.y+lblCode.bounds.size.height, 180, 15)];
         lblplacedtime.font = [UIFont systemFontOfSize:10];
-        lblplacedtime.text = [NSString stringWithFormat:@"Placed:%d mins ago",minutes];
+        lblplacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
         lblplacedtime.adjustsFontSizeToFitWidth=YES;
         lblplacedtime.backgroundColor = [UIColor clearColor];
         lblplacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
         lblplacedtime.textAlignment = NSTextAlignmentLeft;
         [viewBg2 addSubview:lblplacedtime];
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblplacedtime.attributedText];
-        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0] range: NSMakeRange(7, minlength.length+9)];
+        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
         [lblplacedtime setAttributedText: text];
         [text release];
         [lblplacedtime release];
         
         UILabel *lblexpired = [[UILabel alloc]initWithFrame:CGRectMake(69, lblplacedtime.frame.origin.y+lblplacedtime.bounds.size.height, 180, 15)];
         lblexpired.font = [UIFont systemFontOfSize:10];
-        lblexpired.text = [NSString stringWithFormat:@"Expires:%@",@"15 min"];
+        lblexpired.text = [NSString stringWithFormat:@"Expires: %@",@"15 min"];
         lblexpired.adjustsFontSizeToFitWidth=YES;
         lblexpired.backgroundColor = [UIColor clearColor];
         lblexpired.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
         lblexpired.textAlignment = NSTextAlignmentLeft;
         [viewBg2 addSubview:lblexpired];
         NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblexpired.attributedText];
-        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0] range: NSMakeRange(8, 6)];
+        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0] range: NSMakeRange(8, 7)];
         [lblexpired setAttributedText: attribstrg];
         [attribstrg release];
         [lblexpired release];
@@ -1101,7 +1101,7 @@
         {
             NSDictionary *dictTempOrder=[arrBundledOrdersObject objectAtIndex:j];
             
-            UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+(j*15)+40, 242, 15)];
+            UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*15)+40, 242, 15)];
             lblDescription.font = [UIFont boldSystemFontOfSize:12];
             lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
             lblDescription.numberOfLines = 1;
@@ -1111,7 +1111,7 @@
             [viewBg2 addSubview:lblDescription];
             
             
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+(j*15)+40, 45, 15)];
+            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+5+(j*15)+40, 45, 15)];
             lblPrice.font = [UIFont systemFontOfSize:12];
             lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
             lblPrice.numberOfLines = 1;
@@ -1140,7 +1140,7 @@
         
         
         
-        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+([arrBundledOrdersObject count]*15)+45, 120, 15)];
+        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([arrBundledOrdersObject count]*15)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
         if(floattipvalue>0.01)
             lblTipFee.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
@@ -1157,7 +1157,7 @@
         [attribstrgTIP release];
         [lblTipFee release];
         
-        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+([arrBundledOrdersObject count]*15)+45, 150, 15)];
+        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([arrBundledOrdersObject count]*15)+45, 150, 15)];
         lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
         if(floatTaxFee>0.01)
             lblTaxFee.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
@@ -1174,7 +1174,7 @@
         [attribstrgTAX release];
         [lblTaxFee release];
         
-        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+([arrBundledOrdersObject count]*15)+45, 153, 15)];
+        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([arrBundledOrdersObject count]*15)+45, 153, 15)];
         lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
         if(floatTotalPrice>0.01)
             lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
@@ -1510,17 +1510,7 @@
         return 1;
     else
     {
-        if([arrBundledOrders count]||[arrOrdersTimedOut count])
-        {
-//            intNoOfSections=[arrBundledOrders count]+([arrOrdersTimedOut count]>=1?1:0);
-//            return [arrBundledOrders count]+([arrOrdersTimedOut count]>=1?1:0);
-            intNoOfSections=[arrBundledOrders count]+([arrOrdersTimedOut count]>=1?0:0)+([arrOrdersOffered count]>=1?1:0);
-            return [arrBundledOrders count]+([arrOrdersTimedOut count]>=1?0:0)+([arrOrdersOffered count]>=1?1:0);
-        }
-        else
-        {
-            return 1;
-        }
+        return 1;
     }
     
 }
