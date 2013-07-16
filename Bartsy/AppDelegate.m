@@ -43,7 +43,9 @@
     
     [UIApplication sharedApplication].applicationIconBadgeNumber=0;
     
-    arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
+    arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"Your order was rejected by Bartender",@"Order was accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"Noshow",@"Your order was timedout",@"Your order was rejected",@"Drink offered",@"Past Order", nil];
+
+    //arrStatus=[[NSArray alloc]initWithObjects:@"Accepted",@"Ready for pickup",@"Order is picked up",@"Order is picked up", nil];
     
     [Crittercism enableWithAppID:@"51b196e597c8f25177000005"];
     
@@ -207,9 +209,7 @@
 }
 
 -(void)checkOrderStatusUpdate
-{
-    return;
-    
+{    
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -320,20 +320,48 @@
              {
                  NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"orderStatus" ascending:NO selector:nil];
                  [arrOrdersTimer sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-                 NSDictionary *dict=[arrOrdersTimer objectAtIndex:0];
                  
-                 NSLog(@"Updated order is %@",dict);
-                 if([[dict objectForKey:@"orderStatus"] integerValue]!=0)
+                 for (int i=0;i<[arrOrdersTimer count];i++)
                  {
-                     UILocalNotification *localNotificationForOrderStatusUpdate = [[UILocalNotification alloc]init];
-                     localNotificationForOrderStatusUpdate.alertBody =[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
-                     localNotificationForOrderStatusUpdate.fireDate = [NSDate date];
-                     localNotificationForOrderStatusUpdate.soundName = UILocalNotificationDefaultSoundName;
-                     localNotificationForOrderStatusUpdate.userInfo = [NSDictionary
-                                              dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]],@"Message", nil];
+                     NSDictionary *dict=[arrOrdersTimer objectAtIndex:i];
 
-                     [[UIApplication sharedApplication] scheduleLocalNotification:localNotificationForOrderStatusUpdate];
+                     if([[dict objectForKey:@"orderStatus"] integerValue]!=0)
+                     {
+                         //Checking weather this order is already shown or not
+                         NSMutableArray *arrOrderIdsAndStatus=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrderIdsAndStatus"]];
+                         
+                         NSPredicate *pred1=[NSPredicate predicateWithFormat:[self getPredicateWithOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]]];
+                         NSPredicate *pred2=[NSPredicate predicateWithFormat:@"orderId ==[c] %@",[dict objectForKey:@"orderId"]];
+                         
+                         NSPredicate *predCompound=[NSCompoundPredicate andPredicateWithSubpredicates:[NSArray arrayWithObjects:pred1,pred2, nil]];
+                         
+                         [arrOrderIdsAndStatus filterUsingPredicate:predCompound];
+                         
+                         
+                         //It is the first time showing notification for that status
+                         if([arrOrderIdsAndStatus count]==0)
+                         {
+                             NSMutableArray *arrOrderIdsAndStatusTemp=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrderIdsAndStatus"]];
+                             NSDictionary *dictOrderIdAndStatus=[[NSDictionary alloc]initWithObjectsAndKeys:[dict objectForKey:@"orderId"],@"orderId",[dict objectForKey:@"orderStatus"],@"orderStatus", nil];
+                             [arrOrderIdsAndStatusTemp addObject:dictOrderIdAndStatus];
+                             
+                             [[NSUserDefaults standardUserDefaults]setObject:arrOrderIdsAndStatusTemp forKey:@"OrderIdsAndStatus"];
+                             [[NSUserDefaults standardUserDefaults]synchronize];
+                             
+                             UILocalNotification *localNotificationForOrderStatusUpdate = [[UILocalNotification alloc]init];
+                             localNotificationForOrderStatusUpdate.alertBody =[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]];
+                             localNotificationForOrderStatusUpdate.fireDate = [NSDate date];
+                             localNotificationForOrderStatusUpdate.soundName = UILocalNotificationDefaultSoundName;
+                             localNotificationForOrderStatusUpdate.userInfo = [NSDictionary
+                                                                               dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]-2],[[dict objectForKey:@"orderId"] integerValue]],@"Message", nil];
+                             
+                             [[UIApplication sharedApplication] scheduleLocalNotification:localNotificationForOrderStatusUpdate];
+                         }
+                         
+                     }
                  }
+                 
+                 
                  
                  
              }
@@ -351,6 +379,30 @@
     [request release];
 }
 
+-(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus
+{
+    NSString *strPred;
+    if(intStatus==0)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'0'"];
+    else if(intStatus==2)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'2'"];
+    else if(intStatus==3)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'3'"];
+    else if(intStatus==4)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'4'"];
+    else if(intStatus==5)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'5'"];
+    else if(intStatus==6)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'6'"];
+    else if(intStatus==7)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'7'"];
+    else if(intStatus==8)
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'8'"];
+    else
+        strPred=[NSString stringWithFormat:@"orderStatus == [c]'9'"];
+    
+    return strPred;
+}
 
 -(void)startTimerToCheckHeartBeat
 {

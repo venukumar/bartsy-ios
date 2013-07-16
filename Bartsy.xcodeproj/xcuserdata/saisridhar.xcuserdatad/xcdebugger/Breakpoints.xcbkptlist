@@ -594,22 +594,22 @@
          timestampString = "395607116.750322"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "589"
-         endingLineNumber = "589"
-         landmarkName = "-controllerDidFinishLoadingWithResult:"
+         startingLineNumber = "1141"
+         endingLineNumber = "1141"
+         landmarkName = "-btnDismiss_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Bartsy/HomeViewController.m"
-         timestampString = "395607116.750322"
+         filePath = "Bartsy/AppDelegate.m"
+         timestampString = "395630207.159098"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1141"
-         endingLineNumber = "1141"
-         landmarkName = "-btnDismiss_TouchUpInside:"
+         startingLineNumber = "316"
+         endingLineNumber = "316"
+         landmarkName = "-checkOrderStatusUpdate"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

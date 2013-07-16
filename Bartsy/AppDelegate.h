@@ -68,5 +68,6 @@
 -(void)showAPIVersionAlertWithReason:(NSString*)strReason;
 -(void)controllerDidFinishLoadingWithResult:(id)result;
 -(void)controllerDidFailLoadingWithError:(NSError*)error;
+-(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus;
 @end
 
