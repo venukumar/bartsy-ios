@@ -254,16 +254,21 @@
         
         if ([result isKindOfClass:[NSDictionary class]]) {
         
+            if ([[result valueForKey:@"errorCode"] integerValue]==0) {
+                
+                NSLog(@"Dictionary %@  \n URL is %@",result,[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]);
         
-            NSLog(@"Dictionary %@  \n URL is %@",result,[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]);
-        
-            resultAccountInfo=[result retain];
-            
-            [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
-            profileName.text=[result valueForKey:@"nickname"];
-            aboutme.text=[result valueForKey:@"description"];
-            
-            [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadPIC) userInfo:nil repeats:NO];
+                resultAccountInfo=[result retain];
+                
+                [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
+                profileName.text=[result valueForKey:@"nickname"];
+                aboutme.text=[result valueForKey:@"description"];
+    
+                [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadPIC) userInfo:nil repeats:NO];
+            }else{
+                
+                [self createAlertViewWithTitle:@"Error" message:[result valueForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+            }
         
         }else if ([result isKindOfClass:[NSArray class]]){
         

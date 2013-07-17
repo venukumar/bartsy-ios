@@ -61,7 +61,7 @@
 //    // Create tracker instance.
 //    id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-40090000-1"];
 //
-    
+    NSLog(@"My userID %@",[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"]);
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"])
     {
         isCmgForWelcomeScreen=YES;
@@ -655,6 +655,7 @@
         alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         alertView.tag=6666;
         [alertView show];
+        [[tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
     }
 }
 

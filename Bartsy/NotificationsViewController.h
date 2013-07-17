@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-@interface NotificationsViewController : BaseViewController<SharedControllerDelegate,UITableViewDataSource,UITableViewDelegate>
+#import "MessageListViewController.h"
+@interface NotificationsViewController : BaseViewController<SharedControllerDelegate,UITableViewDataSource,UITableViewDelegate>{
+    
+
+}
 @property(nonatomic,retain)NSMutableArray *arrayForNotifications;
 
 @end

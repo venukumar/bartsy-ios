@@ -17,7 +17,7 @@
 
 #define IS_IPHONE_5 ( fabs( ( double )[ [ UIScreen mainScreen ] bounds ].size.height - ( double )568 ) < DBL_EPSILON )
 
-# define KAPIVersionNumber @"2"
+# define KAPIVersionNumber @"3"
 #define kDateMMDDYYYY                       @"MM/dd/yyyy"
 
 #endif

@@ -31,6 +31,8 @@
     self.navigationController.navigationBarHidden = YES;
     self.sharedController=[SharedController sharedController];
     
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
     arrayForNotifications = [[NSMutableArray alloc] init];
         
     UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
@@ -67,6 +69,8 @@
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getNotificationsWithDelegate:self];
     }
+    
+    [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = nil;
 }
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
 {
@@ -77,6 +81,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 {
     if ([arrayForNotifications count]) {
+        
         return [arrayForNotifications count];
     }
     else
@@ -90,7 +95,25 @@
     
     if ([arrayForNotifications count])
     {
-        if ([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkin"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkout"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"self"])
+        if ([[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"bartsyId"]) {
+            
+            UILabel *lblnewmsg = [self createLabelWithTitle:[NSString stringWithFormat:@"You got a message from %@",[[arrayForNotifications objectAtIndex:indexPath.row] valueForKey:@"nickName"]] frame:CGRectMake(71, 15, 250, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            lblnewmsg.backgroundColor=[UIColor clearColor];
+            lblnewmsg.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblnewmsg];
+            
+            NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImagePath"]];
+            
+            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
+            [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+            [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+            [imageForPeople.layer setShadowRadius:3.0];
+            [imageForPeople.layer setShadowOpacity:0.8];
+            [cell.contentView addSubview:imageForPeople];
+            [imageForPeople release];
+
+        }else if ([[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkin"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"type"]isEqualToString:@"checkout"]||[[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"orderType"]isEqualToString:@"self"])
         {
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
@@ -178,6 +201,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"bartsyId"]) {
+        
+       appDelegate.isComingForPeople=YES;
+        
+        if(appDelegate.tabBar.selectedIndex==0)
+        {
+            [appDelegate.delegateForCurrentViewController viewWillAppear:YES];
+        }
+        else
+        {
+            [appDelegate.tabBar setSelectedIndex:0];
+            [appDelegate.delegateForCurrentViewController viewWillAppear:YES];
+        }
+        
+
+
+    }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
@@ -201,7 +241,18 @@
     }
     else if ([[result objectForKey:@"notifications"] count])
     {
+        [arrayForNotifications removeAllObjects];
         [arrayForNotifications addObjectsFromArray:[result objectForKey:@"notifications"]];
+           // NSLog(@"people array %@",appDelegate.arrPeople);
+        int i=0;
+        for (NSDictionary *dic in appDelegate.arrPeople) {
+        
+            if ([[dic valueForKey:@"hasMessages"] isEqualToString:@"New"]) {
+                    [arrayForNotifications insertObject:dic atIndex:i];
+                    i++;
+            }
+        }
+            
         NSLog(@"notifications is %@",arrayForNotifications);
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];

@@ -397,7 +397,7 @@
     }
     
     //Tax on item
-    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+9.5)))/100;
+    float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+[[NSUserDefaults standardUserDefaults] floatForKey:@"percentTAX"])))/100;
     
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
     
@@ -863,6 +863,16 @@
              [appDelegate.arrPeople removeAllObjects];
              [appDelegate.arrPeople addObjectsFromArray:arrPeople];
              
+             int i=0;
+             for (NSDictionary *dic in appDelegate.arrPeople) {
+                 
+                 if ([[dic valueForKey:@"hasMessages"] isEqualToString:@"New"]) {
+                    
+                     i++;
+                 }
+             [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSString stringWithFormat:@"%d",i];
+             }
+             
              if([appDelegate.arrPeople count])
              {
                  NSDictionary *dictPeople=[appDelegate.arrPeople objectAtIndex:0];
@@ -937,7 +947,7 @@
     
     UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 90, 320, 375-42)];
     scrollView.tag=987;
-    scrollView.backgroundColor=[UIColor grayColor];
+    scrollView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:scrollView];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -1175,19 +1185,21 @@
         [attribstrgTAX release];
         [lblTaxFee release];
         
+        NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
+        NSLog(@"%d",ttpricelenght.length);
         UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([arrBundledOrdersObject count]*15)+45, 153, 15)];
         lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
         if(floatTotalPrice>0.01)
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total: $%.2f",floatTotalPrice];
+            lblTotalPrice.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
         else
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total: -"];
+            lblTotalPrice.text = [NSString stringWithFormat:@"Total:-"];
         lblTotalPrice.tag = 12347890;
         lblTotalPrice.backgroundColor = [UIColor clearColor];
         lblTotalPrice.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
         lblTotalPrice.textAlignment = NSTextAlignmentRight;
         [viewBg2 addSubview:lblTotalPrice];
         NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTotalPrice.attributedText];
-        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,sizeof(floatTotalPrice)+2 )];
+        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
         [lblTotalPrice setAttributedText: attribstrgTP];
         [attribstrgTP release];
         [lblTotalPrice release];
@@ -1209,6 +1221,13 @@
         intContentSizeHeight+=123+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks+50;
     }
     
+    if (arrBundledOrders.count==0) {
+        
+        UILabel *lblItemName = [self createLabelWithTitle:@"No orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
+        lblItemName.backgroundColor=[UIColor clearColor];
+        lblItemName.textAlignment = NSTextAlignmentCenter;
+        [scrollView addSubview:lblItemName];
+    }
     scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+10);
     [scrollView release];
 }
@@ -1796,12 +1815,13 @@
         
         if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
         {
-            if ([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"new"]) {
-                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail.png"] frame:CGRectMake(250, 10, 30, 20) tag:indexPath.row selector:nil target:self];
+            if ([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"New"]) {
+                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail.png"] frame:CGRectMake(250, 10, 30, 20) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
                 [cell.contentView addSubview:btnChat];
+               
             }else{
-                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail.png"] frame:CGRectMake(250, 10, 30, 20) tag:indexPath.row selector:nil target:self];
-                btnChat.enabled=NO;
+                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail_gray.png"] frame:CGRectMake(250, 10, 30, 20) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
+    
                 [cell.contentView addSubview:btnChat];
             }
             
@@ -1933,7 +1953,7 @@
         }
         else
         {
-            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to the drinks tab to place some" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
+            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentCenter;
             [cell.contentView addSubview:lblItemName];

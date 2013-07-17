@@ -355,6 +355,9 @@
     }
     else
     {
+        //storing the tax percentage
+        [[NSUserDefaults standardUserDefaults] setFloat:[[[arrVenueList objectAtIndex:indexPath.row] valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
+        
         HomeViewController *obj=[[HomeViewController alloc]init];
         obj.dictVenue=[arrVenueList objectAtIndex:indexPath.row];
         [self.navigationController pushViewController:obj animated:YES];
