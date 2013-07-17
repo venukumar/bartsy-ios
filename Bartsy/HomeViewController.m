@@ -398,6 +398,7 @@
     
     //Tax on item
     float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+9.5)))/100;
+    
     float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
     
     //Tip on item

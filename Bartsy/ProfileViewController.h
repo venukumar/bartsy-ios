@@ -15,6 +15,7 @@
 #import <GooglePlus/GooglePlus.h>
 #import <QuartzCore/QuartzCore.h>
 #import "CardIO.h"
+#import "Crypto.h"
 
 @interface ProfileViewController : BaseViewController<UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,CardIOPaymentViewControllerDelegate>
 {
@@ -46,6 +47,7 @@
     BOOL isCmgForEditProfile;
     NSString *strPassword;
     NSString *strDOB;
+    NSString *strServerPublicKey;
 }
 @property(nonatomic,retain)NSString *strDOB;
 @property(nonatomic,retain)NSString *strPassword;
@@ -58,6 +60,7 @@
 @property(nonatomic,retain)NSString *strGender;
 @property(nonatomic,retain)GTMOAuth2Authentication *auth;
 @property(nonatomic,retain)UITextView *txtViewDescription;
+@property(nonatomic,retain)NSString *strServerPublicKey;
 -(void)saveProfileData:(NSDictionary*)dict;
 -(void)setImageWithURL:(NSURL*)url;
 @end

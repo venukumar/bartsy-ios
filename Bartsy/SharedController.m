@@ -272,8 +272,17 @@ static SharedController *sharedController;
     [dictProfile setObject:strShowProfileStatus forKey:@"showProfile"];
     
     if(strcreditCardNumber!=nil&&[strcreditCardNumber length])
-    [dictProfile setObject:strcreditCardNumber forKey:@"creditCardNumber"];
+    [dictProfile setObject:@"4111111111111111" forKey:@"creditCardNumber"];
+
     
+    
+    NSMutableString *strCCNumber=[[NSMutableString alloc]initWithString:strcreditCardNumber];
+    strCCNumber=[strCCNumber stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    strCCNumber=[strCCNumber stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+
+    
+    [dictProfile setObject:strCCNumber forKey:@"encryptedCreditCard"];
+
     if(strExpiryMonth!=nil&&[strExpiryMonth length])
     [dictProfile setObject:strExpiryMonth forKey:@"expMonth"];
     
@@ -297,7 +306,6 @@ static SharedController *sharedController;
         
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
-   // NSLog(@"Profile Info : \n %@",dictUserProfile);
     
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/user/saveUserProfile",KServerURL];
     NSURL *url=[[NSURL alloc]initWithString:strURL];

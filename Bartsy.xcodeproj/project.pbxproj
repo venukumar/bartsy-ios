@@ -103,6 +103,10 @@
 		E04106BE172AB4EB009F1B1E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BD172AB4EB009F1B1E /* Security.framework */; };
 		E04106C0172AB4F7009F1B1E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E04106BF172AB4F7009F1B1E /* Social.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E0417106176B5F3D00FBA233 /* PeopleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0417105176B5F3D00FBA233 /* PeopleViewController.m */; };
+		E0539F2A17969BF600E16677 /* Crypto.m in Sources */ = {isa = PBXBuildFile; fileRef = E0539F2917969BF600E16677 /* Crypto.m */; };
+		E0539F2D17969C6A00E16677 /* Exception.m in Sources */ = {isa = PBXBuildFile; fileRef = E0539F2C17969C6A00E16677 /* Exception.m */; };
+		E0539F3017969CE000E16677 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = E0539F2F17969CE000E16677 /* Global.m */; };
+		E0539F3517969DD800E16677 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = E0539F3417969DD800E16677 /* NSData+Base64.m */; };
 		E05F8083175CB16600937E80 /* radio_btn_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = E05F8081175CB16600937E80 /* radio_btn_selected.png */; };
 		E05F8084175CB16600937E80 /* radio_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = E05F8082175CB16600937E80 /* radio_btn.png */; };
 		E05F8087175D138B00937E80 /* MixerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E05F8086175D138A00937E80 /* MixerViewController.m */; };
@@ -394,6 +398,14 @@
 		E04106BF172AB4F7009F1B1E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		E0417104176B5F3D00FBA233 /* PeopleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleViewController.h; sourceTree = "<group>"; };
 		E0417105176B5F3D00FBA233 /* PeopleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleViewController.m; sourceTree = "<group>"; };
+		E0539F2817969BF600E16677 /* Crypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crypto.h; sourceTree = "<group>"; };
+		E0539F2917969BF600E16677 /* Crypto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Crypto.m; sourceTree = "<group>"; };
+		E0539F2B17969C6A00E16677 /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
+		E0539F2C17969C6A00E16677 /* Exception.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Exception.m; sourceTree = "<group>"; };
+		E0539F2E17969CE000E16677 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
+		E0539F2F17969CE000E16677 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
+		E0539F3317969DD700E16677 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		E0539F3417969DD800E16677 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		E05F8081175CB16600937E80 /* radio_btn_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_btn_selected.png; sourceTree = "<group>"; };
 		E05F8082175CB16600937E80 /* radio_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = radio_btn.png; sourceTree = "<group>"; };
 		E05F8085175D138900937E80 /* MixerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MixerViewController.h; sourceTree = "<group>"; };
@@ -899,6 +911,7 @@
 		E041068D172A8D6F009F1B1E /* Bartsy */ = {
 			isa = PBXGroup;
 			children = (
+				E0539F2717969BCE00E16677 /* Crypto */,
 				E0EED06D176715960045CA75 /* CardIO */,
 				E07716B117533DFB005FD5E1 /* Google Analytics Library */,
 				E088B9D1174E105B0056FF39 /* Resources */,
@@ -934,6 +947,21 @@
 				E065D8AA1768878300DE7502 /* Default.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E0539F2717969BCE00E16677 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				E0539F2817969BF600E16677 /* Crypto.h */,
+				E0539F2917969BF600E16677 /* Crypto.m */,
+				E0539F2B17969C6A00E16677 /* Exception.h */,
+				E0539F2C17969C6A00E16677 /* Exception.m */,
+				E0539F2E17969CE000E16677 /* Global.h */,
+				E0539F2F17969CE000E16677 /* Global.m */,
+				E0539F3317969DD700E16677 /* NSData+Base64.h */,
+				E0539F3417969DD800E16677 /* NSData+Base64.m */,
+			);
+			name = Crypto;
 			sourceTree = "<group>";
 		};
 		E07716B117533DFB005FD5E1 /* Google Analytics Library */ = {
@@ -1720,6 +1748,10 @@
 				E0C446DB178EBD4400261B74 /* AccountInfoViewController.m in Sources */,
 				CBF8F3431793C0D8008EBBB8 /* AccountSettingsViewController.m in Sources */,
 				E0FD62B21794292800776EE0 /* PastOrdersCell.m in Sources */,
+				E0539F2A17969BF600E16677 /* Crypto.m in Sources */,
+				E0539F2D17969C6A00E16677 /* Exception.m in Sources */,
+				E0539F3017969CE000E16677 /* Global.m in Sources */,
+				E0539F3517969DD800E16677 /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
