@@ -27,7 +27,10 @@
     }
     return self;
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -154,6 +157,13 @@
 }
 -(void)btnSendDrink_TouchUpInside
 {
+    appDelegate.isComingForMenu=YES;
+    
+    //Passing the dict value to HomeviewController
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"PeopleSelected" object:dictPeople userInfo:nil];
+   
+    [self.navigationController popViewControllerAnimated:NO];
+
 }
 -(void)btnBack_TouchUpInside
 {

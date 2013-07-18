@@ -82,6 +82,14 @@
         [segmentControl setSelectedSegmentIndex:1];
         [self segmentControl_ValueChanged:segmentControl];
         return;
+    }else if(appDelegate.isComingForMenu==YES){
+        
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        appDelegate.isComingForMenu=NO;
+        [segmentControl setSelectedSegmentIndex:0];
+        [self segmentControl_ValueChanged:segmentControl];
+        return;
+
     }
 
 }
@@ -230,10 +238,20 @@
     //    ZooZ * zooz = [ZooZ sharedInstance];
     //    [zooz preInitialize:@"c7659586-f78a-4876-b317-1b617ec8ab40" isSandboxEnv:IS_SANDBOX];
     [self getPeopleList];
+    
+    //storing venue ID to call in timerforgetmessage
+    [[NSUserDefaults standardUserDefaults]setObject:[dictVenue objectForKey:@"venueId"] forKey:@"selectedVenueID"];
+    
+    [appDelegate startTimerTOGetMessages];
+    
+    //Registering local Notification
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"PeopleSelected" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedPeople:) name:@"PeopleSelected" object:nil];
 }
 
 -(void)btnBack_TouchUpInside
 {
+    [appDelegate stopTimerForGetMessages];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -418,6 +436,8 @@
     strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
     
     [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTipTotal itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] receiverBartsyId:strBartsyId delegate:self];
+    
+    dictPeopleSelectedForDrink=nil;
 }
 
 
@@ -440,6 +460,7 @@
 
 -(void)btnCancel_TouchUpInside
 {
+    dictPeopleSelectedForDrink=nil;
     UIView *viewA = (UIView*)[self.view viewWithTag:222];
     [viewA removeFromSuperview];
 }
@@ -777,7 +798,7 @@
         }
     }
     
-    //Making the first drinks array as a dictionary instead of array
+    //Making the first drinks array as a dictionary instead of array , Drinks without category name
     if([arrTemp count])
     {
         [arrTemp removeAllObjects];
@@ -870,7 +891,10 @@
                     
                      i++;
                  }
-             [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSString stringWithFormat:@"%d",i];
+                 if (i!=0) {
+                     [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSString stringWithFormat:@"%d",i];
+                 }
+             
              }
              
              if([appDelegate.arrPeople count])
@@ -975,10 +999,10 @@
         viewBg.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
         [scrollView addSubview:viewBg];
         
-        UIImageView *statusImg=[self createImageViewWithImage:[UIImage imageNamed:@"exclamatory_icon"] frame:CGRectMake(20, 5, 20, 20) tag:0];
+        UIImageView *statusImg=[self createImageViewWithImage:[UIImage imageNamed:@"exclametory"] frame:CGRectMake(10, 5, 20, 20) tag:0];
         [viewBg addSubview:statusImg];
         
-        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(55, 0, 250, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:2];
+        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(40, 0, 240, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:3];
         lblOrderStatus.text = [self getTheStatusMessageForOrder:dict];
         lblOrderStatus.adjustsFontSizeToFitWidth=YES;
         lblOrderStatus.textAlignment = NSTextAlignmentLeft;
@@ -988,12 +1012,12 @@
         {
             UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 2, 37.5, 26) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
             btnDismiss.titleLabel.font=[UIFont systemFontOfSize:10];
-            btnDismiss.backgroundColor=[UIColor grayColor];
+            btnDismiss.backgroundColor=[UIColor blackColor];
             [viewBg addSubview:btnDismiss];
         }
        
         
-        UIView *viewBg2=[self createViewWithFrame:CGRectMake(0, 30, viewBg.bounds.size.width, 140+[arrBundledOrdersObject count]*20) tag:0];
+        UIView *viewBg2=[self createViewWithFrame:CGRectMake(0, 35, viewBg.bounds.size.width, 140+[arrBundledOrdersObject count]*20) tag:0];
         viewBg2.backgroundColor=[UIColor blackColor];
         [viewBg addSubview:viewBg2];
         
@@ -2007,13 +2031,15 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if(isSelectedForDrinks)
     {
-        if(dictPeopleSelectedForDrink!=nil)
+       /* if(dictPeopleSelectedForDrink!=nil)
         {
             [dictPeopleSelectedForDrink release];
             dictPeopleSelectedForDrink=nil;
-        }
+        }*/
+        
         id object=[arrMenu objectAtIndex:indexPath.section-1];
         NSDictionary *dict;
+        
         if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
         {
             dict=[object objectAtIndex:indexPath.row];
@@ -2023,7 +2049,7 @@
             NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
             dict=[arrContents objectAtIndex:indexPath.row];
         }
-        
+            
         dictSelectedToMakeOrder=[[NSDictionary alloc]initWithDictionary:dict];
         
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -2059,17 +2085,23 @@
         //[arrPeopleTemp filterUsingPredicate:predicate];
         
         NSLog(@"Bartsy id is %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]);
-        
-        for (int i=0; i<[arrPeople count]; i++)
+        if([dictPeopleSelectedForDrink count])
         {
-            NSDictionary *dictMember=[arrPeople objectAtIndex:i];
-            if([[NSString stringWithFormat:@"%@",[dictMember objectForKey:@"bartsyId"]]isEqualToString:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]])
+            dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictPeopleSelectedForDrink];
+        }
+        else
+        {
+            for (int i=0; i<[arrPeople count]; i++)
             {
-                dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
-                break;
+                NSDictionary *dictMember=[arrPeople objectAtIndex:i];
+                if([[NSString stringWithFormat:@"%@",[dictMember objectForKey:@"bartsyId"]]isEqualToString:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]])
+                {
+                    dictTemp=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
+                    break;
+                }
             }
         }
-        
+       
         
         UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,10,60,60)];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
@@ -2348,8 +2380,6 @@
 
 -(void)btnPhoto_TouchUpInside
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"PeopleSelected" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedPeople:) name:@"PeopleSelected" object:nil];
     
     PeopleViewController *obj=[[PeopleViewController alloc]init];
     UINavigationController *nav=[[UINavigationController alloc]initWithRootViewController:obj];
@@ -2519,6 +2549,8 @@
     // Handle payment success
     [self hideProgressView:nil];
     [self btnOrder_TouchUpInside];
+    
+    
     
 }
 

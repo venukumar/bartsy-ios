@@ -70,7 +70,7 @@
         [self.sharedController getNotificationsWithDelegate:self];
     }
     
-    [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = nil;
+    
 }
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
 {
@@ -248,6 +248,7 @@
         for (NSDictionary *dic in appDelegate.arrPeople) {
         
             if ([[dic valueForKey:@"hasMessages"] isEqualToString:@"New"]) {
+                
                     [arrayForNotifications insertObject:dic atIndex:i];
                     i++;
             }

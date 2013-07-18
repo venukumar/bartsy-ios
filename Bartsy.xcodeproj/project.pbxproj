@@ -61,6 +61,8 @@
 		CBF9B6D91796CCC00030D269 /* send-message-hover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF9B6D11796CCC00030D269 /* send-message-hover@2x.png */; };
 		CBF9B6DA1796CCC00030D269 /* send-message.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF9B6D21796CCC00030D269 /* send-message.png */; };
 		CBF9B6DB1796CCC00030D269 /* send-message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF9B6D31796CCC00030D269 /* send-message@2x.png */; };
+		CBFAF1141797B3E600E953AC /* RewardsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFAF1131797B3E600E953AC /* RewardsTableCell.m */; };
+		CBFAF1161798212A00E953AC /* exclametory.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFAF1151798212A00E953AC /* exclametory.png */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		CBFE3C1D178FD95700DF6F50 /* tickmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C1C178FD95600DF6F50 /* tickmark@2x.png */; };
@@ -355,6 +357,9 @@
 		CBF9B6D11796CCC00030D269 /* send-message-hover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-message-hover@2x.png"; sourceTree = "<group>"; };
 		CBF9B6D21796CCC00030D269 /* send-message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-message.png"; sourceTree = "<group>"; };
 		CBF9B6D31796CCC00030D269 /* send-message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send-message@2x.png"; sourceTree = "<group>"; };
+		CBFAF1121797B3E600E953AC /* RewardsTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RewardsTableCell.h; sourceTree = "<group>"; };
+		CBFAF1131797B3E600E953AC /* RewardsTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RewardsTableCell.m; sourceTree = "<group>"; };
+		CBFAF1151798212A00E953AC /* exclametory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclametory.png; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -870,6 +875,7 @@
 		E02E0176178DC4940022A7F5 /* Venues */ = {
 			isa = PBXGroup;
 			children = (
+				CBFAF1151798212A00E953AC /* exclametory.png */,
 				E0C446EC178EDD1B00261B74 /* select-bartsy.png */,
 				E0C446E0178EBE9700261B74 /* user_icon.png */,
 				E0C446E1178EBE9700261B74 /* chat_icon.png */,
@@ -1380,6 +1386,8 @@
 				E0F956CF1778586C00F1EB71 /* PeopleDetailViewController.xib */,
 				E0C446D6178EBCC200261B74 /* RewardsViewController.h */,
 				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
+				CBFAF1121797B3E600E953AC /* RewardsTableCell.h */,
+				CBFAF1131797B3E600E953AC /* RewardsTableCell.m */,
 				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
 				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
 				CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */,
@@ -1668,6 +1676,7 @@
 				CBF9B6D91796CCC00030D269 /* send-message-hover@2x.png in Resources */,
 				CBF9B6DA1796CCC00030D269 /* send-message.png in Resources */,
 				CBF9B6DB1796CCC00030D269 /* send-message@2x.png in Resources */,
+				CBFAF1161798212A00E953AC /* exclametory.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1796,6 +1805,7 @@
 				E0539F2D17969C6A00E16677 /* Exception.m in Sources */,
 				E0539F3017969CE000E16677 /* Global.m in Sources */,
 				E0539F3517969DD800E16677 /* NSData+Base64.m in Sources */,
+				CBFAF1141797B3E600E953AC /* RewardsTableCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,7 +21,7 @@
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
 @synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
 @synthesize  tabBar;
-@synthesize isComingForPeople;
+@synthesize isComingForPeople,timerforGetMessages,isComingForMenu;
 - (void)dealloc
 {
     [_window release];
@@ -443,6 +443,82 @@
     NSLog(@"Error is %@",error);
 }
 
+#pragma mark------------Timer for Get Message
+-(void)startTimerTOGetMessages{
+    
+    if (![self.timerforGetMessages isValid] && self.timerforGetMessages==nil) {
+        
+        self.timerforGetMessages = [[NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(checkNewMessages) userInfo:nil repeats:YES] retain];
+    }
+}
+
+-(void)stopTimerForGetMessages{
+    
+    if ([self.timerforGetMessages isValid]) {
+        
+        [self.timerforGetMessages invalidate];
+        [self.timerforGetMessages release];
+    }
+}
+
+-(void)checkNewMessages{
+    
+    NSLog(@"newmessage");
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/checkedInUsersList",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults] valueForKey:@"selectedVenueID"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             [self.arrPeople removeAllObjects];
+             [self.arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+             
+             int i=0;
+             for (NSDictionary *dic in self.arrPeople) {
+                 
+                 if ([[dic valueForKey:@"hasMessages"] isEqualToString:@"New"]) {
+                     
+                     i++;
+                 }
+                 [[self.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSString stringWithFormat:@"%d",i];
+                 if (i==0) {
+                    [[self.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue =nil;
+                 }
+             }
+             
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+    
+    
+    [url release];
+    [request release];
+
+}
 - (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif
 {
     // Handle the notificaton when the app is running

@@ -33,7 +33,7 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
-    if(appDelegate.isComingForOrders||appDelegate.isComingForPeople)//&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
+    if(appDelegate.isComingForOrders||appDelegate.isComingForPeople || appDelegate.isComingForMenu)//&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
     {
         HomeViewController *obj=[[HomeViewController alloc]init];
         obj.dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
@@ -146,7 +146,17 @@
 
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
 {
-    
+    /*UISearchBar *SearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,40)];
+   // SearchBar.delegate = self;
+    SearchBar.showsCancelButton = YES;
+    UISearchDisplayController *searchview = [[UISearchDisplayController alloc]
+                                            initWithSearchBar:SearchBar
+                                            contentsController:self ];
+    _searchDisplayController=searchview;
+    searchview.delegate = self;
+    //searchview.searchResultsDataSource = self;
+   // searchview.searchResultsDelegate = self;
+    [searchview setActive:YES animated:YES];*/
 }
 
 -(void)btnGPS_TouchUpInside:(UIButton*)sender

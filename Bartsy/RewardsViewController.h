@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface RewardsViewController : UIViewController
+#import "BaseViewController.h"
+#import "RewardsTableCell.h"
+#import "UIImageView+WebCache.h"
+@interface RewardsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>{
+    
+    
+}
 
 @end

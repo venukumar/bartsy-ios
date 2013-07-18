@@ -34,11 +34,15 @@
     NSMutableArray *arrPeople;
     BOOL isCmgForWelcomeScreen;
     UITabBarController *tabBar;
+    
+    NSTimer *timerforGetMessages;
+    BOOL isComingForMenu;
 }
 @property (nonatomic,retain)UITabBarController *tabBar;
 @property(nonatomic,retain)NSMutableArray *arrPeople;
 @property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;
 @property(nonatomic,retain)NSTimer *timerForHeartBeat;
+@property(nonatomic,retain)NSTimer *timerforGetMessages;
 @property(nonatomic,retain)NSMutableArray *arrOrders;
 @property(nonatomic,retain)NSMutableArray *arrOrdersTimer;
 @property(nonatomic,assign)BOOL isLoginForFB;
@@ -57,7 +61,7 @@
 @property BOOL internetActive;
 @property BOOL hostActive;
 @property(nonatomic,assign)BOOL isCmgForWelcomeScreen;
-
+@property(nonatomic,assign)BOOL isComingForMenu;
 - (void) checkNetworkStatus:(NSNotification *)notice;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
@@ -71,5 +75,7 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result;
 -(void)controllerDidFailLoadingWithError:(NSError*)error;
 -(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus;
+-(void)startTimerTOGetMessages;
+-(void)stopTimerForGetMessages;
 @end
 

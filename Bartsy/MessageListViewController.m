@@ -151,6 +151,8 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     
+    //Marking as all message read
+    [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = nil;
 }
 
 

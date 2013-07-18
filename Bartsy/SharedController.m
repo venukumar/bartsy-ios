@@ -360,9 +360,21 @@ static SharedController *sharedController;
     if(strProdId==nil&&strProdId!=(id)[NSNull null])
         strProdId=@"1";
     
-    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",strReceiverId,@"recieverBartsyId",@"NO",@"drinkAcceptance",@"Take care",@"specialInstructions", nil];
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc]init];
+                                      //initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",strReceiverId,@"recieverBartsyId",@"NO",@"drinkAcceptance",@"Take care",@"specialInstructions", nil];
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
-
+    [dictProfile setValue:strStatus forKey:@"orderStatus"];
+    [dictProfile setValue:strBasePrice forKey:@"basePrice"];
+    [dictProfile setValue:strTotalPrice forKey:@"totalPrice"];
+    [dictProfile setValue:strPercentage forKey:@"tipPercentage"];
+    [dictProfile setValue:strName forKey:@"itemName"];
+    [dictProfile setValue:strProdId forKey:@"itemId"];
+    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+    [dictProfile setValue:strDescription forKey:@"description"];
+    [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
+    [dictProfile setValue:@"NO" forKey:@"drinkAcceptance"];
+    [dictProfile setValue:@"Take care" forKey:@"specialInstructions"];
     //NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
     
     NSLog(@"Order Details : \n %@",dictProfile);
@@ -572,7 +584,21 @@ static SharedController *sharedController;
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     
-    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type",strReceiverId,@"recieverBartsyId", nil];
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] init];
+    //initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type",strReceiverId,@"recieverBartsyId", nil];
+    
+    [dictProfile setValue:strStatus forKey:@"orderStatus"];
+    [dictProfile setValue:strBasePrice forKey:@"basePrice"];
+    [dictProfile setValue:strTotalPrice forKey:@"totalPrice"];
+    [dictProfile setValue:strPercentage forKey:@"tipPercentage"];
+    [dictProfile setValue:strName forKey:@"itemName"];
+    [dictProfile setValue:strProdId forKey:@"itemId"];
+    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+    [dictProfile setValue:strDescription forKey:@"description"];
+    [dictProfile setValue:arrIngredients forKey:@"ingredients"];
+    [dictProfile setValue:@"custom" forKey:@"type"];
+    [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
     [dictProfile setValue:@"Take Care" forKey:@"specialInstructions"];
 
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -883,6 +909,33 @@ static SharedController *sharedController;
     
     [dictCheckIn setObject:strbartsyId forKey:@"bartsyId"];
 
+    NSLog(@"dict is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+    
+}
+
+-(void)getUserRewardsbybartsyID:(NSString*)strbartsyID delegate:(id)aDelegate{
+    
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/UserRewards/getUserRewards",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    [dictCheckIn setObject:strbartsyID forKey:@"bartsyId"];
+    
     NSLog(@"dict is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
