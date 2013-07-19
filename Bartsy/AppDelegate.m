@@ -213,6 +213,7 @@
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getUserOrders",KServerURL];
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -468,7 +469,8 @@
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults] valueForKey:@"selectedVenueID"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];

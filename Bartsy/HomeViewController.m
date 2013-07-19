@@ -862,7 +862,8 @@
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[dictVenue objectForKey:@"venueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -1280,7 +1281,8 @@
         NSMutableDictionary *dictJSON=[[NSMutableDictionary alloc] initWithObjectsAndKeys:arrOrderIds,@"orderList",nil];
         [dictJSON setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
         [dictJSON setValue:KAPIVersionNumber forKey:@"apiVersion"];
-        
+        [dictJSON setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
         SBJSON *jsonObj=[SBJSON new];
         NSString *strJson=[jsonObj stringWithObject:dictJSON];
         NSData *dataJSON=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -1506,7 +1508,8 @@
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strOrderId,@"orderId",strStatus,@"orderStatus",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];

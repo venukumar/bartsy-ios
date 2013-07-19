@@ -105,7 +105,7 @@ static SharedController *sharedController;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getMenu",KServerURL];
     
     NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
-    
+    [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
     SBJSON *jsonObj=[SBJSON new];
@@ -129,6 +129,7 @@ static SharedController *sharedController;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/venue/getVenueList",KServerURL];
     
         NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:nil];
+    [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
     SBJSON *jsonObj=[SBJSON new];
@@ -272,16 +273,13 @@ static SharedController *sharedController;
     [dictProfile setObject:strShowProfileStatus forKey:@"showProfile"];
     
     if(strcreditCardNumber!=nil&&[strcreditCardNumber length])
-    [dictProfile setObject:@"4111111111111111" forKey:@"creditCardNumber"];
+    {
 
-    
-    
-    NSMutableString *strCCNumber=[[NSMutableString alloc]initWithString:strcreditCardNumber];
-    strCCNumber=[strCCNumber stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    strCCNumber=[strCCNumber stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-
-    
-    [dictProfile setObject:strCCNumber forKey:@"encryptedCreditCard"];
+        NSMutableString *strCCNumber=[[NSMutableString alloc]initWithString:strcreditCardNumber];
+        strCCNumber=[strCCNumber stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        strCCNumber=[strCCNumber stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+        [dictProfile setObject:strCCNumber forKey:@"encryptedCreditCard"];
+    }
 
     if(strExpiryMonth!=nil&&[strExpiryMonth length])
     [dictProfile setObject:strExpiryMonth forKey:@"expMonth"];
@@ -375,6 +373,8 @@ static SharedController *sharedController;
     [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
     [dictProfile setValue:@"NO" forKey:@"drinkAcceptance"];
     [dictProfile setValue:@"Take care" forKey:@"specialInstructions"];
+    [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     //NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
     
     NSLog(@"Order Details : \n %@",dictProfile);
@@ -425,6 +425,7 @@ static SharedController *sharedController;
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -450,6 +451,7 @@ static SharedController *sharedController;
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     
     SBJSON *jsonObj=[SBJSON new];
@@ -474,6 +476,7 @@ static SharedController *sharedController;
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -497,6 +500,7 @@ static SharedController *sharedController;
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strBartsyId,@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -520,6 +524,7 @@ static SharedController *sharedController;
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",strBartsyId,@"bartsyId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -562,6 +567,7 @@ static SharedController *sharedController;
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getIngredients",KServerURL];
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -600,6 +606,7 @@ static SharedController *sharedController;
     [dictProfile setValue:@"custom" forKey:@"type"];
     [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
     [dictProfile setValue:@"Take Care" forKey:@"specialInstructions"];
+    [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
 
@@ -719,7 +726,8 @@ static SharedController *sharedController;
     
     
     NSMutableDictionary *dictLogIn=[[NSMutableDictionary alloc] initWithDictionary:dictProfileDetails];
-                                    
+    
+    [dictLogIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
     [dictLogIn setObject:strBastsyId forKey:@"bartsyId"];
     [dictLogIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
     NSLog(@"Login Details %@",dictLogIn);
@@ -746,6 +754,8 @@ static SharedController *sharedController;
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     if(date!=nil&&[date length])
     [dictCheckIn setObject:date forKey:@"date"];
     [dictCheckIn setObject:strbartsyId forKey:@"bartsyId"];
@@ -783,6 +793,8 @@ static SharedController *sharedController;
         [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     }
     
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     NSLog(@"dict for get Notifications is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -810,7 +822,8 @@ static SharedController *sharedController;
     [dictCheckIn setObject:strReceiverBartsyId forKey:@"receiverId"];
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     [dictCheckIn setObject:message forKey:@"message"];
-    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     NSLog(@"dict for send Messages is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -837,6 +850,8 @@ static SharedController *sharedController;
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"senderId"];
     [dictCheckIn setObject:strReceiverBartsyId forKey:@"receiverId"];
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     NSLog(@"dict for get Messages is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
@@ -866,7 +881,8 @@ static SharedController *sharedController;
     [dictCheckIn setObject:strBartsyId forKey:@"favoriteBartsyId"];
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     [dictCheckIn setObject:strStatus forKey:@"status"];
-    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     
     NSLog(@"dict for Like is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
@@ -908,6 +924,7 @@ static SharedController *sharedController;
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
     [dictCheckIn setObject:strbartsyId forKey:@"bartsyId"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     NSLog(@"dict is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
@@ -935,7 +952,8 @@ static SharedController *sharedController;
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
     [dictCheckIn setObject:strbartsyID forKey:@"bartsyId"];
-    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     NSLog(@"dict is %@",dictCheckIn);
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];

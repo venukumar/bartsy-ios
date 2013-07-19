@@ -197,7 +197,8 @@
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-    
+    //[dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+
     SBJSON *jsonObj=[SBJSON new];
     NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
     NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
@@ -1581,13 +1582,16 @@
         isProfileExistsCheck=NO;
         if([[result objectForKey:@"errorCode"] integerValue]==1)
         {
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
             UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
             [tblView reloadData];
         }
         else if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
-            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyId"] forKey:@"bartsyId"];
             
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"oauthCode"] forKey:@"oauthCode"];
             if(appDelegate.isLoginForFB)
             {
                 [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:[dictResult objectForKey:@"username"],@"facebookUserName",[dictResult objectForKey:@"id"],@"facebookId", nil] forKey:@"LoginDetails"];
@@ -1647,6 +1651,7 @@
         
         if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
+            [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"oauthCode"] forKey:@"oauthCode"];            
             
             NSManagedObjectContext *context=[appDelegate managedObjectContext];
             
