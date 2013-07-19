@@ -18,7 +18,7 @@
 @end
 
 @implementation VenueListViewController
-
+@synthesize SearchDisplayController;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -141,21 +141,46 @@
         tblView.frame=CGRectMake(0, 241, 320, 180+108);
     }
     
-    
+    UISearchBar *searchbar = [[UISearchBar alloc] init];
+    [searchbar setTintColor:[UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0]];
+    searchbar.frame = CGRectMake(0, -50, 320,50);
+    searchbar.delegate = self;
+    searchbar.tag=1112;
+    searchbar.backgroundColor=[UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
+    searchbar.showsCancelButton=YES;
+    [self.view addSubview:searchbar];
+    // create searchBar
+    SearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchbar contentsController:self];
+    SearchDisplayController.delegate = self;
+    SearchDisplayController.searchResultsDataSource = self;
+    SearchDisplayController.searchResultsDelegate = self;
+    SearchDisplayController.searchResultsTableView.backgroundColor=[UIColor blackColor];
+    [SearchDisplayController.searchResultsTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+    for (UIView *searchbuttons in searchbar.subviews)
+    {
+        if ([searchbuttons isKindOfClass:[UIButton class]])
+        {
+            UIButton *cancelButton = (UIButton*)searchbuttons;
+            cancelButton.enabled = YES;
+            //cancelButton=[UIButton buttonWithType:UIButtonTypeCustom];
+            [cancelButton setBackgroundColor:[UIColor blackColor]];
+            [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            break;
+        }
+    }
 }
 
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
 {
-    /*UISearchBar *SearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0,0,320,40)];
-   // SearchBar.delegate = self;
-    SearchBar.showsCancelButton = YES;
-    UISearchDisplayController *searchview = [[UISearchDisplayController alloc]
+    UISearchBar *searchbar=(UISearchBar*)[self.view viewWithTag:1112];
+    searchbar.frame=CGRectMake(0, 0, 320,50);
+   /* UISearchDisplayController *searchview = [[UISearchDisplayController alloc]
                                             initWithSearchBar:SearchBar
                                             contentsController:self ];
-    _searchDisplayController=searchview;
+    searchDisplayController=searchview;
     searchview.delegate = self;
-    //searchview.searchResultsDataSource = self;
-   // searchview.searchResultsDelegate = self;
+    searchview.searchResultsDataSource = self;
+    searchview.searchResultsDelegate = self;
     [searchview setActive:YES animated:YES];*/
 }
 
@@ -219,6 +244,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+	{
+        return [arrVenueList count];
+    }else
     return [arrVenueList count];
 }
 
@@ -232,7 +261,10 @@
     NSDictionary *dict=[arrVenueList objectAtIndex:indexPath.row];
     // Configure the cell...
     UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-    
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+	{
+        cell.textLabel.text = [dict objectForKey:@"venueName"];
+    }else{
     if((indexPath.row)==0)
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"city_tavern_bg.png"]]; //set image for cell 0
     else
@@ -324,7 +356,7 @@
 //        cell.contentView.backgroundColor=[UIColor grayColor];
 //        imgViewDrink.alpha=0.1;
 //    }
-
+    }
     
     return cell;
 }
@@ -598,6 +630,12 @@
     
 }
 
+#pragma mark----------Search Delegates
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar{
+    
+    [searchBar resignFirstResponder];
+    searchBar.frame=CGRectMake(0, -50, 320,50);
+}
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(alertView.tag==143225&&buttonIndex==1)

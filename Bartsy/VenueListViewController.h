@@ -12,10 +12,12 @@
 #import "MapKit/MapKit.h"
 #import "CoreLocation/CoreLocation.h"
 
-@interface VenueListViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,CLLocationManagerDelegate>
+@interface VenueListViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,CLLocationManagerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 {
     NSMutableArray *arrVenueList;
     CLLocationCoordinate2D currentLocaion;
+    
 }
 -(void)reloadMapView;
+@property (nonatomic, strong) UISearchDisplayController * SearchDisplayController;
 @end

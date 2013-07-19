@@ -81,6 +81,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark-------------TableView Delegate
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -172,6 +174,20 @@
             profileScreen.isCmgForEditProfile=YES;
             [self.navigationController pushViewController:profileScreen animated:YES];
             [profileScreen release];
+        }else if (indexPath.row==4){
+            
+            NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+            NSString *strMsg=nil;
+            
+            if(appDelegate.intOrderCount)
+            {
+                strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you logout they will be cancelled and you will still be charged for it.Do you want to logout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+            }
+            else
+            {
+                strMsg=[NSString stringWithFormat:@"Do you want to logout"];
+            }
+            [self createAlertViewWithTitle:@"" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:225];
         }
     }else if (indexPath.section==2) {
         
@@ -192,6 +208,27 @@
         }
         
 
+    }
+}
+
+#pragma mark---------------AlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag==225&&buttonIndex==1)
+    {
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+        {
+            self.sharedController=[SharedController sharedController];
+            [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:nil];
+            
+        }
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"CheckInVenueId"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"logOut" object:nil];
     }
 }
 

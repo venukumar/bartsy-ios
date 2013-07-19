@@ -180,7 +180,10 @@
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
 
     cell.title.text= [dictForOrder objectForKey:@"itemName"];
-    cell.description.text=[dictForOrder objectForKey:@"description"];
+    if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]])
+      cell.description.text=@"";
+    else
+     cell.description.text=[dictForOrder objectForKey:@"description"];
     
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";

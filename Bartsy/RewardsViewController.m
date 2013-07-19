@@ -139,7 +139,7 @@
             
         if ([[result valueForKey:@"errorCode"] integerValue]==0) {
                 
-            
+            [rewardsArray removeAllObjects];
             NSArray  *resultarray=[result valueForKey:@"venues"];
             
             for (NSDictionary *dic in resultarray) {

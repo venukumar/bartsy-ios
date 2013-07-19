@@ -219,7 +219,7 @@
     }
     
     
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 90, 320, 323)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323)];
     tblView.dataSource=self;
     tblView.backgroundColor = [UIColor blackColor];
     tblView.delegate=self;
@@ -499,6 +499,10 @@
     
     if([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
+        NSLog(@" id %@",result);
+        if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
+            [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+      else
         [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
     else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO)
@@ -1772,7 +1776,7 @@
         [lblPrice release];
         
         
-        UILabel *lblDollars=[[UILabel alloc]initWithFrame:CGRectMake(275, 45, 50, 10)];
+        UILabel *lblDollars=[[UILabel alloc]initWithFrame:CGRectMake(270, 45, 50, 10)];
         lblDollars.text=@"dollars";        
         lblDollars.font=[UIFont systemFontOfSize:10];
         lblDollars.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
