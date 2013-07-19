@@ -121,7 +121,7 @@
         cell.venuepoints.text=[NSString stringWithFormat:@"%d points",[[dictForrewards valueForKey:@"rewards"] integerValue]];
     }else{
         
-        cell.venueaddress.text=@"\n\n  No reward point available";
+        cell.venueaddress.text=@"\n\n  No reward points available";
     }
     
     return cell;

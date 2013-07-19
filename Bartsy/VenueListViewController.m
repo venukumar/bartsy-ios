@@ -172,16 +172,9 @@
 
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
 {
-    UISearchBar *searchbar=(UISearchBar*)[self.view viewWithTag:1112];
-    searchbar.frame=CGRectMake(0, 0, 320,50);
-   /* UISearchDisplayController *searchview = [[UISearchDisplayController alloc]
-                                            initWithSearchBar:SearchBar
-                                            contentsController:self ];
-    searchDisplayController=searchview;
-    searchview.delegate = self;
-    searchview.searchResultsDataSource = self;
-    searchview.searchResultsDelegate = self;
-    [searchview setActive:YES animated:YES];*/
+   // UISearchBar *searchbar=(UISearchBar*)[self.view viewWithTag:1112];
+    //searchbar.frame=CGRectMake(0, 0, 320,50);
+
 }
 
 -(void)btnGPS_TouchUpInside:(UIButton*)sender

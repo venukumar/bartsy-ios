@@ -1775,7 +1775,6 @@
         [cell.contentView addSubview:lblPrice];
         [lblPrice release];
         
-        
         UILabel *lblDollars=[[UILabel alloc]initWithFrame:CGRectMake(270, 45, 50, 10)];
         lblDollars.text=@"dollars";        
         lblDollars.font=[UIFont systemFontOfSize:10];

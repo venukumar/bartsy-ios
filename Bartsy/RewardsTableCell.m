@@ -26,7 +26,7 @@
         venueName.textAlignment = NSTextAlignmentLeft;
         [self.contentView addSubview:venueName];
         
-        UIImageView *addresimg=[[UIImageView alloc]initWithFrame:CGRectMake(71, 34, 12.5, 15.5)];
+        UIImageView *addresimg=[[UIImageView alloc]initWithFrame:CGRectMake(71, 36, 12.5, 15.5)];
         addresimg.image=[UIImage imageNamed:@"map"];
         [self.contentView addSubview:addresimg];
         [addresimg release];
