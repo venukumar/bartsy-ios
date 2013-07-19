@@ -608,6 +608,9 @@
         [[NSUserDefaults standardUserDefaults]setObject:[arrVenueList objectAtIndex:intIndex] forKey:@"VenueDetails"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [appDelegate startTimerToCheckHeartBeat];
+        
+        //storing the tax percentage
+        [[NSUserDefaults standardUserDefaults] setFloat:[[[arrVenueList objectAtIndex:intIndex] valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
         HomeViewController *obj=[[HomeViewController alloc]init];
         obj.dictVenue=[arrVenueList objectAtIndex:intIndex];
         [self.navigationController pushViewController:obj animated:YES];
