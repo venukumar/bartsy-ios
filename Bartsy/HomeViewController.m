@@ -44,6 +44,10 @@
     BOOL isRequestForGettingsOrders;
     BOOL isRequestForGettingsPastOrders;
     NSString *sessionToken;
+    
+    UIScrollView *topscrollView;
+    UIPageControl *pagectrl;
+    BOOL _pageControlUsed;
 }
 
 @end
@@ -136,6 +140,8 @@
     [btnCheckOut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.view addSubview:btnCheckOut];
     
+   /* UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 8, 28, 28) tag:0 selector:@selector(CheckinButton_Action:) target:self];
+    [self.view addSubview:checkinBtn];*/
     // Do any additional setup after loading the view, typically from a nib.
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -152,7 +158,33 @@
     
     NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",appDelegate.intOrderCount];
     NSString *strPeopleCount=[NSString stringWithFormat:@"People (%i)",appDelegate.intPeopleCount];
-
+// Pagecontrol with scrollview
+  /*  topscrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,45,320,120)];
+    topscrollView.scrollEnabled=YES;
+    topscrollView.pagingEnabled=YES;
+    topscrollView.delegate=self;
+    topscrollView.showsHorizontalScrollIndicator=NO;
+    [topscrollView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:topscrollView];
+    NSLog(@"dictvenue %@",dictVenue);
+    NSArray *temparray=[NSArray arrayWithObjects:@"background-img",@"background-img-A",@"background-img1",nil];
+    for (int i=0; i<3; i++) {
+        
+        UIImageView *imgview=[self createImageViewWithImage:[UIImage imageNamed:[temparray objectAtIndex:i] ] frame:CGRectMake(320*i, 0, 320, 120) tag:0];
+        [topscrollView addSubview:imgview];
+        
+        UILabel *address=[self createLabelWithTitle:[dictVenue valueForKey:@"address"] frame:CGRectMake(31, 0, 260, 120) tag:0 font:[UIFont systemFontOfSize:22] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:3];
+        address.textAlignment=NSTextAlignmentCenter;
+        [imgview addSubview:address];
+        
+        
+    }
+    [topscrollView setContentSize:CGSizeMake(3*320,120)];
+    pagectrl=[[UIPageControl alloc]initWithFrame:CGRectMake(110, 140, 100, 20)];
+    pagectrl.numberOfPages=3;
+    [pagectrl setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview:pagectrl];
+    [pagectrl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];*/
     UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder,@"Past Orders", nil]];
     segmentControl.frame=CGRectMake(2, 47, 316, 40);
     UIFont *font = [UIFont systemFontOfSize:12.0f];
@@ -973,8 +1005,8 @@
 {
     UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
     [scrollViewOld removeFromSuperview];
-    
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 90, 320, 375-42)];
+    UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42)];
     scrollView.tag=987;
     scrollView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:scrollView];
@@ -1379,6 +1411,17 @@
     }
 }
 
+-(void)CheckinButton_Action:(UIButton*)sender{
+    
+    sender.hidden=YES;
+    UIButton *btnCheckOut=[self createUIButtonWithTitle:@"Checkout" image:nil frame:CGRectMake(250, 5, 65, 35) tag:0 selector:@selector(backLogOut_TouchUpInside) target:self];
+    btnCheckOut.titleLabel.font=[UIFont systemFontOfSize:14];
+    [btnCheckOut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.view addSubview:btnCheckOut];
+    UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+   segmentControl.frame=CGRectMake(2, 47, 316, 40);
+
+}
 -(void)getOpenOrders
 {
     isRequestForGettingsPastOrders = NO;
@@ -1874,7 +1917,12 @@
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
             
-            UILabel *lbldescription = [self createLabelWithTitle:[dictForOrder objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+            UILabel *lbldescription;
+            if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]]) 
+             lbldescription = [self createLabelWithTitle:@"" frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+            else
+            lbldescription = [self createLabelWithTitle:[dictForOrder objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+           
             lbldescription.backgroundColor=[UIColor clearColor];
             lbldescription.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lbldescription];
@@ -2376,10 +2424,21 @@
     }
     else if(isSelectedForPeople)
     {
-        PeopleDetailViewController *obj = [[PeopleDetailViewController alloc] init];
-        obj.dictPeople = [arrPeople objectAtIndex:indexPath.row];
-        [self.navigationController pushViewController:obj animated:YES];
-        [obj release];
+        NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
+
+        if ([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"New"]) {
+        
+            MessageListViewController *obj = [[MessageListViewController alloc] init];
+            obj.dictForReceiver = [arrPeople objectAtIndex:indexPath.row];
+            [self.navigationController pushViewController:obj animated:YES];
+            [obj release];
+        }else{
+            PeopleDetailViewController *obj = [[PeopleDetailViewController alloc] init];
+            obj.dictPeople = [arrPeople objectAtIndex:indexPath.row];
+            [self.navigationController pushViewController:obj animated:YES];
+            [obj release];
+        }
+        
     }
     // Navigation logic may go here. Create and push another view controller.
 }
@@ -2620,6 +2679,38 @@
         {
             [self.navigationController popToViewController:viewController animated:YES];
         }
+    }
+}
+
+
+- (void)changePage:(id)sender {
+    int page = ((UIPageControl *)sender).currentPage;
+    
+    // update the scroll view to the appropriate page
+    CGRect frame = topscrollView.frame;
+    CGFloat axis = frame.size.width * page;
+    frame.origin.y = 0;
+    
+    
+    frame.origin.x=axis;
+    [topscrollView scrollRectToVisible:frame animated:YES];
+    
+    // Set the boolean used when scrolls originate from the UIPageControl. See scrollViewDidScroll: above.
+    _pageControlUsed = YES;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)sender {
+    if (sender==topscrollView) {
+        
+    
+    if (_pageControlUsed) {
+        
+        return;
+    }
+    CGFloat pageWidth = topscrollView.frame.size.width;
+    int page = floor((topscrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    
+    pagectrl.currentPage = page;
     }
 }
 

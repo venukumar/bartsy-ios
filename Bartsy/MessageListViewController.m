@@ -161,6 +161,8 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     isGetMessageWebService = YES;
     [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
+    
+   
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -173,6 +175,15 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     isGetMessageWebService = YES;
     [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
+    getmsgtimer=  [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(Get_Messagetimer:) userInfo:nil repeats:YES];
+}
+-(void)viewDidDisappear:(BOOL)animated{
+    
+    [super viewDidDisappear:YES];
+    if ([getmsgtimer isValid]) {
+        
+        [getmsgtimer invalidate];
+    }
 }
 -(void)btnBack_TouchUpInside
 {
@@ -182,15 +193,25 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 {
     if ([txtField.text length])
     {
+        NSData *data = [txtField.text dataUsingEncoding:NSNonLossyASCIIStringEncoding];
+        NSString *encodedstr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         [self createProgressViewToParentView:self.view withTitle:@"Sending Message..."];
         isGetMessageWebService=NO;
         isSendWebService = YES;
-        [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:txtField.text delegate:self];
+        [self.sharedController sendMessageWithSenderId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] receiverId:[dictForReceiver objectForKey:@"bartsyId"] message:encodedstr delegate:self];
+        [encodedstr release];
     }
     else
     {
         [self.sharedController showAlertWithTitle:nil message:@"Message should not be empty" delegate:nil];
     }
+}
+
+-(void)Get_Messagetimer:(NSTimer*)sender{
+    
+    isGetMessageWebService = YES;
+    [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
+    
 }
 #pragma mark - Keyboard notification methods
 
@@ -341,7 +362,10 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
                 isSentByMe=YES;
             }
             isSentByMe=!isSentByMe;
-            NSBubbleData *bubbleMsg = [NSBubbleData dataWithText:[dictMsg objectForKey:@"message"] date:date type:isSentByMe];
+            NSData *data = [[dictMsg objectForKey:@"message"] dataUsingEncoding:NSUTF8StringEncoding];
+            NSString *decodedstr = [[NSString alloc] initWithData:data encoding:NSNonLossyASCIIStringEncoding];
+           
+            NSBubbleData *bubbleMsg = [NSBubbleData dataWithText:decodedstr date:date type:isSentByMe];
             
             if(!isSentByMe)
                 bubbleMsg.avatar=imgSelf;
@@ -349,6 +373,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
                 bubbleMsg.avatar=imgReceiver;
             
             [bubbleData addObject:bubbleMsg];
+            [decodedstr release];
         }
         [bubbleTableView reloadData];
         
@@ -382,7 +407,6 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 {
     [self hideProgressView:nil];
 }
-
 
 - (void)didReceiveMemoryWarning
 {

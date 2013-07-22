@@ -228,6 +228,7 @@ static SharedController *sharedController;
     if(strBartsyLogin!=nil&&[strBartsyLogin length])
     {
         [dictProfile setObject:strBartsyLogin forKey:@"bartsyLogin"];
+        [dictProfile setObject:strBartsyLogin forKey:@"email"];
         if(strBartsyPassword!=nil&&[strBartsyPassword length])
         [dictProfile setObject:strBartsyPassword forKey:@"bartsyPassword"];
         
@@ -274,11 +275,11 @@ static SharedController *sharedController;
     
     if(strcreditCardNumber!=nil&&[strcreditCardNumber length])
     {
-
+        NSLog(@"strcredit %@",strcreditCardNumber);
         NSMutableString *strCCNumber=[[NSMutableString alloc]initWithString:strcreditCardNumber];
         strCCNumber=[strCCNumber stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         strCCNumber=[strCCNumber stringByReplacingOccurrencesOfString:@"\r" withString:@""];
-        [dictProfile setObject:strCCNumber forKey:@"encryptedCreditCard"];
+        [dictProfile setObject:strCCNumber forKey:@"creditCardNumber"];
     }
 
     if(strExpiryMonth!=nil&&[strExpiryMonth length])

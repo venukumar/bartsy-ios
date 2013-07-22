@@ -49,6 +49,7 @@
 		CB98321B179949A100DC63AC /* background-img.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321A179949A100DC63AC /* background-img.png */; };
 		CB98321E17994F0300DC63AC /* background-img-A.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321C17994F0300DC63AC /* background-img-A.png */; };
 		CB98321F17994F0300DC63AC /* background-img1.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321D17994F0300DC63AC /* background-img1.png */; };
+		CB98322117996F2100DC63AC /* tick_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98322017996F2100DC63AC /* tick_mark.png */; };
 		CBF8437E17958176004D8340 /* mail.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8437D17958176004D8340 /* mail.png */; };
 		CBF8F3431793C0D8008EBBB8 /* AccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */; };
 		CBF8F34C179409DC008EBBB8 /* signup-bartsy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF8F34B179409DC008EBBB8 /* signup-bartsy@2x.png */; };
@@ -348,6 +349,7 @@
 		CB98321A179949A100DC63AC /* background-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img.png"; sourceTree = "<group>"; };
 		CB98321C17994F0300DC63AC /* background-img-A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img-A.png"; sourceTree = "<group>"; };
 		CB98321D17994F0300DC63AC /* background-img1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img1.png"; sourceTree = "<group>"; };
+		CB98322017996F2100DC63AC /* tick_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick_mark.png; sourceTree = "<group>"; };
 		CBF8437D17958176004D8340 /* mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mail.png; sourceTree = "<group>"; };
 		CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountSettingsViewController.h; sourceTree = "<group>"; };
 		CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountSettingsViewController.m; sourceTree = "<group>"; };
@@ -1418,6 +1420,7 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB98322017996F2100DC63AC /* tick_mark.png */,
 				CB98321C17994F0300DC63AC /* background-img-A.png */,
 				CB98321D17994F0300DC63AC /* background-img1.png */,
 				CB98321A179949A100DC63AC /* background-img.png */,
@@ -1701,6 +1704,7 @@
 				CB98321B179949A100DC63AC /* background-img.png in Resources */,
 				CB98321E17994F0300DC63AC /* background-img-A.png in Resources */,
 				CB98321F17994F0300DC63AC /* background-img1.png in Resources */,
+				CB98322117996F2100DC63AC /* tick_mark.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

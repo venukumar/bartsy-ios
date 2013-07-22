@@ -31,6 +31,7 @@
     
     isSelected=NO;
     
+    self.navigationController.navigationBar.tintColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
     self.view.backgroundColor=[UIColor whiteColor];
     
     arrAgreements=[[NSArray alloc]initWithObjects:@"Bartsy Beta Participant Agreement - 2013-06-11",@"Bartsy EULA - 2013-06-16",@"Bartsy Terms of Use - 2013-06-11",@"Bartsy Privacy Policy - 2013-06-11", nil];

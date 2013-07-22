@@ -15,6 +15,8 @@
     UIImage *imgSelf;
     UIImage *imgReceiver;
     NSInteger intHeight;
+    
+    NSTimer *getmsgtimer;
 }
 @property(nonatomic,retain)UIImage *imgSelf;
 @property(nonatomic,retain)UIImage *imgReceiver;
