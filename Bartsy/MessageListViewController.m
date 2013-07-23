@@ -249,7 +249,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     {
         if(intHeight>465)
         {
-            [bubbleTableView setContentOffset:CGPointMake(0, intHeight-400) animated:YES];
+            [bubbleTableView setContentOffset:CGPointMake(0, intHeight-240) animated:YES];
         }
     }
     else if(intHeight>262)
@@ -344,7 +344,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     {
         isGetMessageWebService=NO;
         [bubbleData removeAllObjects];
-        NSLog(@"messages is %@",[result objectForKey:@"messages"]);
+        
         NSMutableArray *arrayForMessages = [[NSMutableArray alloc] initWithArray:[result objectForKey:@"messages"]];
         
         for (int i = 0 ; i<[arrayForMessages count]; i++)
@@ -386,12 +386,18 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         {
             if(intHeight>465)
             {
-                [bubbleTableView setContentOffset:CGPointMake(0, intHeight-465) animated:YES];
+                if (bubbleData.count<4) 
+                [bubbleTableView setContentOffset:CGPointMake(0, intHeight-420) animated:YES];
+                else
+                [bubbleTableView setContentOffset:CGPointMake(0, intHeight-240) animated:YES];
             }
         }
         else if(intHeight>382)
         {
-            [bubbleTableView setContentOffset:CGPointMake(0,intHeight-378) animated:YES];
+            if (bubbleData.count<4) {
+                [bubbleTableView setContentOffset:CGPointMake(0,intHeight-348) animated:YES];
+            }else
+               [bubbleTableView setContentOffset:CGPointMake(0,intHeight-160) animated:YES];
         }
         
         NSLog(@"TableView height is %i",intHeight);

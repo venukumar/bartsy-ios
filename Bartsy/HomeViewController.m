@@ -48,6 +48,9 @@
     UIScrollView *topscrollView;
     UIPageControl *pagectrl;
     BOOL _pageControlUsed;
+    
+    NSMutableArray *ArrMenuSections;
+    NSMutableArray *arrFavorites;
 }
 
 @end
@@ -158,34 +161,8 @@
     
     NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",appDelegate.intOrderCount];
     NSString *strPeopleCount=[NSString stringWithFormat:@"People (%i)",appDelegate.intPeopleCount];
-// Pagecontrol with scrollview
-  /*  topscrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,45,320,120)];
-    topscrollView.scrollEnabled=YES;
-    topscrollView.pagingEnabled=YES;
-    topscrollView.delegate=self;
-    topscrollView.showsHorizontalScrollIndicator=NO;
-    [topscrollView setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:topscrollView];
-    NSLog(@"dictvenue %@",dictVenue);
-    NSArray *temparray=[NSArray arrayWithObjects:@"background-img",@"background-img-A",@"background-img1",nil];
-    for (int i=0; i<3; i++) {
-        
-        UIImageView *imgview=[self createImageViewWithImage:[UIImage imageNamed:[temparray objectAtIndex:i] ] frame:CGRectMake(320*i, 0, 320, 120) tag:0];
-        [topscrollView addSubview:imgview];
-        
-        UILabel *address=[self createLabelWithTitle:[dictVenue valueForKey:@"address"] frame:CGRectMake(31, 0, 260, 120) tag:0 font:[UIFont systemFontOfSize:22] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:3];
-        address.textAlignment=NSTextAlignmentCenter;
-        [imgview addSubview:address];
-        
-        
-    }
-    [topscrollView setContentSize:CGSizeMake(3*320,120)];
-    pagectrl=[[UIPageControl alloc]initWithFrame:CGRectMake(110, 140, 100, 20)];
-    pagectrl.numberOfPages=3;
-    [pagectrl setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview:pagectrl];
-    [pagectrl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];*/
-    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder,@"Past Orders", nil]];
+
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder, nil]];
     segmentControl.frame=CGRectMake(2, 47, 316, 40);
     UIFont *font = [UIFont systemFontOfSize:12.0f];
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
@@ -202,26 +179,6 @@
 
     [segmentControl setBackgroundImage:[UIImage imageNamed:@"menu-bg-hover.png"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
     
-    
-    /*
-    int numOfSegments = [segmentControl.subviews count]; //getting the number of all segment sections
-    
-    //removing all segment section images.
-    for( int i = 0; i < numOfSegments; i++ )
-    {
-        if(i==0)
-        {
-            [segmentControl setImage:[UIImage imageNamed:@"menu-bg-hover.png"] forSegmentAtIndex:i];
-        }
-        else
-        {
-            [segmentControl setImage:[UIImage imageNamed:@"menu-bg.png"] forSegmentAtIndex:i];
-        }
-        
-    }
-     */
-    
-
     
     self.sharedController=[SharedController sharedController];
     
@@ -279,6 +236,16 @@
     //Registering local Notification
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"PeopleSelected" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(selectedPeople:) name:@"PeopleSelected" object:nil];
+    
+    ArrMenuSections=[NSMutableArray new ];
+    [ArrMenuSections addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"Arrow",@"Recent Orders",@"SectionName", nil]];
+    [ArrMenuSections addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"Arrow",@"Favourites",@"SectionName", nil]];
+    
+    arrFavorites=[NSMutableArray new];
+    
+    isRequestForGettingsPastOrders = YES;
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+    [self.sharedController getPastOrderWithVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:nil delegate:self];
 }
 
 -(void)btnBack_TouchUpInside
@@ -533,7 +500,7 @@
     {
         NSLog(@" id %@",result);
         if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
-            [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
       else
         [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
@@ -605,14 +572,23 @@
     }
     else if (isRequestForGettingsPastOrders == YES)
     {
-        isSelectedForPastOrders = YES;
-        isSelectedForDrinks=NO;
+        isSelectedForPastOrders = NO;
+        isSelectedForDrinks=YES;
         isSelectedForPeople=NO;
         [arrPastOrders removeAllObjects];
         [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
         //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
         //[arrPastOrders filterUsingPredicate:predicate];
         NSLog(@"past orders is %@",arrPastOrders);
+        
+    /*    for (int i=0; i<[menusection count]; i++) {
+            
+            
+                     NSMutableArray *_cellArray=[[NSMutableArray alloc]initWithObjects:@" Row 1",@" Row 2",@" Row 3",@" Row 4",@" Row 5", nil];
+                     [arrMenu addObject:_cellArray];
+                     [cellCount addObject:[NSNumber numberWithInt:[_cellArray count]]];
+                 }*/
+        
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
 
@@ -882,9 +858,10 @@
     [arrMenu removeAllObjects];
     [arrMenu addObjectsFromArray:arrTemp];
     [arrTemp release];
-    
+    NSLog(@"arrmenu %@",arrMenu);
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
+    
 }
 
 -(void)getPeopleList
@@ -1598,8 +1575,9 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    if(isSelectedForDrinks)
-        return [arrMenu count]+1;
+    if(isSelectedForDrinks){
+        return 2+[arrMenu count];
+    }
     else if(isSelectedForPeople)
         return 1;
     else
@@ -1621,9 +1599,7 @@
 {
     if(isSelectedForDrinks)
     {
-        id object;
-        if(section!=0)
-        object=[arrMenu objectAtIndex:section-1];
+        
         
         UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 53)];
         UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
@@ -1631,41 +1607,52 @@
         
         UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
         button.frame=CGRectMake(0, 0, 600, 44);
-        button.tag=section +1;
+        button.tag=section+1;
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        if(section==0)
-        {
-            [button setImage:[UIImage imageNamed:@"right-arrow.png"] forState:UIControlStateNormal];   
+     
+        [button setImage:[UIImage imageNamed:@"shrink.png"] forState:UIControlStateNormal];   
+        [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateSelected];
+        if (section>1&&section<2+[arrMenu count]) {
+            if([[[arrMenu objectAtIndex:section-2]valueForKey:@"Arrow"] intValue]==0)
+                button.selected=YES;
+            else
+                button.selected=NO;
+
+        }else{
+            if([[[ArrMenuSections objectAtIndex:section]valueForKey:@"Arrow"] intValue]==0)
+                button.selected=YES;
+            else
+                button.selected=NO;
         }
-        else if([[object objectForKey:@"Arrow"] integerValue]==0)
-        {
-            [button setImage:[UIImage imageNamed:@"disclosure.png"] forState:UIControlStateNormal];
-        }
-        else
-        {
-            [button setImage:[UIImage imageNamed:@"shrink.png"] forState:UIControlStateNormal];
-        }
+        
         [headerView addSubview:button];
         
         UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 7, 280, 30)];
         [headerTitle setBackgroundColor:[UIColor clearColor]];
         [headerTitle setFont:[UIFont systemFontOfSize:16]];
         [headerTitle setTextColor:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0]];
-        if(section==0)
+        if (section==0) {
+            headerTitle.text= [NSString stringWithFormat:@"%@",[[ArrMenuSections objectAtIndex:section]valueForKey:@"SectionName"]];
+        }else if (section==1){
+            
+            headerTitle.text= [NSString stringWithFormat:@"%@",[[ArrMenuSections objectAtIndex:section]valueForKey:@"SectionName"]];
+        }else if (section>1&&section<2+[arrMenu count])
         {
-            headerTitle.text= @"Custom Drinks";
-        }
-        else if(section==1&&[[object objectForKey:@"subsection_name"] length]==0)
-        {
-            headerTitle.text= [object objectForKey:@"section_name"];
-        }
-        else if([[object objectForKey:@"subsection_name"] length])
-        {
-            headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
-        }
-        else
-        {
-            headerTitle.text= [NSString stringWithFormat:@"%@",[object objectForKey:@"section_name"]];
+            id object=[arrMenu objectAtIndex:section-2];
+
+            if(section==2&&[[object objectForKey:@"subsection_name"] length]==0)
+            {
+                headerTitle.text= [object objectForKey:@"section_name"];
+            }
+            else if([[object objectForKey:@"subsection_name"] length])
+            {
+                headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
+            }
+            else
+            {
+                headerTitle.text= [NSString stringWithFormat:@"%@",[object objectForKey:@"section_name"]];
+            }
+            
         }
         
         [headerView addSubview:headerTitle];
@@ -1683,39 +1670,35 @@
     // Return the number of rows in the section.
     if(isSelectedForDrinks)
     {
-        id object;
-        if(section!=0)
-        object=[arrMenu objectAtIndex:section-1];
+        if (section==0) {
+            NSMutableDictionary *dict=[ArrMenuSections objectAtIndex:section];
+            BOOL isSelected=!([[dict objectForKey:@"Arrow"] integerValue]);
+
+            if (isSelected) 
+                return 0;
+            else
+                return [arrPastOrders count];
+        }else if (section==1){
+            NSMutableDictionary *dict=[ArrMenuSections objectAtIndex:section];
+            BOOL isSelected=!([[dict objectForKey:@"Arrow"] integerValue]);
+
+            if (isSelected)
+                return 0;
+            else
+            return [arrFavorites count];
+        }else if (section>1&&section<2+[arrMenu count]){
         
-        if(section==0)
+            NSMutableDictionary *dict=[arrMenu objectAtIndex:section-2];
+            BOOL isSelected=!([[dict objectForKey:@"Arrow"] integerValue]);
+            if (isSelected)
+                return 0;
+            else
+               return [[[arrMenu objectAtIndex:section-2] objectForKey:@"contents"] count];
+        }else 
         {
             return 0;
         }
-        else if(section==1&&[object isKindOfClass:[NSArray class]])
-        {
-            return [object count];
-        }
-        else
-        {
-            if([[object objectForKey:@"Arrow"] integerValue]==0)
-            {
-                return 0;
-            }
-            else
-            {
-                return [[object objectForKey:@"contents"] count];
-            }
-        }
-    }
-    else if(isSelectedForPastOrders == YES)
-    {
-        if ([arrPastOrders count]) {
-            return [arrPastOrders count];
-        }
-        else
-        {
-            return 1;
-        }
+        
     }
     else if(isSelectedForPeople)
     {
@@ -1733,10 +1716,6 @@
         return 80;
     else if(isSelectedForPeople)
         return 75;
-    else if(isSelectedForPastOrders == YES)
-    {
-        return 150;
-    }
     else
         return 0;
 }
@@ -1749,30 +1728,48 @@
     if(isSelectedForDrinks==YES)
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-        //        UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-        //        imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
-        //        [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-        //        [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-        //        [[imgViewDrink layer] setShadowRadius:3.0];
-        //        [[imgViewDrink layer] setShadowOpacity:0.8];
-        //        [cell.contentView addSubview:imgViewDrink];
-        //        [imgViewDrink release];
         
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
 
-        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 275, 20)];
-        id object=[arrMenu objectAtIndex:indexPath.section-1];
-        if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 270, 40)];
+        if (indexPath.section==0)
         {
-            NSDictionary *dict=[object objectAtIndex:indexPath.row];
-            lblName.text=[dict objectForKey:@"name"];
+            if ([[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemsList"]){
+                NSArray *multiorderArray=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemsList"];
+                NSMutableString *multilblname = [NSMutableString new];
+                for (NSDictionary *tempdic in multiorderArray) {
+                    [multilblname appendFormat:@"%@,", [tempdic valueForKey:@"itemName"]];
+                }
+                lblName.numberOfLines=2;
+                lblName.text=multilblname;
+                [multilblname release];
+            }else
+                lblName.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemName"];
         }
-        else
+        else if (indexPath.section==1)
         {
-            NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
-            NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
-            lblName.text=[dict objectForKey:@"name"];
+            lblName.text=@"fav";
         }
+        else if (indexPath.section>1&&indexPath.section<2+[arrMenu count])
+        {
+            id object=[arrMenu objectAtIndex:indexPath.section-2];
+            if(indexPath.section==2&&[object isKindOfClass:[NSArray class]])
+            {
+                NSDictionary *dict=[object objectAtIndex:indexPath.row];
+                lblName.text=[dict objectForKey:@"name"];
+            }
+            else
+            {
+                NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+                NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
+                lblName.text=[dict objectForKey:@"name"];
+            }
+           
+        }else{
+            
+            lblName.text=@"fav";
+        }
+        
         
         lblName.font=[UIFont systemFontOfSize:14];
         lblName.backgroundColor=[UIColor clearColor];
@@ -1783,16 +1780,24 @@
         
         UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 255, 50)];
         lblDescription.numberOfLines=3;
-        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        if(indexPath.section==0)
         {
-            NSDictionary *dict=[object objectAtIndex:indexPath.row];
-            lblDescription.text=[dict objectForKey:@"description"];
+            if (![[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"description"] isKindOfClass:[NSNull class]]) {
+                lblDescription.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"description"];
+            }
+            
         }
-        else
+        else if(indexPath.section==1)
         {
+            lblDescription.text=@"fav";
+        }else if (indexPath.section>1&&indexPath.section<2+[arrMenu count]){
+            id object=[arrMenu objectAtIndex:indexPath.section-2];
+
             NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
             NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
             lblDescription.text=[dict objectForKey:@"description"];
+        }else{
+            
         }
         
         lblDescription.font=[UIFont systemFontOfSize:12];
@@ -1802,13 +1807,13 @@
         [lblDescription release];
         
         UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 20, 50, 25)];
-        if(indexPath.section==0&&[object isKindOfClass:[NSArray class]])
+        if(indexPath.section==0)
         {
-            NSDictionary *dict=[object objectAtIndex:indexPath.row];
-            lblPrice.text=[dict objectForKey:@"price"];
+            lblPrice.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"totalPrice"];
         }
-        else
+        else if(indexPath.section>1&&indexPath.section<2+[arrMenu count])
         {
+            id object=[arrMenu objectAtIndex:indexPath.section-2];
             NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
             NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
             lblPrice.text=[dict objectForKey:@"price"];
@@ -1902,141 +1907,6 @@
 
         //UILabel *lbl
     }
-    else if (isSelectedForPastOrders == YES)
-    {
-        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-
-        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
-
-        if ([arrPastOrders count])
-        {
-            NSDictionary *dictForOrder = [arrPastOrders objectAtIndex:indexPath.row];
-            
-            UILabel *lblItemName = [self createLabelWithTitle:[dictForOrder objectForKey:@"itemName"] frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
-            lblItemName.backgroundColor=[UIColor clearColor];
-            lblItemName.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lblItemName];
-            
-            UILabel *lbldescription;
-            if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]]) 
-             lbldescription = [self createLabelWithTitle:@"" frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
-            else
-            lbldescription = [self createLabelWithTitle:[dictForOrder objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
-           
-            lbldescription.backgroundColor=[UIColor clearColor];
-            lbldescription.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lbldescription];
-            
-            
-            NSDateFormatter *dateFormatter = [NSDateFormatter new];
-            dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
-            NSDate *date    = [dateFormatter dateFromString:[dictForOrder objectForKey:@"dateCreated"]];
-            
-            
-            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
-            
-            NSString *newDateString = [outputFormatter stringFromDate:date];
-            
-            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
-            
-            if([arrDateComps count]==5)
-            {
-                NSString *strMeridian;
-                NSString *strTime=[arrDateComps objectAtIndex:0];
-                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
-                if(intHours>=12)
-                {
-                    strMeridian=[NSString stringWithFormat:@"PM"];
-                    NSString *strTime;
-                    
-                    if(intHours==12)
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
-                    }
-                    else
-                    {
-                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
-                        
-                    }
-                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
-                }
-                else
-                {
-                    strMeridian=[NSString stringWithFormat:@"AM"];
-                }
-                [arrDateComps insertObject:strMeridian atIndex:0];
-            }
-            
-            
-            NSCalendar * cal = [NSCalendar currentCalendar];
-            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
-            
-            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
-                comps.hour-=12;
-            
-            NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
-            
-            
-            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
-            lblTime.font = [UIFont systemFontOfSize:14];
-            lblTime.text = strDate1;
-            lblTime.tag = 1234234567;
-            lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
-            lblTime.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lblTime];
-            [lblTime release];
-            
-            UILabel *lblSender = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
-            lblSender.font = [UIFont systemFontOfSize:14];
-            lblSender.text = [NSString stringWithFormat:@"Sender : %@",[dictForOrder objectForKey:@"senderNickname"]];
-            lblSender.tag = 1234234567;
-            lblSender.backgroundColor = [UIColor clearColor];
-            lblSender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
-            lblSender.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lblSender];
-            [lblSender release];
-            
-            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
-            lblRecepient.font = [UIFont systemFontOfSize:14];
-            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
-            lblRecepient.tag = 1234234567;
-            lblRecepient.backgroundColor = [UIColor clearColor];
-            lblRecepient.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
-            lblRecepient.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lblRecepient];
-            [lblRecepient release];
-            
-            
-            if([[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"]!=(id)[NSNull null]&&[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"] integerValue]!=1)
-            {
-                NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[dictForOrder objectForKey:@"totalPrice"] floatValue]];
-                
-                UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
-                lblTotalPrice.backgroundColor=[UIColor clearColor];
-                lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-                [cell.contentView addSubview:lblTotalPrice];
-            }
-            
-            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
-            lblOrderId.font = [UIFont systemFontOfSize:14];
-            lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[dictForOrder objectForKey:@"orderId"]];
-            lblOrderId.backgroundColor = [UIColor clearColor];
-            lblOrderId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-            lblOrderId.textAlignment = NSTextAlignmentLeft;
-            [cell.contentView addSubview:lblOrderId];
-            [lblOrderId release];
-            
-        }
-        else
-        {
-            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
-            lblItemName.backgroundColor=[UIColor clearColor];
-            lblItemName.textAlignment = NSTextAlignmentCenter;
-            [cell.contentView addSubview:lblItemName];
-        }
-    }
     else
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
@@ -2090,8 +1960,10 @@
             [dictPeopleSelectedForDrink release];
             dictPeopleSelectedForDrink=nil;
         }*/
-        
-        id object=[arrMenu objectAtIndex:indexPath.section-1];
+        if ( (indexPath.section==0 || indexPath.section==1)) {
+            return;
+        }
+        id object=[arrMenu objectAtIndex:indexPath.section-2];
         NSDictionary *dict;
         
         if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
@@ -2634,14 +2506,25 @@
 }
 -(void)buttonClicked:(UIButton*)sender
 {
-    NSInteger intTag=sender.tag-2;
-    if(intTag>=0)
+    NSInteger intTag=sender.tag-1;
+    if(sender.tag>=0)
     {
-        NSMutableDictionary *dict=[arrMenu objectAtIndex:intTag];
-        BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
-        NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
-        [dict setObject:strArrow forKey:@"Arrow"];
-        [arrMenu replaceObjectAtIndex:intTag withObject:dict];
+        if (intTag==0 || intTag==1) {
+            NSMutableDictionary *dict=[ArrMenuSections objectAtIndex:intTag];
+            BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
+            NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
+            [dict setObject:strArrow forKey:@"Arrow"];
+            [ArrMenuSections replaceObjectAtIndex:intTag withObject:dict];
+ 
+        }else
+        {
+           NSMutableDictionary *dict=[arrMenu objectAtIndex:intTag-2];
+            BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
+            NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
+            [dict setObject:strArrow forKey:@"Arrow"];
+            [arrMenu replaceObjectAtIndex:intTag-2 withObject:dict];
+        }
+               
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
     }
@@ -2713,6 +2596,7 @@
     pagectrl.currentPage = page;
     }
 }
+
 
 - (void)didReceiveMemoryWarning
 {
