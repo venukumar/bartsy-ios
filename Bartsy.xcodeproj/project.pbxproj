@@ -26,6 +26,10 @@
 		CB10B088178D6F3300CAF6ED /* top_header_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B087178D6F3100CAF6ED /* top_header_bar.png */; };
 		CB10B08A178D6FDE00CAF6ED /* arrow-left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */; };
 		CB10B08C178D700400CAF6ED /* arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B08B178D700300CAF6ED /* arrow-left.png */; };
+		CB688C7A179FE5C4001C4726 /* CustomDrinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */; };
+		CB688C7B179FE5C4001C4726 /* CustomDrinkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */; };
+		CB688C7D17A00618001C4726 /* tickmark_select.png in Resources */ = {isa = PBXBuildFile; fileRef = CB688C7C17A00618001C4726 /* tickmark_select.png */; };
+		CB688C7F17A0108C001C4726 /* home-footer.png in Resources */ = {isa = PBXBuildFile; fileRef = CB688C7E17A0108C001C4726 /* home-footer.png */; };
 		CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB482177417AB00445934 /* NotificationsViewController.m */; };
 		CB8AB4861774200B00445934 /* MessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4851774200B00445934 /* MessageListViewController.m */; };
 		CB8AB4891774376400445934 /* arrow_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4871774376400445934 /* arrow_chat@2x.png */; };
@@ -318,6 +322,11 @@
 		CB10B087178D6F3100CAF6ED /* top_header_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_header_bar.png; sourceTree = "<group>"; };
 		CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left@2x.png"; sourceTree = "<group>"; };
 		CB10B08B178D700300CAF6ED /* arrow-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left.png"; sourceTree = "<group>"; };
+		CB688C77179FE5C4001C4726 /* CustomDrinkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDrinkViewController.h; sourceTree = "<group>"; };
+		CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDrinkViewController.m; sourceTree = "<group>"; };
+		CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomDrinkViewController.xib; sourceTree = "<group>"; };
+		CB688C7C17A00618001C4726 /* tickmark_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tickmark_select.png; sourceTree = "<group>"; };
+		CB688C7E17A0108C001C4726 /* home-footer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home-footer.png"; sourceTree = "<group>"; };
 		CB8AB481177417AB00445934 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
 		CB8AB482177417AB00445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CB8AB4841774200B00445934 /* MessageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageListViewController.h; sourceTree = "<group>"; };
@@ -1368,6 +1377,9 @@
 				E0D56E7617424B6A00257870 /* VenueListViewController.m */,
 				E092F98E173054E800E1CC15 /* HomeViewController.h */,
 				E092F98F173054EC00E1CC15 /* HomeViewController.m */,
+				CB688C77179FE5C4001C4726 /* CustomDrinkViewController.h */,
+				CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */,
+				CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */,
 				E00E4B701742765400749466 /* MyAnnotation.h */,
 				E00E4B711742765400749466 /* MyAnnotation.m */,
 				E0CDC8C81758A0360070E31D /* CustomDrinksViewController.h */,
@@ -1420,6 +1432,8 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB688C7E17A0108C001C4726 /* home-footer.png */,
+				CB688C7C17A00618001C4726 /* tickmark_select.png */,
 				CB98322017996F2100DC63AC /* tick_mark.png */,
 				CB98321C17994F0300DC63AC /* background-img-A.png */,
 				CB98321D17994F0300DC63AC /* background-img1.png */,
@@ -1705,6 +1719,9 @@
 				CB98321E17994F0300DC63AC /* background-img-A.png in Resources */,
 				CB98321F17994F0300DC63AC /* background-img1.png in Resources */,
 				CB98322117996F2100DC63AC /* tick_mark.png in Resources */,
+				CB688C7B179FE5C4001C4726 /* CustomDrinkViewController.xib in Resources */,
+				CB688C7D17A00618001C4726 /* tickmark_select.png in Resources */,
+				CB688C7F17A0108C001C4726 /* home-footer.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1834,6 +1851,7 @@
 				E0539F3017969CE000E16677 /* Global.m in Sources */,
 				E0539F3517969DD800E16677 /* NSData+Base64.m in Sources */,
 				CBFAF1141797B3E600E953AC /* RewardsTableCell.m in Sources */,
+				CB688C7A179FE5C4001C4726 /* CustomDrinkViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

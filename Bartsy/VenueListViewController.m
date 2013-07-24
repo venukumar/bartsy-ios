@@ -383,8 +383,12 @@
             intIndex=indexPath.row;
             isRequestForCheckIn=YES;
             self.sharedController=[SharedController sharedController];
-            [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
-            [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
+            //[self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
+            //[self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
+            HomeViewController *obj=[[HomeViewController alloc]init];
+            obj.dictVenue=[arrVenueList objectAtIndex:indexPath.row];
+            [self.navigationController pushViewController:obj animated:YES];
+            [obj release];
         }
         
     }
@@ -552,7 +556,7 @@
         
     }
 }
-
+/*
 -(void)btnDetail_TouchUpInside:(UIButton*)sender
 {
     NSLog(@"Tag is %i",sender.tag);
@@ -572,7 +576,7 @@
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
     }
-}
+}*/
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
@@ -638,8 +642,13 @@
     {
         isRequestForCheckIn=YES;
         self.sharedController=[SharedController sharedController];
-        [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
-        [self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] delegate:self];
+        //[self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
+        //[self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] delegate:self];
+        HomeViewController *obj=[[HomeViewController alloc]init];
+        obj.dictVenue=[arrVenueList objectAtIndex:0];
+        [self.navigationController pushViewController:obj animated:YES];
+        [obj release];
+
     }
     else if(alertView.tag==225&&buttonIndex==1)
     {

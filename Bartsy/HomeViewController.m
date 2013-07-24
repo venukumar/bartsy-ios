@@ -17,7 +17,7 @@
 #import "MessageListViewController.h"
 #import "PeopleDetailViewController.h"
 #import "SDImageCache.h"
-
+#import "CustomDrinkViewController.h"
 @interface PeopleCustomCell : UITableViewCell {}
 @end
 @implementation PeopleCustomCell
@@ -51,6 +51,9 @@
     
     NSMutableArray *ArrMenuSections;
     NSMutableArray *arrFavorites;
+    BOOL isGettingIngradients;
+    NSMutableArray *arrCustomDrinks;
+    BOOL isRequestCheckin;
 }
 
 @end
@@ -138,17 +141,23 @@
     self.navigationItem.rightBarButtonItem=btnLogOut;
     
    
-    UIButton *btnCheckOut=[self createUIButtonWithTitle:@"Checkout" image:nil frame:CGRectMake(250, 5, 65, 35) tag:0 selector:@selector(backLogOut_TouchUpInside) target:self];
+   /* UIButton *btnCheckOut=[self createUIButtonWithTitle:@"Checkout" image:nil frame:CGRectMake(250, 5, 65, 35) tag:0 selector:@selector(backLogOut_TouchUpInside) target:self];
     btnCheckOut.titleLabel.font=[UIFont systemFontOfSize:14];
     [btnCheckOut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.view addSubview:btnCheckOut];
+    [self.view addSubview:btnCheckOut];*/
     
-   /* UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 8, 28, 28) tag:0 selector:@selector(CheckinButton_Action:) target:self];
-    [self.view addSubview:checkinBtn];*/
+    
+    UIImageView *checkinimg=(UIImageView*)[self.tabBarController.tabBar viewWithTag:5555];
+    [checkinimg removeFromSuperview];
+    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 8, 28, 28) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
+    [self.view addSubview:checkinBtn];
     // Do any additional setup after loading the view, typically from a nib.
     
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
+    
+    [[NSUserDefaults standardUserDefaults]setObject:[dictVenue objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+    [[NSUserDefaults standardUserDefaults]setObject:dictVenue forKey:@"VenueDetails"];
     
     arrMenu=[[NSMutableArray alloc]init];
     arrOrders=[[NSMutableArray alloc]init];
@@ -156,14 +165,44 @@
     arrBundledOrders=[[NSMutableArray alloc]init];
     arrPastOrders=[[NSMutableArray alloc]init];
     arrOrdersTimedOut=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
+    
+    arrCustomDrinks=[NSMutableArray new];
     arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"Your order was rejected by Bartender",@"Order was accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"Noshow",@"Your order was timedout",@"Your order was rejected",@"Drink offered",@"Past Order", nil];
     arrOrdersOffered=[[NSMutableArray alloc]init];
     
     NSString *strOrder=[NSString stringWithFormat:@"Orders (%i)",appDelegate.intOrderCount];
     NSString *strPeopleCount=[NSString stringWithFormat:@"People (%i)",appDelegate.intPeopleCount];
-
-    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder, nil]];
-    segmentControl.frame=CGRectMake(2, 47, 316, 40);
+     [self getPastorderAsynchronously];
+    // Pagecontrol with scrollview
+     topscrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,45,320,120)];
+     topscrollView.scrollEnabled=YES;
+     topscrollView.pagingEnabled=YES;
+     topscrollView.delegate=self;
+     topscrollView.showsHorizontalScrollIndicator=NO;
+     [topscrollView setBackgroundColor:[UIColor clearColor]];
+     [self.view addSubview:topscrollView];
+     NSLog(@"dictvenue %@",dictVenue);
+     NSArray *temparray=[NSArray arrayWithObjects:@"background-img",@"background-img-A",@"background-img1",nil];
+     for (int i=0; i<3; i++) {
+     
+     UIImageView *imgview=[self createImageViewWithImage:[UIImage imageNamed:[temparray objectAtIndex:i] ] frame:CGRectMake(320*i, 0, 320, 120) tag:0];
+     [topscrollView addSubview:imgview];
+     
+     UILabel *address=[self createLabelWithTitle:[dictVenue valueForKey:@"address"] frame:CGRectMake(31, 0, 260, 120) tag:0 font:[UIFont systemFontOfSize:22] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:3];
+     address.textAlignment=NSTextAlignmentCenter;
+     [imgview addSubview:address];
+     
+     
+     }
+     [topscrollView setContentSize:CGSizeMake(3*320,120)];
+     pagectrl=[[UIPageControl alloc]initWithFrame:CGRectMake(110, 140, 100, 20)];
+     pagectrl.numberOfPages=3;
+     [pagectrl setBackgroundColor:[UIColor clearColor]];
+     [self.view addSubview:pagectrl];
+     [pagectrl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
+    
+    UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder,@"Past Orders", nil]];
+    segmentControl.frame=CGRectMake(2, 167, 316, 40);
     UIFont *font = [UIFont systemFontOfSize:12.0f];
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
                                                            forKey:UITextAttributeFont];
@@ -180,35 +219,11 @@
     [segmentControl setBackgroundImage:[UIImage imageNamed:@"menu-bg-hover.png"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
     
     
+    
     self.sharedController=[SharedController sharedController];
     
-    isSelectedForDrinks=YES;
     
-    
-    if(0)//appDelegate.isComingForOrders==YES)
-    {
-        appDelegate.isComingForOrders=NO;
-        [arrOrdersTimedOut removeAllObjects];
-        [arrOrdersTimedOut addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
-        [segmentControl setSelectedSegmentIndex:2];
-        [self segmentControl_ValueChanged:segmentControl];
-        
-    }
-    else
-    {
-        if([[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]count]==0)
-        {
-            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-            [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
-        }
-        else
-        {
-            [self modifyData];
-        }
-    }
-    
-    
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323-topscrollView.frame.size.height)];
     tblView.dataSource=self;
     tblView.backgroundColor = [UIColor blackColor];
     tblView.delegate=self;
@@ -218,10 +233,12 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        tblView.frame=CGRectMake(0, 90, 320, 323+90);
+        tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323+90-topscrollView.frame.size.height);
     }
     
     [tblView release];
+    
+    //tblView.userInteractionEnabled=NO;
     
     //optional pre init, so the ZooZ screen will upload immediatly, you can skip this call
     //    ZooZ * zooz = [ZooZ sharedInstance];
@@ -239,13 +256,10 @@
     
     ArrMenuSections=[NSMutableArray new ];
     [ArrMenuSections addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"Arrow",@"Recent Orders",@"SectionName", nil]];
-    [ArrMenuSections addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"Arrow",@"Favourites",@"SectionName", nil]];
+    [ArrMenuSections addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"Arrow",@"Favorites",@"SectionName", nil]];
     
     arrFavorites=[NSMutableArray new];
     
-    isRequestForGettingsPastOrders = YES;
-    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-    [self.sharedController getPastOrderWithVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:nil delegate:self];
 }
 
 -(void)btnBack_TouchUpInside
@@ -325,6 +339,8 @@
     if(segmentControl.selectedSegmentIndex==0)
     {
         isSelectedForDrinks=YES;
+        isRequestForGettingsOrders=NO;
+        isRequestForPeople=NO;
         tblView.hidden=NO;
         [self modifyData];
     }
@@ -372,8 +388,7 @@
         self.sharedController=[SharedController sharedController];
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getUserOrdersWithBartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] delegate:self];
-    }
-    else if(segmentControl.selectedSegmentIndex==3)
+    }else if(segmentControl.selectedSegmentIndex==3)
     {
         tblView.hidden=NO;
         isRequestForGettingsOrders=NO;
@@ -382,12 +397,15 @@
         isRequestForGettingsPastOrders = YES;
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getPastOrderWithVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyId:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] date:nil delegate:self];
-
+        
     }
+
 }
 
 -(void)btnOrder_TouchUpInside
 {
+    
+    NSLog(@"Post dict %@",[dictSelectedToMakeOrder objectForKey:@"id"] );
     //[self orderTheDrink];
     UIView *viewA = (UIView*)[self.view viewWithTag:222];
     [viewA removeFromSuperview];
@@ -498,13 +516,13 @@
     
     if([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
-        NSLog(@" id %@",result);
+        
         if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
         [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
       else
         [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
-    else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO)
+    else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO && isGettingIngradients==NO && isRequestCheckin==NO)
     {
         [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:[dictVenue objectForKey:@"venueId"]];
         [[NSUserDefaults standardUserDefaults]synchronize];
@@ -512,6 +530,12 @@
         [self hideProgressView:nil];
         
         [self modifyData];
+        if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]) {
+            isGettingIngradients=YES;
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [self.sharedController getIngredientsListWithVenueId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+        }
+        
     }
     else if(isRequestForOrder==YES)
     {
@@ -572,22 +596,14 @@
     }
     else if (isRequestForGettingsPastOrders == YES)
     {
-        isSelectedForPastOrders = NO;
-        isSelectedForDrinks=YES;
+        isRequestForGettingsPastOrders=NO;
+        isSelectedForPastOrders = YES;
+        isSelectedForDrinks=NO;
         isSelectedForPeople=NO;
         [arrPastOrders removeAllObjects];
         [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
         //NSPredicate *predicate = [NSPredicate predicateWithFormat:@"orderStatus == [c]'1' OR orderStatus == [c]'4' OR orderStatus == [c]'5' OR orderStatus == [c]'6' OR orderStatus == [c]'7' OR orderStatus == [c]'8'"];
         //[arrPastOrders filterUsingPredicate:predicate];
-        NSLog(@"past orders is %@",arrPastOrders);
-        
-    /*    for (int i=0; i<[menusection count]; i++) {
-            
-            
-                     NSMutableArray *_cellArray=[[NSMutableArray alloc]initWithObjects:@" Row 1",@" Row 2",@" Row 3",@" Row 4",@" Row 5", nil];
-                     [arrMenu addObject:_cellArray];
-                     [cellCount addObject:[NSNumber numberWithInt:[_cellArray count]]];
-                 }*/
         
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         [tblView reloadData];
@@ -725,6 +741,73 @@
         [segmentControl setTitle:strOrder forSegmentAtIndex:2];
         appDelegate.intOrderCount=[arrOrders count];
         
+    }else if (isGettingIngradients==YES){
+        
+        isGettingIngradients=NO;
+        isSelectedForDrinks=YES;
+        isSelectedForPastOrders=NO;
+        isSelectedForPeople=NO;
+        if([[result objectForKey:@"errorCode"] integerValue]==1)
+        {
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
+        else
+        {
+            [arrCustomDrinks removeAllObjects];
+          //  [arrCustomDrinks addObjectsFromArray:[[result objectForKey:@"ingredients"] objectForKey:@"categories"]];
+            NSArray *arrcustomdrinks=[result objectForKey:@"ingredients"];
+            
+            for (NSDictionary *dic in [[arrcustomdrinks objectAtIndex:0] valueForKey:@"categories"]) {
+                
+                    if ([dic allKeys].count) {
+                        [arrCustomDrinks addObject:dic];
+                       // NSLog(@" arrcustom drinks %@",arrCustomDrinks);
+                    }
+                    
+                
+            }
+            
+            UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+            [tblView reloadData];
+        }
+    }else if (isRequestCheckin){
+        
+        //home-footer
+        
+        UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(40,10,21, 21)];
+        homecheckimg.image=[UIImage imageNamed:@"home-footer"];
+        homecheckimg.tag=5555;
+        [self.tabBarController.tabBar addSubview:homecheckimg];
+        isRequestCheckin=NO;
+        [topscrollView removeFromSuperview];
+        [pagectrl removeFromSuperview];
+        UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3333];
+        [checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
+        checkinBtn.tag=3334;
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+        appDelegate.intOrderCount=0;
+        [[NSUserDefaults standardUserDefaults]setObject:[dictVenue objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+        [[NSUserDefaults standardUserDefaults]setObject:dictVenue forKey:@"VenueDetails"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [appDelegate startTimerToCheckHeartBeat];
+        
+        //storing the tax percentage
+        [[NSUserDefaults standardUserDefaults] setFloat:[[dictVenue valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
+        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+        segmentControl.frame=CGRectMake(2, 47, 316, 40);
+        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+        if (IS_IPHONE_5)
+            tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323+90);
+         else
+             tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323);
+        
+        UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
+        if(IS_IPHONE_5)
+            scrollViewOld.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 327+90-42);
+        else
+            scrollViewOld.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42);
     }
 }
 
@@ -858,12 +941,86 @@
     [arrMenu removeAllObjects];
     [arrMenu addObjectsFromArray:arrTemp];
     [arrTemp release];
-    NSLog(@"arrmenu %@",arrMenu);
+    
+    
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
     
 }
 
+-(void)getPastorderAsynchronously{
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/getPastOrders",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+    
+    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+    [dictCheckIn setObject:[dictVenue objectForKey:@"venueId"] forKey:@"venueId"];
+    
+    
+    NSLog(@"dict is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             
+             //NSLog(@" JSON String ----- :%@",jsonString);
+             
+             NSError *outError = nil;
+             
+             id result = [jsonParser objectWithString:jsonString error:&outError];
+             //[arrPastOrders removeAllObjects];
+             //[arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
+             NSLog(@"arrPastOrders%@",arrPastOrders);
+               isSelectedForDrinks=YES;
+             if([[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]count]==0)
+                 {
+                     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+                     [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+                 }
+                 else
+                 {
+                     [self modifyData];
+                     if ([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]) {
+                         isGettingIngradients=YES;
+                         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+                         [self.sharedController getIngredientsListWithVenueId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+                     }
+                     
+                 }
+             }
+
+
+         
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+
+}
 -(void)getPeopleList
 {
     
@@ -983,7 +1140,7 @@
     UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
     [scrollViewOld removeFromSuperview];
     UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42)];
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42-topscrollView.frame.size.height)];
     scrollView.tag=987;
     scrollView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:scrollView];
@@ -991,7 +1148,7 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        scrollView.frame=CGRectMake(0, 90, 320, 327+90-42);
+        scrollView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 327+90-42-topscrollView.frame.size.height);
     }
     
     NSInteger intContentSizeHeight=0;
@@ -1224,7 +1381,7 @@
         [lblTaxFee release];
         
         NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
-        NSLog(@"%d",ttpricelenght.length);
+       
         UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([arrBundledOrdersObject count]*15)+45, 153, 15)];
         lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
         if(floatTotalPrice>0.01)
@@ -1389,15 +1546,35 @@
 }
 
 -(void)CheckinButton_Action:(UIButton*)sender{
+   
+    if (sender.tag==3333) {
+        isRequestCheckin=YES;
+        isRequestForPeople=NO;
+        isRequestForOrder=NO;
+        isRequestForGettingsPastOrders=NO;
+        isRequestForGettingsOrders=NO;
+        [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
+        [self.sharedController checkInAtBartsyVenueWithId:[dictVenue objectForKey:@"venueId"] delegate:self];
+    }else{
+        
+        UIImageView *checkinimg=(UIImageView*)[self.tabBarController.tabBar viewWithTag:5555];
+        [checkinimg removeFromSuperview];
+        
+        NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+        NSString *strMsg=nil;
+        
+        if(appDelegate.intOrderCount)
+        {
+            strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you logout they will be cancelled and you will still be charged for it.Do you want to logout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+        }
+        else
+        {
+            strMsg=[NSString stringWithFormat:@"Do you want to logout"];
+        }
+        [self createAlertViewWithTitle:@"" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:225];
+    }
     
-    sender.hidden=YES;
-    UIButton *btnCheckOut=[self createUIButtonWithTitle:@"Checkout" image:nil frame:CGRectMake(250, 5, 65, 35) tag:0 selector:@selector(backLogOut_TouchUpInside) target:self];
-    btnCheckOut.titleLabel.font=[UIFont systemFontOfSize:14];
-    [btnCheckOut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.view addSubview:btnCheckOut];
-    UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-   segmentControl.frame=CGRectMake(2, 47, 316, 40);
-
+    
 }
 -(void)getOpenOrders
 {
@@ -1576,7 +1753,7 @@
 {
     // Return the number of sections.
     if(isSelectedForDrinks){
-        return 2+[arrMenu count];
+        return 2+[arrMenu count]+[arrCustomDrinks count];
     }
     else if(isSelectedForPeople)
         return 1;
@@ -1600,7 +1777,6 @@
     if(isSelectedForDrinks)
     {
         
-        
         UIView *headerView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 53)];
         UIImageView *headerBg=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"sectionBg.png"]];
         [headerView addSubview:headerBg];
@@ -1618,7 +1794,11 @@
             else
                 button.selected=NO;
 
-        }else{
+        }else if( section==[arrCustomDrinks count]+[arrMenu count]+1)
+        {
+            [button setImage:[UIImage imageNamed:@"right-arrow.png"] forState:UIControlStateNormal];
+            
+        }else if(section==0|| section==1){
             if([[[ArrMenuSections objectAtIndex:section]valueForKey:@"Arrow"] intValue]==0)
                 button.selected=YES;
             else
@@ -1653,6 +1833,9 @@
                 headerTitle.text= [NSString stringWithFormat:@"%@",[object objectForKey:@"section_name"]];
             }
             
+        }else if (section==[arrCustomDrinks count]+[arrMenu count]+1){
+            
+           headerTitle.text=[[arrCustomDrinks objectAtIndex:0] valueForKey:@"categoryName"];
         }
         
         [headerView addSubview:headerTitle];
@@ -1694,7 +1877,7 @@
                 return 0;
             else
                return [[[arrMenu objectAtIndex:section-2] objectForKey:@"contents"] count];
-        }else 
+        }else if( section==[arrCustomDrinks count]+[arrMenu count]+1)
         {
             return 0;
         }
@@ -1765,9 +1948,9 @@
                 lblName.text=[dict objectForKey:@"name"];
             }
            
-        }else{
+        }else if(indexPath.section>[arrMenu count]+2 &&indexPath.section<[arrCustomDrinks count]+[arrMenu count]+2){
             
-            lblName.text=@"fav";
+            lblName.text=@"custom";
         }
         
         
@@ -1907,6 +2090,142 @@
 
         //UILabel *lbl
     }
+    else if (isSelectedForPastOrders == YES)
+    {
+        cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+        
+        cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
+        
+        if ([arrPastOrders count])
+        {
+            NSDictionary *dictForOrder = [arrPastOrders objectAtIndex:indexPath.row];
+            
+            UILabel *lblItemName = [self createLabelWithTitle:[dictForOrder objectForKey:@"itemName"] frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            lblItemName.backgroundColor=[UIColor clearColor];
+            lblItemName.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblItemName];
+            
+            UILabel *lbldescription;
+            if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]])
+                lbldescription = [self createLabelWithTitle:@"" frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+            else
+                lbldescription = [self createLabelWithTitle:[dictForOrder objectForKey:@"description"] frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
+            
+            lbldescription.backgroundColor=[UIColor clearColor];
+            lbldescription.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lbldescription];
+            
+            
+            NSDateFormatter *dateFormatter = [NSDateFormatter new];
+            dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
+            NSDate *date    = [dateFormatter dateFromString:[dictForOrder objectForKey:@"dateCreated"]];
+            
+            
+            NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+            [outputFormatter setDateFormat:@"aa kk:mm 'on' EEEE MMMM d"];
+            
+            NSString *newDateString = [outputFormatter stringFromDate:date];
+            
+            NSMutableArray *arrDateComps=[[NSMutableArray alloc]initWithArray:[newDateString componentsSeparatedByString:@" "]];
+            
+            if([arrDateComps count]==5)
+            {
+                NSString *strMeridian;
+                NSString *strTime=[arrDateComps objectAtIndex:0];
+                NSInteger intHours=[[[strTime componentsSeparatedByString:@":"] objectAtIndex:0] integerValue];
+                if(intHours>=12)
+                {
+                    strMeridian=[NSString stringWithFormat:@"PM"];
+                    NSString *strTime;
+                    
+                    if(intHours==12)
+                    {
+                        strTime=[NSString stringWithFormat:@"%i:%i",12,[[arrDateComps objectAtIndex:1] integerValue]];
+                    }
+                    else
+                    {
+                        strTime=[NSString stringWithFormat:@"%i:%i",intHours-12,[[arrDateComps objectAtIndex:1] integerValue]];
+                        
+                    }
+                    [arrDateComps replaceObjectAtIndex:0 withObject:strTime];
+                }
+                else
+                {
+                    strMeridian=[NSString stringWithFormat:@"AM"];
+                }
+                [arrDateComps insertObject:strMeridian atIndex:0];
+            }
+            
+            
+            NSCalendar * cal = [NSCalendar currentCalendar];
+            NSDateComponents *comps = [cal components:( NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit | NSTimeZoneCalendarUnit) fromDate:date];
+            
+            if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
+                comps.hour-=12;
+            
+            NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
+            
+            
+            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
+            lblTime.font = [UIFont systemFontOfSize:14];
+            lblTime.text = strDate1;
+            lblTime.tag = 1234234567;
+            lblTime.backgroundColor = [UIColor clearColor];
+            lblTime.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+            lblTime.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblTime];
+            [lblTime release];
+            
+            UILabel *lblSender = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
+            lblSender.font = [UIFont systemFontOfSize:14];
+            lblSender.text = [NSString stringWithFormat:@"Sender : %@",[dictForOrder objectForKey:@"senderNickname"]];
+            lblSender.tag = 1234234567;
+            lblSender.backgroundColor = [UIColor clearColor];
+            lblSender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+            lblSender.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblSender];
+            [lblSender release];
+            
+            UILabel *lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
+            lblRecepient.font = [UIFont systemFontOfSize:14];
+            lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
+            lblRecepient.tag = 1234234567;
+            lblRecepient.backgroundColor = [UIColor clearColor];
+            lblRecepient.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+            lblRecepient.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblRecepient];
+            [lblRecepient release];
+            
+            
+            if([[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"]!=(id)[NSNull null]&&[[[arrPastOrders objectAtIndex:indexPath.row] objectForKey:@"lastState"] integerValue]!=1)
+            {
+                NSString *stringFortotalPrice = [NSString stringWithFormat:@"$%.2f",[[dictForOrder objectForKey:@"totalPrice"] floatValue]];
+                
+                UILabel *lblTotalPrice = [self createLabelWithTitle:stringFortotalPrice frame:CGRectMake(270, 2, 200, 15) tag:0 font:[UIFont boldSystemFontOfSize:11] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+                lblTotalPrice.backgroundColor=[UIColor clearColor];
+                lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+                [cell.contentView addSubview:lblTotalPrice];
+            }
+            
+            UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
+            lblOrderId.font = [UIFont systemFontOfSize:14];
+            lblOrderId.text = [NSString stringWithFormat:@"OrderId : %@",[dictForOrder objectForKey:@"orderId"]];
+            lblOrderId.backgroundColor = [UIColor clearColor];
+            lblOrderId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+            lblOrderId.textAlignment = NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblOrderId];
+            [lblOrderId release];
+            
+        }
+        else
+        {
+            UILabel *lblItemName = [self createLabelWithTitle:@"No past orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
+            lblItemName.backgroundColor=[UIColor clearColor];
+            lblItemName.textAlignment = NSTextAlignmentCenter;
+            [cell.contentView addSubview:lblItemName];
+        }
+    }
+
     else
     {
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
@@ -1963,6 +2282,7 @@
         if ( (indexPath.section==0 || indexPath.section==1)) {
             return;
         }
+        
         id object=[arrMenu objectAtIndex:indexPath.section-2];
         NSDictionary *dict;
         
@@ -1977,7 +2297,6 @@
         }
             
         dictSelectedToMakeOrder=[[NSDictionary alloc]initWithDictionary:dict];
-        
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         
         UIView *viewA=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 480+23)];
@@ -2031,7 +2350,7 @@
         
         UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,10,60,60)];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
-        NSLog(@"URL is %@",strURL);
+        NSLog(@"URL is %@",dictTemp);
         //[imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
         imgViewPhoto.tag=143225;
         [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
@@ -2516,6 +2835,11 @@
             [dict setObject:strArrow forKey:@"Arrow"];
             [ArrMenuSections replaceObjectAtIndex:intTag withObject:dict];
  
+        }else if(intTag==6){
+            //[self createAlertViewWithTitle:@"" message:@"Work in Progress" cancelBtnTitle:nil otherBtnTitle:@"OK" delegate:self tag:0];
+            CustomDrinkViewController *Obj =[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
+            [self.navigationController pushViewController:Obj animated:NO];
+            
         }else
         {
            NSMutableDictionary *dict=[arrMenu objectAtIndex:intTag-2];
