@@ -64,4 +64,5 @@
 -(void)shareAMessage:(NSString*)message AccessToken:(NSString*)strToken delegate:(id)aDelegate;
 -(void)getPastOrderbbybartsyId:(NSString*)strbartsyId delegate:(id)aDelegate;
 -(void)getUserRewardsbybartsyID:(NSString*)strbartsyID delegate:(id)aDelegate;
+-(void)getCocktailsbyvenueID:(NSString*)venueID delegate:(id)aDelegate;
 @end

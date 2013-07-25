@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB0A303717A0FD7000AD52D6 /* wifi-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB0A303617A0FD7000AD52D6 /* wifi-icon.png */; };
+		CB0A303917A0FE3A00AD52D6 /* i-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB0A303817A0FE3900AD52D6 /* i-icon.png */; };
+		CB0A303B17A13DBA00AD52D6 /* drink.png in Resources */ = {isa = PBXBuildFile; fileRef = CB0A303A17A13DB900AD52D6 /* drink.png */; };
 		CB10B065178D3D2600CAF6ED /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B064178D3D2600CAF6ED /* logo.png */; };
 		CB10B067178D3D3400CAF6ED /* f-sign.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B066178D3D3400CAF6ED /* f-sign.png */; };
 		CB10B06B178D3D4C00CAF6ED /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B06A178D3D4C00CAF6ED /* logo@2x.png */; };
@@ -303,6 +306,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CB0A303617A0FD7000AD52D6 /* wifi-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wifi-icon.png"; sourceTree = "<group>"; };
+		CB0A303817A0FE3900AD52D6 /* i-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "i-icon.png"; sourceTree = "<group>"; };
+		CB0A303A17A13DB900AD52D6 /* drink.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drink.png; sourceTree = "<group>"; };
 		CB10B064178D3D2600CAF6ED /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		CB10B066178D3D3400CAF6ED /* f-sign.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "f-sign.png"; sourceTree = "<group>"; };
 		CB10B06A178D3D4C00CAF6ED /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
@@ -1432,6 +1438,9 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB0A303A17A13DB900AD52D6 /* drink.png */,
+				CB0A303817A0FE3900AD52D6 /* i-icon.png */,
+				CB0A303617A0FD7000AD52D6 /* wifi-icon.png */,
 				CB688C7E17A0108C001C4726 /* home-footer.png */,
 				CB688C7C17A00618001C4726 /* tickmark_select.png */,
 				CB98322017996F2100DC63AC /* tick_mark.png */,
@@ -1722,6 +1731,9 @@
 				CB688C7B179FE5C4001C4726 /* CustomDrinkViewController.xib in Resources */,
 				CB688C7D17A00618001C4726 /* tickmark_select.png in Resources */,
 				CB688C7F17A0108C001C4726 /* home-footer.png in Resources */,
+				CB0A303717A0FD7000AD52D6 /* wifi-icon.png in Resources */,
+				CB0A303917A0FE3A00AD52D6 /* i-icon.png in Resources */,
+				CB0A303B17A13DBA00AD52D6 /* drink.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomDrinkViewController : UIViewController
-
+@interface CustomDrinkViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+{
+    NSDictionary *dictCustomDrinks;
+}
+@property(nonatomic,retain) NSDictionary *dictCustomDrinks;
 @end

@@ -381,8 +381,8 @@
         else
         {
             intIndex=indexPath.row;
-            isRequestForCheckIn=YES;
-            self.sharedController=[SharedController sharedController];
+            //isRequestForCheckIn=YES;
+            //self.sharedController=[SharedController sharedController];
             //[self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
             //[self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:indexPath.row] objectForKey:@"venueId"] delegate:self];
             HomeViewController *obj=[[HomeViewController alloc]init];

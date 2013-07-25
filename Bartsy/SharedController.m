@@ -766,7 +766,7 @@ static SharedController *sharedController;
     [dictCheckIn setObject:date forKey:@"date"];
     [dictCheckIn setObject:strbartsyId forKey:@"bartsyId"];
     if (strVenueId!=nil) {
-        [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+        [dictCheckIn setObject:strVenueId forKey:@"venueId"];
     }
 
     NSLog(@"dict is %@",dictCheckIn);
@@ -974,7 +974,35 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+}
+
+-(void)getCocktailsbyvenueID:(NSString *)venueID delegate:(id)aDelegate{
     
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getCocktails",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    [dictCheckIn setObject:venueID forKey:@"venueId"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+    
+    NSLog(@"dict is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+    [dictCheckIn release];
 }
 
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
