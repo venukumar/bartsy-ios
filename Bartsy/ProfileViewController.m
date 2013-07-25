@@ -409,10 +409,11 @@
             [self setImageWithURL:url];
         }
         else
-            [imgViewProfilePicture setImage:[UIImage imageNamed:@"DefaultUser.png"]];
-        
-        if(isReloadingForProfileVisible==YES)
             [imgViewProfilePicture setImage:[dictProfileData objectForKey:@"profilepicture"]];
+        
+        if(imgViewProfilePicture.image==nil)
+        [imgViewProfilePicture setImage:[UIImage imageNamed:@"DefaultUser.png"]];
+
         
         [url release];
         [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
@@ -1428,6 +1429,8 @@
     
     
     UIImage *img=[self scaleAndRotateImage:[info objectForKey:UIImagePickerControllerOriginalImage]];
+    
+    [dictProfileData setObject:img forKey:@"profilepicture"];
     
     UIImageView *imgView=(UIImageView*)[self.view viewWithTag:333];
     imgView.image=img;
