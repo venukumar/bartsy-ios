@@ -52,7 +52,10 @@
     UITextField *txtFldLastName;
     NSString *strFirstName;
     NSString *strLastName;
+    UITextField *txtFldConfirmPassword;
+    NSString *strConfirmPassword;
 }
+@property(nonatomic,retain)NSString *strConfirmPassword;
 @property(nonatomic,retain)NSString *strDOB;
 @property(nonatomic,retain)NSString *strPassword;
 @property(nonatomic,assign)BOOL isCmgForEditProfile;

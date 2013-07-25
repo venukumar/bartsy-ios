@@ -26,7 +26,7 @@
 
 @implementation ProfileViewController
 @synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription;
-@synthesize strServerPublicKey,strFirstName,strLastName;
+@synthesize strServerPublicKey,strFirstName,strLastName,strConfirmPassword;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -107,18 +107,16 @@
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         if (screenBounds.size.height == 568)
         {
-            if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
+            if(isCmgForEditProfile==YES)
             tblView.frame=CGRectMake(0, 46, 320,500-50);
             else
             tblView.frame=CGRectMake(0, 46, 320,500);
         }
         else
         {
-            if(isCmgFromGetStarted==YES||isCmgForEditProfile==YES)
+            if(isCmgForEditProfile==YES)
                 tblView.frame=CGRectMake(0, 46, 320, 420-50);
-            else
-                tblView.frame=CGRectMake(0, 46, 320, 410);
-          }
+        }
         
         [tblView release];
         
@@ -308,9 +306,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section==0&&isCmgFromGetStarted)
+    if(indexPath.section==0)
     {
-        return 85;
+        return 115;
     }
     else if(indexPath.section==1)
     {
@@ -343,9 +341,9 @@
     cell.tag=indexPath.section+1;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if(indexPath.section==0&&isCmgFromGetStarted)
+    if(indexPath.section==0)
     {
-        UILabel *lblEmailId=[self createLabelWithTitle:@"EmailId" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        UILabel *lblEmailId=[self createLabelWithTitle:@"Email*" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblEmailId.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblEmailId];
         
@@ -358,7 +356,7 @@
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
         [cell.contentView addSubview:txtFldEmailId];
         
-        UILabel *lblPassword=[self createLabelWithTitle:@"Password:" frame:CGRectMake(10, 42, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        UILabel *lblPassword=[self createLabelWithTitle:@"Password*:" frame:CGRectMake(10, 42, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblPassword.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblPassword];
         
@@ -372,6 +370,21 @@
         txtFldPassword.text=strPassword;
         else
             txtFldPassword.text=[dictResult objectForKey:@"password"];
+        
+        UILabel *lblConfirm=[self createLabelWithTitle:@"Confirm*:" frame:CGRectMake(10, 74, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblConfirm.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblConfirm];
+        
+        txtFldConfirmPassword=[self createTextFieldWithFrame:CGRectMake(110, 74, 180, 30) tag:321 delegate:self];
+        txtFldConfirmPassword.secureTextEntry=YES;
+        txtFldConfirmPassword.placeholder=@"6 or more characters";
+        txtFldConfirmPassword.font=[UIFont systemFontOfSize:15];
+        [cell.contentView addSubview:txtFldConfirmPassword];
+        
+        if([strPassword length])
+            txtFldConfirmPassword.text=strConfirmPassword;
+        else
+            txtFldConfirmPassword.text=[dictResult objectForKey:@"password"];
         
         //if(isReloadingForProfileVisible==YES)
           //  txtFldPassword.text=[dictProfileData objectForKey:@"password"];
@@ -875,7 +888,7 @@
     NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:[jsonData dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:nil];
     NSString *userId=[jsonDictionary objectForKey:@"id"];
     [dictGoogle setObject:[jsonDictionary objectForKey:@"email"] forKey:@"googleusername"];
-    
+    [dictGoogle setObject:[jsonDictionary objectForKey:@"email"] forKey:@"username"];
     [dictGoogle setObject:[NSString stringWithFormat:@"%@",userId] forKey:@"googleid"];
 
     NSLog(@" user deata %@",jsonData);
@@ -1068,9 +1081,9 @@
 
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     if(isCmgFromGetStarted)
-    [tblView setContentOffset:CGPointMake(0,400) animated:YES];
+    [tblView setContentOffset:CGPointMake(0,400+100) animated:YES];
     else
-        [tblView setContentOffset:CGPointMake(0,315) animated:YES];
+        [tblView setContentOffset:CGPointMake(0,315+100) animated:YES];
 
     
     if([textView.text isEqualToString:@"Enter something about you that you'd like others to see while you're checked in at a venue"])
@@ -1135,7 +1148,7 @@
     if(textField.tag==444&&isCmgFromGetStarted)
     [tblView setContentOffset:CGPointMake(0,100) animated:YES];
     else if(textField.tag==456||textField.tag==567)
-        [tblView setContentOffset:CGPointMake(0,200) animated:YES];
+        [tblView setContentOffset:CGPointMake(0,300) animated:YES];
 
    
 }
@@ -1161,6 +1174,19 @@
         if ([string isEqualToString:@""])
         {
            strPassword = [[strPassword substringToIndex:[strPassword length]-1] retain];
+        }
+    }
+    else if(textField.tag==321)
+    {
+        if([string isEqualToString:@" "])
+        {
+            return NO;
+        }
+        strConfirmPassword=[[NSString stringWithFormat:@"%@%@",textField.text,string] retain];
+        
+        if ([string isEqualToString:@""])
+        {
+            strConfirmPassword = [[strConfirmPassword substringToIndex:[strConfirmPassword length]-1] retain];
         }
     }
     else if(textField.tag==456)
@@ -1450,10 +1476,16 @@
 
     BOOL isValidationSucced=NO;
     
-    if(isCmgFromGetStarted==YES)
+    if([txtFldPassword.text length]==0||[txtFldConfirmPassword.text length]==0||![txtFldPassword.text isEqualToString:txtFldConfirmPassword.text])
     {
-        if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
-        {
+        strPassword=nil;
+        strConfirmPassword=nil;
+        [self createAlertViewWithTitle:@"" message:@"Password mismatch" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        return;
+    }
+    
+    if(imgViewProfilePicture.image!=nil&&[txtFldEmailId.text length]&&[txtFldPassword.text length]>=6&&[txtFldNickName.text length])
+    {
             if([self validemail:txtFldEmailId.text])
             {
                 isValidationSucced=YES;
@@ -1463,14 +1495,13 @@
                 [self createAlertViewWithTitle:@"" message:@"Email is not valid" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
                 return;
             }
-        }
-        else
-        {
+    }
+    else
+    {
             [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
             return;
-        }
-        
     }
+        
     
     if([txtFldNickName.text length])
     {
