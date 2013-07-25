@@ -26,7 +26,7 @@
 
 @implementation ProfileViewController
 @synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription;
-@synthesize strServerPublicKey;
+@synthesize strServerPublicKey,strFirstName,strLastName;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -319,7 +319,7 @@
     else if(indexPath.section==2)
     {
         if([creditCardInfo.redactedCardNumber length])
-        return 70;
+        return 120;
         else
         return 50;
     }
@@ -482,11 +482,45 @@
         
         if([creditCardInfo.redactedCardNumber length])
         {
-            UIButton *btnChange=[self createUIButtonWithTitle:@"Rescan" image:nil frame:CGRectMake(10, 50, 80, 20) tag:0 selector:@selector(btnCreditCard_TouchUpInside) target:self];
+            UILabel *lblFirstName=[self createLabelWithTitle:@"First Name:" frame:CGRectMake(10, 5, 120, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblFirstName.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblFirstName];
+            
+            UILabel *lblLastName=[self createLabelWithTitle:@"Last Name:" frame:CGRectMake(10, 35, 120, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblLastName.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblLastName];
+            
+            txtFldFirstName=[self createTextFieldWithFrame:CGRectMake(140, 5, 150, 30) tag:456 delegate:self];
+            txtFldFirstName.placeholder=@"First Name";
+            txtFldFirstName.font=[UIFont systemFontOfSize:15];
+            [cell.contentView addSubview:txtFldFirstName];
+            
+            if([strFirstName length])
+                txtFldFirstName.text=strFirstName;
+            
+            txtFldLastName=[self createTextFieldWithFrame:CGRectMake(140, 40, 150, 30) tag:567 delegate:self];
+            txtFldLastName.placeholder=@"Last Name";
+            txtFldLastName.font=[UIFont systemFontOfSize:15];
+            [cell.contentView addSubview:txtFldLastName];
+            
+            if([strLastName length])
+                txtFldLastName.text=strLastName;
+            
+            UILabel *lblCC=[self createLabelWithTitle:@"Credit card:" frame:CGRectMake(46, 70, 74, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblCC.adjustsFontSizeToFitWidth=YES;
+            lblCC.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblCC];
+            
+            lblCreditCard.frame=CGRectMake(140, 70, 120, 30);
+            lblCreditCard.lineBreakMode=NSLineBreakByCharWrapping;
+            
+            imgViewCreditCard.frame=CGRectMake(5, 70, 41, 40);
+            
+            UIButton *btnChange=[self createUIButtonWithTitle:@"Rescan" image:nil frame:CGRectMake(130, 95, 80, 20) tag:0 selector:@selector(btnCreditCard_TouchUpInside) target:self];
             btnChange.titleLabel.textColor=[UIColor blackColor];
             [cell.contentView addSubview:btnChange];
             
-            UIButton *btnDelete=[self createUIButtonWithTitle:@"Delete" image:nil frame:CGRectMake(95, 50, 80, 20) tag:0 selector:@selector(btnDelete_TouchUpInside) target:self];
+            UIButton *btnDelete=[self createUIButtonWithTitle:@"Delete" image:nil frame:CGRectMake(215, 95, 80, 20) tag:0 selector:@selector(btnDelete_TouchUpInside) target:self];
             btnDelete.titleLabel.textColor=[UIColor blackColor];
             [cell.contentView addSubview:btnDelete];
         }
@@ -1100,6 +1134,9 @@
     
     if(textField.tag==444&&isCmgFromGetStarted)
     [tblView setContentOffset:CGPointMake(0,100) animated:YES];
+    else if(textField.tag==456||textField.tag==567)
+        [tblView setContentOffset:CGPointMake(0,200) animated:YES];
+
    
 }
 
@@ -1124,6 +1161,32 @@
         if ([string isEqualToString:@""])
         {
            strPassword = [[strPassword substringToIndex:[strPassword length]-1] retain];
+        }
+    }
+    else if(textField.tag==456)
+    {
+        if([string isEqualToString:@" "])
+        {
+            return NO;
+        }
+        strFirstName=[[NSString stringWithFormat:@"%@%@",textField.text,string] retain];
+        
+        if ([string isEqualToString:@""])
+        {
+            strFirstName = [[strFirstName substringToIndex:[strFirstName length]-1] retain];
+        }
+    }
+    else if(textField.tag==567)
+    {
+        if([string isEqualToString:@" "])
+        {
+            return NO;
+        }
+        strLastName=[[NSString stringWithFormat:@"%@%@",textField.text,string] retain];
+        
+        if ([string isEqualToString:@""])
+        {
+            strLastName = [[strLastName substringToIndex:[strLastName length]-1] retain];
         }
     }
     else if(textField.tag==111)
@@ -1414,7 +1477,7 @@
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         NSString *strEncryptedCreditCardNumber=[Crypto encryptRSA:creditCardInfo.cardNumber key:strServerPublicKey];
         
-            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:strEncryptedCreditCardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] delegate:self];
+            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:strEncryptedCreditCardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] firstName:strFirstName lastname:strLastName delegate:self];
             
     }
     
@@ -1507,7 +1570,7 @@
             [dictResult setObject:[NSString stringWithFormat:@"%@/%@",KServerURL,[result objectForKey:@"userImage"]] forKey:@"url"];
             [dictResult setObject:[result objectForKey:@"nickname"] forKey:@"nickname"];
             
-            if([[result objectForKey:@"creditCardNumber"]length]==16)
+            if([[result objectForKey:@"creditCardNumber"]length]>=16)
             {
                 creditCardInfo=[[CardIOCreditCardInfo alloc]init];
                 creditCardInfo.cardNumber=[result objectForKey:@"creditCardNumber"];
@@ -1519,7 +1582,8 @@
                     creditCardInfo.expiryYear=[[result objectForKey:@"expYear"] integerValue];
             }
             
-            
+            strFirstName=[[NSString stringWithFormat:@"%@",[result objectForKey:@"firstname"]] retain];
+            strLastName=[[NSString stringWithFormat:@"%@",[result objectForKey:@"lastname"]] retain];
             
             isChecked=([[result objectForKey:@"showProfile"] isEqualToString:@"ON"]?1:0);
             

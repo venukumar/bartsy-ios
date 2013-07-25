@@ -48,6 +48,10 @@
     NSString *strPassword;
     NSString *strDOB;
     NSString *strServerPublicKey;
+    UITextField *txtFldFirstName;
+    UITextField *txtFldLastName;
+    NSString *strFirstName;
+    NSString *strLastName;
 }
 @property(nonatomic,retain)NSString *strDOB;
 @property(nonatomic,retain)NSString *strPassword;
@@ -61,6 +65,8 @@
 @property(nonatomic,retain)GTMOAuth2Authentication *auth;
 @property(nonatomic,retain)UITextView *txtViewDescription;
 @property(nonatomic,retain)NSString *strServerPublicKey;
+@property(nonatomic,retain)NSString *strFirstName;
+@property(nonatomic,retain)NSString *strLastName;
 -(void)saveProfileData:(NSDictionary*)dict;
 -(void)setImageWithURL:(NSURL*)url;
 @end

@@ -213,7 +213,7 @@ static SharedController *sharedController;
 }
  */
 
--(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName delegate:(id)aDelegate
+-(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName firstName:(NSString*)strFirstName lastname:(NSString*)strLastName delegate:(id)aDelegate
 {
     
     self.delegate=aDelegate;
@@ -302,7 +302,12 @@ static SharedController *sharedController;
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
-        
+    if(strFirstName!=nil&&[strFirstName length])
+        [dictProfile setObject:strFirstName forKey:@"firstname"];
+    
+    if(strLastName!=nil&&[strLastName length])
+        [dictProfile setObject:strLastName forKey:@"lastname"];
+
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"dictprofile %@",dictUserProfile);
