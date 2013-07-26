@@ -53,14 +53,17 @@
     
     arrCustomDrinks=[[NSMutableArray alloc]init];
     
+    UIScrollView *mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,self.view.bounds.size.height)];
+    mainScroll.tag=554;
+    [mainScroll setScrollEnabled:YES];
+    [self.view addSubview:mainScroll];
 
-    
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 46, 320, 367-75) style:UITableViewStylePlain];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 367-75) style:UITableViewStylePlain];
     tblView.dataSource=self;
     tblView.backgroundColor = [UIColor blackColor];
     tblView.delegate=self;
     tblView.tag=555;
-    [self.view addSubview:tblView];
+    [mainScroll addSubview:tblView];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
@@ -70,13 +73,14 @@
     
     [tblView release];
 
-    /*UITextField* field = [[UITextField alloc] initWithFrame:CGRectMake(0, tblView.frame.origin.y+tblView.frame.size.height+5, 320, 35)];
+    UITextField* field = [[UITextField alloc] initWithFrame:CGRectMake(5, tblView.frame.origin.y+tblView.frame.size.height+3, 310, 30)];
     [field setBorderStyle:UITextBorderStyleRoundedRect];
     field.placeholder=@"Special instructions";
-    [self.view addSubview:field];*/
+    field.delegate=self;
+    [mainScroll addSubview:field];
 
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    orderBtn.frame=CGRectMake(5,372, 250, 30);
+    orderBtn.frame=CGRectMake(5,330, 250, 30);
     if (IS_IPHONE_5) {
         orderBtn.frame=CGRectMake(5,430, 250, 30);
 
@@ -86,7 +90,7 @@
     [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [orderBtn addTarget:self action:@selector(Button_Order:) forControlEvents:UIControlEventTouchUpInside];
     orderBtn.backgroundColor=[UIColor blackColor];
-    [self.view addSubview:orderBtn];
+    [mainScroll addSubview:orderBtn];
     
     NSArray *tempArray=[dictCustomDrinks objectForKey:@"ingredients"];
     for (NSDictionary *dict in tempArray) {
@@ -95,17 +99,32 @@
             //[arrCustomDrinks addObject:dict];
             for (NSDictionary *tempdict in [dict valueForKey:@"categories"]) {
                // NSLog(@"dict %@",tempdict);
-                [arrCustomDrinks addObject:tempdict];
+                if ([[tempdict valueForKey:@"Arrow"] integerValue]==1) {
+                    [arrCustomDrinks addObject:tempdict];
+                    NSArray *subitemArray=[tempdict valueForKey:@"ingredients"];
+                    for (NSDictionary *tempdict in subitemArray) {
+                        
+                        [tempdict setValue:@"0" forKey:@"Selected"];
+                        
+                    }
+                }
             }
         }else if ([[dict valueForKey:@"typeName"] isEqualToString:@"Mixer"]){
             for (NSDictionary *tempdict in [dict valueForKey:@"categories"]) {
                // NSLog(@"dict %@",tempdict);
                 [arrCustomDrinks addObject:tempdict];
+                NSArray *subitemArray=[tempdict valueForKey:@"ingredients"];
+
+                for (NSDictionary *tempdict in subitemArray) {
+                    
+                    [tempdict setValue:@"0" forKey:@"Selected"];
+
+                }
+
             }
             
         }
     }
-   // NSLog(@"custom driks %@",tempArray);
 }
 
 -(void)btnBack_TouchUpInside
@@ -180,6 +199,11 @@
     [button setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateSelected];
     [cell.contentView addSubview:button];
     
+    if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+        button.selected=YES;
+    }else{
+        button.selected=NO;
+    }
     lblName.text=[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"];
     [lblName release];
     return cell;
@@ -196,11 +220,30 @@
 
 -(void)checkboxButton:(UIButton*)sender{
     
-    if (sender.selected) {
-        sender.selected=NO;
-    }else{
-        sender.selected=YES;
-    }
+    NSLog(@"button tag %d",sender.tag);
+    UITableView *tableview=(UITableView*)[self.view viewWithTag:555];
+  
+    sender.selected=YES;
+                
+
+    btnTag=sender.tag;
+}
+#pragma mark------------TextField Delegates
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    UIScrollView *scrollview=(UIScrollView*)[self.view viewWithTag:554];
+        
+    [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y-90)];
+    
+    
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    UIScrollView *scrollview=(UIScrollView*)[self.view viewWithTag:554];
+    [scrollview setContentOffset:CGPointMake(0,0)];
+    [textField resignFirstResponder];
+    return YES;
 }
 - (void)didReceiveMemoryWarning
 {

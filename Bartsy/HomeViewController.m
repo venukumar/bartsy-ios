@@ -158,6 +158,7 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
+    
     [[NSUserDefaults standardUserDefaults]setObject:dictVenue forKey:@"VenueDetails"];
     
     arrMenu=[[NSMutableArray alloc]init];
@@ -567,13 +568,19 @@
     }
     else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO && isGettingIngradients==NO && isRequestCheckin==NO && isGettingCocktails==NO && isUserCheckOut==NO)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:[result objectForKey:@"menu"] forKey:[dictVenue objectForKey:@"venueId"]];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        [arrMenu addObjectsFromArray:result];
-        [self hideProgressView:nil];
         
-        [self modifyData];
-       
+        
+        NSLog(@"********%@",arrMenu);
+
+            [[NSUserDefaults standardUserDefaults] setObject:result forKey:[dictVenue objectForKey:@"venueId"]];
+           // [[NSUserDefaults standardUserDefaults]synchronize];
+          //  [arrMenu addObjectsFromArray:result];
+          //  [self hideProgressView:nil];
+            
+            [self modifyData];
+
+        
+               
         isGettingIngradients=YES;
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getIngredientsListWithVenueId:[dictVenue objectForKey:@"venueId"] delegate:self];
@@ -927,96 +934,66 @@
 
 -(void)modifyData
 {
-    NSMutableArray *arrTemp=[[NSMutableArray alloc]init];
-    NSMutableArray *arrContents=[[NSMutableArray alloc]init];
-    
-    if([[NSUserDefaults standardUserDefaults]objectForKey:[dictVenue objectForKey:@"venueId"]])
-    {
-        [arrMenu removeAllObjects];
-        [arrMenu addObjectsFromArray:[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]];
-    }
-    
-    //Drinks without category name
-    for (int i=0; i<[arrMenu count]; i++)
-    {
-        NSDictionary *dict=[arrMenu objectAtIndex:i];
-        if([[dict objectForKey:@"section_name"] length]==0)
-        {
-            NSMutableArray *arrSubsections=[dict objectForKey:@"subsections"];
-            
-            for (int j=0; j<[arrSubsections count]; j++)
-            {
-                NSDictionary *dictSubsection=[arrSubsections objectAtIndex:j];
-                [arrContents addObjectsFromArray:[dictSubsection objectForKey:@"contents"]];
-            }
-            NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!=''"];
-            [arrContents filterUsingPredicate:predicateName];
 
-            NSArray *tempArray = [[NSArray alloc] initWithArray:arrContents];
-            for (int i = 0; i<[tempArray count]; i++)
-            {
-                NSMutableDictionary *contentDict = [tempArray objectAtIndex:i];
-                NSNumber *priceNumber = [NSNumber numberWithFloat:[[contentDict valueForKey:@"price"] floatValue]];
-                if ([priceNumber isEqualToNumber:[NSNumber numberWithFloat:0.00000]])
-                {
-                    [arrContents removeObject:contentDict];
-                }
-            }
+    id result=[[NSUserDefaults standardUserDefaults]objectForKey:[dictVenue objectForKey:@"venueId"]];
+    NSArray *arrmenues=[result valueForKey:@"menus"];
+    for (int i=0; i<[arrmenues count]; i++) {
+        NSDictionary *dicmainsections=[arrmenues objectAtIndex:i];
+        
+        NSArray *arrsections=[dicmainsections valueForKey:@"sections"];
+        for (int j=0; j<[arrsections count]; j++) {
             
-            [arrTemp insertObject:arrContents atIndex:0];
-        }
-    }
-    
-    //Making the first drinks array as a dictionary instead of array , Drinks without category name
-    if([arrTemp count])
-    {
-        [arrTemp removeAllObjects];
-        NSMutableDictionary *dictFirstItem=[[NSMutableDictionary alloc]initWithObjectsAndKeys:arrContents,@"contents",@"Various Items",@"section_name",@"0",@"Arrow", nil];
-        [arrTemp addObject:dictFirstItem];
-        [dictFirstItem release];
-    }
-    
-    //Drinks with category name
-    for (int i=0; i<[arrMenu count]; i++)
-    {
-        NSDictionary *dict=[arrMenu objectAtIndex:i];
-        if([[dict objectForKey:@"section_name"] length]!=0)
-        {
-            NSMutableArray *arrSubsections=[dict objectForKey:@"subsections"];
-            
-            for (int j=0; j<[arrSubsections count]; j++)
-            {
-                NSMutableDictionary *dictSubsection=[[NSMutableDictionary alloc]initWithDictionary:[arrSubsections objectAtIndex:j]];
-                NSMutableArray *arrContents2=[[NSMutableArray alloc]initWithArray:[dictSubsection objectForKey:@"contents"]];
-                NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!=''"];
-                //NSPredicate *predicateName = [NSPredicate predicateWithFormat:@"price!=nil AND price!='' AND price CONTAINS[cd] %@",@"."];
-                [arrContents2 filterUsingPredicate:predicateName];
-                NSArray *tempArray = [[NSArray alloc] initWithArray:arrContents2];
-                for (int i = 0; i<[tempArray count]; i++)
-                {
-                    NSMutableDictionary *contentDict = [tempArray objectAtIndex:i];
-                    NSNumber *priceNumber = [NSNumber numberWithFloat:[[contentDict valueForKey:@"price"] floatValue]];
-                    if ([priceNumber isEqualToNumber:[NSNumber numberWithFloat:0.00000]])
-                    {
-                        [arrContents2 removeObject:contentDict];
+            NSDictionary *dictsection=[arrsections objectAtIndex:j];
+            if ([[dictsection valueForKey:@"section_name"] length]!=0) {
+                
+                NSArray *arrsubSection=[dictsection valueForKey:@"subsections"];
+                for (int k=0; k<[arrsubSection count];k++) {
+                    NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
+                    //NSLog(@"**** %@-->%@ ",[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]);
+                    NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
+                    
+                    [sectionDict setObject:[NSString stringWithFormat:@"%@->%@",[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]] forKey:@"section_name"];
+                    NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
+                    NSMutableArray *arrSubContent=[[NSMutableArray alloc]init];
+                    for (int x=0; x<[arrContent count]; x++) {
+                        
+                        NSDictionary *dictContent=[arrContent objectAtIndex:x];
+                        [arrSubContent addObject:dictContent];
                     }
+                    
+                    [sectionDict setObject:arrSubContent forKey:@"contents"];
+                    [arrMenu addObject:sectionDict];
+                    [sectionDict release];
                 }
-                [dictSubsection setObject:arrContents2 forKey:@"contents"];
-                [dictSubsection setObject:[dict objectForKey:@"section_name"] forKey:@"section_name"];
-                [dictSubsection setObject:@"0" forKey:@"Arrow"];
-                if([arrContents2 count])
-                    [arrTemp addObject:dictSubsection];
-                [dictSubsection release];
-                [tempArray release];
+                
+            }else{
+                NSArray *arrsubSection=[dictsection valueForKey:@"subsections"];
+                for (int k=0; k<[arrsubSection count];k++) {
+                    NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
+                    //NSLog(@"**** %@-->%@ ",[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]);
+                    NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
+                    
+                    [sectionDict setObject:@"Various Items" forKey:@"section_name"];
+                    NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
+                    NSMutableArray *arrSubContent=[[NSMutableArray alloc]init];
+                    for (int x=0; x<[arrContent count]; x++) {
+                        
+                        NSDictionary *dictContent=[arrContent objectAtIndex:x];
+                        [arrSubContent addObject:dictContent];
+                    }
+                    
+                    [sectionDict setObject:arrSubContent forKey:@"contents"];
+                    [arrMenu addObject:sectionDict];
+                    [sectionDict release];
+                }
+                
             }
+            
         }
+        
+        
     }
-    
-    [arrMenu removeAllObjects];
-    [arrMenu addObjectsFromArray:arrTemp];
-    [arrTemp release];
-    
-    
+
     UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
     [tblView reloadData];
     
@@ -1063,10 +1040,22 @@
              NSError *outError = nil;
              
              id result = [jsonParser objectWithString:jsonString error:&outError];
-             //[arrPastOrders removeAllObjects];
-             //[arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
+             [arrPastOrders removeAllObjects];
+             [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
              NSLog(@"arrPastOrders%@",arrPastOrders);
                isSelectedForDrinks=YES;
+             if(0)//appDelegate.isComingForOrders==YES)
+             {
+                 UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+
+                 appDelegate.isComingForOrders=NO;
+                 [arrOrdersTimedOut removeAllObjects];
+                 [arrOrdersTimedOut addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
+                 [segmentControl setSelectedSegmentIndex:2];
+                 [self segmentControl_ValueChanged:segmentControl];
+                 
+             }
+             else
              if([[[NSUserDefaults standardUserDefaults] objectForKey:[dictVenue objectForKey:@"venueId"]]count]==0)
                  {
                      [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -1074,7 +1063,7 @@
                  }
                  else
                  {
-                     [self modifyData];
+                    [self modifyData];
                      
                     isGettingIngradients=YES;
                     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -1919,11 +1908,7 @@
         {
             id object=[arrMenu objectAtIndex:section-2];
 
-            if(section==2&&[[object objectForKey:@"subsection_name"] length]==0)
-            {
-                headerTitle.text= [object objectForKey:@"section_name"];
-            }
-            else if([[object objectForKey:@"subsection_name"] length])
+             if([[object objectForKey:@"subsection_name"] length])
             {
                 headerTitle.text= [NSString stringWithFormat:@"%@->%@",[object objectForKey:@"section_name"],[object objectForKey:@"subsection_name"]];
             }
@@ -2018,11 +2003,11 @@
         
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
 
-        UIImageView *drinkImg=[[UIImageView alloc]initWithFrame:CGRectMake(5,24,13.5, 13.5)];
+        UIImageView *drinkImg=[[UIImageView alloc]initWithFrame:CGRectMake(5,13,13.5, 13.5)];
         drinkImg.image=[UIImage imageNamed:@"drink"];
         [cell.contentView addSubview:drinkImg];
         [drinkImg release];
-        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(25, 10, 270, 40)];
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(25,0, 270, 40)];
         if (indexPath.section==0)
         {
             if ([[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemsList"]){
@@ -2398,7 +2383,6 @@
     if(indexPath.section>1+[arrMenu count]&&indexPath.section<2+[arrMenu count]+[arrCustomDrinks count]){
         
         CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
-        
         obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
         [self.navigationController pushViewController:obj animated:YES];
             

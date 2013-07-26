@@ -201,6 +201,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)
+        return;
+        
     if ([[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"bartsyId"]) {
         
        appDelegate.isComingForPeople=YES;

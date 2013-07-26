@@ -172,6 +172,8 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    
+    [appDelegate stopTimerForGetMessages];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     isGetMessageWebService = YES;
     [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
@@ -184,6 +186,8 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         
         [getmsgtimer invalidate];
     }
+
+      [appDelegate startTimerTOGetMessages];
 }
 -(void)btnBack_TouchUpInside
 {
