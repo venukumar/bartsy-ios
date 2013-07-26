@@ -77,10 +77,10 @@
 {
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
-    
+    UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+
     if(appDelegate.isComingForOrders==YES)
     {
-        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         appDelegate.isComingForOrders=NO;
         [arrOrdersTimedOut removeAllObjects];
         [arrOrdersTimedOut addObjectsFromArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"OrdersTimedOut"]];
@@ -90,19 +90,28 @@
         
     }else if (appDelegate.isComingForPeople==YES){
         
-        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         appDelegate.isComingForPeople=NO;
         [segmentControl setSelectedSegmentIndex:1];
         [self segmentControl_ValueChanged:segmentControl];
         return;
     }else if(appDelegate.isComingForMenu==YES){
         
-        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
         appDelegate.isComingForMenu=NO;
         [segmentControl setSelectedSegmentIndex:0];
         [self segmentControl_ValueChanged:segmentControl];
         return;
 
+    }
+    
+    
+    if(segmentControl.selectedSegmentIndex==1)
+    {
+        isRequestForPeople=YES;
+        isSelectedForPastOrders = NO;
+        isRequestForGettingsPastOrders = NO;
+
+        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        [self.sharedController gettingPeopleListFromVenue:[dictVenue objectForKey:@"venueId"]  delegate:self];
     }
 
 }

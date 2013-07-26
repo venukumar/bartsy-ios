@@ -48,7 +48,7 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
     
-    UILabel *lblHeader=[self createLabelWithTitle:@"Messages" frame:CGRectMake(0, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
+    UILabel *lblHeader=[self createLabelWithTitle:[dictForReceiver objectForKey:@"nickName"] frame:CGRectMake(30, 2, 260, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblHeader];
 

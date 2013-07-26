@@ -149,7 +149,13 @@
             }
             UITableView *tblview=(UITableView*)[self.view viewWithTag:222];
             [tblview reloadData];
-        }else{
+        }
+        else if([[result objectForKey:@"errorCode"] integerValue]==99)
+        {
+            
+            [self createAlertViewWithTitle:@"" message:@"Your account hasn't been verified, please check your email and click on the verification link to enable rewards" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+        }
+        else{
             
             [self createAlertViewWithTitle:@"Error" message:[result valueForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
         }

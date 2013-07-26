@@ -169,8 +169,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "220"
          endingLineNumber = "220"
-         landmarkName = "-keyboardWasShown:"
-         landmarkType = "5">
+         landmarkName = "@implementation MessageListViewController"
+         landmarkType = "3">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
@@ -229,11 +229,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "396439748.365641"
+         timestampString = "396559847.303588"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1371"
-         endingLineNumber = "1371"
+         startingLineNumber = "1380"
+         endingLineNumber = "1380"
          landmarkName = "-loadOrdersView"
          landmarkType = "5">
       </FileBreakpoint>
@@ -528,12 +528,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "396439335.553282"
+         timestampString = "396559847.303588"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1095"
-         endingLineNumber = "1095"
-         landmarkName = "-getPastorderAsynchronously"
+         startingLineNumber = "1104"
+         endingLineNumber = "1104"
+         landmarkName = "-getPeopleList"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -547,19 +547,6 @@
          startingLineNumber = "453"
          endingLineNumber = "453"
          landmarkName = "-checkOutAtBartsyVenueWithId:delegate:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Bartsy/SharedController.m"
-         timestampString = "396437892.511299"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1014"
-         endingLineNumber = "1014"
-         landmarkName = "-connectionDidFinishLoading:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -580,11 +567,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "396439478.464629"
+         timestampString = "396559847.303588"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1103"
-         endingLineNumber = "1103"
+         startingLineNumber = "1112"
+         endingLineNumber = "1112"
          landmarkName = "-getPeopleList"
          landmarkType = "5">
       </FileBreakpoint>
@@ -593,11 +580,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "396440067.483268"
+         timestampString = "396559847.303588"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "514"
-         endingLineNumber = "514"
+         startingLineNumber = "523"
+         endingLineNumber = "523"
          landmarkName = "-btnTip_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -638,6 +625,19 @@
          startingLineNumber = "394"
          endingLineNumber = "394"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/RewardsViewController.m"
+         timestampString = "396560306.347886"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "137"
+         endingLineNumber = "137"
+         landmarkName = "-controllerDidFinishLoadingWithResult:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
