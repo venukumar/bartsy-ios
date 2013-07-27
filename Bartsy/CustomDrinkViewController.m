@@ -11,6 +11,8 @@
 @interface CustomDrinkViewController (){
     
     NSMutableArray *arrCustomDrinks;
+    
+    NSMutableArray *arrIndexSelected;
 }
 
 @end
@@ -41,7 +43,8 @@
     [self.view addSubview:imgLogo];
     [imgLogo release];
 
-    
+    arrIndexSelected=[[NSMutableArray alloc]init];
+   
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     btnBack.frame = CGRectMake(5, 0, 50, 40);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -92,28 +95,28 @@
     orderBtn.backgroundColor=[UIColor blackColor];
     [mainScroll addSubview:orderBtn];
     
-    NSArray *tempArray=[dictCustomDrinks objectForKey:@"ingredients"];
+    NSArray *tempArray=[[dictCustomDrinks valueForKey:@"menus"] valueForKey:@"sections"];
     for (NSDictionary *dict in tempArray) {
         
-        if ([[dict valueForKey:@"typeName"] isEqualToString:@"Spirit"]) {
+        if ([[dict valueForKey:@"section_name"] isEqualToString:@"Spirit"]) {
             //[arrCustomDrinks addObject:dict];
-            for (NSDictionary *tempdict in [dict valueForKey:@"categories"]) {
+            for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
                // NSLog(@"dict %@",tempdict);
-                if ([[tempdict valueForKey:@"Arrow"] integerValue]==1) {
+                //if ([[tempdict valueForKey:@"Arrow"] integerValue]==1) {
                     [arrCustomDrinks addObject:tempdict];
-                    NSArray *subitemArray=[tempdict valueForKey:@"ingredients"];
+                    NSArray *subitemArray=[tempdict valueForKey:@"contents"];
                     for (NSDictionary *tempdict in subitemArray) {
                         
                         [tempdict setValue:@"0" forKey:@"Selected"];
                         
-                    }
+                   // }
                 }
             }
-        }else if ([[dict valueForKey:@"typeName"] isEqualToString:@"Mixer"]){
-            for (NSDictionary *tempdict in [dict valueForKey:@"categories"]) {
+        }else if ([[dict valueForKey:@"section_name"] isEqualToString:@"Mixer"]){
+            for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
                // NSLog(@"dict %@",tempdict);
                 [arrCustomDrinks addObject:tempdict];
-                NSArray *subitemArray=[tempdict valueForKey:@"ingredients"];
+                NSArray *subitemArray=[tempdict valueForKey:@"contents"];
 
                 for (NSDictionary *tempdict in subitemArray) {
                     
@@ -159,7 +162,7 @@
     [headerTitle setBackgroundColor:[UIColor clearColor]];
     [headerTitle setFont:[UIFont boldSystemFontOfSize:16]];
     [headerTitle setTextColor:[UIColor whiteColor]];
-    headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"categoryName"];
+    headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"subsection_name"];
     [headerView addSubview:headerTitle];
         
     return headerView;
@@ -167,7 +170,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"ingredients"];
+    NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"contents"];
     return [subitemArray count];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -189,7 +192,7 @@
     lblName.textColor=[UIColor whiteColor];
     [cell.contentView addSubview:lblName];
     
-    NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"ingredients"];
+    NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"contents"];
    
     UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
     button.frame=CGRectMake(10, 10, 22, 22);
@@ -199,7 +202,7 @@
     [button setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateSelected];
     [cell.contentView addSubview:button];
     
-    if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+    if ([arrIndexSelected containsObject:indexPath]) {
         button.selected=YES;
     }else{
         button.selected=NO;
@@ -215,6 +218,15 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if ([arrIndexSelected containsObject:indexPath] ) {
+        
+        [arrIndexSelected removeObject:indexPath];
+    }else{
+        [arrIndexSelected addObject:indexPath];
+    }
+    
+    [tableView reloadData];
     
 }
 

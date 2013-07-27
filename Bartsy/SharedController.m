@@ -570,7 +570,7 @@ static SharedController *sharedController;
 -(void)getIngredientsListWithVenueId:(NSString*)strVenueId delegate:(id)aDelegate
 {
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getIngredients",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getIngredientsInLocuFormat",KServerURL];
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:strVenueId,@"venueId",nil];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
