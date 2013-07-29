@@ -134,9 +134,9 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 150;
+    return 153;
 }
-/*
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     
@@ -161,7 +161,7 @@
     [headerview addSubview:checkinlbl ];
     [checkinlbl release];
     return [headerview autorelease];
-}*/
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *MyIdentifier = @"cell";
@@ -178,8 +178,8 @@
     [bg release];
     }
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
-
-    cell.title.text= [dictForOrder objectForKey:@"itemName"];
+    cell.venuename.text=[NSString stringWithFormat:@"Venue:%@",[dictForOrder objectForKey:@"venueName"]];
+    cell.title.text=[NSString stringWithFormat:@"Item:%@",[dictForOrder objectForKey:@"itemName"]];
     if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]])
       cell.description.text=@"";
     else
@@ -235,6 +235,14 @@
     NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
     
     cell.lblTime.text=strDate1;
+    if ([dictForOrder objectForKey:@"picked"]) {
+        
+        cell.lblPickedtime.text=[NSString stringWithFormat:@"Picked at:%@",@"Not available"];
+
+    }else{
+        cell.lblPickedtime.text=[NSString stringWithFormat:@"Picked at:%@",@"Order was Cancelled"];
+
+    }
     cell.lblSender.text = [NSString stringWithFormat:@"Sender : %@",[dictForOrder objectForKey:@"senderNickname"]];
     cell.lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
    

@@ -9,7 +9,7 @@
 #import "PastOrdersCell.h"
 
 @implementation PastOrdersCell
-@synthesize statusimage,title,description,lblTotalPrice,lblOrderId,lblRecepient,lblSender,lblTime;
+@synthesize statusimage,title,description,lblTotalPrice,lblOrderId,lblRecepient,lblSender,lblTime,venuename,lblPickedtime;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -20,14 +20,21 @@
         statusimage=[[UIImageView alloc]initWithFrame:CGRectMake(10, 10,25,25)];
         [self.contentView addSubview:statusimage];
         
-        title=[[UILabel alloc]initWithFrame:CGRectMake(10, 3, 250, 15)];
+        venuename=[[UILabel alloc]initWithFrame:CGRectMake(10, 3, 250, 18)];
+        venuename.textAlignment=NSTextAlignmentLeft;
+        venuename.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        venuename.font=[UIFont systemFontOfSize:13];
+        venuename.backgroundColor=[UIColor clearColor];
+        [self.contentView addSubview:venuename ];
+        
+        title=[[UILabel alloc]initWithFrame:CGRectMake(10, venuename.frame.origin.y+venuename.frame.size.height, 250, 15)];
         title.textAlignment=NSTextAlignmentLeft;
         title.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         title.font=[UIFont systemFontOfSize:13];
         title.backgroundColor=[UIColor clearColor];
         [self.contentView addSubview:title ];
-        
-        description=[[UILabel alloc]initWithFrame:CGRectMake(10, 20,250, 35)];
+
+        description=[[UILabel alloc]initWithFrame:CGRectMake(10, title.frame.origin.y+title.frame.size.height,250, 35)];
         description.textAlignment=NSTextAlignmentLeft;
         description.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         description.font=[UIFont systemFontOfSize:15];
@@ -35,7 +42,7 @@
         description.numberOfLines=2;
         [self.contentView addSubview:description];
         
-        lblTime=[[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
+        lblTime=[[UILabel alloc]initWithFrame:CGRectMake(10, description.frame.origin.y+description.frame.size.height, 280, 15)];
         lblTime.textAlignment=NSTextAlignmentLeft;
         lblTime.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         lblTime.backgroundColor=[UIColor clearColor];
@@ -43,7 +50,16 @@
         lblTime.tag = 1234234567;
         [self.contentView addSubview:lblTime ];
         
-        lblSender=[[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];
+        lblPickedtime=[[UILabel alloc]initWithFrame:CGRectMake(10, lblTime.frame.origin.y+lblTime.frame.size.height, 280, 15)];
+        lblPickedtime.textAlignment=NSTextAlignmentLeft;
+        lblPickedtime.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        lblPickedtime.backgroundColor=[UIColor clearColor];
+        lblPickedtime.font=[UIFont systemFontOfSize:14];
+        lblPickedtime.tag = 1234234567;
+        [self.contentView addSubview:lblPickedtime ];
+
+        
+        lblSender=[[UILabel alloc]initWithFrame:CGRectMake(10, lblPickedtime.frame.origin.y+lblPickedtime.frame.size.height, 280, 15)];
         lblSender.textAlignment=NSTextAlignmentLeft;
         lblSender.textColor=[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         lblSender.backgroundColor=[UIColor clearColor];
@@ -52,7 +68,7 @@
         [self.contentView addSubview:lblSender ];
         [lblSender release];
         
-        lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, 100, 280, 20)];
+        lblRecepient = [[UILabel alloc]initWithFrame:CGRectMake(10, lblSender.frame.origin.y+lblSender.frame.size.height, 280, 20)];
         lblRecepient.font = [UIFont systemFontOfSize:14];
         //lblRecepient.text = [NSString stringWithFormat:@"Recipient : %@",[dictForOrder objectForKey:@"recipientNickname"]];
         lblRecepient.tag = 1234234567;
@@ -70,7 +86,7 @@
         [self.contentView addSubview:lblTotalPrice];
         [lblTotalPrice release];
         
-        lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, 120, 280, 20)];
+        lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(10, lblRecepient.frame.origin.y+lblRecepient.frame.size.height-2, 280, 20)];
         lblOrderId.font = [UIFont systemFontOfSize:14];
         lblOrderId.backgroundColor = [UIColor clearColor];
         lblOrderId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];

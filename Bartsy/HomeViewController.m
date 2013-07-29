@@ -945,7 +945,7 @@
 #pragma mark----------Parsing the Locumenu Data
 -(void)modifyData
 {
-
+    [arrMenu removeAllObjects];
     id result=[[NSUserDefaults standardUserDefaults]objectForKey:[dictVenue objectForKey:@"venueId"]];
     NSArray *arrmenues=[result valueForKey:@"menus"];
     for (int i=0; i<[arrmenues count]; i++) {
@@ -961,7 +961,7 @@
                 for (int k=0; k<[arrsubSection count];k++) {
                     NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
                     NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
-                    [sectionDict setObject:[NSString stringWithFormat:@"%@->%@",[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]] forKey:@"section_name"];
+                    [sectionDict setObject:[NSString stringWithFormat:@"%@->%@->%@",[dicmainsections valueForKey:@"menu_name"],[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]] forKey:@"section_name"];
                     NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
                     NSMutableArray *arrSubContent=[[NSMutableArray alloc]init];
                     for (int x=0; x<[arrContent count]; x++) {
@@ -1015,7 +1015,8 @@
 -(void)ParsinggetIngredients:(id)result{
     
     [arrCustomDrinks removeAllObjects];
-    NSArray *arrmenues=[[result valueForKey:@"menus"] valueForKey:@"sections"];
+  
+      NSArray *arrmenues=[[result valueForKey:@"menus"] valueForKey:@"sections"];
         
         for (int j=0; j<[arrmenues count]; j++) {
             
@@ -1040,7 +1041,6 @@
                     [sectionDict setObject:arrSubContent forKey:@"contents"];
                     [arrCustomDrinks addObject:sectionDict];
                     [sectionDict release];
-                    NSLog(@"********%@",sectionDict);
             }
         }
     }
@@ -1049,6 +1049,7 @@
 #pragma mark----------Parsing the getCocktails Data
 -(void)ParsinggetCocktails:(id)result{
     
+    [arrCocktailsSection removeAllObjects];
     NSArray *arrmenues=[result valueForKey:@"menus"];
     for (int i=0; i<[arrmenues count]; i++) {
         NSDictionary *dicmainsections=[arrmenues objectAtIndex:i];
@@ -1062,7 +1063,7 @@
                 for (int k=0; k<[arrsubSection count];k++) {
                     NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
                     NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
-                    [sectionDict setObject:[NSString stringWithFormat:@"%@->%@",[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]] forKey:@"section_name"];
+                    [sectionDict setObject:[NSString stringWithFormat:@"%@->%@",[dicmainsections valueForKey:@"menu_name"],[dictsection valueForKey:@"section_name"]] forKey:@"section_name"];
                     NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
                     NSMutableArray *arrSubContent=[[NSMutableArray alloc]init];
                     for (int x=0; x<[arrContent count]; x++) {
@@ -1080,6 +1081,8 @@
             }
             
         }
+    
+    NSLog(@"arrcoctails %@",arrCocktailsSection);
     
 }
 
@@ -1910,10 +1913,10 @@
 {
     // Return the number of sections.
     if(isSelectedForDrinks){
-        return 2+[arrCustomDrinks count]+[arrMenu count];
+        return 2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count];
     }
     else if(isSelectedForPeople)
-        return 1;
+        return 1; 
     else
     {
         return 1;
@@ -1975,6 +1978,12 @@
                 button.selected=YES;
             else
                 button.selected=NO;
+        }else if(section>1+[arrCustomDrinks count]+[arrMenu count]&&section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            
+            if([[[arrCocktailsSection objectAtIndex:section-(2+[arrCustomDrinks count]+[arrMenu count])]valueForKey:@"Arrow"] intValue]==0)
+                button.selected=YES;
+            else
+                button.selected=NO;
         }
         
         [headerView addSubview:button];
@@ -2005,6 +2014,8 @@
                 headerTitle.text= [NSString stringWithFormat:@"%@",[object objectForKey:@"section_name"]];
             }
 
+        }else if(section>1+[arrCustomDrinks count]+[arrMenu count]&&section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            headerTitle.text=[[arrCocktailsSection objectAtIndex:section-(2+[arrCustomDrinks count]+[arrMenu count])] valueForKey:@"section_name"];
         }
         
         [headerView addSubview:headerTitle];
@@ -2055,6 +2066,14 @@
             else
                 return [[[arrMenu objectAtIndex:section-(2+[arrCustomDrinks count])] objectForKey:@"contents"] count];
 
+        }else if(section>1+[arrCustomDrinks count]+[arrMenu count]&&section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            
+            NSMutableDictionary *dict=[arrCocktailsSection objectAtIndex:section-(2+[arrCustomDrinks count]+[arrMenu count])];
+            BOOL isSelected=!([[dict objectForKey:@"Arrow"] integerValue]);
+            if (isSelected)
+                return 0;
+            else
+                return [[[arrCocktailsSection objectAtIndex:section-(2+[arrCustomDrinks count]+[arrMenu count])] objectForKey:@"contents"] count];
         }
         
     }
@@ -2133,6 +2152,10 @@
                 lblName.text=[dict objectForKey:@"name"];
             }
 
+        }else if (indexPath.section>1+[arrCustomDrinks count]+[arrCocktailsSection count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            
+            NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
+            lblName.text=[[tempArray objectAtIndex:indexPath.row] valueForKey:@"name"];
         }
         
         
@@ -2165,6 +2188,10 @@
             
             NSArray *tempArray=[[arrCustomDrinks objectAtIndex:indexPath.section-2] valueForKey:@"contents"];
             lblDescription.text=[[tempArray objectAtIndex:indexPath.row] valueForKey:@"description"];
+        }else if (indexPath.section>1+[arrCustomDrinks count]+[arrCocktailsSection count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            
+            NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
+            lblDescription.text=[[tempArray objectAtIndex:indexPath.row] valueForKey:@"description"];
         }
         
         lblDescription.font=[UIFont systemFontOfSize:12];
@@ -2187,6 +2214,10 @@
         }else if(indexPath.section>1&&indexPath.section<2+[arrCustomDrinks count]){
             NSArray *tempArray=[[arrCustomDrinks objectAtIndex:indexPath.section-2] valueForKey:@"contents"];
             lblPrice.text=[NSString stringWithFormat:@"%d",[[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]];
+        }else if (indexPath.section>1+[arrCustomDrinks count]+[arrMenu count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            
+            NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
+            lblPrice.text=[NSString stringWithFormat:@"%d",[[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]];
         }
         
         lblPrice.font=[UIFont systemFontOfSize:22];
@@ -2196,14 +2227,14 @@
         [cell.contentView addSubview:lblPrice];
         [lblPrice release];
         
-        UILabel *lblDollars=[[UILabel alloc]initWithFrame:CGRectMake(270, 45, 50, 10)];
-        lblDollars.text=@"dollars";        
+        /*UILabel *lblDollars=[[UILabel alloc]initWithFrame:CGRectMake(270, 45, 50, 10)];
+        lblDollars.text=@"dollars";
         lblDollars.font=[UIFont systemFontOfSize:10];
         lblDollars.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
         lblDollars.adjustsFontSizeToFitWidth=YES;
         lblDollars.backgroundColor=[UIColor clearColor];
         [cell.contentView addSubview:lblDollars];
-        [lblDollars release];
+        [lblDollars release];*/
 
     }
     else if(isSelectedForPeople)
@@ -2466,6 +2497,11 @@
             [dictPeopleSelectedForDrink release];
             dictPeopleSelectedForDrink=nil;
         }*/
+        if (![[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"]) {
+            
+            [self createAlertViewWithTitle:@"" message:@"Please checkin the venue to proceed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+            return;
+        }
         if ( (indexPath.section==0 || indexPath.section==1)) {
             return;
         }
@@ -2474,12 +2510,22 @@
     if(indexPath.section>1&&indexPath.section<2+[arrCustomDrinks count]){
         
         CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
+        obj.viewtype=2;
+        NSLog(@"********%@",[arrCustomDrinks objectAtIndex:indexPath.section-2]);
+
+        obj.dictitemdetails=[arrCustomDrinks objectAtIndex:indexPath.section-2];
         obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
         [self.navigationController pushViewController:obj animated:YES];
             
-        }else if (indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]){
-            
-            id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
+    }else if (indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]){
+        
+        CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
+        obj.viewtype=1;
+        id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
+        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+        obj.dictitemdetails=[arrContents objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:obj animated:YES];
+          /*  id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
             NSDictionary *dict;
             if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
             {
@@ -2490,10 +2536,6 @@
                 NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
                 dict=[arrContents objectAtIndex:indexPath.row];
                 
-                if (![[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"]) {
-                    
-                    return;
-                }
             }
 
         dictSelectedToMakeOrder=[[NSDictionary alloc]initWithDictionary:dict];
@@ -2811,11 +2853,16 @@
         
         [viewA release];
         [viewB release];
-        [viewC release];
-        }
+        [viewC release];*/
     }
+   }
     else if(isSelectedForPeople)
     {
+        if (![[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"]) {
+            
+            [self createAlertViewWithTitle:@"" message:@"Please checkin the venue to proceed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+            return;
+        }
         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
 
         if ([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"New"]) {
@@ -3044,13 +3091,20 @@
             [dict setObject:strArrow forKey:@"Arrow"];
             [arrMenu replaceObjectAtIndex:intTag-(2+[arrCustomDrinks count]) withObject:dict];
            
-        }else
+        }else if(intTag>1 && intTag<(2+[arrCustomDrinks count]))
         {
             NSMutableDictionary *dict=[arrCustomDrinks objectAtIndex:intTag-2];
             BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
             NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
             [dict setObject:strArrow forKey:@"Arrow"];
             [arrCustomDrinks replaceObjectAtIndex:intTag-2 withObject:dict];
+
+        }else{
+            NSMutableDictionary *dict=[arrCocktailsSection objectAtIndex:intTag-(2+[arrCustomDrinks count]+[arrMenu count])];
+            BOOL boolArrow=!([[dict objectForKey:@"Arrow"] integerValue]);
+            NSString *strArrow=[NSString stringWithFormat:@"%i",boolArrow];
+            [dict setObject:strArrow forKey:@"Arrow"];
+            [arrCocktailsSection replaceObjectAtIndex:intTag-(2+[arrCustomDrinks count]+[arrMenu count]) withObject:dict];
 
         }
                

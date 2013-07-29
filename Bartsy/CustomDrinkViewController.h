@@ -7,11 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <QuartzCore/QuartzCore.h>
+enum{
+    
+    LocuMenuView=1,
+    CustomDrinksView=2
+    
+};
+typedef NSInteger viewtype;
 @interface CustomDrinkViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
     NSDictionary *dictCustomDrinks;
-    int btnTag;
+    NSDictionary *dictitemdetails;
+    
+    NSInteger viewtype;
 }
 @property(nonatomic,retain) NSDictionary *dictCustomDrinks;
+@property(nonatomic,retain) NSDictionary *dictitemdetails;
+
+@property(nonatomic,assign)NSInteger viewtype;
+
 @end

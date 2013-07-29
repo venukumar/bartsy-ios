@@ -10,15 +10,17 @@
 #import "Constants.h"
 @interface CustomDrinkViewController (){
     
+    UIScrollView *mainScroll;
+    
     NSMutableArray *arrCustomDrinks;
     
-    NSMutableArray *arrIndexSelected;
+    int indexselected;
 }
 
 @end
 
 @implementation CustomDrinkViewController
-@synthesize dictCustomDrinks;
+@synthesize dictCustomDrinks,viewtype,dictitemdetails;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -43,7 +45,6 @@
     [self.view addSubview:imgLogo];
     [imgLogo release];
 
-    arrIndexSelected=[[NSMutableArray alloc]init];
    
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     btnBack.frame = CGRectMake(5, 0, 50, 40);
@@ -55,79 +56,162 @@
     [imgViewBack release];
     
     arrCustomDrinks=[[NSMutableArray alloc]init];
-    
-    UIScrollView *mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,self.view.bounds.size.height)];
+    indexselected=-1;
+    mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,self.view.bounds.size.height)];
     mainScroll.tag=554;
     [mainScroll setScrollEnabled:YES];
     [self.view addSubview:mainScroll];
-
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 367-75) style:UITableViewStylePlain];
-    tblView.dataSource=self;
-    tblView.backgroundColor = [UIColor blackColor];
-    tblView.delegate=self;
-    tblView.tag=555;
-    [mainScroll addSubview:tblView];
     
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    if (screenBounds.size.height == 568)
-    {
-        tblView.frame=CGRectMake(0,47, 320, 455-75);
+    if (viewtype==2) {
+        
+        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 367-100) style:UITableViewStylePlain];
+        tblView.dataSource=self;
+        tblView.backgroundColor = [UIColor blackColor];
+        tblView.delegate=self;
+        tblView.tag=555;
+        [tblView setSeparatorColor:[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f]];
+        [mainScroll addSubview:tblView];
+        
+        if (IS_IPHONE_5)
+        {
+            tblView.frame=CGRectMake(0,0, 320, 455-105);
+        }
+        
+        [tblView release];
+
+    }else if (viewtype==1){
+       
+        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 38,200, 18)];
+        lblitem.text=[dictitemdetails valueForKey:@"name"];
+        lblitem.textColor=[UIColor whiteColor];
+        lblitem.backgroundColor=[UIColor clearColor];
+        [mainScroll addSubview:lblitem];
+        [lblitem release];
+        
+        UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 56, 320, 1.5)];
+        lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+        [mainScroll addSubview:lineview];
+        [lineview release];
+        
+        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 38,200, 18)];
+        lbldescription.text=[dictitemdetails valueForKey:@"description"];
+        lbldescription.textColor=[UIColor whiteColor];
+        lbldescription.backgroundColor=[UIColor clearColor];
+        [mainScroll addSubview:lbldescription];
+        [lbldescription release];
+
     }
     
-    [tblView release];
-
-    UITextField* field = [[UITextField alloc] initWithFrame:CGRectMake(5, tblView.frame.origin.y+tblView.frame.size.height+3, 310, 30)];
-    [field setBorderStyle:UITextBorderStyleRoundedRect];
-    field.placeholder=@"Special instructions";
+    UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 275,180,18)];
+    if (IS_IPHONE_5) {
+        lblinstruction.frame=CGRectMake(5, 357,180,18);
+    }
+    lblinstruction.text=@"Special instructions";
+    lblinstruction.textColor=[UIColor whiteColor];
+    lblinstruction.backgroundColor=[UIColor clearColor];
+    [mainScroll addSubview:lblinstruction];
+    [lblinstruction release];
+    
+    UITextField* field = [[[UITextField alloc] initWithFrame:CGRectMake(-1.5,295, 323, 30)] autorelease];
+    if (IS_IPHONE_5) {
+        field.frame=CGRectMake(-1.5,385, 323, 30);
+    }
+    [field setBorderStyle:UITextBorderStyleLine];
+    field.placeholder=@"Optional";
     field.delegate=self;
+    field.textColor=[UIColor whiteColor];
+    field.layer.borderWidth=1.5;
+    field.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
     [mainScroll addSubview:field];
 
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     orderBtn.frame=CGRectMake(5,330, 250, 30);
     if (IS_IPHONE_5) {
-        orderBtn.frame=CGRectMake(5,430, 250, 30);
+        orderBtn.frame=CGRectMake(5,418, 250, 30);
 
     }
     orderBtn.tag=556;
-    [orderBtn setTitle:@"Add to order" forState:UIControlStateNormal];
+    [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",[dictitemdetails valueForKey:@"price"]] forState:UIControlStateNormal];
     [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [orderBtn addTarget:self action:@selector(Button_Order:) forControlEvents:UIControlEventTouchUpInside];
-    orderBtn.backgroundColor=[UIColor blackColor];
+    orderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
     [mainScroll addSubview:orderBtn];
+    [arrCustomDrinks addObject:dictitemdetails];
     
-    NSArray *tempArray=[[dictCustomDrinks valueForKey:@"menus"] valueForKey:@"sections"];
-    for (NSDictionary *dict in tempArray) {
+    //if Viewtype is 2 it is ingradient selection
+    if (viewtype==2) {
         
-        if ([[dict valueForKey:@"section_name"] isEqualToString:@"Spirit"]) {
-            //[arrCustomDrinks addObject:dict];
-            for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
-               // NSLog(@"dict %@",tempdict);
-                //if ([[tempdict valueForKey:@"Arrow"] integerValue]==1) {
+        //Parsing the GetIngradient Data
+        NSArray *tempArray=[[dictCustomDrinks valueForKey:@"menus"] valueForKey:@"sections"];
+        for (NSDictionary *dict in tempArray) {
+            
+            if ([[dict valueForKey:@"section_name"] isEqualToString:@"Mixer"]){
+                for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
+                    // NSLog(@"dict %@",tempdict);
                     [arrCustomDrinks addObject:tempdict];
                     NSArray *subitemArray=[tempdict valueForKey:@"contents"];
+                    
                     for (NSDictionary *tempdict in subitemArray) {
                         
                         [tempdict setValue:@"0" forKey:@"Selected"];
                         
-                   // }
-                }
-            }
-        }else if ([[dict valueForKey:@"section_name"] isEqualToString:@"Mixer"]){
-            for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
-               // NSLog(@"dict %@",tempdict);
-                [arrCustomDrinks addObject:tempdict];
-                NSArray *subitemArray=[tempdict valueForKey:@"contents"];
-
-                for (NSDictionary *tempdict in subitemArray) {
+                    }
                     
-                    [tempdict setValue:@"0" forKey:@"Selected"];
-
                 }
-
+                
             }
-            
         }
+
     }
+        
+    
+    UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
+    buttonFav.frame=CGRectMake(265, 328, 13, 13);
+    if (IS_IPHONE_5)
+        buttonFav.frame=CGRectMake(265, 418, 13, 13);
+   
+    
+    buttonFav.tag=557;
+    [buttonFav addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
+    [buttonFav setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
+    [buttonFav setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
+    [mainScroll addSubview:buttonFav];
+    
+    UILabel *lblfav=[[UILabel alloc]initWithFrame:CGRectMake(285,328, 100, 18)];
+    if (IS_IPHONE_5)
+        lblfav.frame=CGRectMake(285, 418, 100, 18);
+
+    lblfav.textColor=[UIColor whiteColor];
+    lblfav.text=@"Favorite";
+    lblfav.textAlignment=NSTextAlignmentLeft;
+    lblfav.backgroundColor=[UIColor clearColor];
+    lblfav.font=[UIFont systemFontOfSize:9];
+    [mainScroll addSubview:lblfav];
+    [lblfav release];
+    
+    UIButton *buttonLike=[UIButton buttonWithType:UIButtonTypeCustom];
+    buttonLike.frame=CGRectMake(265, 346, 13, 13);
+    if (IS_IPHONE_5)
+        buttonLike.frame=CGRectMake(265, 433, 13, 13);
+
+    buttonLike.tag=558;
+    [buttonLike addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
+    [buttonLike setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
+    [buttonLike setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
+    [mainScroll addSubview:buttonLike];
+    
+    UILabel *lbllike=[[UILabel alloc]initWithFrame:CGRectMake(285,346, 100, 18)];
+    if (IS_IPHONE_5)
+        lbllike.frame=CGRectMake(285, 432, 100, 18);
+    lbllike.textColor=[UIColor whiteColor];
+    lbllike.text=@"Like";
+    lbllike.textAlignment=NSTextAlignmentLeft;
+    lbllike.backgroundColor=[UIColor clearColor];
+    lbllike.font=[UIFont systemFontOfSize:9];
+    [mainScroll addSubview:lbllike];
+    [lbllike release];
+    
+
 }
 
 -(void)btnBack_TouchUpInside
@@ -138,13 +222,41 @@
 
 -(void)Button_Order:(UIButton*)sender{
     
+    if (viewtype==1) {
+        NSLog(@"Final order %@",arrCustomDrinks);
+
+    }else if (viewtype==2){
+       
+        NSLog(@"Final order %@",arrCustomDrinks);
+
+    }
+    
+}
+
+-(void)Button_Action:(UIButton*)sender{
+    
+    if (sender.tag==557) {
+        if (sender.selected) {
+            
+            sender.selected=NO;
+        }else{
+            sender.selected=YES;
+        }
+        
+    }else if (sender.tag==558){
+        if (sender.selected) {
+            
+            sender.selected=NO;
+        }else{
+            sender.selected=YES;
+        }
+    }
     
 }
 #pragma mark - Table view Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
     return [arrCustomDrinks count];
 }
 
@@ -162,7 +274,13 @@
     [headerTitle setBackgroundColor:[UIColor clearColor]];
     [headerTitle setFont:[UIFont boldSystemFontOfSize:16]];
     [headerTitle setTextColor:[UIColor whiteColor]];
-    headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"subsection_name"];
+    if (section==0) {
+        headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"section_name"];
+
+    }else{
+        headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"subsection_name"];
+
+    }
     [headerView addSubview:headerTitle];
         
     return headerView;
@@ -179,9 +297,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
-    //NSDictionary *dictForOrder=[pastorderArray objectAtIndex:indexPath.row];
-    
+    UITableViewCell *cell;    
    
     cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
@@ -197,17 +313,28 @@
     UIButton *button=[UIButton buttonWithType:UIButtonTypeCustom];
     button.frame=CGRectMake(10, 10, 22, 22);
     button.tag=indexPath.row;
-    [button addTarget:self action:@selector(checkboxButton:) forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:[UIImage imageNamed:@"tick_mark"] forState:UIControlStateNormal];
-    [button setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateSelected];
+    //[button addTarget:self action:@selector(checkboxButton:) forControlEvents:UIControlEventTouchUpInside];
+    [button setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
+    button.userInteractionEnabled=NO;
     [cell.contentView addSubview:button];
     
-    if ([arrIndexSelected containsObject:indexPath]) {
+    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(260, 5, 50, 25)];
+    lblPrice.font=[UIFont boldSystemFontOfSize:18];
+    lblPrice.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
+    lblPrice.adjustsFontSizeToFitWidth=YES;
+    lblPrice.backgroundColor=[UIColor clearColor];
+    [cell.contentView addSubview:lblPrice];
+    
+     if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
         button.selected=YES;
+         lblPrice.text=[NSString stringWithFormat:@"$%@",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
     }else{
+        lblPrice.text=nil;
         button.selected=NO;
     }
-    lblName.text=[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"];
+    [lblPrice release];
+    lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"],[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
     [lblName release];
     return cell;
 }
@@ -218,28 +345,49 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if ([arrIndexSelected containsObject:indexPath] ) {
+    NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"contents"];
+    UIButton *orderBtn=(UIButton*)[mainScroll viewWithTag:556];
+    if (indexPath.section==0) {
         
-        [arrIndexSelected removeObject:indexPath];
+        if (indexselected!=-1) {
+            NSDictionary *dict2=[subitemArray objectAtIndex:indexselected];
+            [dict2 setValue:@"0" forKey:@"Selected"];
+            
+        }
+
+        NSDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
+        [dict setValue:@"1" forKey:@"Selected"];
+        [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",[dict valueForKey:@"price"]] forState:UIControlStateNormal];
+
+        indexselected=indexPath.row;
+                
     }else{
-        [arrIndexSelected addObject:indexPath];
+       // NSDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
+
+        if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+            
+            NSDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
+            [dict setValue:@"0" forKey:@"Selected"];
+            
+        }else{
+            
+            NSDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
+            [dict setValue:@"1" forKey:@"Selected"];
+        }
     }
     
     [tableView reloadData];
     
+    
 }
 
+/*
 -(void)checkboxButton:(UIButton*)sender{
     
     NSLog(@"button tag %d",sender.tag);
     UITableView *tableview=(UITableView*)[self.view viewWithTag:555];
-  
     sender.selected=YES;
-                
-
-    btnTag=sender.tag;
-}
+}*/
 #pragma mark------------TextField Delegates
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
