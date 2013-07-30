@@ -227,7 +227,6 @@
     [mainScroll addSubview:lbllike];
     [lbllike release];
     
-
 }
 
 -(void)btnBack_TouchUpInside
@@ -238,9 +237,25 @@
 
 -(void)Button_Order:(UIButton*)sender{
     
-    if (viewtype==1) {
+    NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+    
+    UITextField *txtFieldSpecialInstructions=(UITextField*)[self.view viewWithTag:559];
+    
+    if (viewtype==1)
+    {
         NSLog(@"Final order %@",arrCustomDrinks);
-
+        
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrCustomDrinks objectAtIndex:0]];
+        [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [arrMultiItemOrders addObject:dictItem];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        appDelegate.isCmgForShowingOrderUI=YES;
+        [arrMultiItemOrders release];
+        [self.navigationController popViewControllerAnimated:YES];
+        
     }else if (viewtype==2){
         UIButton *btnFav=(UIButton*)[mainScroll viewWithTag:557];
         
