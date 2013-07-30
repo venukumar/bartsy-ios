@@ -461,9 +461,35 @@
 
 }
 
--(void)btnOrder_TouchUpInside
+-(void)btnOrder_TouchUpInside:(UIButton*)sender
 {
-    
+    if (sender.tag==1115) {
+        
+        UIView *popupView=(UIView*)[self.view viewWithTag:2222];
+        popupView.hidden=YES;
+        UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
+        checkinBtn.hidden=YES;
+        UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 27, 27) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
+        [self.view addSubview:drinkBtn];
+        
+        
+    }else if (sender.tag==1116){
+        
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
+        UIView *popupView=(UIView*)[self.view viewWithTag:2222];
+        [popupView removeFromSuperview];
+    }else if(sender.tag==1117){
+        
+        UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
+        [drinkBtn removeFromSuperview];
+        UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
+        [checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
+        checkinBtn.hidden=NO;
+        UIView *popupView=(UIView*)[self.view viewWithTag:2222];
+        popupView.hidden=NO;
+
+        
+    }else{
     NSLog(@"Post dict %@",[dictSelectedToMakeOrder objectForKey:@"id"] );
     //[self orderTheDrink];
     UIView *viewA = (UIView*)[self.view viewWithTag:222];
@@ -514,6 +540,7 @@
     [self.sharedController createOrderWithOrderStatus:@"New" basePrice:strBasePrice totalPrice:strTotalPrice1 tipPercentage:strTipTotal itemName:[dictSelectedToMakeOrder objectForKey:@"name"] produceId:[dictSelectedToMakeOrder objectForKey:@"id"] description:[dictSelectedToMakeOrder objectForKey:@"description"] receiverBartsyId:strBartsyId delegate:self];
     
     dictPeopleSelectedForDrink=nil;
+    }
 }
 
 
@@ -966,13 +993,212 @@
     [tblView reloadData];
 }
 
-/*
+
 -(void)showMultiItemOrderUI
 {
     
     
     NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
     
+    NSLog(@"%@",arrMultiItems);
+    
+    UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 75, 320, 350)];
+    popupView.backgroundColor=[UIColor blackColor];
+    popupView.tag=2222;
+    [self.view addSubview:popupView];
+    
+    UILabel *lbltitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 5, 200, 35)];
+    lbltitle.text=@"Review your order";
+    lbltitle.font=[UIFont systemFontOfSize:18];
+    lbltitle.tag=111222333;
+    lbltitle.backgroundColor=[UIColor clearColor];
+    lbltitle.textColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [popupView addSubview:lbltitle];
+    [lbltitle release];
+
+    UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 35, 320, 1.5)];
+    lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [popupView addSubview:lineview];
+    [lineview release];
+   
+    UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,lineview.frame.origin.y+2,60,60)];
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
+    [imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
+    imgViewPhoto.tag=143225;
+    [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
+    [popupView addSubview:imgViewPhoto];
+    [imgViewPhoto release];
+    
+    UIButton *btnPhoto = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnPhoto.frame = CGRectMake(10,lineview.frame.origin.y+2,60,60);
+    [btnPhoto addTarget:self action:@selector(btnPhoto_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    btnPhoto.backgroundColor=[UIColor clearColor];
+    [popupView addSubview:btnPhoto];
+    
+    UILabel *lblNametitle=[[UILabel alloc]initWithFrame:CGRectMake(110, lineview.frame.origin.y+7, 150, 22)];
+    lblNametitle.text=@"This order is for:";
+    lblNametitle.font=[UIFont systemFontOfSize:15];
+    lblNametitle.tag=111222333;
+    lblNametitle.backgroundColor=[UIColor clearColor];
+    lblNametitle.textColor=[UIColor whiteColor];
+    [popupView addSubview:lblNametitle];
+    [lblNametitle release];
+
+    
+    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(110, 70, 150, 22)];
+    lblName.text=@"My name";
+    lblName.font=[UIFont systemFontOfSize:18];
+    lblName.tag=111222333;
+    lblName.backgroundColor=[UIColor clearColor];
+    lblName.textColor=[UIColor whiteColor];
+    [popupView addSubview:lblName];
+    [lblName release];
+
+    UIView *scrollstrtlineview=[[UIView alloc]initWithFrame:CGRectMake(0, imgViewPhoto.frame.origin.y+imgViewPhoto.frame.size.height+2, 320, 1.5)];
+    scrollstrtlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [popupView addSubview:scrollstrtlineview];
+    [scrollstrtlineview release];
+    UIScrollView *popupscrollview=[[UIScrollView alloc]initWithFrame:CGRectMake(0,imgViewPhoto.frame.origin.y+imgViewPhoto.frame.size.height+3, 320, 100)];
+    popupscrollview.backgroundColor=[UIColor clearColor];
+    [popupView addSubview:popupscrollview];
+    float totalPrice = 0.0;
+    for (int i=0; i<[arrMultiItems count]; i++) {
+        
+        UILabel *lblitemName=[[UILabel alloc]initWithFrame:CGRectMake(50, (i*30)+5, 150, 22)];
+        lblitemName.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"name"];
+        lblitemName.font=[UIFont systemFontOfSize:18];
+        lblitemName.tag=111222333;
+        lblitemName.backgroundColor=[UIColor clearColor];
+        lblitemName.textColor=[UIColor whiteColor];
+        [popupscrollview addSubview:lblitemName];
+        [lblitemName release];
+        
+        UILabel *lblprice=[[UILabel alloc]initWithFrame:CGRectMake(250, (i*30)+5, 190, 22)];
+        lblprice.text=[NSString stringWithFormat:@"$%@",[[arrMultiItems objectAtIndex:i] valueForKey:@"price"]];
+        lblprice.font=[UIFont boldSystemFontOfSize:18];
+        lblprice.tag=111222333;
+        lblprice.backgroundColor=[UIColor clearColor];
+        lblprice.textColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+        [popupscrollview addSubview:lblprice];
+        [lblprice release];
+        
+        UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0,(i*30)+29, 320, 1)];
+        scrollendlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+        [popupscrollview addSubview:scrollendlineview];
+        [scrollendlineview release];
+        totalPrice+=[[[arrMultiItems objectAtIndex:i] valueForKey:@"price"] floatValue];
+    }
+    [popupscrollview setContentSize:CGSizeMake(320,[arrMultiItems count]*30)];
+    UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0, imgViewPhoto.frame.origin.y+imgViewPhoto.frame.size.height+2, 320, 1.5)];
+    scrollendlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [popupView addSubview:scrollendlineview];
+    [scrollendlineview release];
+    UILabel *lblTip = [[UILabel alloc]initWithFrame:CGRectMake(8, popupscrollview.frame.origin.y+popupscrollview.frame.size.height+15, 30, 30)];
+    lblTip.font = [UIFont boldSystemFontOfSize:12];
+    lblTip.text = @"Tip:";
+    lblTip.backgroundColor = [UIColor clearColor];
+    lblTip.textColor = [UIColor whiteColor] ;
+    lblTip.textAlignment = NSTextAlignmentLeft;
+    [popupView addSubview:lblTip];
+    [lblTip release];
+    
+    UIButton *btn10 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn10.frame = CGRectMake(37,popupscrollview.frame.origin.y+popupscrollview.frame.size.height+20,23,23);
+    btn10.tag = 10;
+    [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    [popupView addSubview:btn10];
+    
+    
+    UILabel *lbl10 = [[UILabel alloc]initWithFrame:CGRectMake(60, popupscrollview.frame.origin.y+popupscrollview.frame.size.height+15, 30, 30)];
+    lbl10.font = [UIFont boldSystemFontOfSize:12];
+    lbl10.text = @"10%";
+    lbl10.backgroundColor = [UIColor clearColor];
+    lbl10.textColor = [UIColor whiteColor] ;
+    lbl10.textAlignment = NSTextAlignmentCenter;
+    [popupView addSubview:lbl10];
+    [lbl10 release];
+    
+    UIButton *btn20 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn20.frame = CGRectMake(90,popupscrollview.frame.origin.y+popupscrollview.frame.size.height+20,23,23);
+    btn20.tag = 15;
+    [btn20 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    [btn20 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    [popupView addSubview:btn20];
+    
+    UILabel *lbl15 = [[UILabel alloc]initWithFrame:CGRectMake(118, popupscrollview.frame.origin.y+popupscrollview.frame.size.height+15, 30, 30)];
+    lbl15.font = [UIFont boldSystemFontOfSize:12];
+    lbl15.text = @"15%";
+    lbl15.backgroundColor = [UIColor clearColor];
+    lbl15.textColor = [UIColor whiteColor] ;
+    lbl15.textAlignment = NSTextAlignmentCenter;
+    [popupView addSubview:lbl15];
+    [lbl15 release];
+    
+    UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn30.frame = CGRectMake(148,popupscrollview.frame.origin.y+popupscrollview.frame.size.height+20,23,23);
+    [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+    btn30.tag = 20;
+    [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    [popupView addSubview:btn30];
+    
+    btnValue=btn30.tag;
+    
+    UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(180, popupscrollview.frame.origin.y+popupscrollview.frame.size.height+15, 30, 30)];
+    lbl20.font = [UIFont boldSystemFontOfSize:12];
+    lbl20.text = @"20%";
+    lbl20.backgroundColor = [UIColor clearColor];
+    lbl20.textColor = [UIColor whiteColor] ;
+    lbl20.textAlignment = NSTextAlignmentCenter;
+    [popupView addSubview:lbl20];
+    [lbl20 release];
+    
+    UIView *lineview2=[[UIView alloc]initWithFrame:CGRectMake(0, lbl20.frame.origin.y+30, 320, 1.5)];
+    lineview2.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [popupView addSubview:lineview2];
+    [lineview2 release];
+    
+    UILabel *lblTax = [[UILabel alloc]initWithFrame:CGRectMake(8, lineview2.frame.origin.y+lineview2.frame.size.height+15, 175, 30)];
+    lblTax.font = [UIFont systemFontOfSize:12];
+    lblTax.text = [NSString stringWithFormat:@"Tax:$%@",@"5.00"];
+    lblTax.backgroundColor = [UIColor clearColor];
+    lblTax.textColor = [UIColor whiteColor] ;
+    lblTax.textAlignment = NSTextAlignmentLeft;
+    [popupView addSubview:lblTax];
+    [lblTax release];
+    
+    UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(195, lineview2.frame.origin.y+lineview2.frame.size.height+15, 150, 30)];
+    lblTotalPrice.font = [UIFont systemFontOfSize:12];
+    lblTotalPrice.text = [NSString stringWithFormat:@"Total:$%@",[NSString stringWithFormat:@"%.2f",totalPrice]];
+    lblTotalPrice.backgroundColor = [UIColor clearColor];
+    lblTotalPrice.textColor = [UIColor whiteColor] ;
+    lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+    [popupView addSubview:lblTotalPrice];
+    [lblTotalPrice release];
+    
+    UIButton *btnaddmore = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnaddmore.frame = CGRectMake(0,popupView.frame.size.height-50,160,40);
+    [btnaddmore setTitle:@"Add more items" forState:UIControlStateNormal];
+    btnaddmore.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+    btnaddmore.titleLabel.textColor = [UIColor whiteColor];
+    btnaddmore.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
+    btnaddmore.tag=1115;
+    [btnaddmore addTarget:self action:@selector(btnOrder_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    [popupView addSubview:btnaddmore];
+
+    
+    UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnOrder.frame = CGRectMake(161,popupView.frame.size.height-50,159,40);
+    [btnOrder setTitle:@"Place Order" forState:UIControlStateNormal];
+    btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+    btnOrder.titleLabel.textColor = [UIColor whiteColor];
+    btnOrder.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
+    btnOrder.tag=1116;
+    [btnOrder addTarget:self action:@selector(btnOrder_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    [popupView addSubview:btnOrder];
+    
+    
+ /*
 //     id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
 //     NSDictionary *dict;
 //     if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
@@ -1301,9 +1527,9 @@
      
      [viewA release];
      [viewB release];
-     [viewC release];
+     [viewC release];*/
 }
- */
+ 
 #pragma mark----------Parsing the Locumenu Data
 -(void)modifyData
 {
@@ -3481,7 +3707,7 @@
 {
     // Handle payment success
     [self hideProgressView:nil];
-    [self btnOrder_TouchUpInside];
+    [self btnOrder_TouchUpInside:nil];
     
     
     

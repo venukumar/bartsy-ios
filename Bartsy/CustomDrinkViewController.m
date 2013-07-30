@@ -116,18 +116,18 @@
     [mainScroll addSubview:lblinstruction];
     [lblinstruction release];
     
-    UITextField* field = [[[UITextField alloc] initWithFrame:CGRectMake(-1.5,295, 323, 30)] autorelease];
+    UITextField* instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(-1.5,295, 323, 30)] autorelease];
     if (IS_IPHONE_5) {
-        field.frame=CGRectMake(-1.5,385, 323, 30);
+        instructionfield.frame=CGRectMake(-1.5,385, 323, 30);
     }
-    [field setBorderStyle:UITextBorderStyleLine];
-    field.placeholder=@"Optional";
-    field.delegate=self;
-    field.tag=559;
-    field.textColor=[UIColor whiteColor];
-    field.layer.borderWidth=1.5;
-    field.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
-    [mainScroll addSubview:field];
+    [instructionfield setBorderStyle:UITextBorderStyleLine];
+    instructionfield.placeholder=@"Optional";
+    instructionfield.delegate=self;
+    instructionfield.tag=559;
+    instructionfield.textColor=[UIColor whiteColor];
+    instructionfield.layer.borderWidth=1.5;
+    instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
+    [mainScroll addSubview:instructionfield];
 
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     orderBtn.frame=CGRectMake(5,330, 250, 30);
@@ -239,14 +239,13 @@
     
     NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
     
-    UITextField *txtFieldSpecialInstructions=(UITextField*)[self.view viewWithTag:559];
+    UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
     
     if (viewtype==1)
     {
         NSLog(@"Final order %@",arrCustomDrinks);
-        
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrCustomDrinks objectAtIndex:0]];
-        [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        [dictItem setObject:@"" forKey:@"specialInstructions"];
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         [arrMultiItemOrders addObject:dictItem];
         
