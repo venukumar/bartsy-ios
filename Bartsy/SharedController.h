@@ -65,4 +65,6 @@
 -(void)getPastOrderbbybartsyId:(NSString*)strbartsyId delegate:(id)aDelegate;
 -(void)getUserRewardsbybartsyID:(NSString*)strbartsyID delegate:(id)aDelegate;
 -(void)getCocktailsbyvenueID:(NSString*)venueID delegate:(id)aDelegate;
+-(void)saveFavoriteDrinkbyvenueID:(NSString*)venuID bartsyID:(NSString*)bartsyID description:(NSString*)description specialinstruction:(NSString*)instructions itemlist:(NSArray*)itemlist delegate:(id)aDelegate;
+-(void)getFavoriteDrinksbybartsyID:(NSString*)strbartsyID venueID:(NSString*)venueID delegate:(id)aDelegate;
 @end

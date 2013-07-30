@@ -34,6 +34,9 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    self.sharedController=[SharedController sharedController];
+    
     self.view.backgroundColor=[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:18.0/255.0 alpha:1.0];
     UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
@@ -61,7 +64,7 @@
     mainScroll.tag=554;
     [mainScroll setScrollEnabled:YES];
     [self.view addSubview:mainScroll];
-    
+    NSLog(@"dict%@",dictitemdetails);
     if (viewtype==2) {
         
         UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 367-100) style:UITableViewStylePlain];
@@ -81,7 +84,7 @@
 
     }else if (viewtype==1){
        
-        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 38,200, 18)];
+        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 38,310, 18)];
         lblitem.text=[dictitemdetails valueForKey:@"name"];
         lblitem.textColor=[UIColor whiteColor];
         lblitem.backgroundColor=[UIColor clearColor];
@@ -93,9 +96,10 @@
         [mainScroll addSubview:lineview];
         [lineview release];
         
-        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 38,200, 18)];
+        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 59,310, 54)];
         lbldescription.text=[dictitemdetails valueForKey:@"description"];
         lbldescription.textColor=[UIColor whiteColor];
+        lbldescription.numberOfLines=3;
         lbldescription.backgroundColor=[UIColor clearColor];
         [mainScroll addSubview:lbldescription];
         [lbldescription release];
@@ -119,9 +123,9 @@
     [field setBorderStyle:UITextBorderStyleLine];
     field.placeholder=@"Optional";
     field.delegate=self;
+    field.tag=559;
     field.textColor=[UIColor whiteColor];
     field.layer.borderWidth=1.5;
-    field.tag=143225;
     field.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
     [mainScroll addSubview:field];
 
@@ -132,7 +136,13 @@
 
     }
     orderBtn.tag=556;
-    [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",[dictitemdetails valueForKey:@"price"]] forState:UIControlStateNormal];
+    if (![dictitemdetails valueForKey:@"price"]) {
+        [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",@"0"] forState:UIControlStateNormal];
+
+    }else{
+        [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",[dictitemdetails valueForKey:@"price"]] forState:UIControlStateNormal];
+
+    }
     [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [orderBtn addTarget:self action:@selector(Button_Order:) forControlEvents:UIControlEventTouchUpInside];
     orderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
@@ -143,26 +153,31 @@
     if (viewtype==2) {
         
         //Parsing the GetIngradient Data
-        NSArray *tempArray=[[dictCustomDrinks valueForKey:@"menus"] valueForKey:@"sections"];
+        NSArray *tempArray=[dictCustomDrinks valueForKey:@"menus"];
         for (NSDictionary *dict in tempArray) {
             
-            if ([[dict valueForKey:@"section_name"] isEqualToString:@"Mixer"]){
-                for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
-                    // NSLog(@"dict %@",tempdict);
-                    [arrCustomDrinks addObject:tempdict];
-                    NSArray *subitemArray=[tempdict valueForKey:@"contents"];
-                    
-                    for (NSDictionary *tempdict in subitemArray) {
+            NSArray *temp2Array=[dict valueForKey:@"sections"];
+            for (NSDictionary *dict in temp2Array) {
+                
+                if ([[dict valueForKey:@"section_name"] isEqualToString:@"Mixer"]){
+                    for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
+                        // NSLog(@"dict %@",tempdict);
+                        [arrCustomDrinks addObject:tempdict];
+                        NSArray *subitemArray=[tempdict valueForKey:@"contents"];
                         
-                        [tempdict setValue:@"0" forKey:@"Selected"];
+                        for (NSDictionary *tempdict in subitemArray) {
+                            
+                            [tempdict setValue:@"0" forKey:@"Selected"];
+                            
+                        }
                         
                     }
                     
                 }
-                
             }
-        }
 
+        }
+       
     }
         
     
@@ -221,36 +236,53 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)Button_Order:(UIButton*)sender
-{
-    NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
-
-    UITextField *txtFieldSpecialInstructions=(UITextField*)[self.view viewWithTag:143225];
+-(void)Button_Order:(UIButton*)sender{
     
-    if (viewtype==1)
-    {
+    if (viewtype==1) {
         NSLog(@"Final order %@",arrCustomDrinks);
-        
-        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrCustomDrinks objectAtIndex:0]];
-        [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
-        [dictItem setObject:@"Menu" forKey:@"ItemType"];
-        [arrMultiItemOrders addObject:dictItem];
-        
-        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        appDelegate.isCmgForShowingOrderUI=YES;
-        [arrMultiItemOrders release];
-        [self.navigationController popViewControllerAnimated:YES];
 
-    }else if (viewtype==2)
-    {
+    }else if (viewtype==2){
+        UIButton *btnFav=(UIButton*)[mainScroll viewWithTag:557];
+        
+         if (viewtype==2 && btnFav.selected){
+            NSMutableArray *arritemlist=[[NSMutableArray alloc]init];
+            for (NSDictionary *dictTemp in arrCustomDrinks) {
+                NSMutableDictionary *dictitemlist=[[NSMutableDictionary alloc]init];
+                
+                NSLog(@"%@",dictTemp);
+                NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"contents"]];
+                NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+                for (NSDictionary *dictTemp in filterarr)
+                {
+                    [dictitemlist setObject:[dictTemp valueForKey:@"name"] forKey:@"itemName"];
+                    [dictitemlist setObject:[dictTemp valueForKey:@"price"] forKey:@"basePrice"];
+                    [dictitemlist setObject:[dictTemp valueForKey:@"ingredientId"] forKey:@"itemId"];
+                    [dictitemlist setObject:@"" forKey:@"title"];
+                    [dictitemlist setObject:@"1" forKey:@"quantity"];
+                    [dictitemlist setObject:@"" forKey:@"description"];
+                    
+                    [arritemlist addObject:dictitemlist];
+                    
+                }
+            }
+            
+            NSLog(@"arritemlist %@",arritemlist);
+            // SBJSON *jsonObj=[SBJSON new];
+            // NSString *strJson=[jsonObj stringWithObject:arritemlist];
+            //[self createProgressViewToParentView:self.view withTitle:@"Saving your favorite drink..."];
+            
+            [self.sharedController saveFavoriteDrinkbyvenueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] description:@"" specialinstruction:@"" itemlist:arritemlist delegate:self];
+        }
+        
         NSLog(@"Final order %@",arrCustomDrinks);
+
     }
-    
+
 }
 
 -(void)Button_Action:(UIButton*)sender{
     
+   // UITextField *txtfield=(UITextField*)[mainScroll viewWithTag:559];
     if (sender.tag==557) {
         if (sender.selected) {
             
@@ -362,7 +394,7 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"contents"];
-    UIButton *orderBtn=(UIButton*)[mainScroll viewWithTag:556];
+    
     if (indexPath.section==0) {
         
         if (indexselected!=-1) {
@@ -373,7 +405,7 @@
 
         NSDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
         [dict setValue:@"1" forKey:@"Selected"];
-        [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",[dict valueForKey:@"price"]] forState:UIControlStateNormal];
+       
 
         indexselected=indexPath.row;
                 
@@ -393,17 +425,51 @@
     }
     
     [tableView reloadData];
-    
-    
+
+    [self calculateTotalPrice];
 }
 
-/*
--(void)checkboxButton:(UIButton*)sender{
+-(void)calculateTotalPrice
+{
+    float floatTotalPrice=0.0;
     
-    NSLog(@"button tag %d",sender.tag);
-    UITableView *tableview=(UITableView*)[self.view viewWithTag:555];
-    sender.selected=YES;
-}*/
+    for (int i=0;i<[arrCustomDrinks count]; i++)
+    {
+        NSDictionary *dict=[arrCustomDrinks objectAtIndex:i];
+        
+        NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"contents"]];
+        NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+        for (NSDictionary *dictTemp in filterarr)
+        {
+            floatTotalPrice+=[[dictTemp objectForKey:@"price"] floatValue];
+        }
+    }
+    UIButton *orderBtn=(UIButton*)[mainScroll viewWithTag:556];
+     [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%.2f",@"Add to order",floatTotalPrice] forState:UIControlStateNormal];
+    NSLog(@"%f",floatTotalPrice);
+}
+
+#pragma mark------------Webservice Delegates
+-(void)controllerDidFinishLoadingWithResult:(id)result
+{
+    [self hideProgressView:nil];
+    
+    if([[result objectForKey:@"errorCode"] integerValue]!=0)
+    {
+        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+    }
+    else
+    {
+        NSLog(@"result %@",result);
+    }
+
+}
+
+-(void)controllerDidFailLoadingWithError:(NSError*)error
+{
+    [self hideProgressView:nil];
+    
+}
 #pragma mark------------TextField Delegates
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{

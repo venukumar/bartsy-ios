@@ -240,7 +240,7 @@
         cell.lblPickedtime.text=[NSString stringWithFormat:@"Picked at:%@",@"Not available"];
 
     }else{
-        cell.lblPickedtime.text=[NSString stringWithFormat:@"Picked at:%@",@"Order was Cancelled"];
+        cell.lblPickedtime.text=[NSString stringWithFormat:@"Picked at: %@",@"Order was Cancelled"];
 
     }
     cell.lblSender.text = [NSString stringWithFormat:@"Sender : %@",[dictForOrder objectForKey:@"senderNickname"]];
