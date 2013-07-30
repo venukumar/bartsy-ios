@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "BaseViewController.h"
 enum{
     
     LocuMenuView=1,
@@ -15,7 +16,7 @@ enum{
     
 };
 typedef NSInteger viewtype;
-@interface CustomDrinkViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
+@interface CustomDrinkViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
     NSDictionary *dictCustomDrinks;
     NSDictionary *dictitemdetails;

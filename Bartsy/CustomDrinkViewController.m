@@ -121,6 +121,7 @@
     field.delegate=self;
     field.textColor=[UIColor whiteColor];
     field.layer.borderWidth=1.5;
+    field.tag=143225;
     field.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
     [mainScroll addSubview:field];
 
@@ -220,15 +221,30 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)Button_Order:(UIButton*)sender{
+-(void)Button_Order:(UIButton*)sender
+{
+    NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+
+    UITextField *txtFieldSpecialInstructions=(UITextField*)[self.view viewWithTag:143225];
     
-    if (viewtype==1) {
+    if (viewtype==1)
+    {
         NSLog(@"Final order %@",arrCustomDrinks);
+        
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrCustomDrinks objectAtIndex:0]];
+        [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [arrMultiItemOrders addObject:dictItem];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        appDelegate.isCmgForShowingOrderUI=YES;
+        [arrMultiItemOrders release];
+        [self.navigationController popViewControllerAnimated:YES];
 
-    }else if (viewtype==2){
-       
+    }else if (viewtype==2)
+    {
         NSLog(@"Final order %@",arrCustomDrinks);
-
     }
     
 }

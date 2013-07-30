@@ -37,7 +37,9 @@
     
     NSTimer *timerforGetMessages;
     BOOL isComingForMenu;
+    BOOL isCmgForShowingOrderUI;
 }
+@property(nonatomic,assign)BOOL isCmgForShowingOrderUI;
 @property (nonatomic,retain)UITabBarController *tabBar;
 @property(nonatomic,retain)NSMutableArray *arrPeople;
 @property(nonatomic,retain)NSTimer *timerForOrderStatusUpdate;

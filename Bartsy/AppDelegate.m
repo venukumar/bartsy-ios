@@ -22,6 +22,7 @@
 @synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
 @synthesize  tabBar;
 @synthesize isComingForPeople,timerforGetMessages,isComingForMenu;
+@synthesize isCmgForShowingOrderUI;
 - (void)dealloc
 {
     [_window release];
