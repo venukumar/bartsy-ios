@@ -29,6 +29,7 @@
 		CB10B088178D6F3300CAF6ED /* top_header_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B087178D6F3100CAF6ED /* top_header_bar.png */; };
 		CB10B08A178D6FDE00CAF6ED /* arrow-left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */; };
 		CB10B08C178D700400CAF6ED /* arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B08B178D700300CAF6ED /* arrow-left.png */; };
+		CB443CA617A8D93400127BB4 /* deleteicon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB443CA517A8D93400127BB4 /* deleteicon.png */; };
 		CB688C7A179FE5C4001C4726 /* CustomDrinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */; };
 		CB688C7B179FE5C4001C4726 /* CustomDrinkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */; };
 		CB688C7D17A00618001C4726 /* tickmark_select.png in Resources */ = {isa = PBXBuildFile; fileRef = CB688C7C17A00618001C4726 /* tickmark_select.png */; };
@@ -328,6 +329,7 @@
 		CB10B087178D6F3100CAF6ED /* top_header_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_header_bar.png; sourceTree = "<group>"; };
 		CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left@2x.png"; sourceTree = "<group>"; };
 		CB10B08B178D700300CAF6ED /* arrow-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left.png"; sourceTree = "<group>"; };
+		CB443CA517A8D93400127BB4 /* deleteicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deleteicon.png; sourceTree = "<group>"; };
 		CB688C77179FE5C4001C4726 /* CustomDrinkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDrinkViewController.h; sourceTree = "<group>"; };
 		CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDrinkViewController.m; sourceTree = "<group>"; };
 		CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomDrinkViewController.xib; sourceTree = "<group>"; };
@@ -1438,6 +1440,7 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB443CA517A8D93400127BB4 /* deleteicon.png */,
 				CB0A303A17A13DB900AD52D6 /* drink.png */,
 				CB0A303817A0FE3900AD52D6 /* i-icon.png */,
 				CB0A303617A0FD7000AD52D6 /* wifi-icon.png */,
@@ -1734,6 +1737,7 @@
 				CB0A303717A0FD7000AD52D6 /* wifi-icon.png in Resources */,
 				CB0A303917A0FE3A00AD52D6 /* i-icon.png in Resources */,
 				CB0A303B17A13DBA00AD52D6 /* drink.png in Resources */,
+				CB443CA617A8D93400127BB4 /* deleteicon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

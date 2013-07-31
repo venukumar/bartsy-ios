@@ -1002,9 +1002,11 @@
     
     NSLog(@"%@",arrMultiItems);
     
-    UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 75, 320, 350)];
+    UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 350)];
     popupView.backgroundColor=[UIColor blackColor];
     popupView.tag=2222;
+    popupView.layer.borderWidth=1;
+    popupView.layer.borderColor=[UIColor whiteColor].CGColor;
     [self.view addSubview:popupView];
     
     UILabel *lbltitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 5, 200, 35)];
@@ -1064,9 +1066,16 @@
     float totalPrice = 0.0;
     for (int i=0; i<[arrMultiItems count]; i++) {
         
-        UILabel *lblitemName=[[UILabel alloc]initWithFrame:CGRectMake(50, (i*30)+5, 150, 22)];
+        UIButton *btnDelete=[UIButton buttonWithType:UIButtonTypeCustom];
+        btnDelete.frame=CGRectMake(3,(i*30)+5, 22, 22);
+        [btnDelete setImage:[UIImage imageNamed:@"deleteicon.png"] forState:UIControlStateNormal];
+        btnDelete.tag=i+1;
+        [btnDelete addTarget:self action:@selector(Btn_DeleteOrder:) forControlEvents:UIControlEventTouchUpInside];
+        [popupscrollview addSubview:btnDelete];
+        
+        UILabel *lblitemName=[[UILabel alloc]initWithFrame:CGRectMake(40, (i*30)+5, 190, 22)];
         lblitemName.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"name"];
-        lblitemName.font=[UIFont systemFontOfSize:18];
+        lblitemName.font=[UIFont systemFontOfSize:16];
         lblitemName.tag=111222333;
         lblitemName.backgroundColor=[UIColor clearColor];
         lblitemName.textColor=[UIColor whiteColor];
@@ -1177,7 +1186,7 @@
     [lblTotalPrice release];
     
     UIButton *btnaddmore = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnaddmore.frame = CGRectMake(0,popupView.frame.size.height-50,160,40);
+    btnaddmore.frame = CGRectMake(0,popupView.frame.size.height-41,160,40);
     [btnaddmore setTitle:@"Add more items" forState:UIControlStateNormal];
     btnaddmore.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     btnaddmore.titleLabel.textColor = [UIColor whiteColor];
@@ -1188,7 +1197,7 @@
 
     
     UIButton *btnOrder = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnOrder.frame = CGRectMake(161,popupView.frame.size.height-50,159,40);
+    btnOrder.frame = CGRectMake(161,popupView.frame.size.height-41,159,40);
     [btnOrder setTitle:@"Place Order" forState:UIControlStateNormal];
     btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     btnOrder.titleLabel.textColor = [UIColor whiteColor];
@@ -1529,7 +1538,20 @@
      [viewB release];
      [viewC release];*/
 }
- 
+
+-(void)Btn_DeleteOrder:(UIButton*)sender{
+    
+    UIView *popview=(UIView*)[self.view viewWithTag:2222];
+    [popview removeFromSuperview];
+    
+    NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+    [arrMultiItemOrders removeObjectAtIndex:sender.tag-1];
+    [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
+    [self showMultiItemOrderUI];
+    
+}
+
 #pragma mark----------Parsing the Locumenu Data
 -(void)modifyData
 {
