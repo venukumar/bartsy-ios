@@ -92,12 +92,14 @@
       UIRemoteNotificationTypeBadge |
       UIRemoteNotificationTypeSound)];
     
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
-    
     internetReachable = [[Reachability reachabilityForInternetConnection] retain];
     [internetReachable startNotifier];
     
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    
+    
+    [self checkNetworkStatus:nil];
     //hostReachable = [[Reachability reachabilityWithHostName:KServerURL] retain];
     //[hostReachable startNotifier];
     
@@ -118,7 +120,7 @@
         {
             NSLog(@"The internet is down.");
             self.internetActive = NO;
-            
+            [self showAlertForWifiList];
             break;
             
         }
@@ -186,6 +188,29 @@
     
     AuthNet *an = [AuthNet getInstance];
     [an mobileDeviceRegistrationRequest:mobileDeviceRegistrationRequest];
+}
+
+-(void)showAlertForWifiList
+{
+    NSDictionary *dictVenue=nil;
+    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+    {
+        dictVenue=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+    }
+    else
+    {
+        dictVenue=[[[NSUserDefaults standardUserDefaults]objectForKey:@"Venues"] objectAtIndex:0];
+    }
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
+        NSString *strTitle=[NSString stringWithFormat:@"Internet Connection Required. Please connect to %@ Wi-Fi to continue Bartsy\n Wi-Fi Name: %@ \n Password: %@",[dictVenue objectForKey:@"venueName"],[dictVenue objectForKey:@"wifiName"],[dictVenue objectForKey:@"wifiPassword"]];
+        alertView=[[UIAlertView alloc]initWithTitle:nil message:strTitle delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
 }
 
 

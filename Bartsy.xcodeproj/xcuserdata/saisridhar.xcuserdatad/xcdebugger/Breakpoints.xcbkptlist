@@ -216,12 +216,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "Bartsy/HomeViewController.m"
-         timestampString = "396861931.123191"
+         timestampString = "396901301.262641"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "1721"
-         endingLineNumber = "1721"
-         landmarkName = "-getPredicateWithOrderStatus:"
+         startingLineNumber = "1724"
+         endingLineNumber = "1724"
+         landmarkName = "-ParsinggetCocktails:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -533,7 +533,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "527"
          endingLineNumber = "527"
-         landmarkName = "-btnTip_TouchUpInside:"
+         landmarkName = "-btnOrder_TouchUpInside:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -612,6 +612,19 @@
          startingLineNumber = "111"
          endingLineNumber = "111"
          landmarkName = "-viewWillAppear:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/AppDelegate.m"
+         timestampString = "396959680.27568"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "194"
+         endingLineNumber = "194"
+         landmarkName = "-showAlertForWifiList"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

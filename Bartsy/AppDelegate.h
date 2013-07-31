@@ -79,5 +79,6 @@
 -(NSString*)getPredicateWithOrderStatus:(NSInteger)intStatus;
 -(void)startTimerTOGetMessages;
 -(void)stopTimerForGetMessages;
+-(void)showAlertForWifiList;
 @end
 

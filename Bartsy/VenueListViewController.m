@@ -458,6 +458,10 @@
     
     NSSortDescriptor *sortDescriptor=[[NSSortDescriptor alloc]initWithKey:@"distance" ascending:YES selector:nil];
     [arrVenueList sortUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    
+    //Saving all venue details to show the wifi details incase of internet lost
+    [[NSUserDefaults standardUserDefaults]setObject:arrVenueList forKey:@"Venues"];
+    [[NSUserDefaults standardUserDefaults]synchronize];
     //[sortDescriptor release];
     
     for (int i=0;i<[arrVenueList count];i++)
