@@ -67,4 +67,5 @@
 -(void)getCocktailsbyvenueID:(NSString*)venueID delegate:(id)aDelegate;
 -(void)saveFavoriteDrinkbyvenueID:(NSString*)venuID bartsyID:(NSString*)bartsyID description:(NSString*)description specialinstruction:(NSString*)instructions itemlist:(NSArray*)itemlist delegate:(id)aDelegate;
 -(void)getFavoriteDrinksbybartsyID:(NSString*)strbartsyID venueID:(NSString*)venueID delegate:(id)aDelegate;
+-(void)SaveOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName splcomments:(NSString*)splcomments description:(NSString*)strDescription itemlist:(NSArray*)arritemlist receiverBartsyId:(NSString*)strReceiverId delegate:(id)aDelegate;
 @end

@@ -1068,6 +1068,75 @@ static SharedController *sharedController;
     [dictCheckIn release];
 
 }
+-(void)SaveOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName splcomments:(NSString*)splcomments description:(NSString*)strDescription itemlist:(NSArray*)arritemlist receiverBartsyId:(NSString*)strReceiverId delegate:(id)aDelegate{
+    
+    self.delegate=aDelegate;
+    
+    appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
+    NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] init];
+    //initWithObjectsAndKeys:strStatus,@"orderStatus",strBasePrice,@"basePrice",strTotalPrice,@"totalPrice",strPercentage,@"tipPercentage",strName,@"itemName",strProdId,@"itemId",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",strDescription,@"description",arrIngredients,@"ingredients",@"custom",@"type",strReceiverId,@"recieverBartsyId", nil];
+    
+    [dictProfile setValue:strStatus forKey:@"orderStatus"];
+    [dictProfile setValue:strBasePrice forKey:@"basePrice"];
+    [dictProfile setValue:strTotalPrice forKey:@"totalPrice"];
+    [dictProfile setValue:strPercentage forKey:@"tipPercentage"];
+    [dictProfile setValue:strName forKey:@"itemName"];
+    [dictProfile setValue:splcomments forKey:@"specialInstructions"];
+    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+    [dictProfile setValue:strDescription forKey:@"description"];
+    [dictProfile setValue:arritemlist forKey:@"itemsList"];
+   // [dictProfile setValue:@"custom" forKey:@"type"];
+    [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
+    //[dictProfile setValue:@"Take Care" forKey:@"specialInstructions"];
+    [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+    
+    [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictProfile];
+    
+    NSLog(@"JSON string \n %@",strJson);
+    
+    NSData *dataProfile=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/placeOrder",KServerURL];
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataProfile];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             NSLog(@"JSON response is %@",jsonString);
+             
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             NSLog(@"Result is %@",result);
+             [appDelegate.delegateForCurrentViewController controllerDidFinishLoadingWithResult:result];
+         }
+         else
+         {
+             NSLog(@"Error is %@",[error description]);
+             [appDelegate.delegateForCurrentViewController controllerDidFinishLoadingWithResult:error];
+         }
+         
+     }
+     ];
+    
+    [url release];
+    [request release];
+
+}
+
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

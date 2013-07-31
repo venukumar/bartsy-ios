@@ -20,7 +20,7 @@
 @end
 
 @implementation CustomDrinkViewController
-@synthesize dictCustomDrinks,viewtype,dictitemdetails;
+@synthesize dictCustomDrinks,viewtype,dictitemdetails,arrIndex;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -47,7 +47,6 @@
     imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
     [self.view addSubview:imgLogo];
     [imgLogo release];
-
    
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     btnBack.frame = CGRectMake(5, 0, 50, 40);
@@ -238,23 +237,31 @@
 -(void)Button_Order:(UIButton*)sender{
     
     NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
-    
+   
+
     UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
     
     if (viewtype==1)
     {
         NSLog(@"Final order %@",arrCustomDrinks);
-        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrCustomDrinks objectAtIndex:0]];
-        [dictItem setObject:@"" forKey:@"specialInstructions"];
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrMultiItemOrders objectAtIndex:arrIndex]];
+        if (txtFieldSpecialInstructions.text.length>0) {
+            [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+
+        }else{
+            [dictItem setObject:@"" forKey:@"specialInstructions"];
+
+        }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
-        [arrMultiItemOrders addObject:dictItem];
+        [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         appDelegate.isCmgForShowingOrderUI=YES;
         [arrMultiItemOrders release];
         [self.navigationController popViewControllerAnimated:YES];
-        
+        NSMutableArray *arrMulti=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+         NSLog(@"index %d -> %d",arrIndex,[arrMulti count]);
     }else if (viewtype==2){
         UIButton *btnFav=(UIButton*)[mainScroll viewWithTag:557];
         

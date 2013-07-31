@@ -61,6 +61,7 @@
     
     NSMutableArray *arrCocktailsSection;
    
+    float ttlPrice;
 }
 
 @end
@@ -475,9 +476,79 @@
         
     }else if (sender.tag==1116){
         
+        NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
+        UILabel *lblTotalPrice=(UILabel*)[self.view viewWithTag:2229];
+        
+        isRequestForOrder=YES;
+        self.sharedController=[SharedController sharedController];
+        if([dictPeopleSelectedForDrink count]==0||[[dictPeopleSelectedForDrink objectForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
+        {
+            [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
+        }
+        else
+        {
+            NSString *strMsg=[NSString stringWithFormat:@"Sending Order details to %@...",[dictPeopleSelectedForDrink objectForKey:@"nickName"]];
+            [self createProgressViewToParentView:self.view withTitle:strMsg];
+        }
+      /*  NSString *strBasePrice=[NSString stringWithFormat:@"%.2f",[lblTotalPrice.text floatValue]];
+        
+        NSString *strTip;
+        if(btnValue!=40)
+            strTip=[NSString stringWithFormat:@"%i",btnValue];
+        else
+        {
+            UITextField *txtFld=(UITextField*)[self.view viewWithTag:500];
+            strTip=[NSString stringWithFormat:@"%i",[txtFld.text integerValue]];
+        }
+        
+        //Tax on item
+        float subTotal=([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*(([strTip floatValue]+[[NSUserDefaults standardUserDefaults] floatForKey:@"percentTAX"])))/100;
+        
+        float totalPrice=[[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]+subTotal;
+        
+        //Tip on item
+        float tipTotal = ([[dictSelectedToMakeOrder objectForKey:@"price"] floatValue]*[strTip floatValue])/100;
+        
+        NSString *strTipTotal=[NSString stringWithFormat:@"%.2f",tipTotal];
+        
+        NSLog(@"Tip is %@",strTipTotal);
+        
+        NSString *strTotalPrice1=[NSString stringWithFormat:@"%.2f",totalPrice];
+        
+        
+        NSString *strBartsyId;
+        if([dictPeopleSelectedForDrink count])
+            strBartsyId=[NSString stringWithFormat:@"%@",[dictPeopleSelectedForDrink objectForKey:@"bartsyId"]];
+        else
+            strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];*/
+        NSMutableArray *arritemlist=[[NSMutableArray alloc]init];
+        for (NSDictionary *dicttemp in arrMultiItems)
+        {
+            NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
+            [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
+            [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
+            [dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"description"];
+            [dictitem setObject:@"1" forKey:@"quantity"];
+            [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"basePrice"];
+            [dictitem setObject:@"1" forKey:@"quantity"];
+            [dictitem setObject:[dicttemp valueForKey:@"id"] forKey:@"itemId"];
+            //[dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"specialInstructions"];
+            [arritemlist addObject:dictitem];
+            [dictitem release];
+        }
+        float taxPrice=[[NSUserDefaults standardUserDefaults] floatForKey:@"percentTAX"];
+
+        float tiptotal=(ttlPrice*((float)btnValue/100))+ttlPrice;
+        NSString *totalprice=[NSString stringWithFormat:@"%.2f",tiptotal+taxPrice];
+        [self.sharedController SaveOrderWithOrderStatus:@"0" basePrice:[NSString stringWithFormat:@"%.2f",ttlPrice] totalPrice:totalprice tipPercentage:[NSString stringWithFormat:@"%d",btnValue] itemName:@"" splcomments:@"Chill" description:@"" itemlist:arritemlist receiverBartsyId:[dictPeopleSelectedForDrink valueForKey:@"bartsyId"] delegate:self];
+        
+        dictPeopleSelectedForDrink=nil;
+
+        
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
-        UIView *popupView=(UIView*)[self.view viewWithTag:2222];
-        [popupView removeFromSuperview];
+        UIView *Backgroundview=(UIView*)[self.view viewWithTag:2221];
+        [Backgroundview removeFromSuperview];
+        
     }else if(sender.tag==1117){
         
         UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
@@ -546,19 +617,14 @@
 
 -(void)btnTip_TouchUpInside:(id)sender
 {
-    if(btnValue!=0)
-    {
-        UIButton *btn=(UIButton*)[self.view viewWithTag:btnValue];
-        [btn setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
-    }
-    btnValue=[sender tag];
-    [sender setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
     
-    if(btnValue==40)
-    {
-        UITextField *txtFld=(UITextField*)[self.view viewWithTag:500];
-        [txtFld becomeFirstResponder];
-    }
+    UIView *popview=(UIView*)[self.view viewWithTag:2222];
+    UIButton *btn=(UIButton*)[popview viewWithTag:btnValue];
+    //[btn setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    [btn setSelected:NO];
+    btnValue=[sender tag];
+    //[sender setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+    [sender setSelected:YES];
 }
 
 -(void)btnCancel_TouchUpInside
@@ -997,18 +1063,54 @@
 -(void)showMultiItemOrderUI
 {
     
+    UIView *popview=(UIView*)[self.view viewWithTag:2222];
+    if (popview) {
+        [popview removeFromSuperview];
+    }
     
     NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
     
     NSLog(@"%@",arrMultiItems);
+    NSMutableDictionary *dictuserInfo;
+    if([dictPeopleSelectedForDrink count])
+    {
+        dictuserInfo=[[NSMutableDictionary alloc] initWithDictionary:dictPeopleSelectedForDrink];
+    }
+    else
+    {
+        for (int i=0; i<[arrPeople count]; i++)
+        {
+            NSDictionary *dictMember=[arrPeople objectAtIndex:i];
+            if([[NSString stringWithFormat:@"%@",[dictMember objectForKey:@"bartsyId"]]isEqualToString:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]])
+            {
+                dictuserInfo=[[NSMutableDictionary alloc] initWithDictionary:dictMember];
+                break;
+            }
+        }
+    }
+    dictPeopleSelectedForDrink=dictuserInfo;
+    NSLog(@"%@",dictuserInfo);
+    UIView *Backgroundview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
+    Backgroundview.backgroundColor=[UIColor clearColor];
+    Backgroundview.tag=2221;
+    //Backgroundview.userInteractionEnabled=NO;
+    //Backgroundview.exclusiveTouch=NO;
+    [self.view addSubview:Backgroundview];
+    //[[[UIApplication sharedApplication] keyWindow] addSubview:Backgroundview];
+   
+    /*UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    [doubleTap setNumberOfTapsRequired:2];
+    [doubleTap setNumberOfTapsRequired:1];
+    [Backgroundview addGestureRecognizer:doubleTap];*/
     
     UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 350)];
     popupView.backgroundColor=[UIColor blackColor];
     popupView.tag=2222;
     popupView.layer.borderWidth=1;
     popupView.layer.borderColor=[UIColor whiteColor].CGColor;
-    [self.view addSubview:popupView];
+    [Backgroundview addSubview:popupView];
     
+
     UILabel *lbltitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 5, 200, 35)];
     lbltitle.text=@"Review your order";
     lbltitle.font=[UIFont systemFontOfSize:18];
@@ -1024,7 +1126,7 @@
     [lineview release];
    
     UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(10,lineview.frame.origin.y+2,60,60)];
-    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictTemp objectForKey:@"userImagePath"]];
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictuserInfo objectForKey:@"userImagePath"]];
     [imgViewPhoto setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
     imgViewPhoto.tag=143225;
     [imgViewPhoto setImageWithURL:[NSURL URLWithString:strURL]];
@@ -1048,9 +1150,9 @@
 
     
     UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(110, 70, 150, 22)];
-    lblName.text=@"My name";
+    lblName.text=[dictuserInfo valueForKey:@"nickName"];
     lblName.font=[UIFont systemFontOfSize:18];
-    lblName.tag=111222333;
+    lblName.tag=2223;
     lblName.backgroundColor=[UIColor clearColor];
     lblName.textColor=[UIColor whiteColor];
     [popupView addSubview:lblName];
@@ -1091,12 +1193,20 @@
         [popupscrollview addSubview:lblprice];
         [lblprice release];
         
+        UIButton *indexButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        indexButton.tag=i;
+        indexButton.frame=CGRectMake(25, (i*30), 290, 30);
+        [indexButton addTarget:self action:@selector(Button_Popview:) forControlEvents:UIControlEventTouchUpInside];
+        [popupscrollview addSubview:indexButton];
+        
         UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0,(i*30)+29, 320, 1)];
         scrollendlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
         [popupscrollview addSubview:scrollendlineview];
         [scrollendlineview release];
         totalPrice+=[[[arrMultiItems objectAtIndex:i] valueForKey:@"price"] floatValue];
     }
+    
+    ttlPrice=totalPrice;
     [popupscrollview setContentSize:CGSizeMake(320,[arrMultiItems count]*30)];
     UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0, imgViewPhoto.frame.origin.y+imgViewPhoto.frame.size.height+2, 320, 1.5)];
     scrollendlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
@@ -1115,6 +1225,7 @@
     btn10.frame = CGRectMake(37,popupscrollview.frame.origin.y+popupscrollview.frame.size.height+20,23,23);
     btn10.tag = 10;
     [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateSelected];
     [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [popupView addSubview:btn10];
     
@@ -1132,6 +1243,8 @@
     btn20.frame = CGRectMake(90,popupscrollview.frame.origin.y+popupscrollview.frame.size.height+20,23,23);
     btn20.tag = 15;
     [btn20 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    [btn20 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateSelected];
+
     [btn20 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [popupView addSubview:btn20];
     
@@ -1146,12 +1259,14 @@
     
     UIButton *btn30 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn30.frame = CGRectMake(148,popupscrollview.frame.origin.y+popupscrollview.frame.size.height+20,23,23);
-    [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
+    [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
+    [btn30 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateSelected];
+
     btn30.tag = 20;
     [btn30 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [popupView addSubview:btn30];
-    
-    btnValue=btn30.tag;
+    btn30.selected=YES;
+    btnValue=20;
     
     UILabel *lbl20 = [[UILabel alloc]initWithFrame:CGRectMake(180, popupscrollview.frame.origin.y+popupscrollview.frame.size.height+15, 30, 30)];
     lbl20.font = [UIFont boldSystemFontOfSize:12];
@@ -1167,12 +1282,15 @@
     [popupView addSubview:lineview2];
     [lineview2 release];
     
+    float taxPrice=[[NSUserDefaults standardUserDefaults] floatForKey:@"percentTAX"];
+    
     UILabel *lblTax = [[UILabel alloc]initWithFrame:CGRectMake(8, lineview2.frame.origin.y+lineview2.frame.size.height+15, 175, 30)];
     lblTax.font = [UIFont systemFontOfSize:12];
-    lblTax.text = [NSString stringWithFormat:@"Tax:$%@",@"5.00"];
+    lblTax.text = [NSString stringWithFormat:@"Tax:$%.2f",taxPrice];
     lblTax.backgroundColor = [UIColor clearColor];
     lblTax.textColor = [UIColor whiteColor] ;
     lblTax.textAlignment = NSTextAlignmentLeft;
+    lblTax.tag=2228;
     [popupView addSubview:lblTax];
     [lblTax release];
     
@@ -1182,6 +1300,7 @@
     lblTotalPrice.backgroundColor = [UIColor clearColor];
     lblTotalPrice.textColor = [UIColor whiteColor] ;
     lblTotalPrice.textAlignment = NSTextAlignmentLeft;
+    lblTotalPrice.tag=2229;
     [popupView addSubview:lblTotalPrice];
     [lblTotalPrice release];
     
@@ -1206,7 +1325,10 @@
     [btnOrder addTarget:self action:@selector(btnOrder_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [popupView addSubview:btnOrder];
     
-    
+   /* [[popview subviews]
+     makeObjectsPerformSelector:@selector(setUserInteractionEnabled:)
+     withObject:[NSNumber numberWithBool:FALSE]];
+    popview.userInteractionEnabled=YES;*/
  /*
 //     id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
 //     NSDictionary *dict;
@@ -1552,6 +1674,24 @@
     
 }
 
+-(void)Button_Popview:(UIButton*)sender{
+    
+    NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+    NSLog(@"index %d -> %d",sender.tag,[arrMultiItemOrders count]);
+    CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
+    obj.viewtype=1;
+    obj.arrIndex=sender.tag;
+   // NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+    obj.dictitemdetails=[arrMultiItemOrders objectAtIndex:sender.tag];
+    [self.navigationController pushViewController:obj animated:YES];
+    
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    if ([touch.view isDescendantOfView:gestureRecognizer.view])
+        return NO;
+}
 #pragma mark----------Parsing the Locumenu Data
 -(void)modifyData
 {
@@ -3196,12 +3336,32 @@
             
     }else if (indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]){
         
+        NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+
+        id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
+        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+        
+        
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrContents objectAtIndex:indexPath.row]];
+        [dictItem setObject:@"" forKey:@"specialInstructions"];
+        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [arrMultiItemOrders addObject:dictItem];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [arrMultiItemOrders release];
+        
+        [self showMultiItemOrderUI];
+
+
+        /*
         CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
         obj.viewtype=1;
         id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
         NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
         obj.dictitemdetails=[arrContents objectAtIndex:indexPath.row];
         [self.navigationController pushViewController:obj animated:YES];
+         */
           /*  id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
             NSDictionary *dict;
             if(indexPath.section==1&&[object isKindOfClass:[NSArray class]])
@@ -3579,7 +3739,7 @@
     NSLog(@"URL is %@",strURL);
     //[imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
     [imgView setImageWithURL:[NSURL URLWithString:strURL]];
-    UILabel *lblName=(UILabel*)[self.view viewWithTag:111222333];
+    UILabel *lblName=(UILabel*)[self.view viewWithTag:2223];
     lblName.text=[dictPeopleSelectedForDrink objectForKey:@"nickName"];
 
     

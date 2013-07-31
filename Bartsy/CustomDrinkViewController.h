@@ -22,10 +22,13 @@ typedef NSInteger viewtype;
     NSDictionary *dictitemdetails;
     
     NSInteger viewtype;
+    
+    int arrIndex;
 }
 @property(nonatomic,retain) NSDictionary *dictCustomDrinks;
 @property(nonatomic,retain) NSDictionary *dictitemdetails;
 
 @property(nonatomic,assign)NSInteger viewtype;
+@property(nonatomic,assign)int arrIndex;
 
 @end
