@@ -460,6 +460,8 @@
     intOrderCount=[[result objectForKey:@"orderCount"] integerValue];
     intPeopleCount=[[result objectForKey:@"userCount"] integerValue];
     
+    [[UIApplication sharedApplication]setApplicationIconBadgeNumber:[[result objectForKey:@"unReadNotifications"] integerValue]];
+    
     if([delegateForCurrentViewController isKindOfClass:[HomeViewController class]])
         [delegateForCurrentViewController reloadDataPeopleAndOrderCount];
 }
