@@ -128,6 +128,10 @@
     instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
     [mainScroll addSubview:instructionfield];
 
+    if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
+        instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
+    }
+    NSLog(@"detail %@",dictitemdetails);
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     orderBtn.frame=CGRectMake(5,330, 250, 30);
     if (IS_IPHONE_5) {
@@ -160,7 +164,6 @@
                 
                 if ([[dict valueForKey:@"section_name"] isEqualToString:@"Mixer"]){
                     for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
-                        // NSLog(@"dict %@",tempdict);
                         [arrCustomDrinks addObject:tempdict];
                         NSArray *subitemArray=[tempdict valueForKey:@"contents"];
                         
@@ -203,6 +206,7 @@
     lblfav.font=[UIFont systemFontOfSize:9];
     [mainScroll addSubview:lblfav];
     [lblfav release];
+    
     
     UIButton *buttonLike=[UIButton buttonWithType:UIButtonTypeCustom];
     buttonLike.frame=CGRectMake(265, 346, 13, 13);
@@ -260,12 +264,28 @@
         appDelegate.isCmgForShowingOrderUI=YES;
         [arrMultiItemOrders release];
         [self.navigationController popViewControllerAnimated:YES];
-        NSMutableArray *arrMulti=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
-         NSLog(@"index %d -> %d",arrIndex,[arrMulti count]);
     }else if (viewtype==2){
         UIButton *btnFav=(UIButton*)[mainScroll viewWithTag:557];
         
-         if (viewtype==2 && btnFav.selected){
+         if (viewtype==2 ){
+      
+        }
+        
+        NSLog(@"Final order %@",arrCustomDrinks);
+
+    }
+
+}
+
+-(void)Button_Action:(UIButton*)sender{
+    
+   // UITextField *txtfield=(UITextField*)[mainScroll viewWithTag:559];
+    if (sender.tag==557) {
+        if (sender.selected) {
+            
+            sender.selected=NO;
+        }else{
+            sender.selected=YES;
             NSMutableArray *arritemlist=[[NSMutableArray alloc]init];
             for (NSDictionary *dictTemp in arrCustomDrinks) {
                 NSMutableDictionary *dictitemlist=[[NSMutableDictionary alloc]init];
@@ -293,23 +313,6 @@
             //[self createProgressViewToParentView:self.view withTitle:@"Saving your favorite drink..."];
             
             [self.sharedController saveFavoriteDrinkbyvenueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] description:@"" specialinstruction:@"" itemlist:arritemlist delegate:self];
-        }
-        
-        NSLog(@"Final order %@",arrCustomDrinks);
-
-    }
-
-}
-
--(void)Button_Action:(UIButton*)sender{
-    
-   // UITextField *txtfield=(UITextField*)[mainScroll viewWithTag:559];
-    if (sender.tag==557) {
-        if (sender.selected) {
-            
-            sender.selected=NO;
-        }else{
-            sender.selected=YES;
         }
         
     }else if (sender.tag==558){

@@ -294,8 +294,8 @@
     [ArrMenuSections addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"0",@"Arrow",@"Favorites",@"SectionName", nil]];
     
     arrFavorites=[NSMutableArray new];
-    
-    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil){
+    NSLog(@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]);
+    if(!([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)){
         
         [topscrollView removeFromSuperview];
         [pagectrl removeFromSuperview];
@@ -477,7 +477,6 @@
     }else if (sender.tag==1116){
         
         NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
-        UILabel *lblTotalPrice=(UILabel*)[self.view viewWithTag:2229];
         
         isRequestForOrder=YES;
         self.sharedController=[SharedController sharedController];
@@ -531,7 +530,13 @@
             [dictitem setObject:@"1" forKey:@"quantity"];
             [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"basePrice"];
             [dictitem setObject:@"1" forKey:@"quantity"];
-            [dictitem setObject:[dicttemp valueForKey:@"id"] forKey:@"itemId"];
+            if ([dicttemp valueForKey:@"id"]) {
+                [dictitem setObject:[dicttemp valueForKey:@"id"] forKey:@"itemId"];
+
+            }else{
+                [dictitem setObject:@"" forKey:@"itemId"];
+
+            }
             //[dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"specialInstructions"];
             [arritemlist addObject:dictitem];
             [dictitem release];
@@ -1098,10 +1103,6 @@
     [self.view addSubview:Backgroundview];
     //[[[UIApplication sharedApplication] keyWindow] addSubview:Backgroundview];
    
-    /*UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
-    [doubleTap setNumberOfTapsRequired:2];
-    [doubleTap setNumberOfTapsRequired:1];
-    [Backgroundview addGestureRecognizer:doubleTap];*/
     
     UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 350)];
     popupView.backgroundColor=[UIColor blackColor];
@@ -1109,6 +1110,7 @@
     popupView.layer.borderWidth=1;
     popupView.layer.borderColor=[UIColor whiteColor].CGColor;
     [Backgroundview addSubview:popupView];
+    
     
 
     UILabel *lbltitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 5, 200, 35)];
@@ -1120,6 +1122,12 @@
     [popupView addSubview:lbltitle];
     [lbltitle release];
 
+    UIButton *btnclose=[UIButton buttonWithType:UIButtonTypeCustom];
+    btnclose.frame=CGRectMake(276, 6, 22, 22);
+    [btnclose setImage:[UIImage imageNamed:@"deleteicon.png"] forState:UIControlStateNormal];
+    [btnclose addTarget:self action:@selector(Btn_Closepopup:) forControlEvents:UIControlEventTouchUpInside];
+    [popupView addSubview:btnclose];
+   
     UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 35, 320, 1.5)];
     lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
     [popupView addSubview:lineview];
@@ -1687,10 +1695,10 @@
     
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+-(void)Btn_Closepopup:(UIButton*)sender
 {
-    if ([touch.view isDescendantOfView:gestureRecognizer.view])
-        return NO;
+    UIView *Backgroundview=(UIView*)[self.view viewWithTag:2221];
+    [Backgroundview removeFromSuperview];
 }
 #pragma mark----------Parsing the Locumenu Data
 -(void)modifyData
@@ -2319,10 +2327,11 @@
             if([[dict objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
             {
                 floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
-                floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
-                floatTaxFee+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue]-[[dictTempOrder objectForKey:@"tipPercentage"]floatValue];
+                floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
+                floattipvalue=([[dict objectForKey:@"tipPercentage"]floatValue]*floatPrice)/100;
+
+                floatTaxFee+=[[dict objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
                
-                floattipvalue=[[dictTempOrder objectForKey:@"tipPercentage"]floatValue];
             }
             else
             {
@@ -2334,7 +2343,7 @@
             
         }
         
-        
+        floatTaxFee=floatTaxFee-floattipvalue;
         
         
         UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
@@ -2385,7 +2394,7 @@
         lblTotalPrice.textAlignment = NSTextAlignmentRight;
         [viewBg2 addSubview:lblTotalPrice];
         NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTotalPrice.attributedText];
-        //[attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
+        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
         [lblTotalPrice setAttributedText: attribstrgTP];
         [attribstrgTP release];
         [lblTotalPrice release];
@@ -3331,6 +3340,7 @@
         
         CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
         obj.viewtype=2;
+        NSLog(@"%@\n %@",[arrCustomDrinks objectAtIndex:indexPath.section-2],[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks]);
         obj.dictitemdetails=[arrCustomDrinks objectAtIndex:indexPath.section-2];
         obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
         [self.navigationController pushViewController:obj animated:YES];
