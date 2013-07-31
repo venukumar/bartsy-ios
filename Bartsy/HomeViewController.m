@@ -466,7 +466,7 @@
 {
     if (sender.tag==1115) {
         
-        UIView *popupView=(UIView*)[self.view viewWithTag:2222];
+        UIView *popupView=(UIView*)[self.view viewWithTag:2221];
         popupView.hidden=YES;
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
         checkinBtn.hidden=YES;
@@ -556,7 +556,7 @@
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
         [checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
         checkinBtn.hidden=NO;
-        UIView *popupView=(UIView*)[self.view viewWithTag:2222];
+        UIView *popupView=(UIView*)[self.view viewWithTag:2221];
         popupView.hidden=NO;
 
         
@@ -618,7 +618,7 @@
 -(void)btnTip_TouchUpInside:(id)sender
 {
     
-    UIView *popview=(UIView*)[self.view viewWithTag:2222];
+    UIView *popview=(UIView*)[self.view viewWithTag:2221];
     UIButton *btn=(UIButton*)[popview viewWithTag:btnValue];
     //[btn setBackgroundImage:[UIImage imageNamed:@"radio_button1.png"] forState:UIControlStateNormal];
     [btn setSelected:NO];
@@ -1063,7 +1063,7 @@
 -(void)showMultiItemOrderUI
 {
     
-    UIView *popview=(UIView*)[self.view viewWithTag:2222];
+    UIView *popview=(UIView*)[self.view viewWithTag:2221];
     if (popview) {
         [popview removeFromSuperview];
     }
@@ -1663,7 +1663,7 @@
 
 -(void)Btn_DeleteOrder:(UIButton*)sender{
     
-    UIView *popview=(UIView*)[self.view viewWithTag:2222];
+    UIView *popview=(UIView*)[self.view viewWithTag:2221];
     [popview removeFromSuperview];
     
     NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
