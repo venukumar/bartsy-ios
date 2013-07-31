@@ -542,9 +542,10 @@
             [dictitem release];
         }
         float taxPrice=[[NSUserDefaults standardUserDefaults] floatForKey:@"percentTAX"];
+        float floatTotalTax=(ttlPrice*((float)taxPrice/100));
 
-        float tiptotal=(ttlPrice*((float)btnValue/100))+ttlPrice;
-        NSString *totalprice=[NSString stringWithFormat:@"%.2f",tiptotal+taxPrice];
+        float tiptotal=(ttlPrice*((float)btnValue/100));
+        NSString *totalprice=[NSString stringWithFormat:@"%.2f",tiptotal+floatTotalTax+ttlPrice];
         [self.sharedController SaveOrderWithOrderStatus:@"0" basePrice:[NSString stringWithFormat:@"%.2f",ttlPrice] totalPrice:totalprice tipPercentage:[NSString stringWithFormat:@"%d",btnValue] itemName:@"" splcomments:@"Chill" description:@"" itemlist:arritemlist receiverBartsyId:[dictPeopleSelectedForDrink valueForKey:@"bartsyId"] delegate:self];
         
         dictPeopleSelectedForDrink=nil;
@@ -2179,7 +2180,7 @@
         
         if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
         {
-            UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 2, 37.5, 26) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
+            UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 1, 44, 33) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
             btnDismiss.titleLabel.font=[UIFont systemFontOfSize:10];
             btnDismiss.backgroundColor=[UIColor blackColor];
             [viewBg addSubview:btnDismiss];
@@ -2323,33 +2324,27 @@
             lblPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
             lblPrice.textAlignment = NSTextAlignmentRight;
             [viewBg2 addSubview:lblPrice];
-                        
-            if([[dict objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
-            {
-                floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
-                floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
-                floattipvalue=([[dict objectForKey:@"tipPercentage"]floatValue]*floatPrice)/100;
-
-                floatTaxFee+=[[dict objectForKey:@"totalPrice"]floatValue]-[[dictTempOrder objectForKey:@"basePrice"]floatValue];
-               
-            }
-            else
+            
+            floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
+            floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
+            if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
             {
                 lblPrice.text=@"-";
+
             }
-            
             [lblDescription release];
             [lblPrice release];
             
         }
-        
-        floatTaxFee=floatTaxFee-floattipvalue;
-        
+                
         
         UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
+        floattipvalue= ([[dict objectForKey:@"basePrice"] floatValue]*[[dict objectForKey:@"tipPercentage"] floatValue])/100;
         if(floattipvalue>0.01)
+        {
             lblTipFee.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
+        }
         else
             lblTipFee.text = [NSString stringWithFormat:@"Tip: -"];
         lblTipFee.tag = 12347890;
@@ -2365,8 +2360,11 @@
         
         UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 150, 15)];
         lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
+        floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
         if(floatTaxFee>0.01)
+        {
             lblTaxFee.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
+        }
         else
             lblTaxFee.text = [NSString stringWithFormat:@"Tax: -"];
         lblTaxFee.tag = 12347890;
