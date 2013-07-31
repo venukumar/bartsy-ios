@@ -2130,7 +2130,7 @@
     UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
     [scrollViewOld removeFromSuperview];
     UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42-topscrollView.frame.size.height)];
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 320)];
     scrollView.tag=987;
     scrollView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:scrollView];
@@ -2138,7 +2138,7 @@
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        scrollView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 327+90-42-topscrollView.frame.size.height);
+        scrollView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 320+88);
     }
     
     NSInteger intContentSizeHeight=0;
@@ -2293,9 +2293,9 @@
         float floattipvalue=0;
         intHeight=72;
         
-        for (int j=0; j<[arrBundledOrdersObject count]; j++)
+        for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
         {
-            NSDictionary *dictTempOrder=[arrBundledOrdersObject objectAtIndex:j];
+            NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
             
             UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*15)+40, 242, 15)];
             lblDescription.font = [UIFont boldSystemFontOfSize:12];
@@ -2316,7 +2316,7 @@
             lblPrice.textAlignment = NSTextAlignmentRight;
             [viewBg2 addSubview:lblPrice];
                         
-            if([[dictTempOrder objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
+            if([[dict objectForKey:@"senderBartsyId"]doubleValue]==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
             {
                 floatPrice+=[[dictTempOrder objectForKey:@"basePrice"] floatValue];
                 floatTotalPrice+=[[dictTempOrder objectForKey:@"totalPrice"]floatValue];
@@ -2330,13 +2330,14 @@
             }
             
             [lblDescription release];
-            [lblPrice release];            
+            [lblPrice release];
+            
         }
         
         
         
         
-        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([arrBundledOrdersObject count]*15)+45, 120, 15)];
+        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
         if(floattipvalue>0.01)
             lblTipFee.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
@@ -2353,7 +2354,7 @@
         [attribstrgTIP release];
         [lblTipFee release];
         
-        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([arrBundledOrdersObject count]*15)+45, 150, 15)];
+        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 150, 15)];
         lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
         if(floatTaxFee>0.01)
             lblTaxFee.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
@@ -2372,7 +2373,7 @@
         
         NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
        
-        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([arrBundledOrdersObject count]*15)+45, 153, 15)];
+        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 153, 15)];
         lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
         if(floatTotalPrice>0.01)
             lblTotalPrice.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
@@ -2384,7 +2385,7 @@
         lblTotalPrice.textAlignment = NSTextAlignmentRight;
         [viewBg2 addSubview:lblTotalPrice];
         NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTotalPrice.attributedText];
-        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
+        //[attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
         [lblTotalPrice setAttributedText: attribstrgTP];
         [attribstrgTP release];
         [lblTotalPrice release];
@@ -2392,18 +2393,18 @@
         
         if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
         {
-            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 30+87+[arrBundledOrdersObject count]*20+42, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
+            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 30+87+[[dict objectForKey:@"itemsList"] count]*20+42, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
             btnReject.titleLabel.font=[UIFont systemFontOfSize:10];
             btnReject.backgroundColor=[UIColor grayColor];
             [viewBg addSubview:btnReject];
             
-            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 30+87+[arrBundledOrdersObject count]*20+42, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
+            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 30+87+[[dict objectForKey:@"itemsList"] count]*20+42, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
             btnAccept.titleLabel.font=[UIFont systemFontOfSize:10];
             btnAccept.backgroundColor=[UIColor grayColor];
             [viewBg addSubview:btnAccept];
         }
         
-        intContentSizeHeight+=123+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks+50;
+        intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*20 + intHeightForOfferedDrinks+50;
     }
     
     if (arrBundledOrders.count==0) {

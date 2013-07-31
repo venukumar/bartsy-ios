@@ -549,6 +549,32 @@
          landmarkName = "-showAlertForWifiList"
          landmarkType = "5">
       </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/AppDelegate.m"
+         timestampString = "396961139.67471"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "459"
+         endingLineNumber = "459"
+         landmarkName = "-controllerDidFinishLoadingWithResult:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "Bartsy/HomeViewController.m"
+         timestampString = "396968447.637792"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "2298"
+         endingLineNumber = "2298"
+         landmarkName = "-loadOrdersView"
+         landmarkType = "5">
+      </FileBreakpoint>
    </FileBreakpoints>
    <ExceptionBreakpoints>
       <ExceptionBreakpoint
