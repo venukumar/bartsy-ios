@@ -546,7 +546,7 @@
 
         float tiptotal=(ttlPrice*((float)btnValue/100));
         NSString *totalprice=[NSString stringWithFormat:@"%.2f",tiptotal+floatTotalTax+ttlPrice];
-        [self.sharedController SaveOrderWithOrderStatus:@"0" basePrice:[NSString stringWithFormat:@"%.2f",ttlPrice] totalPrice:totalprice tipPercentage:[NSString stringWithFormat:@"%d",btnValue] itemName:@"" splcomments:@"Chill" description:@"" itemlist:arritemlist receiverBartsyId:[dictPeopleSelectedForDrink valueForKey:@"bartsyId"] delegate:self];
+        [self.sharedController SaveOrderWithOrderStatus:@"0" basePrice:[NSString stringWithFormat:@"%.2f",ttlPrice] totalPrice:totalprice tipPercentage:[NSString stringWithFormat:@"%d",btnValue] itemName:@"" splcomments:@"" description:@"" itemlist:arritemlist receiverBartsyId:[dictPeopleSelectedForDrink valueForKey:@"bartsyId"] delegate:self];
         
         dictPeopleSelectedForDrink=nil;
 
@@ -922,18 +922,6 @@
             [self ParsinggetIngredients:result];
             dictMainCustomDrinks=[[NSDictionary alloc ]initWithDictionary:result];
 
-         /*   NSArray *arrcustomdrinks=[result objectForKey:@"ingredients"];
-            dictMainCustomDrinks=[[NSDictionary alloc ]initWithDictionary:result];
-            for (NSDictionary *dic in [[arrcustomdrinks objectAtIndex:0] valueForKey:@"categories"]) {
-                
-                    if ([dic allKeys].count) {
-                        
-                        [dic setValue:@"0" forKey:@"Arrow"];
-                        [arrCustomDrinks addObject:dic];
-                        
-                    }
-        }*/
-            
         }
         NSLog(@" arrcustom drinks %@",arrCustomDrinks);
         //UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
@@ -947,6 +935,7 @@
         homecheckimg.image=[UIImage imageNamed:@"home-footer"];
         homecheckimg.tag=5555;
         [self.tabBarController.tabBar addSubview:homecheckimg];
+        [self getPeopleList];
         isRequestCheckin=NO;
         [topscrollView removeFromSuperview];
         [pagectrl removeFromSuperview];
@@ -1094,8 +1083,8 @@
             }
         }
     }
-    dictPeopleSelectedForDrink=dictuserInfo;
-    NSLog(@"%@",dictuserInfo);
+    dictPeopleSelectedForDrink=[[NSDictionary alloc ]initWithDictionary:dictuserInfo];
+    NSLog(@"%@",dictPeopleSelectedForDrink);
     UIView *Backgroundview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
     Backgroundview.backgroundColor=[UIColor clearColor];
     Backgroundview.tag=2221;
@@ -1103,7 +1092,6 @@
     //Backgroundview.exclusiveTouch=NO;
     [self.view addSubview:Backgroundview];
     //[[[UIApplication sharedApplication] keyWindow] addSubview:Backgroundview];
-   
     
     UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 350)];
     popupView.backgroundColor=[UIColor blackColor];
@@ -1781,35 +1769,38 @@
     NSArray *arrmenues=[result valueForKey:@"menus"];
     for (int i=0; i<[arrmenues count]; i++) {
         NSDictionary *dicmainsections=[arrmenues objectAtIndex:i];
-        
-        NSArray *arrsections=[dicmainsections valueForKey:@"sections"];
-        for (int j=0; j<[arrsections count]; j++) {
-            
-            NSDictionary *dictsection=[arrsections objectAtIndex:j];
-            if ([[dictsection valueForKey:@"section_name"] isEqualToString:@"Spirit"]) {
-
-                NSArray *arrsubSection=[dictsection valueForKey:@"subsections"];
-                for (int k=0; k<[arrsubSection count];k++) {
-                    NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
-                    NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
-                    if ([[dictSubSection valueForKey:@"subsection_name"] length]>0)
-                        [sectionDict setObject:[NSString stringWithFormat:@"%@->%@->%@",[dicmainsections valueForKey:@"menu_name"],[dictsection valueForKey:@"section_name"],[dictSubSection valueForKey:@"subsection_name"]] forKey:@"section_name"];
-                    else
-                        [sectionDict setObject:[NSString stringWithFormat:@"%@->%@",[dicmainsections valueForKey:@"menu_name"],[dictsection valueForKey:@"section_name"]] forKey:@"section_name"];
-                    NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
-                    NSMutableArray *arrSubContent=[[NSMutableArray alloc]init];
-                    for (int x=0; x<[arrContent count]; x++) {
-                        
-                        NSDictionary *dictContent=[arrContent objectAtIndex:x];
-                        [arrSubContent addObject:dictContent];
-                    }
+        if (![[dicmainsections valueForKey:@"show_menu"] isEqualToString:@"No"])
+        {
+            NSArray *arrsections=[dicmainsections valueForKey:@"sections"];
+            for (int j=0; j<[arrsections count]; j++) {
+                
+                NSDictionary *dictsection=[arrsections objectAtIndex:j];
                     
-                    [sectionDict setObject:arrSubContent forKey:@"contents"];
-                    [arrCustomDrinks addObject:sectionDict];
-                    [sectionDict release];
-                    [arrSubContent release];
-                }
+                    NSArray *arrsubSection=[dictsection valueForKey:@"subsections"];
+                    for (int k=0; k<[arrsubSection count];k++) {
+                        NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
+                        NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
+
+                        [sectionDict setObject:[NSString stringWithFormat:@"%@",[dicmainsections valueForKey:@"menu_name"]] forKey:@"section_name"];
+                        NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
+                        NSMutableArray *arroptions=[[NSMutableArray alloc]init];
+                        for (int x=0; x<[arrContent count]; x++) {
+                            
+                            NSDictionary *dictsuboptions=[arrContent objectAtIndex:x];
+                            
+                            [arroptions addObject:dictsuboptions];
+                            
+                        }
+                        [sectionDict setObject:arroptions forKey:@"contents"];
+
+                        [arrCustomDrinks addObject:sectionDict];
+                        
+                        [sectionDict release];
+                        [arroptions release];
+
+                    }
             }
+        
         }
     }
 
@@ -1860,7 +1851,7 @@
                 for (int k=0; k<[arrsubSection count];k++) {
                     NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
                     NSMutableDictionary *sectionDict=[[NSMutableDictionary alloc]init];
-                    [sectionDict setObject:[NSString stringWithFormat:@"%@->%@",[dicmainsections valueForKey:@"menu_name"],[dictsection valueForKey:@"section_name"]] forKey:@"section_name"];
+                    [sectionDict setObject:[NSString stringWithFormat:@"%@",[dicmainsections valueForKey:@"menu_name"]] forKey:@"section_name"];
                     NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
                     NSMutableArray *arrSubContent=[[NSMutableArray alloc]init];
                     for (int x=0; x<[arrContent count]; x++) {
@@ -2551,6 +2542,10 @@
         isRequestForOrder=NO;
         isRequestForGettingsPastOrders=NO;
         isRequestForGettingsOrders=NO;
+        isGettingCocktails=NO;
+        isGettingIngradients=NO;
+        isGetFavorites=NO;
+        
         [self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
         [self.sharedController checkInAtBartsyVenueWithId:[dictVenue objectForKey:@"venueId"] delegate:self];
     }else{
@@ -3319,11 +3314,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if(isSelectedForDrinks)
     {
-       /* if(dictPeopleSelectedForDrink!=nil)
-        {
-            [dictPeopleSelectedForDrink release];
-            dictPeopleSelectedForDrink=nil;
-        }*/
+      
         if (![[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"]) {
             
             [self createAlertViewWithTitle:@"" message:@"Please checkin the venue to proceed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
@@ -3336,10 +3327,30 @@
         
     if(indexPath.section>1&&indexPath.section<2+[arrCustomDrinks count]){
         
+      /*  NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+        
+        id object=[arrCustomDrinks objectAtIndex:indexPath.section-2];
+        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+        
+        
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrContents objectAtIndex:indexPath.row]];
+        [dictItem setObject:@"" forKey:@"specialInstructions"];
+        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [arrMultiItemOrders addObject:dictItem];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [arrMultiItemOrders release];
+        [dictItem release];
+        [self showMultiItemOrderUI];*/
+
+        
+        id object=[arrCustomDrinks objectAtIndex:indexPath.section-2];
+        NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
         CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
         obj.viewtype=2;
         NSLog(@"%@\n %@",[arrCustomDrinks objectAtIndex:indexPath.section-2],[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks]);
-        obj.dictitemdetails=[arrCustomDrinks objectAtIndex:indexPath.section-2];
+        obj.dictitemdetails=[arrContents objectAtIndex:indexPath.row];
         obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
         [self.navigationController pushViewController:obj animated:YES];
             
@@ -3359,7 +3370,7 @@
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrMultiItemOrders release];
-        
+        [dictItem release];
         [self showMultiItemOrderUI];
 
 
