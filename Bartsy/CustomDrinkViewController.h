@@ -12,18 +12,20 @@
 enum{
     
     LocuMenuView=1,
-    CustomDrinksView=2
+    CustomDrinksView=2,
+    CocktailsView=3
     
 };
 typedef NSInteger viewtype;
 @interface CustomDrinkViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 {
-    NSDictionary *dictCustomDrinks;
     NSDictionary *dictitemdetails;
     
     NSInteger viewtype;
     
     int arrIndex;
+    
+    NSInteger favoriteID;
 }
 @property(nonatomic,retain) NSDictionary *dictCustomDrinks;
 @property(nonatomic,retain) NSDictionary *dictitemdetails;
