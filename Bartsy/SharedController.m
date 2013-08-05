@@ -1008,7 +1008,7 @@ static SharedController *sharedController;
 -(void)saveFavoriteDrinkbyvenueID:(NSString*)venuID bartsyID:(NSString*)bartsyID description:(NSString*)description specialinstruction:(NSString*)instructions itemlist:(NSArray*)itemlist delegate:(id)aDelegate{
     
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/saveFavoriteDrink",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/saveFavorite",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -1041,7 +1041,7 @@ static SharedController *sharedController;
 -(void)getFavoriteDrinksbybartsyID:(NSString*)strbartsyID venueID:(NSString*)venueID delegate:(id)aDelegate{
     
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/getFavoriteDrinks",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/getFavorite",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -1139,7 +1139,7 @@ static SharedController *sharedController;
 -(void)DeleteFavoritebyfavoriteID:(NSString*)favoriteID venueID:(NSString*)venueID bydelegate:(id)aDelegate{
     
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/deleteFavoriteDrink",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/deleteFavorite",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];

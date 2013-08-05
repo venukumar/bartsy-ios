@@ -110,6 +110,7 @@
     else if(appDelegate.isCmgForShowingOrderUI==YES)
     {
         [self showMultiItemOrderUI];
+        appDelegate.isCmgForShowingOrderUI=NO;
     }
     
     
@@ -3404,16 +3405,16 @@
         [dictItem release];
         [self showMultiItemOrderUI];*/
 
-        
         id object=[arrCustomDrinks objectAtIndex:indexPath.section-2];
         NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
         CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
         obj.viewtype=2;
-        NSLog(@"%@\n %@",[arrCustomDrinks objectAtIndex:indexPath.section-2],[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks]);
+        NSLog(@"%@",[arrContents objectAtIndex:indexPath.row]);
         obj.dictitemdetails=[arrContents objectAtIndex:indexPath.row];
+        [arrContents release];
        // obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
         [self.navigationController pushViewController:obj animated:YES];
-            
+
     }else if (indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]){
         
         NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
