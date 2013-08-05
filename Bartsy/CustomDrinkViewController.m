@@ -21,7 +21,7 @@
 @end
 
 @implementation CustomDrinkViewController
-@synthesize dictCustomDrinks,viewtype,dictitemdetails,arrIndex;
+@synthesize dictCustomDrinks,viewtype,dictitemdetails,arrIndex,isEdit;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -154,7 +154,6 @@
     
     //if Viewtype is 2 it is ingradient selection
     if (viewtype==2) {
-        NSLog(@"%@",dictitemdetails);
 
         NSArray *arrOptionGroup=[dictitemdetails valueForKey:@"option_groups"];
         for (NSDictionary *dictoption in arrOptionGroup) {
@@ -182,6 +181,7 @@
                     [arrCustomDrinks addObject:dictlist];
                     [arrlist release];
                     [tempDict release];
+                    [dictlist release];
                 }
             }
         }
@@ -232,11 +232,6 @@
         }*/
        
     }
-     if (viewtype==3) {
-         
-         
-
-     }
     
     UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
     buttonFav.frame=CGRectMake(265, 328, 13, 13);
@@ -285,7 +280,8 @@
     [mainScroll addSubview:lbllike];
     [lbllike release];
     
-    
+    isGettingFavorites=YES;
+    [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
 }
 
 -(void)btnBack_TouchUpInside
@@ -412,13 +408,14 @@
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
         NSArray *arraytemp=[subitemArray valueForKey:@"options"];
         NSArray *array2temp=[arraytemp objectAtIndex:0];
-    if ([[[array2temp objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
-                    button.selected=YES;
-                    lblPrice.text=[NSString stringWithFormat:@"$%@",[[array2temp objectAtIndex:indexPath.row] valueForKey:@"price"]];
-    }else{
-                    lblPrice.text=nil;
-                    button.selected=NO;
-    }
+        if ([[[array2temp objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+            button.selected=YES;
+            lblPrice.text=[NSString stringWithFormat:@"$%@",[[array2temp objectAtIndex:indexPath.row] valueForKey:@"price"]];
+        }else{
+            lblPrice.text=nil;
+            button.selected=NO;
+        }
+
     }else{
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
         if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
@@ -461,9 +458,9 @@
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
         NSArray *arrytemp=[subitemArray valueForKey:@"options"];
         NSArray *array2temp=[arrytemp objectAtIndex:0];
-
         NSMutableDictionary *dict=[array2temp objectAtIndex:indexPath.row];
-        if ([[dict valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"]) {
+        NSDictionary *dictType=[subitemArray objectAtIndex:0];
+        if ([[dictType valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"]) {
             
             [self Reset_Selection:indexPath.section];
         }
@@ -521,7 +518,6 @@
     }
     UIButton *orderBtn=(UIButton*)[mainScroll viewWithTag:556];
      [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%.2f",@"Add to order",floatTotalPrice] forState:UIControlStateNormal];
-    NSLog(@"%f",floatTotalPrice);
 }
 
 //Saving the Order details
@@ -590,18 +586,16 @@
                      
                      [arritemlist addObject:dictitemlist];
                      [dictitemlist release];*/
-                    
                 }
                 [arrTemp release];
             }
-            
         }
         
-        
         [dictItem setObject:itemdescription forKey:@"description"];
-        
+        [dictItem setObject:[NSNumber numberWithInt:2] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
-        
+        [dictItem setObject:dictitemdetails forKey:@"DictInfo"];
+
         if (txtFieldSpecialInstructions.text.length>0) {
             [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
             
@@ -664,15 +658,29 @@
             [dictitemlist release];
             
         }else if (viewtype==2){
-            NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"options"]];
-            NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+            NSMutableArray *arrTemp;NSArray *filterarr;
+            if ([dictTemp objectForKey:@"option_groups"]) {
+                arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"option_groups"]];
+                NSArray *array2temp=[arrTemp objectAtIndex:0];
+                filterarr=[[array2temp valueForKey:@"options"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+            }else{
+            arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"options"]];
+            filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+            }
+            
             for (NSDictionary *dictTemp in filterarr)
             {
                 NSMutableDictionary *dictitemlist=[[NSMutableDictionary alloc]init];
                 
                 [dictitemlist setObject:[dictTemp valueForKey:@"name"] forKey:@"itemName"];
                 [dictitemlist setObject:[dictTemp valueForKey:@"price"] forKey:@"basePrice"];
-                [dictitemlist setObject:[dictTemp valueForKey:@"ingredientId"] forKey:@"itemId"];
+                if ([dictTemp valueForKey:@"id"]) {
+                    [dictitemlist setObject:[dictTemp valueForKey:@"id"] forKey:@"itemId"];
+
+                }else{
+                    [dictitemlist setObject:@"" forKey:@"itemId"];
+
+                }
                 [dictitemlist setObject:@"" forKey:@"title"];
                 [dictitemlist setObject:@"1" forKey:@"quantity"];
                 [dictitemlist setObject:@"" forKey:@"description"];
@@ -685,10 +693,8 @@
         }
     }
     
-    NSLog(@"arritemlist %@",arritemlist);
     isSaveFavorite=YES;
     [self createProgressViewToParentView:self.view withTitle:@"Saving your favorite drink..."];
-    
     [self.sharedController saveFavoriteDrinkbyvenueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] description:@"" specialinstruction:@"" itemlist:arritemlist delegate:self];
     [arritemlist release];
     
@@ -724,20 +730,28 @@
     if (isSaveFavorite) {
         
         isSaveFavorite=YES;
-    if([[result objectForKey:@"errorCode"] integerValue]!=0)
-    {
-        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-    }
-    else
-    {
-        NSLog(@"result %@",result);
-        [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
-        favoriteID=[[result valueForKey:@"favoriteDrinkId"] integerValue];
-        NSLog(@"fa%d",favoriteID);
-    }
+        if([[result objectForKey:@"errorCode"] integerValue]!=0)
+        {
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
+        else
+        {
+           // NSLog(@"result %@",result);
+            [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+            favoriteID=[[result valueForKey:@"favoriteDrinkId"] integerValue];
+            NSLog(@"fa%d",favoriteID);
+        }
+
     }else if (isDeleteFavorite){
         
         isDeleteFavorite=YES;
+        
+    }else if (isGettingFavorites){
+        isGettingFavorites=NO;
+        if([[result objectForKey:@"errorCode"] integerValue]==0)
+        {
+            NSLog(@"result %@",result);
+        }
     }
 }
 
@@ -753,7 +767,6 @@
     UIScrollView *scrollview=(UIScrollView*)[self.view viewWithTag:554];
         
     [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y-90)];
-    
     
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

@@ -22,6 +22,8 @@
     UITextField *txtField;
     UIView *viewForTextField;
     NSMutableArray *bubbleData;
+    
+    BOOL isSelectedTxtField;
 
 }
 @end
@@ -151,6 +153,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillBeHidden:) name:UIKeyboardWillHideNotification object:nil];
     
+    isSelectedTxtField=NO;
     //Marking as all message read
     [[appDelegate.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = nil;
 }
@@ -221,6 +224,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
+    isSelectedTxtField=YES;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
@@ -264,6 +268,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
+    isSelectedTxtField=NO;
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
@@ -291,6 +296,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
             bubbleTableView.frame = CGRectMake(0, 44, 320, 332);
         }
     }];
+    
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;              // called when 'return' key pressed. return NO to ignore.
 {
@@ -355,7 +361,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         {
             NSDictionary *dictMsg=[arrayForMessages objectAtIndex:i];
             NSDateFormatter *dateFormatter = [NSDateFormatter new];
-            dateFormatter.dateFormat       = @"yyyy-MM-dd'T'HH:mm:ssZ";
+            dateFormatter.dateFormat       = @"dd MMM yyyy HH':'mm':'ss 'GMT";
             NSDate *date    = [dateFormatter dateFromString:[dictMsg objectForKey:@"date"]];
             
             BOOL isSentByMe=NO;
