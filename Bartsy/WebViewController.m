@@ -45,9 +45,13 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
     
-    UILabel *lblMsg=[self createLabelWithTitle:@"Account Settings" frame:CGRectMake(0, 0, 320, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:1];
+    UILabel *lblMsg=[self createLabelWithTitle:@"" frame:CGRectMake(0, 0, 320, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:1];
     lblMsg.textAlignment=NSTextAlignmentCenter;
     lblMsg.text=[strTitle substringToIndex:[strTitle length]];
+    if(viewtype==1)
+    {
+        lblMsg.text=[strTitle substringToIndex:[strTitle length]-2];
+    }
     [self.view addSubview:lblMsg];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -55,6 +59,12 @@
     [btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
+    
+    
+    UIButton *btnBack1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack1.frame = CGRectMake(10, 11, 40, 30);
+    [btnBack1 addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnBack1];
     
     NSString *strPth = [[NSBundle mainBundle]pathForResource:strHTMLPath ofType:@"html"];
     

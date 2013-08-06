@@ -23,6 +23,11 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBarHidden=NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -129,6 +134,7 @@
     WebViewController *obj=[[WebViewController alloc]init];
     obj.strTitle=[NSString stringWithFormat:@"%@",sender.titleLabel.text];
     obj.strHTMLPath=[NSString stringWithFormat:@"%i",sender.tag/111];
+    obj.viewtype=1;
     [self.navigationController pushViewController:obj animated:YES];
     [obj release];
 }
