@@ -481,7 +481,8 @@
         
         isRequestForOrder=YES;
         self.sharedController=[SharedController sharedController];
-        if([[dictPeopleSelectedForDrink objectForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]])
+        //NSLog(@":%@",dictPeopleSelectedForDrink);
+        if([[dictPeopleSelectedForDrink objectForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] ] )
         {
             [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
         }
@@ -530,10 +531,9 @@
             [dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"description"];
             [dictitem setObject:@"1" forKey:@"quantity"];
             [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"basePrice"];
-            [dictitem setObject:@"1" forKey:@"quantity"];
+           
             if ([dicttemp valueForKey:@"id"]) {
                 [dictitem setObject:[NSString stringWithFormat:@"%@",[dicttemp valueForKey:@"id"]] forKey:@"itemId"];
-
             }else{
                 [dictitem setObject:@"" forKey:@"itemId"];
 
@@ -551,7 +551,6 @@
         
         dictPeopleSelectedForDrink=nil;
 
-        
         [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
         UIView *Backgroundview=(UIView*)[self.view viewWithTag:2221];
         [Backgroundview removeFromSuperview];
@@ -689,8 +688,42 @@
       else
         [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         
-        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-        [tblView reloadData];
+        if (isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO && isGettingIngradients==NO && isRequestCheckin==NO && isGettingCocktails==NO && isUserCheckOut==NO && isGetFavorites==NO) {
+            
+            isGettingIngradients=YES;
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [self.sharedController getIngredientsListWithVenueId:[dictVenue objectForKey:@"venueId"] delegate:self];
+        }else if (isGettingIngradients){
+           
+            isGettingIngradients=NO;
+            isSelectedForDrinks=YES;
+            isSelectedForPastOrders=NO;
+            isSelectedForPeople=NO;
+            
+            isGettingCocktails=YES;
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [self.sharedController getCocktailsbyvenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+        }else if (isGettingCocktails){
+            
+            isGettingCocktails=NO;
+            //isSelectedForDrinks=YES;
+            isSelectedForPastOrders=NO;
+            isSelectedForPeople=NO;
+
+            isGetFavorites=YES;
+            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+        }else if (isGetFavorites){
+            
+            isGetFavorites=NO;
+            isGettingCocktails=NO;
+            isSelectedForDrinks=YES;
+            isSelectedForPastOrders=NO;
+            isSelectedForPeople=NO;
+            
+            UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+            [tblView reloadData];
+        }
 
     }
     else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO && isGettingIngradients==NO && isRequestCheckin==NO && isGettingCocktails==NO && isUserCheckOut==NO && isGetFavorites==NO)
@@ -703,8 +736,6 @@
             
             [self modifyData];
 
-        
-               
         isGettingIngradients=YES;
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getIngredientsListWithVenueId:[dictVenue objectForKey:@"venueId"] delegate:self];
@@ -940,42 +971,50 @@
         [self.sharedController getCocktailsbyvenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
     }else if (isRequestCheckin){
         
-        //home-footer
-        UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(40,10,21, 21)];
-        homecheckimg.image=[UIImage imageNamed:@"home-footer"];
-        homecheckimg.tag=5555;
-        [self.tabBarController.tabBar addSubview:homecheckimg];
-        [self getPeopleList];
-        isRequestCheckin=NO;
-        [topscrollView removeFromSuperview];
-        [pagectrl removeFromSuperview];
-        UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3333];
-        [checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
-        checkinBtn.tag=3334;
-        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
-        appDelegate.intOrderCount=0;
-        [[NSUserDefaults standardUserDefaults]setObject:[dictVenue objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
-        [[NSUserDefaults standardUserDefaults]setObject:dictVenue forKey:@"VenueDetails"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        [appDelegate startTimerToCheckHeartBeat];
-        
-        //storing the tax percentage
-        [[NSUserDefaults standardUserDefaults] setFloat:[[dictVenue valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
-        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        segmentControl.frame=CGRectMake(2, 47, 316, 40);
-        UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
-        if (IS_IPHONE_5)
-            tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323+90);
-         else
-             tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323);
-        
-        UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
-        if(IS_IPHONE_5)
-            scrollViewOld.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 327+90-42);
+        if([[result objectForKey:@"errorCode"] integerValue]==1)
+        {
+            [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        }
         else
-            scrollViewOld.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42);
+        {
+            //home-footer
+            UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(40,10,21, 21)];
+            homecheckimg.image=[UIImage imageNamed:@"home-footer"];
+            homecheckimg.tag=5555;
+            [self.tabBarController.tabBar addSubview:homecheckimg];
+            [self getPeopleList];
+            isRequestCheckin=NO;
+            [topscrollView removeFromSuperview];
+            [pagectrl removeFromSuperview];
+            UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3333];
+            [checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
+            checkinBtn.tag=3334;
+            [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
+            appDelegate.intOrderCount=0;
+            [[NSUserDefaults standardUserDefaults]setObject:[dictVenue objectForKey:@"venueId"] forKey:@"CheckInVenueId"];
+            [[NSUserDefaults standardUserDefaults]setObject:dictVenue forKey:@"VenueDetails"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            [appDelegate startTimerToCheckHeartBeat];
+            
+            //storing the tax percentage
+            [[NSUserDefaults standardUserDefaults] setFloat:[[dictVenue valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
+            UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+            segmentControl.frame=CGRectMake(2, 47, 316, 40);
+            UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
+            if (IS_IPHONE_5)
+                tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323+90);
+            else
+                tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323);
+            
+            UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
+            if(IS_IPHONE_5)
+                scrollViewOld.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 327+90-42);
+            else
+                scrollViewOld.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 375-42);
+        }
+       
     }else if (isGettingCocktails){
         isGettingCocktails=NO;
         isSelectedForDrinks=YES;
@@ -1019,7 +1058,7 @@
         }
         else
         {
-            [self ParsingGetFavorites:result];
+           // [self ParsingGetFavorites:result];
             //NSLog(@"result %@",result);
         }
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
@@ -1102,7 +1141,6 @@
     //Backgroundview.userInteractionEnabled=NO;
     //Backgroundview.exclusiveTouch=NO;
     [self.view addSubview:Backgroundview];
-    //[[[UIApplication sharedApplication] keyWindow] addSubview:Backgroundview];
     
     UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 55, 320, 350)];
     popupView.backgroundColor=[UIColor blackColor];
@@ -1236,7 +1274,6 @@
     [btn10 setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateSelected];
     [btn10 addTarget:self action:@selector(btnTip_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     [popupView addSubview:btn10];
-    
     
     UILabel *lbl10 = [[UILabel alloc]initWithFrame:CGRectMake(60, popupscrollview.frame.origin.y+popupscrollview.frame.size.height+15, 30, 30)];
     lbl10.font = [UIFont boldSystemFontOfSize:12];
@@ -1684,20 +1721,25 @@
     }else{
         
     }
-    
-    
+
 }
 
 -(void)Button_Popview:(UIButton*)sender{
     
     NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
     NSDictionary *dicttemp=[arrMultiItemOrders objectAtIndex:sender.tag];
+    
+    if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2) {
+        
+        return;
+        
+    }
     CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
     obj.viewtype=[[dicttemp valueForKey:@"Viewtype"] integerValue];
     obj.arrIndex=sender.tag;
     obj.isEdit=YES;
     if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2)
-        obj.dictitemdetails=[dicttemp valueForKey:@"DictInfo"];
+        obj.arrayEditInfo=[dicttemp valueForKey:@"ArrayInfo"];
     else
         obj.dictitemdetails=[arrMultiItemOrders objectAtIndex:sender.tag];
     
@@ -1914,8 +1956,6 @@
             
         }
     
-    NSLog(@"arrcoctails %@",arrCocktailsSection);
-    
 }
 
 #pragma mark------------Parsing GetFavorites Data
@@ -1941,11 +1981,13 @@
                 for (int x=0; x<[arrContent count]; x++) {
                     
                     NSDictionary *dictContent=[arrContent objectAtIndex:x];
-                    [arrSubContent addObject:dictContent];
+                    //[arrSubContent addObject:dictContent];
+                    [arrFavorites addObject:dictContent];
+
                 }
                 
-                [sectionDict setObject:arrSubContent forKey:@"contents"];
-                [arrFavorites addObject:sectionDict];
+                //[sectionDict setObject:arrSubContent forKey:@"contents"];
+                //[arrFavorites addObject:sectionDict];
                 [sectionDict release];
                 [arrSubContent release];
             }
@@ -2348,7 +2390,6 @@
             lblDescription.textAlignment = NSTextAlignmentLeft;
             [viewBg2 addSubview:lblDescription];
             
-            
             UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+5+(j*15)+40, 45, 15)];
             lblPrice.font = [UIFont systemFontOfSize:12];
             lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
@@ -2363,14 +2404,12 @@
             if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
             {
                 lblPrice.text=@"-";
-
             }
             [lblDescription release];
             [lblPrice release];
             
         }
                 
-        
         UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
         floattipvalue= ([[dict objectForKey:@"basePrice"] floatValue]*[[dict objectForKey:@"tipPercentage"] floatValue])/100;
@@ -2906,6 +2945,7 @@
             }
 
         }else if(section>1+[arrCustomDrinks count]+[arrMenu count]&&section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
+            
             headerTitle.text=[[arrCocktailsSection objectAtIndex:section-(2+[arrCustomDrinks count]+[arrMenu count])] valueForKey:@"section_name"];
         }
         
@@ -2934,6 +2974,7 @@
                 return [arrPastOrders count];
         }else if (section==1){
             NSMutableDictionary *dict=[ArrMenuSections objectAtIndex:section];
+           
             BOOL isSelected=!([[dict objectForKey:@"Arrow"] integerValue]);
 
             if (isSelected)
@@ -2971,6 +3012,14 @@
     else if(isSelectedForPeople)
     {
         return [arrPeople count];
+    }else if (isSelectedForPastOrders==YES){
+        if ([arrPastOrders count]) {
+            return [arrPastOrders count];
+        }
+        else
+        {
+            return 1;
+        }
     }
     else
     {
@@ -2984,6 +3033,10 @@
         return 80;
     else if(isSelectedForPeople)
         return 75;
+    else if(isSelectedForPastOrders == YES)
+    {
+        return 150;
+    }
     else
         return 0;
 }
@@ -3020,9 +3073,8 @@
         }
         else if (indexPath.section==1)
         {
-             NSArray *arrFavTemp=[[arrFavorites objectAtIndex:indexPath.row] valueForKey:@"contents"];
-            NSDictionary *dictFav=[arrFavTemp objectAtIndex:0];
-            lblName.text=[dictFav valueForKey:@"name"];
+             NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
+            lblName.text=[dictFavTemp valueForKey:@"name"];
         }
         else if (indexPath.section>1&&indexPath.section<2+[arrCustomDrinks count])
         {
@@ -3070,13 +3122,13 @@
         }
         else if(indexPath.section==1)
         {
-            NSArray *arrFavTemp=[[arrFavorites objectAtIndex:indexPath.row] valueForKey:@"contents"];
-            NSDictionary *dictFav=[arrFavTemp objectAtIndex:0];
-            if ([dictFav valueForKey:@"description"])
+            NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
+            if ([dictFavTemp valueForKey:@"description"])
             
-                lblDescription.text=[dictFav valueForKey:@"description"];
+                lblDescription.text=[dictFavTemp valueForKey:@"description"];
             else
                 lblDescription.text=@"";
+            
         }else if (indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]){
             id object=[arrMenu objectAtIndex:indexPath.section-(2+[arrCustomDrinks count])];
 
@@ -3105,10 +3157,11 @@
             lblPrice.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"totalPrice"];
         }else if (indexPath.section==1){
             
-            NSArray *arrFavTemp=[[arrFavorites objectAtIndex:indexPath.row] valueForKey:@"contents"];
-            NSDictionary *dictFav=[arrFavTemp objectAtIndex:0];
-            lblPrice.text=[dictFav valueForKey:@"price"];
-
+            NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
+            if ([dictFavTemp valueForKey:@"price"]) {
+                 lblPrice.text=[NSString stringWithFormat:@"%@",[dictFavTemp valueForKey:@"price"]];
+            }else
+                lblPrice.text=@"0";
         }
         else if(indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count])
         {
@@ -3223,11 +3276,19 @@
         {
             NSDictionary *dictForOrder = [arrPastOrders objectAtIndex:indexPath.row];
             
-            UILabel *lblItemName = [self createLabelWithTitle:[dictForOrder objectForKey:@"itemName"] frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            NSMutableString *itemName = [[NSMutableString alloc]init];
+            NSArray *array1Temp=[dictForOrder valueForKey:@"itemsList"];
+            for (int i=0; i<array1Temp.count; i++) {
+                NSDictionary *dict1Temp=[array1Temp objectAtIndex:i];
+                
+                [itemName appendFormat:@"%@ ",[dict1Temp valueForKey:@"itemName"]];
+                
+            }
+            UILabel *lblItemName = [self createLabelWithTitle:itemName frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
-            
+            [itemName release];
             UILabel *lbldescription;
             if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]])
                 lbldescription = [self createLabelWithTitle:@"" frame:CGRectMake(10, 20,250, 35) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
@@ -3395,7 +3456,7 @@
             [self createAlertViewWithTitle:@"" message:@"Please checkin the venue to proceed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
             return;
         }
-        if ( (indexPath.section==0 || indexPath.section==1)) {
+        if (indexPath.section==0 ) {
             return;
         }
         
@@ -3440,7 +3501,7 @@
         [dictItem setObject:@"" forKey:@"specialInstructions"];
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
-
+        [dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
         [arrMultiItemOrders addObject:dictItem];
         
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
@@ -3826,6 +3887,32 @@
         obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
         [self.navigationController pushViewController:obj animated:YES];*/
         
+    }else if (indexPath.section==1){
+        NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
+        if ([dictFavTemp valueForKey:@"option_groups"]) {
+           // NSLog(@"%@",dictFavTemp);
+        }else{
+         
+            NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+            
+            id object=[arrFavorites objectAtIndex:indexPath.row];
+            
+            NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
+            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"Menu" forKey:@"ItemType"];
+            [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
+            //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
+            [arrMultiItemOrders addObject:dictItem];
+            
+            [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+            [[NSUserDefaults standardUserDefaults]synchronize];
+            [arrMultiItemOrders release];
+            [dictItem release];
+            
+            [self showMultiItemOrderUI];
+        }
+        
+
     }
    }
     else if(isSelectedForPeople)

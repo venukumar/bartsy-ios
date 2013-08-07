@@ -166,6 +166,7 @@
         txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(30, 117, 268, 40) tag:111 delegate:self];
         txtFldEmailId.clearButtonMode = UITextFieldViewModeWhileEditing;
         txtFldEmailId.text=[[[NSUserDefaults standardUserDefaults]objectForKey:@"LoginDetails"] objectForKey:@"bartsyLogin"];
+       
         txtFldEmailId.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
         txtFldEmailId.placeholder=@"Email";
         txtFldEmailId.font=[UIFont systemFontOfSize:15];
@@ -346,7 +347,7 @@
         UILabel *lblEmailId=[self createLabelWithTitle:@"Email*" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
         lblEmailId.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblEmailId];
-        
+    
         txtFldEmailId=[self createTextFieldWithFrame:CGRectMake(110, 10, 180, 30) tag:111 delegate:self];
         if(isReloadingForProfileVisible==NO)
             txtFldEmailId.text=[dictResult objectForKey:@"username"];
@@ -1505,13 +1506,12 @@
             return;
     }
         
-    
     if([txtFldNickName.text length])
     {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         NSString *strEncryptedCreditCardNumber=[Crypto encryptRSA:creditCardInfo.cardNumber key:strServerPublicKey];
         
-            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[dictResult objectForKey:@"username"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:strEncryptedCreditCardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] firstName:strFirstName lastname:strLastName delegate:self];
+            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[[NSUserDefaults standardUserDefaults] valueForKey:@"FBUsername"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:strEncryptedCreditCardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] firstName:strFirstName lastname:strLastName delegate:self];
             
     }
     
@@ -1578,6 +1578,7 @@
                 [dictResult release];
                 dictResult=nil;
                 dictResult=[[NSMutableDictionary alloc] init];
+                
             }
             
             if([[result objectForKey:@"bartsyLogin"] length])
@@ -1667,6 +1668,11 @@
             [dictResult release];
             dictResult=nil;
             dictResult=[[NSMutableDictionary alloc] initWithDictionary:result];
+            
+            if (appDelegate.isLoginForFB) {
+                [[NSUserDefaults standardUserDefaults]setObject:[result valueForKey:@"username"] forKey:@"FBUsername"];
+                
+            }
         }
         
         isProfileExistsCheck=YES;
@@ -1692,10 +1698,12 @@
             [[NSUserDefaults standardUserDefaults]setObject:[result objectForKey:@"oauthCode"] forKey:@"oauthCode"];
             if(appDelegate.isLoginForFB)
             {
+               
                 [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:[dictResult objectForKey:@"username"],@"facebookUserName",[dictResult objectForKey:@"id"],@"facebookId", nil] forKey:@"LoginDetails"];
             }
             else if(auth!=nil)
             {
+
                 [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:[dictResult objectForKey:@"googleid"],@"googleId",[dictResult objectForKey:@"googleusername"],@"googleUserName", nil] forKey:@"LoginDetails"];
             }
             

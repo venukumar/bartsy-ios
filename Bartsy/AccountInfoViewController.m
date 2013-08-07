@@ -143,7 +143,7 @@
     UIView *headerview=[[UIView alloc]initWithFrame:CGRectMake(0,0, 320,60)];
     headerview.backgroundColor=[UIColor blackColor];
 
-   UILabel *title=[[UILabel alloc]initWithFrame:CGRectMake(20,-5,200,30)];
+   UILabel *title=[[UILabel alloc]initWithFrame:CGRectMake(12,-5,200,30)];
     title.textAlignment=NSTextAlignmentLeft;
     title.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
     title.text=@"Past Orders";
@@ -152,14 +152,14 @@
     [headerview addSubview:title ];
     [title release];
     
-    UILabel *checkinlbl=[[UILabel alloc]initWithFrame:CGRectMake(260,-5,60,30)];
+   /* UILabel *checkinlbl=[[UILabel alloc]initWithFrame:CGRectMake(260,-5,60,30)];
     checkinlbl.textAlignment=NSTextAlignmentLeft;
     checkinlbl.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
     checkinlbl.text=@"Check-ins";
     checkinlbl.backgroundColor=[UIColor clearColor];
     checkinlbl.font=[UIFont systemFontOfSize:12];
     [headerview addSubview:checkinlbl ];
-    [checkinlbl release];
+    [checkinlbl release];*/
     return [headerview autorelease];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -179,7 +179,16 @@
     }
     cell.selectionStyle=UITableViewCellSelectionStyleNone;
     cell.venuename.text=[NSString stringWithFormat:@"Venue:%@",[dictForOrder objectForKey:@"venueName"]];
-    cell.title.text=[NSString stringWithFormat:@"Item:%@",[dictForOrder objectForKey:@"itemName"]];
+    NSMutableString *itemName = [[NSMutableString alloc]init];
+    NSArray *array1Temp=[dictForOrder valueForKey:@"itemsList"];
+    for (int i=0; i<array1Temp.count; i++) {
+        NSDictionary *dict1Temp=[array1Temp objectAtIndex:i];
+        
+        [itemName appendFormat:@"%@ ",[dict1Temp valueForKey:@"itemName"]];
+        
+    }
+    cell.title.text=[NSString stringWithFormat:@"Item:%@",itemName];
+    [itemName release];
     if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]])
       cell.description.text=@"";
     else

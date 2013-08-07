@@ -1041,7 +1041,7 @@ static SharedController *sharedController;
 -(void)getFavoriteDrinksbybartsyID:(NSString*)strbartsyID venueID:(NSString*)venueID delegate:(id)aDelegate{
     
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/getFavorite",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/favorites/getFavorites",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];

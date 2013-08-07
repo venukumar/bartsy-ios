@@ -17,11 +17,11 @@
     BOOL isDeleteFavorite;
     BOOL isGettingFavorites;
 }
-
+@property(nonatomic,retain)NSMutableArray *arrCustomDrinks;
 @end
 
 @implementation CustomDrinkViewController
-@synthesize dictCustomDrinks,viewtype,dictitemdetails,arrIndex,isEdit;
+@synthesize dictCustomDrinks,viewtype,dictitemdetails,arrIndex,isEdit,arrayEditInfo,arrCustomDrinks;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -65,7 +65,7 @@
     [mainScroll setScrollEnabled:YES];
     [self.view addSubview:mainScroll];
   
-    if (viewtype==2 ) {
+    if (viewtype==2 || ([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)) {
         
         UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 367-100) style:UITableViewStylePlain];
         tblView.dataSource=self;
@@ -150,95 +150,47 @@
     [orderBtn addTarget:self action:@selector(Button_Order:) forControlEvents:UIControlEventTouchUpInside];
     orderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
     [mainScroll addSubview:orderBtn];
-    [arrCustomDrinks addObject:dictitemdetails];
-    
-    //if Viewtype is 2 it is ingradient selection
-    if (viewtype==2) {
-
-        NSArray *arrOptionGroup=[dictitemdetails valueForKey:@"option_groups"];
-        for (NSDictionary *dictoption in arrOptionGroup) {
-         
-            if ([[dictoption valueForKey:@"text"] isEqualToString:@"Mixers"]) {
-                
-                NSArray *arroption=[dictoption valueForKey:@"options"];
-                for (int k=0;k<[arroption count];k++) {
-                    
-                    //[arrCustomDrinks addObject:[[NSUserDefaults standardUserDefaults] dictionaryForKey:[arroption objectAtIndex:k] ]];
-                    NSDictionary *tempDict=[[NSDictionary alloc
-                                        ]initWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey:[arroption objectAtIndex:k] ]];
-                    NSMutableDictionary *dictlist=[[NSMutableDictionary alloc]init];
-                    [dictlist setObject:[tempDict valueForKey:@"text"] forKey:@"text"];
-
-                    [dictlist setObject:[tempDict valueForKey:@"type"] forKey:@"type"];
-                    NSMutableArray *arrlist=[[NSMutableArray alloc]init];
-                    for (int l=0;l<[[tempDict valueForKey:@"options"] count];l++) {
-                        NSMutableDictionary *dicttemp=[NSMutableDictionary dictionaryWithDictionary:[[tempDict valueForKey:@"options"] objectAtIndex:l]];
-                        [dicttemp setObject:@"0" forKey:@"Selected"];
-                        [arrlist addObject:dicttemp];
-                        
-                    }
-                    [dictlist setObject:arrlist forKey:@"options"];
-                    [arrCustomDrinks addObject:dictlist];
-                    [arrlist release];
-                    [tempDict release];
-                    [dictlist release];
-                }
-            }
-        }
-      
-      /*  NSArray *arrGroup=[dictitemdetails valueForKey:@"option_groups"];
-        for (NSDictionary *dictoption in arrGroup) {
-            
-            if(![[dictoption valueForKey:@"text"] isEqualToString:@"Mixers"]){
-                
-                [dictitemdetails setValue:dictoption forKey:@"option_groups"];
-                break;
-            }
-        }*/
+    if (!isEdit || viewtype==1||viewtype==3) {
         
-    //Parsing the GetIngradient Data
-       /* NSArray *tempArray=[dictCustomDrinks valueForKey:@"menus"];
-        for (NSDictionary *dict in tempArray) {
-            if ([[dict valueForKey:@"show_menu"] isEqualToString:@"No"]) {
-                
-                NSArray *temp2Array=[dict valueForKey:@"sections"];
-                for (NSDictionary *dict in temp2Array) {
-                    
-                        for (NSDictionary *tempdict in [dict valueForKey:@"subsections"]) {
-                            NSArray *subitemArray=[tempdict valueForKey:@"contents"];
-                            
-                            
-                            for (NSDictionary *tempdict in subitemArray) {
-                                NSMutableDictionary *dictcontentlist=[[NSMutableDictionary alloc]init];
-                                [dictcontentlist setObject:[NSString stringWithFormat:@"%@",[tempdict valueForKey:@"name"]] forKey:@"section_name"];
-                                NSArray *arroption=[tempdict valueForKey:@"option_groups"];
-                                NSMutableArray *arrcontentlist=[[NSMutableArray alloc]init];
-                                for (NSDictionary *tempdict in arroption) {
-                                    for (NSDictionary *tempDict in [tempdict valueForKey:@"options"]) {
-                                        [tempDict setValue:@"0" forKey:@"Selected"];
-                                        [arrcontentlist addObject:tempDict];
-                                    }
-                                    
-                                }
-                                [dictcontentlist setObject:arrcontentlist forKey:@"content"];
-                                [arrCustomDrinks addObject:dictcontentlist];
-                                [arrcontentlist release];
-                                [dictcontentlist release];
-                            }
-                            
-                        }
-                }
-            }
-        }*/
-       
+        [arrCustomDrinks addObject:dictitemdetails];
     }
     
+    //if Viewtype is 2 it is ingradient selection
+    if (viewtype==2 && isEdit==NO) {
+ 
+        [self HashmappingIngradients:dictitemdetails];
+                      
+    }else if ([dictitemdetails valueForKey:@"option_groups"] && viewtype==3){
+        [arrCustomDrinks removeAllObjects];
+      /*  NSArray *arrOptionGroup=[dictitemdetails valueForKey:@"option_groups"];
+ 
+        for (NSDictionary *dictoption in arrOptionGroup) {
+ 
+            NSArray *arroption=[dictoption valueForKey:@"options"];
+            NSMutableArray *arrOptionList=[[NSMutableArray alloc]init];
+            NSMutableDictionary *dictOptionList=[[NSMutableDictionary alloc]init];
+            [dictOptionList setObject:[dictoption valueForKey:@"text"] forKey:@"text"];
+            
+            [dictOptionList setObject:[dictoption valueForKey:@"type"] forKey:@"type"];
+            for (int k=0;k<[arroption count];k++) {
+                NSMutableDictionary *dict1Temp=[NSMutableDictionary dictionaryWithDictionary:[arroption objectAtIndex:k]];
+                
+                //NSDictionary *dictOptionGroup=[[NSDictionary alloc]initWithDictionary:[[NSUserDefaults standardUserDefaults]valueForKey:[dict1Temp valueForKey:@"name"] ]];
+                [dict1Temp setObject:@"0" forKey:@"Selected"];
+
+                [arrOptionList addObject:dict1Temp];
+                
+            }
+            [dictOptionList setObject:arrOptionList forKey:@"options"];
+            [arrCustomDrinks addObject:dictOptionList];
+        }*/
+    }
+    NSLog(@"%@",arrCustomDrinks);
     UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
     buttonFav.frame=CGRectMake(265, 328, 13, 13);
     if (IS_IPHONE_5)
         buttonFav.frame=CGRectMake(265, 418, 13, 13);
    
-    
     buttonFav.tag=557;
     [buttonFav addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
     [buttonFav setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
@@ -256,7 +208,6 @@
     lblfav.font=[UIFont systemFontOfSize:9];
     [mainScroll addSubview:lblfav];
     [lblfav release];
-    
     
     UIButton *buttonLike=[UIButton buttonWithType:UIButtonTypeCustom];
     buttonLike.frame=CGRectMake(265, 346, 13, 13);
@@ -282,6 +233,50 @@
     
     isGettingFavorites=YES;
     [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
+
+   if(viewtype==2 && isEdit==YES){
+      
+       [arrCustomDrinks addObjectsFromArray: arrayEditInfo];
+       NSLog(@"%@",arrayEditInfo);
+
+       UITableView *tableview=(UITableView*)[self.view viewWithTag:555];
+       [tableview reloadData];
+   }
+}
+
+-(void)HashmappingIngradients:(NSDictionary*)Dict{
+    
+    NSArray *arrOptionGroup=[Dict valueForKey:@"option_groups"];
+    for (NSDictionary *dictoption in arrOptionGroup) {
+        
+        if ([[dictoption valueForKey:@"text"] isEqualToString:@"Mixers"]) {
+            
+            NSArray *arroption=[dictoption valueForKey:@"options"];
+            for (int k=0;k<[arroption count];k++) {
+                
+                //[arrCustomDrinks addObject:[[NSUserDefaults standardUserDefaults] dictionaryForKey:[arroption objectAtIndex:k] ]];
+                NSDictionary *tempDict=[[NSDictionary alloc
+                                         ]initWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey:[arroption objectAtIndex:k] ]];
+                NSMutableDictionary *dictlist=[[NSMutableDictionary alloc]init];
+                [dictlist setObject:[tempDict valueForKey:@"text"] forKey:@"text"];
+                
+                [dictlist setObject:[tempDict valueForKey:@"type"] forKey:@"type"];
+                NSMutableArray *arrlist=[[NSMutableArray alloc]init];
+                for (int l=0;l<[[tempDict valueForKey:@"options"] count];l++) {
+                    NSMutableDictionary *dicttemp=[NSMutableDictionary dictionaryWithDictionary:[[tempDict valueForKey:@"options"] objectAtIndex:l]];
+                    [dicttemp setObject:@"0" forKey:@"Selected"];
+                    [arrlist addObject:dicttemp];
+                    
+                }
+                [dictlist setObject:arrlist forKey:@"options"];
+                [arrCustomDrinks addObject:dictlist];
+                [arrlist release];
+                [tempDict release];
+                [dictlist release];
+            }
+        }
+    }
+
 }
 
 -(void)btnBack_TouchUpInside
@@ -344,12 +339,17 @@
     [headerTitle setBackgroundColor:[UIColor clearColor]];
     [headerTitle setFont:[UIFont boldSystemFontOfSize:16]];
     [headerTitle setTextColor:[UIColor whiteColor]];
+    if (!([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
+        
     if (section==0) {
         headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"name"];
 
     }else{
         headerTitle.text=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"text"];
 
+     }
+    }else{
+       headerTitle.text=@"Cocktails";
     }
     [headerView addSubview:headerTitle];
         
@@ -358,18 +358,25 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section==0) {
-        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"option_groups"];
-        NSArray *arraytemp=[subitemArray valueForKey:@"options"];
-        NSArray *array2temp=[arraytemp objectAtIndex:0];
-
-        return [array2temp count];
+    if (!([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
         
+        if (section==0) {
+            NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"option_groups"];
+            NSArray *arraytemp=[subitemArray valueForKey:@"options"];
+            NSArray *array2temp=[arraytemp objectAtIndex:0];
+            
+            return [array2temp count];
+            
+        }else{
+            NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"options"];
+            return [subitemArray count];
+        }
+
     }else{
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"options"];
         return [subitemArray count];
     }
-   
+      
     return nil;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -404,44 +411,69 @@
     lblPrice.adjustsFontSizeToFitWidth=YES;
     lblPrice.backgroundColor=[UIColor clearColor];
     [cell.contentView addSubview:lblPrice];
-    if (indexPath.section==0) {
-        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
-        NSArray *arraytemp=[subitemArray valueForKey:@"options"];
-        NSArray *array2temp=[arraytemp objectAtIndex:0];
-        if ([[[array2temp objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
-            button.selected=YES;
-            lblPrice.text=[NSString stringWithFormat:@"$%@",[[array2temp objectAtIndex:indexPath.row] valueForKey:@"price"]];
-        }else{
-            lblPrice.text=nil;
-            button.selected=NO;
-        }
+     if (!([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
+         if (indexPath.section==0) {
+             NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
+             NSArray *arraytemp=[subitemArray valueForKey:@"options"];
+             NSArray *array2temp=[arraytemp objectAtIndex:0];
+             NSLog(@"%@",arrCustomDrinks);
+             if ([[[array2temp objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+                 button.selected=YES;
+                 lblPrice.text=[NSString stringWithFormat:@"$%@",[[array2temp objectAtIndex:indexPath.row] valueForKey:@"price"]];
+             }else{
+                 lblPrice.text=nil;
+                 button.selected=NO;
+             }
+             
+         }else{
+             NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
+             if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+                 button.selected=YES;
+                 lblPrice.text=[NSString stringWithFormat:@"$%@",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
+             }else{
+                 
+                 lblPrice.text=nil;
+                 button.selected=NO;
+             }
+             
+         }
 
-    }else{
-        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
-        if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
-            button.selected=YES;
-            lblPrice.text=[NSString stringWithFormat:@"$%@",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
-        }else{
-            
-            lblPrice.text=nil;
-            button.selected=NO;
-        }
+     }else{
+         
+         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
+         if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+             button.selected=YES;
+             lblPrice.text=[NSString stringWithFormat:@"$%@",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
+         }else{
+             
+             lblPrice.text=nil;
+             button.selected=NO;
+         }
 
-    }
-         [lblPrice release];
-    if (indexPath.section==0) {
-         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
-
-        NSArray *arrytemp=[subitemArray valueForKey:@"options"];
-        NSArray *array2temp=[arrytemp objectAtIndex:0];
-
-        lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[array2temp objectAtIndex:indexPath.row] valueForKey:@"name"],[[array2temp objectAtIndex:indexPath.row] valueForKey:@"price"]];
-
-    }else{
-        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
-        lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"],[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
-    }
+     }
+        [lblPrice release];
     
+     if (!([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
+         
+         if (indexPath.section==0) {
+             NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
+             
+             NSArray *arrytemp=[subitemArray valueForKey:@"options"];
+             NSArray *array2temp=[arrytemp objectAtIndex:0];
+             
+             lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[array2temp objectAtIndex:indexPath.row] valueForKey:@"name"],[[array2temp objectAtIndex:indexPath.row] valueForKey:@"price"]];
+             
+         }else{
+             NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
+             lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"],[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
+         }
+
+     }else{
+         
+         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
+         lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"],[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
+     }
+        
     [lblName release];
     return cell;
 }
@@ -452,21 +484,42 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (indexPath.section==0) {
-        
-        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
-        NSArray *arrytemp=[subitemArray valueForKey:@"options"];
-        NSArray *array2temp=[arrytemp objectAtIndex:0];
-        NSMutableDictionary *dict=[array2temp objectAtIndex:indexPath.row];
-        NSDictionary *dictType=[subitemArray objectAtIndex:0];
-        if ([[dictType valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"]) {
+    if (!([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
+        if (indexPath.section==0) {
             
-            [self Reset_Selection:indexPath.section];
-        }
-        [dict setObject:@"1" forKey:@"Selected"];
+            NSMutableArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
+            NSArray *arrytemp=[subitemArray valueForKey:@"options"];
+            NSMutableArray *array2temp=[arrytemp objectAtIndex:0];
+            NSMutableDictionary *dict=[array2temp objectAtIndex:indexPath.row];
+            NSDictionary *dictType=[subitemArray objectAtIndex:0];
+            if ([[dictType valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"]) {
                 
+                [self Reset_Selection:indexPath.section];
+            }
+            [dict setObject:@"1" forKey:@"Selected"];
+            
+        }else{
+            id item=[arrCustomDrinks objectAtIndex:indexPath.section];
+            if ([[item valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"]) {
+                
+                [self Reset_Selection:indexPath.section];
+            }
+            NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
+            if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"Selected"] integerValue]==1) {
+                
+                NSMutableDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
+                [dict setObject:@"0" forKey:@"Selected"];
+            }else{
+                
+                NSMutableDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
+                [dict setObject:@"1" forKey:@"Selected"];
+            }
+        }
+        [tableView reloadData];
+        
+        [self calculateTotalPrice:indexPath.section];
     }else{
+        
         id item=[arrCustomDrinks objectAtIndex:indexPath.section];
         if ([[item valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"]) {
             
@@ -478,15 +531,16 @@
             NSMutableDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
             [dict setObject:@"0" forKey:@"Selected"];
         }else{
-
+            
             NSMutableDictionary *dict=[subitemArray objectAtIndex:indexPath.row];
             [dict setObject:@"1" forKey:@"Selected"];
         }
+
+        [tableView reloadData];
+        [self calculateTotalPrice:indexPath.section];
     }
     
-    [tableView reloadData];
-
-    [self calculateTotalPrice:indexPath.section];
+   
 }
 
 -(void)calculateTotalPrice:(int)section
@@ -495,17 +549,32 @@
     
     for (int i=0;i<[arrCustomDrinks count]; i++)
     {
-        NSDictionary *dict=[arrCustomDrinks objectAtIndex:i];
-        if ([dict valueForKey:@"option_groups"]) {
-            NSMutableArray *arrytemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"option_groups"]];
-            NSArray *array2temp=[arrytemp objectAtIndex:0];
-            NSArray *filterarr=[[array2temp valueForKey:@"options"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
-            for (NSDictionary *dictTemp in filterarr)
-            {
-                floatTotalPrice+=[[dictTemp objectForKey:@"price"] floatValue];
-            }
-        }else{
+        if (!([dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
             
+            NSDictionary *dict=[arrCustomDrinks objectAtIndex:i];
+            if ([dict valueForKey:@"option_groups"]) {
+                NSMutableArray *arrytemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"option_groups"]];
+                NSArray *array2temp=[arrytemp objectAtIndex:0];
+                NSArray *filterarr=[[array2temp valueForKey:@"options"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+                for (NSDictionary *dictTemp in filterarr)
+                {
+                    floatTotalPrice+=[[dictTemp objectForKey:@"price"] floatValue];
+                }
+            }else{
+                
+                NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"options"]];
+                NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+                for (NSDictionary *dictTemp in filterarr)
+                {
+                    floatTotalPrice+=[[dictTemp objectForKey:@"price"] floatValue];
+                }
+                [arrTemp release];
+                
+            }
+
+        }else{
+            NSDictionary *dict=[arrCustomDrinks objectAtIndex:i];
+
             NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"options"]];
             NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
             for (NSDictionary *dictTemp in filterarr)
@@ -513,7 +582,6 @@
                 floatTotalPrice+=[[dictTemp objectForKey:@"price"] floatValue];
             }
             [arrTemp release];
-
         }
     }
     UIButton *orderBtn=(UIButton*)[mainScroll viewWithTag:556];
@@ -554,14 +622,16 @@
         
         float totalPrice = 0.0;
         NSMutableString *itemdescription =[[NSMutableString alloc]init];
-        
+        NSLog(@"%@",arrCustomDrinks);
+
         for (NSDictionary *dictTemp in arrCustomDrinks) {
             
             if (![dictTemp valueForKey:@"options"]) {
                 NSArray *arrTemp=[dictTemp valueForKey:@"option_groups"];
                 NSArray *array2temp=[arrTemp objectAtIndex:0];
+                NSArray *filterarr=[[array2temp valueForKey:@"options"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
 
-                for (NSDictionary *dict1Temp in [array2temp valueForKey:@"options"])
+                for (NSDictionary *dict1Temp in filterarr)
                 {
                     totalPrice+=[[dict1Temp valueForKey:@"price"] floatValue];
                     [itemdescription appendFormat:@"%@,",[dict1Temp valueForKey:@"name"]];
@@ -578,23 +648,16 @@
                     
                     totalPrice+=[[dictTemp valueForKey:@"price"] floatValue];
                     [itemdescription appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
-                    /*[dictitemlist setObject:[dictTemp valueForKey:@"name"] forKey:@"itemName"];
-                     [dictitemlist setObject:[dictTemp valueForKey:@"price"] forKey:@"basePrice"];
-                     [dictitemlist setObject:[dictTemp valueForKey:@"ingredientId"] forKey:@"itemId"];
-                     [dictitemlist setObject:@"" forKey:@"title"];
-                     [dictitemlist setObject:@"" forKey:@"description"];
-                     
-                     [arritemlist addObject:dictitemlist];
-                     [dictitemlist release];*/
+                   
                 }
                 [arrTemp release];
             }
         }
-        
+
         [dictItem setObject:itemdescription forKey:@"description"];
         [dictItem setObject:[NSNumber numberWithInt:2] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
-        [dictItem setObject:dictitemdetails forKey:@"DictInfo"];
+        [dictItem setObject:arrCustomDrinks forKey:@"ArrayInfo"];
 
         if (txtFieldSpecialInstructions.text.length>0) {
             [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
@@ -634,6 +697,55 @@
         [dictItem release];
         [self.navigationController popViewControllerAnimated:YES];
         
+    }else if ([dictitemdetails valueForKey:@"option_groups"] && viewtype==3){
+        
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]init];
+        
+        float totalPrice = 0.0;
+        NSMutableString *itemdescription =[[NSMutableString alloc]init];
+        NSLog(@"%@",arrCustomDrinks);
+        
+        for (NSDictionary *dictTemp in arrCustomDrinks) {
+            
+                NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"options"]];
+                NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
+                
+                for (NSDictionary *dictTemp in filterarr)
+                {
+                    
+                    totalPrice+=[[dictTemp valueForKey:@"price"] floatValue];
+                    [itemdescription appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
+                    
+                }
+            
+                [arrTemp release];
+        }
+        if (itemdescription.length>0) {
+            [itemdescription deleteCharactersInRange:NSMakeRange([itemdescription length]-1, 1)];
+        }
+        [dictItem setObject:itemdescription forKey:@"name"];
+        [dictItem setObject:itemdescription forKey:@"description"];
+        [dictItem setObject:[NSNumber numberWithInt:2] forKey:@"Viewtype"];
+        [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
+        [dictItem setObject:arrCustomDrinks forKey:@"ArrayInfo"];
+        
+        if (txtFieldSpecialInstructions.text.length>0) {
+            [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+            
+        }else{
+            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            
+        }
+        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [arrMultiItemOrders addObject:dictItem];
+        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        appDelegate.isCmgForShowingOrderUI=YES;
+        [arrMultiItemOrders release];
+        [dictItem release];
+        [itemdescription release];
+        [self.navigationController popViewControllerAnimated:YES];
+        
     }
 
 }
@@ -641,6 +753,7 @@
 //Saving the favorite
 -(void)SavingFavorites{
     
+    UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
 
     NSMutableArray *arritemlist=[[NSMutableArray alloc]init];
     for (NSDictionary *dictTemp in arrCustomDrinks) {
@@ -649,10 +762,10 @@
             NSMutableDictionary *dictitemlist=[[NSMutableDictionary alloc]init];
             
             [dictitemlist setObject:[dictTemp valueForKey:@"name"] forKey:@"itemName"];
-            [dictitemlist setObject:[dictTemp valueForKey:@"price"] forKey:@"basePrice"];
+            [dictitemlist setObject:[NSString stringWithFormat:@"%@",[dictTemp valueForKey:@"price"]] forKey:@"basePrice"];
+            [dictitemlist setObject:@"1" forKey:@"quantity"];
             [dictitemlist setObject:@"" forKey:@"itemId"];
             [dictitemlist setObject:@"" forKey:@"title"];
-            [dictitemlist setObject:@"1" forKey:@"quantity"];
             [dictitemlist setObject:[dictTemp valueForKey:@"description"] forKey:@"description"];
             [arritemlist addObject:dictitemlist];
             [dictitemlist release];
@@ -690,38 +803,130 @@
                 
             }
             [arrTemp release];
+        }else if ([dictitemdetails valueForKey:@"option_groups"] && viewtype==3){
+            
+            break;
         }
     }
     
     isSaveFavorite=YES;
+    NSString *strDescription;
+    if ([txtFieldSpecialInstructions.text length]>0) {
+        strDescription=txtFieldSpecialInstructions.text;
+    }else{
+        strDescription=@"";
+    }
     [self createProgressViewToParentView:self.view withTitle:@"Saving your favorite drink..."];
-    [self.sharedController saveFavoriteDrinkbyvenueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] description:@"" specialinstruction:@"" itemlist:arritemlist delegate:self];
+    [self.sharedController saveFavoriteDrinkbyvenueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] bartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] description:strDescription specialinstruction:@"" itemlist:arritemlist delegate:self];
     [arritemlist release];
     
 }
 
 -(void)Reset_Selection:(int)section{
     
-        NSDictionary *dict=[arrCustomDrinks objectAtIndex:section];
+        NSMutableDictionary *dict=[arrCustomDrinks objectAtIndex:section];
         if ([dict valueForKey:@"option_groups"]) {
             NSMutableArray *arrytemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"option_groups"]];
             NSArray *array2temp=[arrytemp objectAtIndex:0];
             NSArray *filterarr=[[array2temp valueForKey:@"options"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
-            for (NSDictionary *dictTemp in filterarr)
+            
+            for (int i=0;i<[filterarr count];i++)
             {
-                [dictTemp setObject:@"0" forKey:@"Selected"];
+                NSMutableDictionary *dict1Temp=[filterarr objectAtIndex:i];
+                [dict1Temp setObject:@"0" forKey:@"Selected"];
             }
             [arrytemp release];
         }else{
             
             NSMutableArray *arrTemp=[[NSMutableArray alloc]initWithArray:[dict objectForKey:@"options"]];
             NSArray *filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
-            for (NSDictionary *dictTemp in filterarr)
+            for (NSMutableDictionary *dictTemp in filterarr)
             {
                 [dictTemp setObject:@"0" forKey:@"Selected"];
             }
             [arrTemp release];
         }
+}
+
+-(void)ParsingFavorites:(id)results{
+    
+    NSArray *arrmenues=[results valueForKey:@"menus"];
+    for (int i=0; i<[arrmenues count]; i++) {
+        NSDictionary *dicmainsections=[arrmenues objectAtIndex:i];
+        
+        NSArray *arrsections=[dicmainsections valueForKey:@"sections"];
+        for (int j=0; j<[arrsections count]; j++) {
+            
+            NSDictionary *dictsection=[arrsections objectAtIndex:j];
+            
+            NSArray *arrsubSection=[dictsection valueForKey:@"subsections"];
+            for (int k=0; k<[arrsubSection count];k++) {
+                NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
+                NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
+
+                for (int l=0; l<arrContent.count;l++) {
+                    NSDictionary *dictContent=[arrContent objectAtIndex:l];
+                    NSLog(@"%@",dictContent);
+                    if (viewtype==1 || (![dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
+                        
+                        if ([[dictContent valueForKey:@"name"] isEqualToString:[dictitemdetails valueForKey:@"name"] ]) {
+                            
+                            favoriteID=[[dictContent valueForKey:@"favorite_id"] integerValue];
+                            UIButton *btnFav=(UIButton*)[mainScroll viewWithTag:557];
+                            btnFav.selected=YES;
+                            NSLog(@"%d",favoriteID);
+                            
+                        }
+                    }else if (viewtype==2){
+                        
+                        for (int x=0;i<arrCustomDrinks.count; i++) {
+                            if ([[dictContent valueForKey:@"name"] isEqualToString:[[arrCustomDrinks objectAtIndex:x] valueForKey:@"name"] ]) {
+                                
+                                favoriteID=[[dictContent valueForKey:@"FavID"] integerValue];
+                                UIButton *btnFav=(UIButton*)[mainScroll viewWithTag:557];
+                                btnFav.selected=YES;
+                                NSLog(@"%d",favoriteID);
+                            }
+ 
+                        }
+                  }
+
+                  
+                }
+    
+            }
+        }
+    }
+    /*for (int x=0; x<[arrFavorites count]; x++) {
+      
+        NSDictionary *dict1Temp=[arrFavorites objectAtIndex:x];
+        NSArray *array1Temp=[dict1Temp valueForKey:@"contents"];
+        for (int y=0; y<array1Temp.count; y++) {
+            NSDictionary *dict2Temp=[array1Temp objectAtIndex:y];
+            if (viewtype==1 || (![dictitemdetails valueForKey:@"option_groups"] && viewtype==3)){
+                
+                if ([[dict2Temp valueForKey:@"name"] isEqualToString:[dictitemdetails valueForKey:@"name"] ]) {
+                    
+                    favoriteID=[[dict1Temp valueForKey:@"FavID"] integerValue];
+                    NSLog(@"%d",favoriteID);
+                    
+                }
+            }else if (viewtype==2){
+                
+                if ([[dict2Temp valueForKey:@"name"] isEqualToString:[[arrCustomDrinks objectAtIndex:y] valueForKey:@"name"] ]) {
+                    
+                    favoriteID=[[dict1Temp valueForKey:@"FavID"] integerValue];
+                    NSLog(@"%d",favoriteID);
+                }
+            }
+            
+        }
+       
+    }
+    if ([arrFavorites containsObject:@""]) {
+        
+    }*/
+    
 }
 #pragma mark------------Webservice Delegates
 -(void)controllerDidFinishLoadingWithResult:(id)result
@@ -750,7 +955,9 @@
         isGettingFavorites=NO;
         if([[result objectForKey:@"errorCode"] integerValue]==0)
         {
-            NSLog(@"result %@",result);
+            //[self ParsingFavorites:result];
+            //NSLog(@"result %@",result);
+            
         }
     }
 }

@@ -26,12 +26,12 @@ typedef NSInteger viewtype;
     int arrIndex;
     
     NSInteger favoriteID;
-    
+    NSMutableArray *arrayEditInfo;
     BOOL isEdit;
 }
 @property(nonatomic,retain) NSDictionary *dictCustomDrinks;
 @property(nonatomic,retain) NSDictionary *dictitemdetails;
-
+@property(nonatomic,retain)NSMutableArray *arrayEditInfo;
 @property(nonatomic,assign)NSInteger viewtype;
 @property(nonatomic,assign)int arrIndex;
 @property(nonatomic,assign)BOOL isEdit;
