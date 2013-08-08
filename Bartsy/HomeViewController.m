@@ -60,6 +60,7 @@
     NSDictionary *dictMainCustomDrinks;
     
     NSMutableArray *arrCocktailsSection;
+    NSMutableArray *arrRecentOrders;
    
     float ttlPrice;
 }
@@ -189,7 +190,8 @@
     
     arrCustomDrinks=[NSMutableArray new];
     arrCocktailsSection=[[NSMutableArray alloc]init];
-
+    arrRecentOrders=[[NSMutableArray alloc]init];
+    
     arrStatus=[[NSArray alloc]initWithObjects:@"Waiting for bartender to accept",@"Your order was rejected by Bartender",@"Order was accepted",@"Ready for pickup",@"Order is Failed",@"Order is picked up",@"Noshow",@"Your order was timedout",@"Your order was rejected",@"Drink offered",@"Past Order", nil];
     arrOrdersOffered=[[NSMutableArray alloc]init];
     
@@ -525,23 +527,25 @@
         NSMutableArray *arritemlist=[[NSMutableArray alloc]init];
         for (NSDictionary *dicttemp in arrMultiItems)
         {
+            
             NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
-            [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
-            [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
-            [dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"description"];
-            [dictitem setObject:@"1" forKey:@"quantity"];
-            [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"basePrice"];
-           
-            if ([dicttemp valueForKey:@"id"]) {
-                [dictitem setObject:[NSString stringWithFormat:@"%@",[dicttemp valueForKey:@"id"]] forKey:@"itemId"];
-            }else{
-                [dictitem setObject:@"" forKey:@"itemId"];
-
-            }
-            //[dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"specialInstructions"];
-            [arritemlist addObject:dictitem];
-            [dictitem release];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
+                [dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"description"];
+                [dictitem setObject:@"1" forKey:@"quantity"];
+                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"basePrice"];
+                
+                if ([dicttemp valueForKey:@"id"]) {
+                    [dictitem setObject:[NSString stringWithFormat:@"%@",[dicttemp valueForKey:@"id"]] forKey:@"itemId"];
+                }else{
+                    [dictitem setObject:@"" forKey:@"itemId"];
+                    
+                }
+                //[dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"specialInstructions"];
+                [arritemlist addObject:dictitem];
+                [dictitem release];
         }
+        
         float taxPrice=[[NSUserDefaults standardUserDefaults] floatForKey:@"percentTAX"];
         float floatTotalTax=(ttlPrice*((float)taxPrice/100));
 
@@ -1058,7 +1062,7 @@
         }
         else
         {
-           // [self ParsingGetFavorites:result];
+            [self ParsingGetFavorites:result];
             //NSLog(@"result %@",result);
         }
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
@@ -1727,7 +1731,7 @@
 -(void)Button_Popview:(UIButton*)sender{
     
     NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
-    NSDictionary *dicttemp=[arrMultiItemOrders objectAtIndex:sender.tag];
+    NSDictionary *dicttemp=[[NSDictionary alloc]initWithDictionary:[arrMultiItemOrders objectAtIndex:sender.tag]];
     
     if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2) {
         
@@ -1738,8 +1742,14 @@
     obj.viewtype=[[dicttemp valueForKey:@"Viewtype"] integerValue];
     obj.arrIndex=sender.tag;
     obj.isEdit=YES;
-    if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2)
-        obj.arrayEditInfo=[dicttemp valueForKey:@"ArrayInfo"];
+    
+    if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2){
+       
+        obj.dictitemdetails=[dicttemp valueForKey:@"DictInfo"];
+        
+        
+        //obj.arrayEditInfo=[dicttemp valueForKey:@"ArrayInfo"];
+    }
     else
         obj.dictitemdetails=[arrMultiItemOrders objectAtIndex:sender.tag];
     
@@ -1996,9 +2006,39 @@
     
     NSLog(@"arrfav %@",arrFavorites);
 }
+
+-(void)ParsingRecentOrders:(id)result{
+    
+    [arrRecentOrders removeAllObjects];
+    NSArray *arrmenues=[result valueForKey:@"menus"];
+    for (int i=0; i<[arrmenues count]; i++) {
+        NSDictionary *dicmainsections=[arrmenues objectAtIndex:i];
+        
+        NSArray *arrsections=[dicmainsections valueForKey:@"sections"];
+        for (int j=0; j<[arrsections count]; j++) {
+            
+            NSDictionary *dictsection=[arrsections objectAtIndex:j];
+            
+            NSArray *arrsubSection=[dictsection valueForKey:@"subsections"];
+            for (int k=0; k<[arrsubSection count];k++) {
+                NSDictionary *dictSubSection=[ arrsubSection objectAtIndex:k];
+                
+                NSArray *arrContent=[dictSubSection valueForKey:@"contents"];
+                for (int x=0; x<[arrContent count]; x++) {
+                    
+                    NSDictionary *dictContent=[arrContent objectAtIndex:x];
+                    [arrRecentOrders addObject:dictContent];
+                    
+                }
+                
+            }
+        }
+    }
+
+}
 -(void)getPastorderAsynchronously{
     
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/getPastOrders",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/order/getRecentOrders",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -2037,9 +2077,11 @@
              NSError *outError = nil;
              
              id result = [jsonParser objectWithString:jsonString error:&outError];
-             [arrPastOrders removeAllObjects];
-             [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
-             NSLog(@"arrPastOrders%@",arrPastOrders);
+             [arrRecentOrders removeAllObjects];
+             [self ParsingRecentOrders:result];
+             NSLog(@"arrRecentOrders%@",arrPastOrders);
+             
+            // [arrPastOrders addObjectsFromArray:[result objectForKey:@"pastOrders"]];
                isSelectedForDrinks=YES;
              if(0)//appDelegate.isComingForOrders==YES)
              {
@@ -2844,7 +2886,7 @@
             else
                 return 54;
         }else if (section==0){
-            if ([arrPastOrders count]==0)
+            if ([arrRecentOrders count]==0)
                 return 0;
             else
                 return 54;
@@ -2971,7 +3013,7 @@
             if (isSelected) 
                 return 0;
             else
-                return [arrPastOrders count];
+                return [arrRecentOrders count];
         }else if (section==1){
             NSMutableDictionary *dict=[ArrMenuSections objectAtIndex:section];
            
@@ -3059,17 +3101,19 @@
         UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(25,0, 270, 40)];
         if (indexPath.section==0)
         {
-            if ([[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemsList"]){
-                NSArray *multiorderArray=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemsList"];
-                NSMutableString *multilblname = [NSMutableString new];
-                for (NSDictionary *tempdic in multiorderArray) {
-                    [multilblname appendFormat:@"%@,", [tempdic valueForKey:@"itemName"]];
+               
+                NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
+            if ([dictRecTemp valueForKey:@"option_groups"]) {
+                NSArray *arrOption=[dictRecTemp valueForKey:@"option_groups"];
+                NSMutableString *titlename=[[NSMutableString alloc]init];
+                for (int x=0; x<arrOption.count; x++) {
+                    
+                    NSDictionary *dict2Options=[arrOption objectAtIndex:x];
+                    [titlename appendFormat:@"%@ ",[dict2Options valueForKey:@"name"]];
                 }
-                lblName.numberOfLines=2;
-                lblName.text=multilblname;
-                [multilblname release];
-            }else
-                lblName.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"itemName"];
+                lblName.text=titlename;
+                [titlename release];
+            }
         }
         else if (indexPath.section==1)
         {
@@ -3115,8 +3159,19 @@
         lblDescription.numberOfLines=3;
         if(indexPath.section==0)
         {
-            if (![[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"description"] isKindOfClass:[NSNull class]]) {
-                lblDescription.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"description"];
+            NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
+            if ([dictRecTemp valueForKey:@"option_groups"] ) {
+                
+                NSArray *arrOption=[dictRecTemp valueForKey:@"option_groups"];
+                NSMutableString *strdescription=[[NSMutableString alloc]init];
+                for (int x=0; x<arrOption.count; x++) {
+                    
+                    NSDictionary *dict2Options=[arrOption objectAtIndex:x];
+                    [strdescription appendFormat:@"%@ ",[dict2Options valueForKey:@"description"]];
+                }
+                lblDescription.text=strdescription;
+                [strdescription release];
+                
             }
             
         }
@@ -3154,7 +3209,20 @@
         UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 20, 50, 25)];
         if(indexPath.section==0)
         {
-            lblPrice.text=[[arrPastOrders objectAtIndex:indexPath.row] valueForKey:@"totalPrice"];
+            NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
+            if ([dictRecTemp valueForKey:@"option_groups"] ) {
+                NSArray *arrOption=[dictRecTemp valueForKey:@"option_groups"];
+                NSMutableString *strprice=[[NSMutableString alloc]init];
+                for (int x=0; x<arrOption.count; x++) {
+                    
+                    NSDictionary *dict2Options=[arrOption objectAtIndex:x];
+                    [strprice appendFormat:@"%@ ",[dict2Options valueForKey:@"order_price"]];
+                }
+                lblPrice.text=strprice;
+                [strprice release];
+
+            }
+
         }else if (indexPath.section==1){
             
             NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
@@ -3454,9 +3522,6 @@
         if (![[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"]) {
             
             [self createAlertViewWithTitle:@"" message:@"Please checkin the venue to proceed" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
-            return;
-        }
-        if (indexPath.section==0 ) {
             return;
         }
         
@@ -3912,6 +3977,26 @@
             [self showMultiItemOrderUI];
         }
         
+
+    }else if (indexPath.section==0){
+        
+        NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+        
+        id object=[arrRecentOrders objectAtIndex:indexPath.row];
+        
+        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
+        [dictItem setObject:@"" forKey:@"specialInstructions"];
+        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
+        //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
+        [arrMultiItemOrders addObject:dictItem];
+        
+        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        [arrMultiItemOrders release];
+        [dictItem release];
+        
+        [self showMultiItemOrderUI];
 
     }
    }

@@ -396,18 +396,31 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
         {
             if(intHeight>465)
             {
+                 if (isSelectedTxtField) {
                 if (bubbleData.count<4) 
                 [bubbleTableView setContentOffset:CGPointMake(0, intHeight-420) animated:YES];
                 else
                 [bubbleTableView setContentOffset:CGPointMake(0, intHeight-240) animated:YES];
+                 }else{
+                     [bubbleTableView setContentOffset:CGPointMake(0, intHeight-415) animated:YES];
+
+                 }
             }
         }
         else if(intHeight>382)
         {
-            if (bubbleData.count<4) {
-                [bubbleTableView setContentOffset:CGPointMake(0,intHeight-348) animated:YES];
-            }else
-               [bubbleTableView setContentOffset:CGPointMake(0,intHeight-160) animated:YES];
+            
+            if (isSelectedTxtField) {
+                
+                if (bubbleData.count<4) {
+                    [bubbleTableView setContentOffset:CGPointMake(0,intHeight-348) animated:YES];
+                }else
+                    [bubbleTableView setContentOffset:CGPointMake(0,intHeight-160) animated:YES];
+            }else{
+                
+                 [bubbleTableView setContentOffset:CGPointMake(0,intHeight-330) animated:YES];
+            }
+            
         }
         
         NSLog(@"TableView height is %i",intHeight);
