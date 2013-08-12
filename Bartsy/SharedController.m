@@ -1088,7 +1088,7 @@ static SharedController *sharedController;
     [dictProfile setValue:strDescription forKey:@"description"];
     [dictProfile setValue:arritemlist forKey:@"itemsList"];
    // [dictProfile setValue:@"custom" forKey:@"type"];
-    [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
+    [dictProfile setValue:strReceiverId forKey:@"receiverBartsyId"];
     //[dictProfile setValue:@"Take Care" forKey:@"specialInstructions"];
     [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
     
