@@ -868,10 +868,9 @@
                     }
                     NSArray *arroptionsgrp=[dictTemp valueForKey:@"option_groups"];
                     
-                    NSDictionary *dict2Temp=[arroptionsgrp objectAtIndex:0];
                     NSMutableDictionary *dictOptionItems=[[NSMutableDictionary alloc]init];
                     NSMutableArray *arrOptions=[[NSMutableArray alloc]init];
-                    NSArray *arroptionTemp=[dict2Temp valueForKey:@"options"];
+                    NSArray *arroptionTemp=[arroptionsgrp valueForKey:@"options"];
                     for (int k=0; k<arroptionTemp.count; k++) {
                         NSDictionary *dict3Temp=[arroptionTemp objectAtIndex:k];
                         NSMutableDictionary *dictsubItems=[[NSMutableDictionary alloc]init];
@@ -890,8 +889,8 @@
                         [dictsubItems release];
                         
                     }
-                    [dictOptionItems setObject:[dict2Temp valueForKey:@"type"] forKey:@"type"];
-                    [dictOptionItems setObject:[dict2Temp valueForKey:@"text"] forKey:@"text"];
+                    [dictOptionItems setObject:[arroptionsgrp valueForKey:@"type"] forKey:@"type"];
+                    [dictOptionItems setObject:[arroptionsgrp valueForKey:@"text"] forKey:@"text"];
                     [dictOptionItems setObject:arrOptions forKey:@"options"];
                     [arrOptionGroup addObject:dictOptionItems];
                 } else {
