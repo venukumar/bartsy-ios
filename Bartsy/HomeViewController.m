@@ -1830,7 +1830,7 @@
     
     if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2) {
         
-        return;
+        //return;
         
     }
     CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
@@ -3198,17 +3198,9 @@
         {
                
                 NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
-            if ([dictRecTemp valueForKey:@"option_groups"]) {
-                NSArray *arrOption=[dictRecTemp valueForKey:@"option_groups"];
-                NSMutableString *titlename=[[NSMutableString alloc]init];
-                for (int x=0; x<arrOption.count; x++) {
-                    
-                    NSDictionary *dict2Options=[arrOption objectAtIndex:x];
-                    [titlename appendFormat:@"%@ ",[dict2Options valueForKey:@"name"]];
-                }
-                lblName.text=titlename;
-                [titlename release];
-            }
+                
+                lblName.text=[dictRecTemp valueForKey:@"name"];
+            
         }
         else if (indexPath.section==1)
         {
@@ -3255,20 +3247,12 @@
         if(indexPath.section==0)
         {
             NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
-            if ([dictRecTemp valueForKey:@"option_groups"] ) {
-                
-                NSArray *arrOption=[dictRecTemp valueForKey:@"option_groups"];
-                NSMutableString *strdescription=[[NSMutableString alloc]init];
-                for (int x=0; x<arrOption.count; x++) {
-                    
-                    NSDictionary *dict2Options=[arrOption objectAtIndex:x];
-                    [strdescription appendFormat:@"%@ ",[dict2Options valueForKey:@"description"]];
-                }
-                lblDescription.text=strdescription;
-                [strdescription release];
-                
+            if ([dictRecTemp valueForKey:@"description"]) {
+                lblDescription.text=[dictRecTemp valueForKey:@"description"];
+
+            }else{
+                lblDescription.text=@"";
             }
-            
         }
         else if(indexPath.section==1)
         {
@@ -3305,18 +3289,11 @@
         if(indexPath.section==0)
         {
             NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
-            if ([dictRecTemp valueForKey:@"option_groups"] ) {
-                NSArray *arrOption=[dictRecTemp valueForKey:@"option_groups"];
-                NSMutableString *strprice=[[NSMutableString alloc]init];
-                for (int x=0; x<arrOption.count; x++) {
-                    
-                    NSDictionary *dict2Options=[arrOption objectAtIndex:x];
-                    [strprice appendFormat:@"%@ ",[dict2Options valueForKey:@"order_price"]];
-                }
-                lblPrice.text=strprice;
-                [strprice release];
-
-            }
+        
+            if ([dictRecTemp valueForKey:@"price"]) {
+                lblPrice.text=[NSString stringWithFormat:@"%@",[dictRecTemp valueForKey:@"price"]];
+            }else
+                lblPrice.text=@"0";
 
         }else if (indexPath.section==1){
             
@@ -4057,49 +4034,65 @@
                 obj.isEdit=NO;
                 obj.dictitemdetails=dictFavTemp;
                 [self.navigationController pushViewController:obj animated:YES];
+            }else{
+                
+                NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+                
+                id object=[arrFavorites objectAtIndex:indexPath.row];
+                
+                NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
+                [dictItem setObject:@"" forKey:@"specialInstructions"];
+                [dictItem setObject:@"Menu" forKey:@"ItemType"];
+                [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
+                //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
+                [arrMultiItemOrders addObject:dictItem];
+                
+                [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                [arrMultiItemOrders release];
+                [dictItem release];
+                
+                [self showMultiItemOrderUI];
+
             }
             
-        }else{
-         
-            NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
-            
-            id object=[arrFavorites objectAtIndex:indexPath.row];
-            
-            NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
-            [dictItem setObject:@"" forKey:@"specialInstructions"];
-            [dictItem setObject:@"Menu" forKey:@"ItemType"];
-            [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
-            //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
-            [arrMultiItemOrders addObject:dictItem];
-            
-            [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
-            [[NSUserDefaults standardUserDefaults]synchronize];
-            [arrMultiItemOrders release];
-            [dictItem release];
-            
-            [self showMultiItemOrderUI];
         }
-        
 
     }else if (indexPath.section==0){
         
-        NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
-        
-        id object=[arrRecentOrders objectAtIndex:indexPath.row];
-        
-        NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
-        [dictItem setObject:@"" forKey:@"specialInstructions"];
-        [dictItem setObject:@"Menu" forKey:@"ItemType"];
-        [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
-        //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
-        [arrMultiItemOrders addObject:dictItem];
-        
-        [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
-        [arrMultiItemOrders release];
-        [dictItem release];
-        
-        [self showMultiItemOrderUI];
+        NSDictionary *dictFavTemp=[arrRecentOrders objectAtIndex:indexPath.row];
+        if ([dictFavTemp valueForKey:@"option_groups"]) {
+            // NSLog(@"%@",dictFavTemp);
+            if ([dictFavTemp valueForKey:@"price"] && [[dictFavTemp valueForKey:@"price"] integerValue]==0) {
+                CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
+                obj.viewtype=4;
+                obj.isEdit=NO;
+                obj.dictitemdetails=dictFavTemp;
+                [self.navigationController pushViewController:obj animated:YES];
+            }else{
+                
+                NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+                
+                id object=[arrRecentOrders objectAtIndex:indexPath.row];
+                
+                NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
+                [dictItem setObject:@"" forKey:@"specialInstructions"];
+                [dictItem setObject:@"Menu" forKey:@"ItemType"];
+                [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
+                //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
+                [arrMultiItemOrders addObject:dictItem];
+                
+                [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+                [[NSUserDefaults standardUserDefaults]synchronize];
+                [arrMultiItemOrders release];
+                [dictItem release];
+                
+                [self showMultiItemOrderUI];
+                
+            }
+            
+        }
+
 
     }
    }
