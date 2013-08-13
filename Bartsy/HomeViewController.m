@@ -170,7 +170,7 @@
     [self.view addSubview:btnCheckOut];*/
     
     
-    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 8, 35, 35) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
+    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 6, 35, 35) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
     [self.view addSubview:checkinBtn];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -600,6 +600,7 @@
                                 [arrOptions addObject:dictsubItems];
                                 [dictsubItems release];
                                 
+                                
                             }
                             [dictOptionItems setObject:[dict1Temp valueForKey:@"type"] forKey:@"type"];
                             [dictOptionItems setObject:[dict1Temp valueForKey:@"text"] forKey:@"text"];
@@ -612,6 +613,97 @@
                 [arritemlist addObject:dictitem];
                
 
+            } else if([[dicttemp valueForKey:@"Viewtype"] integerValue]==3){
+                NSArray *arr1Temp=[dicttemp valueForKey:@"ArrayInfo"];
+                NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
+                NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
+                
+                for (int i=0; i<arr1Temp.count; i++) {
+                    NSDictionary *dict1Temp=[arr1Temp objectAtIndex:i];
+                
+                    NSMutableDictionary *dictOptionItems=[[NSMutableDictionary alloc]init];
+                        NSMutableArray *arrOptions=[[NSMutableArray alloc]init];
+                        NSArray *arroptionTemp=[dict1Temp valueForKey:@"options"];
+                        for (int k=0; k<arroptionTemp.count; k++) {
+                            NSDictionary *dict3Temp=[arroptionTemp objectAtIndex:k];
+                            NSMutableDictionary *dictsubItems=[[NSMutableDictionary alloc]init];
+                            
+                            [dictsubItems setObject:[dict3Temp valueForKey:@"name"] forKey:@"name"];
+                            if ([dict3Temp valueForKey:@"price"]) {
+                                [dictsubItems setObject:[dict3Temp valueForKey:@"price"] forKey:@"price"];
+                                
+                            }else{
+                                [dictsubItems setObject:@"0" forKey:@"price"];
+                            }
+                            if ([[dict3Temp valueForKey:@"Selected"] integerValue]==1 && [dict3Temp valueForKey:@"Selected"]) {
+                                [dictsubItems setObject:@"true" forKey:@"selected"];
+                                
+                            }else{
+                                [dictsubItems setObject:@"false" forKey:@"selected"];
+                                
+                            }
+                            
+                            [arrOptions addObject:dictsubItems];
+                            [dictsubItems release];
+                            
+                        }
+                       [dictOptionItems setObject:[dict1Temp valueForKey:@"name"] forKey:@"title"];
+                       [dictOptionItems setObject:[dict1Temp valueForKey:@"name"] forKey:@"itemName"];
+                       [dictOptionItems setObject:[dict1Temp valueForKey:@"description"] forKey:@"description"];
+                        [dictOptionItems setObject:[dict1Temp valueForKey:@"type"] forKey:@"type"];
+                        [dictOptionItems setObject:[dict1Temp valueForKey:@"text"] forKey:@"text"];
+                        [dictOptionItems setObject:arrOptions forKey:@"options"];
+                        [arrOptionGroup addObject:dictOptionItems];
+                    }
+                    
+                [dictitem setObject:arrOptionGroup forKey:@"option_groups"];
+                [arritemlist addObject:dictitem];
+                
+            }else if([[dicttemp valueForKey:@"Viewtype"] integerValue]==4){
+                NSArray *arr1Temp=[dicttemp valueForKey:@"ArrayInfo"];
+                NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
+                NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
+                
+                for (int i=0; i<arr1Temp.count; i++) {
+                    NSDictionary *dict1Temp=[arr1Temp objectAtIndex:i];
+                    
+                    NSMutableDictionary *dictOptionItems=[[NSMutableDictionary alloc]init];
+                    NSMutableArray *arrOptions=[[NSMutableArray alloc]init];
+                    NSArray *arroptionTemp=[dict1Temp valueForKey:@"options"];
+                    for (int k=0; k<arroptionTemp.count; k++) {
+                        NSDictionary *dict3Temp=[arroptionTemp objectAtIndex:k];
+                        NSMutableDictionary *dictsubItems=[[NSMutableDictionary alloc]init];
+                        
+                        [dictsubItems setObject:[dict3Temp valueForKey:@"name"] forKey:@"name"];
+                        if ([dict3Temp valueForKey:@"price"]) {
+                            [dictsubItems setObject:[dict3Temp valueForKey:@"price"] forKey:@"price"];
+                            
+                        }else{
+                            [dictsubItems setObject:@"0" forKey:@"price"];
+                        }
+                        if ([[dict3Temp valueForKey:@"Selected"] integerValue]==1 && [dict3Temp valueForKey:@"Selected"]) {
+                            [dictsubItems setObject:@"true" forKey:@"selected"];
+                            
+                        }else{
+                            [dictsubItems setObject:@"false" forKey:@"selected"];
+                            
+                        }
+                        
+                        [arrOptions addObject:dictsubItems];
+                        [dictsubItems release];
+                        
+                    }
+                    
+                    [dictOptionItems setObject:[dict1Temp valueForKey:@"type"] forKey:@"type"];
+                    [dictOptionItems setObject:[dict1Temp valueForKey:@"text"] forKey:@"text"];
+                    [dictOptionItems setObject:arrOptions forKey:@"options"];
+                    [arrOptionGroup addObject:dictOptionItems];
+                }
+                
+                [dictitem setObject:arrOptionGroup forKey:@"option_groups"];
+                [arritemlist addObject:dictitem];
+
+                
             }else{
                 NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
                 NSArray *tempArray=[[NSArray alloc]init];
@@ -4014,7 +4106,7 @@
 
         
         NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
-        //id object=[arrCustomDrinks objectAtIndex:indexPath.section-2];
+        id object=[tempArray objectAtIndex:indexPath.row];
        // NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
         if ([[tempArray objectAtIndex:indexPath.row] valueForKey:@"option_groups"]) {
             CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];

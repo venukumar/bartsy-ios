@@ -1450,6 +1450,7 @@
 
 -(void)saveProfileData:(NSDictionary*)dict
 {
+    
     isRequestForSavingProfile=YES;
     self.sharedController=[SharedController sharedController];
     //NSString *strId=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"id"] integerValue]];
@@ -1504,6 +1505,10 @@
     {
             [self createAlertViewWithTitle:@"" message:@"Username,password,profile picture, nick name should not be empty" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
             return;
+    }
+    if(![creditCardInfo.redactedCardNumber length]){
+        [self createAlertViewWithTitle:@"" message:@"Please,enter credit card information" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        return;
     }
         
     if([txtFldNickName.text length])
