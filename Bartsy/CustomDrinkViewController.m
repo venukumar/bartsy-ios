@@ -189,7 +189,10 @@
         //[arrCustomDrinks addObject:dictitemdetails];
         //NSLog(@"%@",arrCustomDrinks);
 
-    }else if (viewtype==2 && isEdit==NO) {
+    }
+    
+    //if Viewtype is 2 it is ingradient selection
+    if (viewtype==2 && isEdit==NO) {
  
         [self HashmappingIngradients:dictitemdetails];
                       
@@ -237,12 +240,6 @@
                 [dictOptionGroup release];
             }
         }
-    }else if (viewtype==4){
-        [arrCustomDrinks removeAllObjects];
-        NSArray *arrayTemp=[dictitemdetails valueForKey:@"option_groups"];
-        
-        [arrCustomDrinks addObjectsFromArray:arrayTemp];
-        
     }
     NSLog(@"%@",arrCustomDrinks);
     UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -293,7 +290,7 @@
     isGettingFavorites=YES;
     [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
 
-   /*if(viewtype==2 && isEdit==YES){
+   if(viewtype==2 && isEdit==YES){
       
        NSMutableArray *array=[[NSMutableArray alloc]initWithArray:arrayEditInfo];
        for (int i=0; i<array.count; i++) {
@@ -308,7 +305,13 @@
 
        UITableView *tableview=(UITableView*)[self.view viewWithTag:555];
        [tableview reloadData];
-   }*/
+   }else if (viewtype==4){
+       [arrCustomDrinks removeAllObjects];
+       NSArray *arrayTemp=[dictitemdetails valueForKey:@"option_groups"];
+       
+       [arrCustomDrinks addObjectsFromArray:arrayTemp];
+       
+   }
     
     [self calculateTotalPrice:0];
 }
