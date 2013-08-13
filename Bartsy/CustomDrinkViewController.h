@@ -14,6 +14,7 @@ enum{
     LocuMenuView=1,
     CustomDrinksView=2,
     CocktailsView=3,
+    RecentOrderView=4,
     FavoriteView=4
     
 };
@@ -30,7 +31,6 @@ typedef NSInteger viewtype;
     NSMutableArray *arrayEditInfo;
     BOOL isEdit;
 }
-@property(nonatomic,retain) NSDictionary *dictCustomDrinks;
 @property(nonatomic,retain) NSDictionary *dictitemdetails;
 @property(nonatomic,retain)NSMutableArray *arrayEditInfo;
 @property(nonatomic,assign)NSInteger viewtype;

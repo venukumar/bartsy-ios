@@ -170,7 +170,7 @@
     [self.view addSubview:btnCheckOut];*/
     
     
-    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 8, 28, 28) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
+    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 8, 35, 35) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
     [self.view addSubview:checkinBtn];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -404,9 +404,9 @@
         isRequestForGettingsOrders=NO;
         isRequestForPeople=NO;
         tblView.hidden=NO;
-        //[self modifyData];
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-        [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+        [self modifyData];
+        //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        //[self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
     }
     else if(segmentControl.selectedSegmentIndex==1)
     {
@@ -828,11 +828,11 @@
     else if(isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO && isGettingIngradients==NO && isRequestCheckin==NO && isGettingCocktails==NO && isUserCheckOut==NO && isGetFavorites==NO)
     {
         
-            [[NSUserDefaults standardUserDefaults] setObject:result forKey:[dictVenue objectForKey:@"venueId"]];
-           // [[NSUserDefaults standardUserDefaults]synchronize];
+            [[NSUserDefaults standardUserDefaults] setObject:result forKey:@"LocuMenu"];
+            //[[NSUserDefaults standardUserDefaults]synchronize];
           //  [arrMenu addObjectsFromArray:result];
           //  [self hideProgressView:nil];
-            
+        
             [self modifyData];
 
         isGettingIngradients=YES;
@@ -1830,7 +1830,7 @@
     
     if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2) {
         
-        //return;
+        return;
         
     }
     CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
@@ -1866,7 +1866,7 @@
 -(void)modifyData
 {
     [arrMenu removeAllObjects];
-    id results=[[NSUserDefaults standardUserDefaults]objectForKey:[dictVenue objectForKey:@"venueId"]];
+    id results=[[NSUserDefaults standardUserDefaults]objectForKey:@"LocuMenu"];
     NSArray *arrmenues=[results valueForKey:@"menus"];
     for (int i=0; i<[arrmenues count]; i++) {
         NSDictionary *dicmainsections=[arrmenues objectAtIndex:i];
@@ -2196,9 +2196,9 @@
                  }
                  else
                  {
-                    //[self modifyData];
-                     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
-                     [self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
+                    [self modifyData];
+                     //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+                     //[self.sharedController getMenuListWithVenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
                     /*isGettingIngradients=YES;
                 
                     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -3989,7 +3989,7 @@
     
     }else if (indexPath.section>1+[arrCustomDrinks count]+[arrMenu count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
         
-        NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+       /* NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
         
         id object=[arrCocktailsSection objectAtIndex:indexPath.section-(2+[arrCustomDrinks count]+[arrMenu count])];
         NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
@@ -4010,19 +4010,19 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         [arrMultiItemOrders release];
         [dictItem release];
-        [self showMultiItemOrderUI];
+        [self showMultiItemOrderUI];*/
 
         
-       /* NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
+        NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
         //id object=[arrCustomDrinks objectAtIndex:indexPath.section-2];
        // NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+        if ([[tempArray objectAtIndex:indexPath.row] valueForKey:@"option_groups"]) {
+            CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
+            obj.viewtype=3;
+            obj.dictitemdetails=[tempArray objectAtIndex:indexPath.row];
+            [self.navigationController pushViewController:obj animated:YES];
+        }
         
-        CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
-        obj.viewtype=3;
-        NSLog(@"%@",[tempArray objectAtIndex:indexPath.row]);
-        obj.dictitemdetails=[tempArray objectAtIndex:indexPath.row];
-        obj.dictCustomDrinks=[NSDictionary dictionaryWithDictionary:dictMainCustomDrinks];
-        [self.navigationController pushViewController:obj animated:YES];*/
         
     }else if (indexPath.section==1){
         NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];

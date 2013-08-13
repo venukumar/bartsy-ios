@@ -1016,7 +1016,7 @@ static SharedController *sharedController;
     [dictCheckIn setObject:venuID forKey:@"venueId"];
     [dictCheckIn setObject:bartsyID forKey:@"bartsyId"];
     [dictCheckIn setObject:description forKey:@"description"];
-    [dictCheckIn setObject:instructions forKey:@"specialInstructions"];
+    [dictCheckIn setObject:instructions forKey:@"special_instructions"];
     [dictCheckIn setObject:itemlist forKey:@"itemsList"];
     
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
