@@ -214,10 +214,12 @@
          UIImageView *imgview=[self createImageViewWithImage:[UIImage imageNamed:[temparray objectAtIndex:i] ] frame:CGRectMake(320*i, 0, 320, 120) tag:0];
          [topscrollView addSubview:imgview];
      
-         UIImageView *wifiimg=[[UIImageView alloc]initWithFrame:CGRectMake(18+(320*i),85,34, 16)];
-         wifiimg.image=[UIImage imageNamed:@"wifi-icon"];
-         [topscrollView addSubview:wifiimg];
-         [wifiimg release];
+         if ([[dictVenue valueForKey:@"wifiPresent"] integerValue]==1) {
+             UIImageView *wifiimg=[[UIImageView alloc]initWithFrame:CGRectMake(18+(320*i),85,34, 16)];
+             wifiimg.image=[UIImage imageNamed:@"wifi-icon"];
+             [topscrollView addSubview:wifiimg];
+             [wifiimg release];
+         }
          
          UIImageView *infoimg=[[UIImageView alloc]initWithFrame:CGRectMake(275+(320*i),80,25, 25)];
          infoimg.image=[UIImage imageNamed:@"i-icon"];
@@ -286,7 +288,6 @@
     //storing venue ID to call in timerforgetmessage
     [[NSUserDefaults standardUserDefaults]setObject:[dictVenue objectForKey:@"venueId"] forKey:@"selectedVenueID"];
     
-    [appDelegate startTimerTOGetMessages];
     
     //Registering local Notification
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"PeopleSelected" object:nil];
@@ -300,6 +301,8 @@
     NSLog(@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]);
     if(!([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]==nil)){
         
+        [appDelegate startTimerTOGetMessages];
+
         [topscrollView removeFromSuperview];
         [pagectrl removeFromSuperview];
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3333];
@@ -475,8 +478,14 @@
         popupView.hidden=YES;
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
         checkinBtn.hidden=YES;
-        UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 27, 27) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
-        [self.view addSubview:drinkBtn];
+        
+        UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
+        if (!drinkBtn) {
+            UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 27, 27) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
+            [self.view addSubview:drinkBtn];
+        }
+        
+        
         
         
     }else if (sender.tag==1116){
@@ -539,18 +548,10 @@
 
 
                     if ([dict1Temp valueForKey:@"option_groups"]) {
-                        [dictitem setObject:[dict1Temp valueForKey:@"name"] forKey:@"title"];
-                        [dictitem setObject:[dict1Temp valueForKey:@"name"] forKey:@"itemName"];
-                        if ([dict1Temp valueForKey:@"price"]) {
-                            [dictitem setObject:[dict1Temp valueForKey:@"price"] forKey:@"price"];
-
-                        }else{
-                            [dictitem setObject:@"0" forKey:@"price"];
-
-                        }
+                        
+                       
                         NSArray *arroptionsgrp=[dict1Temp valueForKey:@"option_groups"];
                       
-                            NSLog(@"%@",arroptionsgrp);
                             NSMutableDictionary *dictOptionItems=[[NSMutableDictionary alloc]init];
                             NSMutableArray *arrOptions=[[NSMutableArray alloc]init];
                             NSArray *arroptionTemp=[arroptionsgrp valueForKey:@"options"];
@@ -559,7 +560,7 @@
                                  NSMutableDictionary *dictsubItems=[[NSMutableDictionary alloc]init];
                                  [dictsubItems setObject:[dict3Temp valueForKey:@"name"] forKey:@"name"];
                                  [dictsubItems setObject:[dict3Temp valueForKey:@"price"] forKey:@"price"];
-                                 if ([[dict3Temp valueForKey:@"Selected"] integerValue]==1 && [dict3Temp valueForKey:@"Selected"]) {
+                                 if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
                                      [dictsubItems setObject:@"true" forKey:@"selected"];
 
                                  }else{
@@ -589,7 +590,7 @@
                                 }else{
                                     [dictsubItems setObject:@"0" forKey:@"price"];
                                 }
-                                if ([[dict3Temp valueForKey:@"Selected"] integerValue]==1 && [dict3Temp valueForKey:@"Selected"]) {
+                                if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
                                     [dictsubItems setObject:@"true" forKey:@"selected"];
                                     
                                 }else{
@@ -610,6 +611,17 @@
                        
                 }
                 [dictitem setObject:arrOptionGroup forKey:@"option_groups"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"name"];
+                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"order_price"];
+                if ([dicttemp valueForKey:@"price"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
+                    
+                }else{
+                    [dictitem setObject:@"0" forKey:@"price"];
+                    
+                }
                 [arritemlist addObject:dictitem];
                
 
@@ -620,7 +632,13 @@
                 
                 for (int i=0; i<arr1Temp.count; i++) {
                     NSDictionary *dict1Temp=[arr1Temp objectAtIndex:i];
-                
+                    if (i==0) {
+                        
+                        [dictitem setObject:[dict1Temp valueForKey:@"instructions"] forKey:@"instructions"];
+                        [dictitem setObject:[dict1Temp valueForKey:@"category"] forKey:@"category"];
+
+                        [dictitem setObject:[dict1Temp valueForKey:@"ingredients"] forKey:@"ingredients"];
+                    }
                     NSMutableDictionary *dictOptionItems=[[NSMutableDictionary alloc]init];
                         NSMutableArray *arrOptions=[[NSMutableArray alloc]init];
                         NSArray *arroptionTemp=[dict1Temp valueForKey:@"options"];
@@ -635,7 +653,7 @@
                             }else{
                                 [dictsubItems setObject:@"0" forKey:@"price"];
                             }
-                            if ([[dict3Temp valueForKey:@"Selected"] integerValue]==1 && [dict3Temp valueForKey:@"Selected"]) {
+                            if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
                                 [dictsubItems setObject:@"true" forKey:@"selected"];
                                 
                             }else{
@@ -647,9 +665,7 @@
                             [dictsubItems release];
                             
                         }
-                       [dictOptionItems setObject:[dict1Temp valueForKey:@"name"] forKey:@"title"];
-                       [dictOptionItems setObject:[dict1Temp valueForKey:@"name"] forKey:@"itemName"];
-                       [dictOptionItems setObject:[dict1Temp valueForKey:@"description"] forKey:@"description"];
+                      
                         [dictOptionItems setObject:[dict1Temp valueForKey:@"type"] forKey:@"type"];
                         [dictOptionItems setObject:[dict1Temp valueForKey:@"text"] forKey:@"text"];
                         [dictOptionItems setObject:arrOptions forKey:@"options"];
@@ -657,6 +673,17 @@
                     }
                     
                 [dictitem setObject:arrOptionGroup forKey:@"option_groups"];
+                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"order_price"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"name"];
+                if ([dicttemp valueForKey:@"price"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
+                    
+                }else{
+                    [dictitem setObject:@"0" forKey:@"price"];
+                    
+                }
                 [arritemlist addObject:dictitem];
                 
             }else if([[dicttemp valueForKey:@"Viewtype"] integerValue]==4){
@@ -681,32 +708,40 @@
                         }else{
                             [dictsubItems setObject:@"0" forKey:@"price"];
                         }
-                        if ([[dict3Temp valueForKey:@"Selected"] integerValue]==1 && [dict3Temp valueForKey:@"Selected"]) {
+                        if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
                             [dictsubItems setObject:@"true" forKey:@"selected"];
                             
                         }else{
                             [dictsubItems setObject:@"false" forKey:@"selected"];
-                            
                         }
                         
                         [arrOptions addObject:dictsubItems];
                         [dictsubItems release];
-                        
                     }
-                    
+
                     [dictOptionItems setObject:[dict1Temp valueForKey:@"type"] forKey:@"type"];
                     [dictOptionItems setObject:[dict1Temp valueForKey:@"text"] forKey:@"text"];
                     [dictOptionItems setObject:arrOptions forKey:@"options"];
                     [arrOptionGroup addObject:dictOptionItems];
                 }
-                
                 [dictitem setObject:arrOptionGroup forKey:@"option_groups"];
+                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"order_price"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
+                [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"name"];
+                if ([dicttemp valueForKey:@"price"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
+                    
+                }else{
+                    [dictitem setObject:@"0" forKey:@"price"];
+                    
+                }
                 [arritemlist addObject:dictitem];
 
-                
             }else{
                 NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
                 NSArray *tempArray=[[NSArray alloc]init];
+            
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
                 if ([dicttemp valueForKey:@"description"]) {
@@ -717,7 +752,9 @@
 
                 }
                 [dictitem setObject:@"1" forKey:@"quantity"];
-                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"basePrice"];
+                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
+                [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"order_price"];
+
                 [dictitem setObject:tempArray forKey:@"option_groups"];
                 if ([dicttemp valueForKey:@"id"]) {
                     [dictitem setObject:[NSString stringWithFormat:@"%@",[dicttemp valueForKey:@"id"]] forKey:@"itemId"];
@@ -725,11 +762,21 @@
                     [dictitem setObject:@"" forKey:@"itemId"];
                     
                 }
-                //[dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"specialInstructions"];
+                if ([dicttemp valueForKey:@"category"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"category"] forKey:@"category"];
+                }
+                if ([dicttemp valueForKey:@"ingredients"]) {
+                     [dictitem setObject:[dicttemp valueForKey:@"ingredients"] forKey:@"ingredients"];
+                }
+                if ([dicttemp valueForKey:@"instructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"instructions"] forKey:@"instructions"];
+                }
+                if ([dicttemp valueForKey:@"type"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
+                }
                 [arritemlist addObject:dictitem];
                 [dictitem release];
                 [tempArray release];
-
             }
         }
          NSLog(@"%@",arritemlist);
@@ -869,11 +916,11 @@
 
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
-    [self hideProgressView:nil];
+   
     
     if([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
-        
+         [self hideProgressView:nil];
         if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
         [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
       else
@@ -882,7 +929,7 @@
         if (isRequestForOrder==NO&&isRequestForPeople==NO&&isRequestForGettingsOrders==NO&&isRequestForGettingsPastOrders == NO && isGettingIngradients==NO && isRequestCheckin==NO && isGettingCocktails==NO && isUserCheckOut==NO && isGetFavorites==NO) {
             
             isGettingIngradients=YES;
-            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
             [self.sharedController getIngredientsListWithVenueId:[dictVenue objectForKey:@"venueId"] delegate:self];
         }else if (isGettingIngradients){
            
@@ -892,7 +939,7 @@
             isSelectedForPeople=NO;
             
             isGettingCocktails=YES;
-            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
             [self.sharedController getCocktailsbyvenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
         }else if (isGettingCocktails){
             
@@ -902,7 +949,7 @@
             isSelectedForPeople=NO;
 
             isGetFavorites=YES;
-            [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+            //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
             [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[dictVenue objectForKey:@"venueId"] delegate:self];
         }else if (isGetFavorites){
             
@@ -928,13 +975,14 @@
             [self modifyData];
 
         isGettingIngradients=YES;
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getIngredientsListWithVenueId:[dictVenue objectForKey:@"venueId"] delegate:self];
         
         
     }
     else if(isRequestForOrder==YES)
     {
+        [self hideProgressView:nil];
         isRequestForOrder=NO;
         
 //        UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
@@ -969,6 +1017,7 @@
     }
     else if(isRequestForPeople==YES)
     {
+        [self hideProgressView:nil];
         NSLog(@"people result %@",result);
         SDImageCache *sharedSDImageCache=[SDImageCache sharedImageCache];
         [sharedSDImageCache clearMemory];
@@ -978,7 +1027,16 @@
         isSelectedForDrinks=NO;
         isSelectedForPeople=YES;
         [arrPeople removeAllObjects];
-        [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+        NSArray *arrNewhasmsglist=[result objectForKey:@"checkedInUsers"];
+        //[arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
+        
+        NSArray *newfilterarr=[arrNewhasmsglist filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(hasMessages == %@)",@"New"]];
+        [arrPeople addObjectsFromArray:newfilterarr];
+        NSArray *oldfilterarr=[arrNewhasmsglist filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(hasMessages == %@)",@"Old"]];
+        [arrPeople addObjectsFromArray:oldfilterarr];
+        NSArray *nonefilterarr=[arrNewhasmsglist filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(hasMessages == %@)",@"None"]];
+        [arrPeople addObjectsFromArray:nonefilterarr];
+        
         [appDelegate.arrPeople removeAllObjects];
         [appDelegate.arrPeople addObjectsFromArray:arrPeople];
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
@@ -992,6 +1050,7 @@
     }
     else if (isRequestForGettingsPastOrders == YES)
     {
+        [self hideProgressView:nil];
         isRequestForGettingsPastOrders=NO;
         isSelectedForPastOrders = YES;
         isSelectedForDrinks=NO;
@@ -1007,6 +1066,7 @@
     }
     else if(isRequestForGettingsOrders==YES)
     {
+         [self hideProgressView:nil];
         SDImageCache *sharedSDImageCache=[SDImageCache sharedImageCache];
         [sharedSDImageCache clearMemory];
         [sharedSDImageCache clearDisk];
@@ -1158,16 +1218,17 @@
         //UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         //[tblView reloadData];
         isGettingCocktails=YES;
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getCocktailsbyvenueID:[dictVenue objectForKey:@"venueId"] delegate:self];
     }else if (isRequestCheckin){
-        
+         [self hideProgressView:nil];
         if([[result objectForKey:@"errorCode"] integerValue]==1)
         {
             [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         }
         else
         {
+            [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
             //home-footer
             UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(40,10,21, 21)];
             homecheckimg.image=[UIImage imageNamed:@"home-footer"];
@@ -1188,7 +1249,8 @@
             [[NSUserDefaults standardUserDefaults]setObject:dictVenue forKey:@"VenueDetails"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             [appDelegate startTimerToCheckHeartBeat];
-            
+            [appDelegate startTimerTOGetMessages];
+
             //storing the tax percentage
             [[NSUserDefaults standardUserDefaults] setFloat:[[dictVenue valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
             UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
@@ -1223,12 +1285,13 @@
         }
     
         isGetFavorites=YES;
-        [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+        //[self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[dictVenue objectForKey:@"venueId"] delegate:self];
     
 
     }else if (isUserCheckOut){
-        
+         [self hideProgressView:nil];
+        [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
         UIImageView *checkinimg=(UIImageView*)[self.tabBarController.tabBar viewWithTag:5555];
         [checkinimg removeFromSuperview];
         isUserCheckOut=NO;
@@ -1237,7 +1300,7 @@
 
         
     }else if (isGetFavorites){
-        
+        [self hideProgressView:nil];
         isGetFavorites=NO;
         isGettingCocktails=NO;
         isSelectedForDrinks=YES;
@@ -1522,7 +1585,7 @@
     
     UILabel *lblTax = [[UILabel alloc]initWithFrame:CGRectMake(8, lineview2.frame.origin.y+lineview2.frame.size.height+15, 175, 30)];
     lblTax.font = [UIFont systemFontOfSize:12];
-    lblTax.text = [NSString stringWithFormat:@"Tax:$%.2f",taxPrice];
+    lblTax.text = [NSString stringWithFormat:@"Tax:%.2f%@",taxPrice,@"%"];
     lblTax.backgroundColor = [UIColor clearColor];
     lblTax.textColor = [UIColor whiteColor] ;
     lblTax.textAlignment = NSTextAlignmentLeft;
@@ -1922,7 +1985,7 @@
     
     if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2) {
         
-        return;
+        //return;
         
     }
     CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
@@ -1930,12 +1993,10 @@
     obj.arrIndex=sender.tag;
     obj.isEdit=YES;
     
-    if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2){
-       
-        //obj.dictitemdetails=[dicttemp valueForKey:@"DictInfo"];
-        
+    if ([[dicttemp valueForKey:@"Viewtype"] integerValue]==2 || [[dicttemp valueForKey:@"Viewtype"] integerValue]==3 ||[[dicttemp valueForKey:@"Viewtype"] integerValue]==4)
+
         obj.arrayEditInfo=[dicttemp valueForKey:@"ArrayInfo"];
-    }
+    
     else
         obj.dictitemdetails=[arrMultiItemOrders objectAtIndex:sender.tag];
     
@@ -1943,8 +2004,12 @@
     [arrMultiItemOrders release];
 }
 
+//Removing the OrderView from top
 -(void)Btn_Closepopup:(UIButton*)sender
 {
+    //Deleting all orders added to list
+    [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
+
     UIView *Backgroundview=(UIView*)[self.view viewWithTag:2221];
     [Backgroundview removeFromSuperview];
     
@@ -2147,11 +2212,8 @@
                     [sectionDict release];
                     [arrSubContent release];
                 }
-
             }
-            
         }
-    
 }
 
 #pragma mark------------Parsing GetFavorites Data
@@ -2179,9 +2241,7 @@
                     NSDictionary *dictContent=[arrContent objectAtIndex:x];
                     //[arrSubContent addObject:dictContent];
                     [arrFavorites addObject:dictContent];
-
                 }
-                
                 //[sectionDict setObject:arrSubContent forKey:@"contents"];
                 //[arrFavorites addObject:sectionDict];
                 [sectionDict release];
@@ -2407,7 +2467,7 @@
         //[[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"percentTAX"];
-
+        [appDelegate stopTimerForHeartBeat];
         //[[NSNotificationCenter defaultCenter]postNotificationName:@"logOut" object:nil];
     }
 }
@@ -2621,7 +2681,7 @@
             
             UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+5+(j*15)+40, 45, 15)];
             lblPrice.font = [UIFont systemFontOfSize:12];
-            lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"basePrice"] floatValue]];
+            lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
             lblPrice.numberOfLines = 1;
             lblPrice.backgroundColor = [UIColor clearColor];
             lblPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
@@ -3513,10 +3573,14 @@
             for (int i=0; i<array1Temp.count; i++) {
                 NSDictionary *dict1Temp=[array1Temp objectAtIndex:i];
                 
-                [itemName appendFormat:@"%@ ",[dict1Temp valueForKey:@"itemName"]];
+                [itemName appendFormat:@"%@,",[dict1Temp valueForKey:@"itemName"]];
                 
             }
-            UILabel *lblItemName = [self createLabelWithTitle:itemName frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            NSString *strTrim;
+            if ([itemName length]>1) {
+                strTrim = (NSMutableString*)[itemName substringToIndex:[itemName length]-1];
+            }
+            UILabel *lblItemName = [self createLabelWithTitle:strTrim frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblItemName];
@@ -3734,7 +3798,7 @@
         [arrMultiItemOrders addObject:dictItem];
         
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
+       // [[NSUserDefaults standardUserDefaults]synchronize];
         [arrMultiItemOrders release];
         [dictItem release];
         [arrContents release];
@@ -4106,13 +4170,33 @@
 
         
         NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
-        id object=[tempArray objectAtIndex:indexPath.row];
-       // NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+
         if ([[tempArray objectAtIndex:indexPath.row] valueForKey:@"option_groups"]) {
             CustomDrinkViewController *obj=[[CustomDrinkViewController alloc]initWithNibName:@"CustomDrinkViewController" bundle:nil];
             obj.viewtype=3;
             obj.dictitemdetails=[tempArray objectAtIndex:indexPath.row];
             [self.navigationController pushViewController:obj animated:YES];
+        }else{
+            
+            NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
+            
+            id object=[arrCocktailsSection objectAtIndex:indexPath.section-(2+[arrCustomDrinks count]+[arrMenu count])];
+            NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
+            
+            NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrContents objectAtIndex:indexPath.row]];
+            
+            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"Menu" forKey:@"ItemType"];
+            [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
+            
+            [arrMultiItemOrders addObject:dictItem];
+            
+            [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
+           // [[NSUserDefaults standardUserDefaults]synchronize];
+            [arrMultiItemOrders release];
+            [dictItem release];
+            [arrContents release];
+            [self showMultiItemOrderUI];
         }
         
         
@@ -4140,7 +4224,7 @@
                 [arrMultiItemOrders addObject:dictItem];
                 
                 [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
-                [[NSUserDefaults standardUserDefaults]synchronize];
+                //[[NSUserDefaults standardUserDefaults]synchronize];
                 [arrMultiItemOrders release];
                 [dictItem release];
                 
@@ -4175,7 +4259,7 @@
                 [arrMultiItemOrders addObject:dictItem];
                 
                 [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
-                [[NSUserDefaults standardUserDefaults]synchronize];
+                //[[NSUserDefaults standardUserDefaults]synchronize];
                 [arrMultiItemOrders release];
                 [dictItem release];
                 
@@ -4515,7 +4599,19 @@
     }
 }
 
-
+-(void)dealloc{
+    [super dealloc];
+    [arrMenu release];
+    [arrPastOrders release];
+    [arrFavorites release];
+    [arrCocktailsSection release];
+    [arrCustomDrinks release];
+    [ArrMenuSections release];
+    [arrPeople release];
+    [arrRecentOrders release];
+    [topscrollView release];
+    [pagectrl release];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

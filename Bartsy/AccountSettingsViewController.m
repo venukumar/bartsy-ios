@@ -33,7 +33,7 @@
 
     self.view.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
     
-    arySettings = [[NSMutableArray alloc]initWithObjects:@"Edit Profile",@"Privacy",@"Share Settings",@"Push Notifications",@"Log Out", nil];
+    arySettings = [[NSMutableArray alloc]initWithObjects:@"Edit Profile",@"Share Settings",@"Push Notifications",@"Log Out", nil];
     aryMsg = [[NSMutableArray alloc]initWithObjects:@"About",@"Privacy Policy",@"Terms of Service", nil];
     
     UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
@@ -191,7 +191,13 @@
         }
     }else if (indexPath.section==2) {
         
-        if (indexPath.row==1) {
+        if (indexPath.row==0) {
+            
+            
+            [self createAlertViewWithTitle:@"" message:@"Version : 1.0\n Release Date :" cancelBtnTitle:nil otherBtnTitle:@"OK" delegate:self tag:0];
+            
+            
+        }else if (indexPath.row==1) {
             WebViewController *obj=[[WebViewController alloc]init];
             obj.viewtype=2;
             obj.strTitle=[NSString stringWithFormat:@"%@",[aryMsg objectAtIndex:indexPath.row]];

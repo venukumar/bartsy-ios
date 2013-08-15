@@ -25,7 +25,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription,strCity,strState,strZipcode;
 @synthesize strServerPublicKey,strFirstName,strLastName,strConfirmPassword;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -188,6 +188,9 @@
     
     [imgBg release];
 
+    strCity=[[NSString alloc]init];
+    strState=[[NSString alloc]init];
+    strZipcode=[[NSString alloc]init];
 }
 
 -(void)getServerPublicKey
@@ -236,9 +239,12 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+#pragma mark--------------Table View Delegates
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
+    return 5;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;    // fixed font style. use custom view (UILabel) if you want something different
@@ -259,6 +265,10 @@
     {
         return @"See and be seen";
     }
+    else if (section==4){
+        
+        return @"Location Information";
+    }
     else
     {
         return nil;
@@ -268,7 +278,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if(section==3)
+    if(section==4)
     return 50;
     else
         return 0;
@@ -278,7 +288,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if(section==3)
+    if(section==4)
     {
         UIView *viewFooter=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 300, 50)];
         
@@ -328,6 +338,9 @@
         return 300+80;
         else
             return 50;
+    }else if (indexPath.section==4){
+        
+        return 120;
     }
     else
     {
@@ -394,7 +407,7 @@
     else if(indexPath.section==1)
     {
         NSString *strURL=[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=100&height=100",[dictResult objectForKey:@"id"]];
-        NSLog(@"Pic URL is %@",strURL);
+        NSLog(@"Pic URL is %@",[dictResult objectForKey:@"url"]);
 
         NSURL *url=[[NSURL alloc]initWithString:strURL];
         
@@ -715,6 +728,49 @@
 
         }
                 
+        
+    }else if (indexPath.section==4){
+        
+        UILabel *lblcity=[self createLabelWithTitle:@"Home City" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblcity.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblcity];
+        
+        UITextField *txtFldcity=[self createTextFieldWithFrame:CGRectMake(110, 10, 180, 30) tag:1111 delegate:self];
+        txtFldcity.placeholder=@"City";
+        txtFldcity.font=[UIFont systemFontOfSize:15];
+       
+        if (strCity.length>0) {
+            txtFldcity.text=strCity;
+        }
+        [cell.contentView addSubview:txtFldcity];
+        
+        
+        UILabel *lblstate=[self createLabelWithTitle:@"State:" frame:CGRectMake(10, 42, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblstate.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblstate];
+        
+        UITextField *txtFldstate=[self createTextFieldWithFrame:CGRectMake(110, 42, 180, 30) tag:2222 delegate:self];
+        txtFldstate.placeholder=@"State";
+        txtFldstate.font=[UIFont systemFontOfSize:15];
+        if (strState.length>0) {
+            txtFldstate.text=strState;
+        }
+        [cell.contentView addSubview:txtFldstate];
+        
+        
+        
+        UILabel *lblzipcode=[self createLabelWithTitle:@"Zip code:" frame:CGRectMake(10, 74, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        lblzipcode.textAlignment=NSTextAlignmentLeft;
+        [cell.contentView addSubview:lblzipcode];
+        
+        UITextField *txtFldzipcode=[self createTextFieldWithFrame:CGRectMake(110, 74, 180, 30) tag:3333 delegate:self];
+        txtFldzipcode.placeholder=@"Zip code";
+        txtFldzipcode.font=[UIFont systemFontOfSize:15];
+        if (strZipcode.length>0) {
+            txtFldzipcode.text=strZipcode;
+        }
+        [cell.contentView addSubview:txtFldzipcode];
+        
         
     }
     
@@ -1071,7 +1127,7 @@
     [NSTimer scheduledTimerWithTimeInterval:2.5 target:self selector:@selector(removeLoader) userInfo:nil repeats:NO];
 }
 
-
+#pragma mark------------Textview Delegates
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if(customPickerView!=nil)
@@ -1127,6 +1183,7 @@
     return YES;
 }
 
+#pragma mark----------------TextField Delegates
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     
@@ -1151,12 +1208,34 @@
     [tblView setContentOffset:CGPointMake(0,100) animated:YES];
     else if(textField.tag==456||textField.tag==567)
         [tblView setContentOffset:CGPointMake(0,300) animated:YES];
+    else if (textField.tag==1111)
+        [tblView setContentOffset:CGPointMake(0,720) animated:YES];
+    else if (textField.tag==2222)
+        [tblView setContentOffset:CGPointMake(0,750) animated:YES];
+    else if (textField.tag==3333)
+        [tblView setContentOffset:CGPointMake(0,780) animated:YES];
+
 
    
 }
 
+- (void)textFieldDidEndEditing:(UITextField *)textField{
+    
+    if (textField.tag==1111){
+        strCity=[[NSString stringWithFormat:@"%@",textField.text] retain];
+    }
+    else if (textField.tag==2222){
+        strState=[[NSString stringWithFormat:@"%@",textField.text] retain];
+        
+    }
+    else if (textField.tag==3333){
+        strZipcode=[[NSString stringWithFormat:@"%@",textField.text] retain];
+    }
+
+}
 - (BOOL)textFieldShouldReturn:(UITextField*)textField
 {
+        
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     [tblView setContentOffset:CGPointMake(0,0) animated:YES];
     [textField resignFirstResponder];

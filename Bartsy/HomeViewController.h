@@ -20,7 +20,7 @@
     BOOL isRequestForPeople;
     NSArray *arrStatus;
     NSMutableArray *arrBundledOrders;
-    NSMutableDictionary *dictTemp;
+    //NSMutableDictionary *dictTemp;
     NSDictionary *dictPeopleSelectedForDrink;
     NSMutableArray *arrOrdersTimedOut;
     NSMutableArray *arrOrdersOffered;

@@ -54,6 +54,10 @@
     NSString *strLastName;
     UITextField *txtFldConfirmPassword;
     NSString *strConfirmPassword;
+    
+    NSString *strCity;
+    NSString *strState;
+    NSString *strZipcode;
 }
 @property(nonatomic,retain)NSString *strConfirmPassword;
 @property(nonatomic,retain)NSString *strDOB;
@@ -70,6 +74,9 @@
 @property(nonatomic,retain)NSString *strServerPublicKey;
 @property(nonatomic,retain)NSString *strFirstName;
 @property(nonatomic,retain)NSString *strLastName;
+@property(nonatomic,retain)NSString *strCity;
+@property(nonatomic,retain)NSString *strState;
+@property(nonatomic,retain)NSString *strZipcode;
 -(void)saveProfileData:(NSDictionary*)dict;
 -(void)setImageWithURL:(NSURL*)url;
 @end

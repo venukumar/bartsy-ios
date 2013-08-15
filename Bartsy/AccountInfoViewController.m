@@ -40,6 +40,8 @@
     
     self.navigationController.navigationBarHidden=YES;
     
+    is_pastOrders=NO;
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
     [self.sharedController getUserProfileWithBartsyId:[[NSUserDefaults standardUserDefaults] valueForKey:@"bartsyId"] delegate:self];
     
 }
@@ -184,10 +186,14 @@
     for (int i=0; i<array1Temp.count; i++) {
         NSDictionary *dict1Temp=[array1Temp objectAtIndex:i];
         
-        [itemName appendFormat:@"%@ ",[dict1Temp valueForKey:@"itemName"]];
+        [itemName appendFormat:@"%@,",[dict1Temp valueForKey:@"itemName"]];
         
     }
-    cell.title.text=[NSString stringWithFormat:@"Item:%@",itemName];
+    NSString *strTrim;
+    if ([itemName length]>1) {
+        strTrim = (NSMutableString*)[itemName substringToIndex:[itemName length]-1];
+    }
+    cell.title.text=[NSString stringWithFormat:@"Item:%@",strTrim];
     [itemName release];
     if ([[dictForOrder objectForKey:@"description"] isKindOfClass:[NSNull class]])
       cell.description.text=@"";
@@ -272,6 +278,11 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result{
     if (!is_pastOrders) {
         
+        SDImageCache *sharedSDImageCache=[SDImageCache sharedImageCache];
+        [sharedSDImageCache clearMemory];
+        [sharedSDImageCache clearDisk];
+        [sharedSDImageCache cleanDisk];
+        
         if ([result isKindOfClass:[NSDictionary class]]) {
         
             if ([[result valueForKey:@"errorCode"] integerValue]==0) {
@@ -300,6 +311,8 @@
         [pastorderArray removeAllObjects];
         [self.sharedController getPastOrderbbybartsyId:[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"] delegate:self];
     }else{
+        [self hideProgressView:nil];
+
         if ([result isKindOfClass:[NSDictionary class]]) {
             
             
@@ -329,6 +342,8 @@
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error{
     
+    [self hideProgressView:nil];
+
     [self createAlertViewWithTitle:@"Error" message:[error localizedDescription] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
     
 }

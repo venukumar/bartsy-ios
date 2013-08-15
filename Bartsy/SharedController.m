@@ -121,6 +121,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictProfile release];
+    [jsonObj release];
 }
 
 -(void)getVenueListWithDelegate:(id)aDelegate
@@ -145,6 +147,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictProfile release];
+    [jsonObj release];
 }
 
 /*
@@ -261,11 +265,6 @@ static SharedController *sharedController;
     [[NSUserDefaults standardUserDefaults]synchronize];
 
    
-    
-   
-    
-    
-
     [dictProfile setObject:strGender forKey:@"gender"];
     [dictProfile setObject:strNickName forKey:@"nickname"];
     [dictProfile setObject:@"1" forKey:@"deviceType"];
@@ -352,6 +351,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictProfile release];
+    [dictUserProfile release];
 
 }
 
@@ -421,6 +422,8 @@ static SharedController *sharedController;
     
     [url release];
     [request release];
+    [dictProfile release];
+    [jsonObj release];
 }
 
 -(void)checkInAtBartsyVenueWithId:(NSString*)strVenueId delegate:(id)aDelegate
@@ -446,6 +449,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 
@@ -473,6 +478,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)gettingPeopleListFromVenue:(NSString*)strVenueId delegate:(id)aDelegate
@@ -497,6 +504,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)getUserOrdersWithBartsyId:(NSString*)strBartsyId delegate:(id)aDelegate
@@ -521,6 +530,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)heartBeatWithBartsyId:(NSString*)strBartsyId venueId:(NSString*)strVenueId delegate:(id)aDelegate
@@ -565,6 +576,8 @@ static SharedController *sharedController;
      ];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)getIngredientsListWithVenueId:(NSString*)strVenueId delegate:(id)aDelegate
@@ -588,6 +601,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)createOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName produceId:(NSString*)strProdId description:(NSString*)strDescription ingredients:(NSArray*)arrIngredients receiverBartsyId:(NSString*)strReceiverId delegate:(id)aDelegate
@@ -656,6 +671,8 @@ static SharedController *sharedController;
     
     [url release];
     [request release];
+    [dictProfile release];
+    [jsonObj release];
 }
 
 -(void)syncUserDetailsWithUserName:(NSString*)strUserName type:(NSString*)strType bartsyId:(NSString*)strBartsyId delegate:(id)aDelegate
@@ -687,6 +704,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)loginWithEmailID:(NSString*)strEmailId password:(NSString*)strPassword delegate:(id)aDelegate
@@ -718,6 +737,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictLogIn release];
+    [jsonObj release];
 }
 
 -(void)getUserProfileWithBartsyId:(NSString*)strBastsyId delegate:(id)aDelegate
@@ -751,6 +772,9 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictProfileDetails release];
+    [dictLogIn release];
+    [jsonObj release];
 }
 
 -(void)getPastOrderWithVenueWithId:(NSString*)strVenueId bartsyId:(NSString*)strbartsyId date:(NSString*)date  delegate:(id)aDelegate
@@ -783,7 +807,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
-    
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)getNotificationsWithDelegate:(id)aDelegate;
@@ -815,6 +840,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 
 }
 -(void)sendMessageWithSenderId:(NSString*)strSenderBarstsyID receiverId:(NSString*)strReceiverBartsyId message:(NSString*)message delegate:(id)aDelegate;
@@ -844,6 +871,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
  
 }
 -(void)getMessagesWithReceiverId:(NSString*)strReceiverBartsyId delegate:(id)aDelegate;
@@ -872,6 +901,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)likePeopleWithBartsyId:(NSString*)strBartsyId status:(NSInteger)intStatus withDelegate:(id)aDelegate
@@ -904,7 +935,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
-
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)shareAMessage:(NSString*)message AccessToken:(NSString*)strToken delegate:(id)aDelegate;
@@ -946,7 +978,8 @@ static SharedController *sharedController;
     [self sendRequest:request];
     [url release];
     [request release];
-    
+    [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)getUserRewardsbybartsyID:(NSString*)strbartsyID delegate:(id)aDelegate{
@@ -975,6 +1008,7 @@ static SharedController *sharedController;
     [url release];
     [request release];
     [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)getCocktailsbyvenueID:(NSString *)venueID delegate:(id)aDelegate{
@@ -1003,6 +1037,7 @@ static SharedController *sharedController;
     [url release];
     [request release];
     [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)saveFavoriteDrinkbyvenueID:(NSString*)venuID bartsyID:(NSString*)bartsyID description:(NSString*)description specialinstruction:(NSString*)instructions itemlist:(NSArray*)itemlist delegate:(id)aDelegate{
@@ -1036,6 +1071,7 @@ static SharedController *sharedController;
     [url release];
     [request release];
     [dictCheckIn release];
+    [jsonObj release];
 }
 
 -(void)getFavoriteDrinksbybartsyID:(NSString*)strbartsyID venueID:(NSString*)venueID delegate:(id)aDelegate{
@@ -1066,6 +1102,7 @@ static SharedController *sharedController;
     [url release];
     [request release];
     [dictCheckIn release];
+    [jsonObj release];
 
 }
 -(void)SaveOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName splcomments:(NSString*)splcomments description:(NSString*)strDescription itemlist:(NSArray*)arritemlist receiverBartsyId:(NSString*)strReceiverId delegate:(id)aDelegate{
@@ -1134,6 +1171,8 @@ static SharedController *sharedController;
     
     [url release];
     [request release];
+    [dictProfile release];
+    [jsonObj release];
 
 }
 -(void)DeleteFavoritebyfavoriteID:(NSString*)favoriteID venueID:(NSString*)venueID bydelegate:(id)aDelegate{
@@ -1165,6 +1204,7 @@ static SharedController *sharedController;
     [url release];
     [request release];
     [dictCheckIn release];
+    [jsonObj release];
 
     
 }
@@ -1233,6 +1273,8 @@ static SharedController *sharedController;
         NSLog(@" result :%@ -----  error :%@",result, outError);
         [delegate controllerDidFailLoadingWithError:outError];
     }
+    
+    
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error

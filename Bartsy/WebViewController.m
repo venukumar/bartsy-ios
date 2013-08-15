@@ -50,7 +50,7 @@
     lblMsg.text=[strTitle substringToIndex:[strTitle length]];
     if(viewtype==1)
     {
-        lblMsg.text=[strTitle substringToIndex:[strTitle length]-2];
+        lblMsg.text=[strTitle substringToIndex:[strTitle length]];
     }
     [self.view addSubview:lblMsg];
     
