@@ -65,8 +65,8 @@
     [nav4 release];
 
     
-    UIImage* tabBarBackground = [UIImage imageNamed:@"footer_bar.png"];
-    [[UITabBar appearance] setBackgroundImage:tabBarBackground];
+    //UIImage* tabBarBackground = [UIImage imageNamed:@"footer_bar.png"];
+    //[[UITabBar appearance] setBackgroundImage:tabBarBackground];
     [[UITabBar appearance]setSelectionIndicatorImage:[UIImage imageNamed:@"button_hover.png"]];
     
     [appDelegate.tabBar setViewControllers:viewControllers];

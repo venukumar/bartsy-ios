@@ -144,7 +144,7 @@
     [imgViewForTop release];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(5, 0, 50, 40);
+    btnBack.frame = CGRectMake(2, 0, 44, 44);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     
@@ -170,7 +170,7 @@
     [self.view addSubview:btnCheckOut];*/
     
     
-    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(280, 6, 35, 35) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
+    UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"tick_mark"] frame:CGRectMake(276, 1, 42, 42) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
     [self.view addSubview:checkinBtn];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -268,6 +268,7 @@
     tblView.backgroundColor = [UIColor blackColor];
     tblView.delegate=self;
     tblView.tag=111;
+    [tblView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:tblView];
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
@@ -546,10 +547,8 @@
                 for (int i=0; i<arr1Temp.count; i++) {
                     NSDictionary *dict1Temp=[arr1Temp objectAtIndex:i];
 
-
                     if ([dict1Temp valueForKey:@"option_groups"]) {
                         
-                       
                         NSArray *arroptionsgrp=[dict1Temp valueForKey:@"option_groups"];
                       
                             NSMutableDictionary *dictOptionItems=[[NSMutableDictionary alloc]init];
@@ -564,7 +563,7 @@
                                      [dictsubItems setObject:@"true" forKey:@"selected"];
 
                                  }else{
-                                     [dictsubItems setObject:@"false" forKey:@"selected"];
+                                     //[dictsubItems setObject:@"false" forKey:@"selected"];
 
                                  }
                                  
@@ -594,13 +593,12 @@
                                     [dictsubItems setObject:@"true" forKey:@"selected"];
                                     
                                 }else{
-                                    [dictsubItems setObject:@"false" forKey:@"selected"];
+                                   // [dictsubItems setObject:@"false" forKey:@"selected"];
                                     
                                 }
                                 
                                 [arrOptions addObject:dictsubItems];
                                 [dictsubItems release];
-                                
                                 
                             }
                             [dictOptionItems setObject:[dict1Temp valueForKey:@"type"] forKey:@"type"];
@@ -621,6 +619,10 @@
                 }else{
                     [dictitem setObject:@"0" forKey:@"price"];
                     
+                }
+                [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
+                if ([dicttemp valueForKey:@"specialInstructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];
                 }
                 [arritemlist addObject:dictitem];
                
@@ -657,7 +659,7 @@
                                 [dictsubItems setObject:@"true" forKey:@"selected"];
                                 
                             }else{
-                                [dictsubItems setObject:@"false" forKey:@"selected"];
+                                //[dictsubItems setObject:@"false" forKey:@"selected"];
                                 
                             }
                             
@@ -683,6 +685,13 @@
                 }else{
                     [dictitem setObject:@"0" forKey:@"price"];
                     
+                }
+                [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
+                if ([dicttemp valueForKey:@"specialInstructions"]) {
+                   [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];  
+                }
+                if ([dicttemp valueForKey:@"description"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"description"]; 
                 }
                 [arritemlist addObject:dictitem];
                 
@@ -712,7 +721,7 @@
                             [dictsubItems setObject:@"true" forKey:@"selected"];
                             
                         }else{
-                            [dictsubItems setObject:@"false" forKey:@"selected"];
+                           // [dictsubItems setObject:@"false" forKey:@"selected"];
                         }
                         
                         [arrOptions addObject:dictsubItems];
@@ -735,6 +744,10 @@
                 }else{
                     [dictitem setObject:@"0" forKey:@"price"];
                     
+                }
+                [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
+                if ([dicttemp valueForKey:@"specialInstructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];
                 }
                 [arritemlist addObject:dictitem];
 
@@ -774,6 +787,9 @@
                 if ([dicttemp valueForKey:@"type"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
                 }
+                if ([dicttemp valueForKey:@"specialInstructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];
+                }
                 [arritemlist addObject:dictitem];
                 [dictitem release];
                 [tempArray release];
@@ -785,7 +801,7 @@
 
         float tiptotal=(ttlPrice*((float)btnValue/100));
         NSString *totalprice=[NSString stringWithFormat:@"%.2f",tiptotal+floatTotalTax+ttlPrice];
-        [self.sharedController SaveOrderWithOrderStatus:@"0" basePrice:[NSString stringWithFormat:@"%.2f",ttlPrice] totalPrice:totalprice tipPercentage:[NSString stringWithFormat:@"%d",btnValue] itemName:@"" splcomments:@"" description:@"" itemlist:arritemlist receiverBartsyId:[dictPeopleSelectedForDrink valueForKey:@"bartsyId"] delegate:self];
+        [self.sharedController SaveOrderWithOrderStatus:@"0" basePrice:[NSString stringWithFormat:@"%.2f",ttlPrice] totalPrice:totalprice tipPercentage:[NSString stringWithFormat:@"%.2f",tiptotal] itemName:@"" splcomments:@"" description:@"" itemlist:arritemlist receiverBartsyId:[dictPeopleSelectedForDrink valueForKey:@"bartsyId"] delegate:self];
         
         dictPeopleSelectedForDrink=nil;
 
@@ -917,7 +933,6 @@
 -(void)controllerDidFinishLoadingWithResult:(id)result
 {
    
-    
     if([[result objectForKey:@"errorCode"] integerValue]!=0)
     {
          [self hideProgressView:nil];
@@ -1469,13 +1484,13 @@
     for (int i=0; i<[arrMultiItems count]; i++) {
         
         UIButton *btnDelete=[UIButton buttonWithType:UIButtonTypeCustom];
-        btnDelete.frame=CGRectMake(3,(i*30)+5, 22, 22);
+        btnDelete.frame=CGRectMake(3,(i*60)+15, 22, 22);
         [btnDelete setImage:[UIImage imageNamed:@"deleteicon.png"] forState:UIControlStateNormal];
         btnDelete.tag=i+1;
         [btnDelete addTarget:self action:@selector(Btn_DeleteOrder:) forControlEvents:UIControlEventTouchUpInside];
         [popupscrollview addSubview:btnDelete];
         
-        UILabel *lblitemName=[[UILabel alloc]initWithFrame:CGRectMake(40, (i*30)+5, 190, 22)];
+        UILabel *lblitemName=[[UILabel alloc]initWithFrame:CGRectMake(40, (i*60)+5, 190, 22)];
         lblitemName.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"name"];
         lblitemName.font=[UIFont systemFontOfSize:16];
         lblitemName.tag=111222333;
@@ -1484,7 +1499,26 @@
         [popupscrollview addSubview:lblitemName];
         [lblitemName release];
         
-        UILabel *lblprice=[[UILabel alloc]initWithFrame:CGRectMake(250, (i*30)+5, 190, 22)];
+        UILabel *lbl_Optdespt=[[UILabel alloc]initWithFrame:CGRectMake(40, (i*60)+25, 290, 22)];
+        lbl_Optdespt.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"options_description"];
+        lbl_Optdespt.font=[UIFont systemFontOfSize:10];
+        lbl_Optdespt.tag=111222333;
+        lbl_Optdespt.backgroundColor=[UIColor clearColor];
+        lbl_Optdespt.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        [popupscrollview addSubview:lbl_Optdespt];
+        [lbl_Optdespt release];
+        
+        UILabel *lbl_splinst=[[UILabel alloc]initWithFrame:CGRectMake(40, (i*60)+38, 290, 22)];
+        lbl_splinst.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"specialInstructions"];
+        lbl_splinst.font=[UIFont systemFontOfSize:10];
+        lbl_splinst.tag=111222333;
+        lbl_splinst.backgroundColor=[UIColor clearColor];
+        lbl_splinst.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        [popupscrollview addSubview:lbl_splinst];
+        [lbl_splinst release];
+
+        
+        UILabel *lblprice=[[UILabel alloc]initWithFrame:CGRectMake(250, (i*60)+5, 190, 22)];
         lblprice.text=[NSString stringWithFormat:@"$%@",[[arrMultiItems objectAtIndex:i] valueForKey:@"price"]];
         lblprice.font=[UIFont boldSystemFontOfSize:18];
         lblprice.tag=111222333;
@@ -1495,11 +1529,11 @@
         
         UIButton *indexButton=[UIButton buttonWithType:UIButtonTypeCustom];
         indexButton.tag=i;
-        indexButton.frame=CGRectMake(25, (i*30), 290, 30);
+        indexButton.frame=CGRectMake(25, (i*60), 290, 30);
         [indexButton addTarget:self action:@selector(Button_Popview:) forControlEvents:UIControlEventTouchUpInside];
         [popupscrollview addSubview:indexButton];
         
-        UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0,(i*30)+29, 320, 1)];
+        UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0,(i*60)+59, 320, 1)];
         scrollendlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
         [popupscrollview addSubview:scrollendlineview];
         [scrollendlineview release];
@@ -1507,7 +1541,7 @@
     }
     
     ttlPrice=totalPrice;
-    [popupscrollview setContentSize:CGSizeMake(320,[arrMultiItems count]*30)];
+    [popupscrollview setContentSize:CGSizeMake(320,[arrMultiItems count]*60)];
     UIView *scrollendlineview=[[UIView alloc]initWithFrame:CGRectMake(0, imgViewPhoto.frame.origin.y+imgViewPhoto.frame.size.height+2, 320, 1.5)];
     scrollendlineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
     [popupView addSubview:scrollendlineview];
@@ -2465,8 +2499,8 @@
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"CheckInVenueId"];
         [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
         //[[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"percentTAX"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
         [appDelegate stopTimerForHeartBeat];
         //[[NSNotificationCenter defaultCenter]postNotificationName:@"logOut" object:nil];
     }
@@ -2701,7 +2735,7 @@
                 
         UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
-        floattipvalue= ([[dict objectForKey:@"basePrice"] floatValue]*[[dict objectForKey:@"tipPercentage"] floatValue])/100;
+        floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
         if(floattipvalue>0.01)
         {
             lblTipFee.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
@@ -3124,6 +3158,16 @@
     
 }
 
+-(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.0;
+}
+
+
+-(UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if(isSelectedForDrinks)
@@ -3319,7 +3363,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(isSelectedForDrinks)
-        return 80;
+        return 65;
     else if(isSelectedForPeople)
         return 75;
     else if(isSelectedForPastOrders == YES)
@@ -3394,7 +3438,7 @@
         [lblName release];
         
         
-        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 255, 50)];
+        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 25, 255, 50)];
         lblDescription.numberOfLines=3;
         if(indexPath.section==0)
         {
@@ -3437,23 +3481,23 @@
         [cell.contentView addSubview:lblDescription];
         [lblDescription release];
         
-        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 20, 50, 25)];
+        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(275, 20, 50, 25)];
         if(indexPath.section==0)
         {
             NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
         
-            if ([dictRecTemp valueForKey:@"price"]) {
+            if ([dictRecTemp valueForKey:@"price"] && [[dictRecTemp valueForKey:@"price"] integerValue] !=0) {
                 lblPrice.text=[NSString stringWithFormat:@"%@",[dictRecTemp valueForKey:@"price"]];
             }else
-                lblPrice.text=@"0";
+                lblPrice.text=@"";
 
         }else if (indexPath.section==1){
             
             NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
-            if ([dictFavTemp valueForKey:@"price"]) {
+            if ([dictFavTemp valueForKey:@"price"] && [[dictFavTemp valueForKey:@"price"] integerValue] !=0) {
                  lblPrice.text=[NSString stringWithFormat:@"%@",[dictFavTemp valueForKey:@"price"]];
             }else
-                lblPrice.text=@"0";
+                lblPrice.text=@"";
         }
         else if(indexPath.section>1+[arrCustomDrinks count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count])
         {
@@ -3463,11 +3507,22 @@
             lblPrice.text=[dict objectForKey:@"price"];
         }else if(indexPath.section>1&&indexPath.section<2+[arrCustomDrinks count]){
             NSArray *tempArray=[[arrCustomDrinks objectAtIndex:indexPath.section-2] valueForKey:@"contents"];
-            lblPrice.text=[NSString stringWithFormat:@"%d",[[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]];
+            if ([[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]!=0) {
+                lblPrice.text=[NSString stringWithFormat:@"%d",[[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]];
+            }else{
+                lblPrice.text=@"";
+            }
+            
         }else if (indexPath.section>1+[arrCustomDrinks count]+[arrMenu count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
             
             NSArray *tempArray=[[arrCocktailsSection objectAtIndex:indexPath.section-([arrCustomDrinks count]+2+[arrMenu count])] valueForKey:@"contents"];
+            
+            if ([[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]!=0) {
+                
             lblPrice.text=[NSString stringWithFormat:@"%d",[[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]];
+            }else{
+                lblPrice.text=@"";
+            }
         }
         
         lblPrice.font=[UIFont systemFontOfSize:22];
@@ -3712,12 +3767,6 @@
     }
     
     return cell;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *viewFooter=[[UIView alloc]init];
-    return viewFooter;
 }
 
 -(void)btnChat_TouchUpInside:(UIButton*)sender

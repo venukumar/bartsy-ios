@@ -217,7 +217,7 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 -(void)Get_Messagetimer:(NSTimer*)sender{
     
     isGetMessageWebService = YES;
-    [self.sharedController getMessagesWithReceiverId:[dictForReceiver objectForKey:@"bartsyId"] delegate:self];
+    [self.sharedController getMessagesWithReceiverId:[NSString stringWithFormat:@"%@",[dictForReceiver objectForKey:@"bartsyId"]] delegate:self];
     
 }
 #pragma mark - Keyboard notification methods

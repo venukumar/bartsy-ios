@@ -54,12 +54,18 @@
     }
     [self.view addSubview:lblMsg];
     
+    
+    
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(10, 11, 12, 20);
-    [btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
+    btnBack.frame = CGRectMake(2, 0, 50, 44);
+    //[btnBack setBackgroundImage:[UIImage imageNamed:@"arrow-left.png"] forState:UIControlStateNormal];
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
     
     UIButton *btnBack1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btnBack1.frame = CGRectMake(10, 11, 40, 30);

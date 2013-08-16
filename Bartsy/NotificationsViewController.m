@@ -40,13 +40,16 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
     
-    UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
+    UILabel *lblMsg=[self createLabelWithTitle:@"Notifications" frame:CGRectMake(0, 0, 320, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:1];
+    lblMsg.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblMsg];
+   /* UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
     imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
     [self.view addSubview:imgLogo];
-    [imgLogo release];
+    [imgLogo release];*/
     
-    UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
-    [self.view addSubview:btnSearch];
+   /* UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
+    [self.view addSubview:btnSearch];*/
 
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 367)];
     if (IS_IPHONE_5)
@@ -64,12 +67,9 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
-    if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
-    {
+
         [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         [self.sharedController getNotificationsWithDelegate:self];
-    }
-    
     
 }
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
@@ -159,7 +159,7 @@
             [imageForPeople release];
 
             UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(71, 5, 200, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
-            lblVenueName.text=@"VenueName";
+            //lblVenueName.text=@"VenueName";
             lblVenueName.backgroundColor=[UIColor clearColor];
             lblVenueName.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblVenueName];
@@ -171,7 +171,7 @@
             [cell.contentView addSubview:lblItemName];
             //[lblItemName release];
             
-            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(11,65,200,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
+            UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(71,65,200,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblDate.backgroundColor=[UIColor clearColor];
             lblDate.textAlignment = NSTextAlignmentLeft;
             [cell.contentView addSubview:lblDate];

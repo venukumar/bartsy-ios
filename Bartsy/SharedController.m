@@ -217,7 +217,7 @@ static SharedController *sharedController;
 }
  */
 
--(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName firstName:(NSString*)strFirstName lastname:(NSString*)strLastName delegate:(id)aDelegate
+-(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName firstName:(NSString*)strFirstName lastname:(NSString*)strLastName ethnicity:(NSString*)strethnicity city:(NSString*)strcity state:(NSString*)strstate zipcode:(NSString*)strZipcode delegate:(id)aDelegate
 {
     
     self.delegate=aDelegate;
@@ -307,6 +307,10 @@ static SharedController *sharedController;
     if(strLastName!=nil&&[strLastName length])
         [dictProfile setObject:strLastName forKey:@"lastname"];
 
+   /* [dictProfile setObject:strethnicity forKey:@"ethnicity"];
+    [dictProfile setObject:strcity forKey:@"homeCity"];
+    [dictProfile setObject:strstate forKey:@"state"];
+    [dictProfile setObject:[NSString stringWithFormat:@"%d",[strZipcode integerValue]] forKey:@"zipCode"];*/
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"dictprofile %@",dictUserProfile);
@@ -818,10 +822,10 @@ static SharedController *sharedController;
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]&&[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"])
+    if ([[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"])
     {
         [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
-        [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+      //  [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     }
     
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];

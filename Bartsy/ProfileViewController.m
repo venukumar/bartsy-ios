@@ -25,7 +25,7 @@
 @end
 
 @implementation ProfileViewController
-@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription,strCity,strState,strZipcode;
+@synthesize dictResult,auth,strGender,isCmgFromGetStarted,dictProfileData,isReloadingForProfileVisible,creditCardInfo,isCmgForLogin,isCmgForEditProfile,strPassword,strDOB,txtViewDescription,strCity,strState,strZipcode,strEthnicity;
 @synthesize strServerPublicKey,strFirstName,strLastName,strConfirmPassword;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -188,9 +188,6 @@
     
     [imgBg release];
 
-    strCity=[[NSString alloc]init];
-    strState=[[NSString alloc]init];
-    strZipcode=[[NSString alloc]init];
 }
 
 -(void)getServerPublicKey
@@ -244,7 +241,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    return 4;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section;    // fixed font style. use custom view (UILabel) if you want something different
@@ -265,10 +262,6 @@
     {
         return @"See and be seen";
     }
-    else if (section==4){
-        
-        return @"Location Information";
-    }
     else
     {
         return nil;
@@ -278,7 +271,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if(section==4)
+    if(section==3)
     return 50;
     else
         return 0;
@@ -288,7 +281,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if(section==4)
+    if(section==3)
     {
         UIView *viewFooter=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 300, 50)];
         
@@ -328,7 +321,7 @@
     else if(indexPath.section==2)
     {
         if([creditCardInfo.redactedCardNumber length])
-        return 120;
+        return 120+155;
         else
         return 50;
     }
@@ -338,9 +331,6 @@
         return 300+80;
         else
             return 50;
-    }else if (indexPath.section==4){
-        
-        return 120;
     }
     else
     {
@@ -526,6 +516,10 @@
             if([strFirstName length])
                 txtFldFirstName.text=strFirstName;
             
+            if (appDelegate.isLoginForFB) {
+                txtFldFirstName.text=[dictResult valueForKey:@"first_name"];
+            }
+            
             txtFldLastName=[self createTextFieldWithFrame:CGRectMake(140, 40, 150, 30) tag:567 delegate:self];
             txtFldLastName.placeholder=@"Last Name";
             txtFldLastName.font=[UIFont systemFontOfSize:15];
@@ -534,6 +528,9 @@
             if([strLastName length])
                 txtFldLastName.text=strLastName;
             
+            if (appDelegate.isLoginForFB) {
+                txtFldLastName.text=[dictResult valueForKey:@"last_name"];
+            }
             UILabel *lblCC=[self createLabelWithTitle:@"Credit card:" frame:CGRectMake(46, 70, 74, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
             lblCC.adjustsFontSizeToFitWidth=YES;
             lblCC.textAlignment=NSTextAlignmentLeft;
@@ -551,6 +548,58 @@
             UIButton *btnDelete=[self createUIButtonWithTitle:@"Delete" image:nil frame:CGRectMake(215, 95, 80, 20) tag:0 selector:@selector(btnDelete_TouchUpInside) target:self];
             btnDelete.titleLabel.textColor=[UIColor blackColor];
             [cell.contentView addSubview:btnDelete];
+            
+            UILabel *lblEthnicity=[self createLabelWithTitle:@"Ethnicity" frame:CGRectMake(10, 125, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblEthnicity.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblEthnicity];
+            
+            UITextField *txtEthnicity=[self createTextFieldWithFrame:CGRectMake(110, 125, 180, 30) tag:1111 delegate:self];
+            txtEthnicity.placeholder=@"Ethnicity";
+            txtEthnicity.font=[UIFont systemFontOfSize:15];
+            
+            if (strEthnicity.length>0) {
+                txtEthnicity.text=strEthnicity;
+            }
+            [cell.contentView addSubview:txtEthnicity];
+            
+            UILabel *lblcity=[self createLabelWithTitle:@"Home City" frame:CGRectMake(10, 160, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblcity.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblcity];
+            
+            UITextField *txtFldcity=[self createTextFieldWithFrame:CGRectMake(110, 160, 180, 30) tag:2222 delegate:self];
+            txtFldcity.placeholder=@"City";
+            txtFldcity.font=[UIFont systemFontOfSize:15];
+            
+            if (strCity.length>0) {
+                txtFldcity.text=strCity;
+            }
+            [cell.contentView addSubview:txtFldcity];
+            
+            
+            UILabel *lblstate=[self createLabelWithTitle:@"State:" frame:CGRectMake(10, 195, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblstate.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblstate];
+            
+            UITextField *txtFldstate=[self createTextFieldWithFrame:CGRectMake(110, 195, 180, 30) tag:3333 delegate:self];
+            txtFldstate.placeholder=@"State";
+            txtFldstate.font=[UIFont systemFontOfSize:15];
+            if (strState.length>0) {
+                txtFldstate.text=strState;
+            }
+            [cell.contentView addSubview:txtFldstate];
+            
+            
+            UILabel *lblzipcode=[self createLabelWithTitle:@"Zip code:" frame:CGRectMake(10, 230, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            lblzipcode.textAlignment=NSTextAlignmentLeft;
+            [cell.contentView addSubview:lblzipcode];
+            
+            UITextField *txtFldzipcode=[self createTextFieldWithFrame:CGRectMake(110, 230, 180, 30) tag:4444 delegate:self];
+            txtFldzipcode.placeholder=@"Zip code";
+            txtFldzipcode.font=[UIFont systemFontOfSize:15];
+            if (strZipcode.length>0) {
+                txtFldzipcode.text=strZipcode;
+            }
+            [cell.contentView addSubview:txtFldzipcode];
         }
         
         
@@ -630,7 +679,7 @@
             lblFeMale.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblFeMale];
             
-            UILabel *lblDOB=[self createLabelWithTitle:@"Date of birth:" frame:CGRectMake(10, 170, 120, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblDOB=[self createLabelWithTitle:@"Date of birth*:" frame:CGRectMake(10, 170, 120, 20) tag:0 font:[UIFont systemFontOfSize:14] color:[UIColor blackColor] numberOfLines:1];
             lblDOB.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblDOB];
             
@@ -645,7 +694,7 @@
             
             
             
-            UIButton *btnDOB=[self createUIButtonWithTitle:@"MM/DD/YYYY" image:nil frame:CGRectMake(95, 165, 150, 30) tag:666 selector:@selector(btnDOB_TouchUpInside) target:self];
+            UIButton *btnDOB=[self createUIButtonWithTitle:@"MM/DD/YYYY" image:nil frame:CGRectMake(100, 165, 150, 30) tag:666 selector:@selector(btnDOB_TouchUpInside) target:self];
             [btnDOB setBackgroundImage:[UIImage imageNamed:@"textfield.png"] forState:UIControlStateNormal];
             [btnDOB setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             btnDOB.titleLabel.font=[UIFont systemFontOfSize:15];
@@ -731,45 +780,7 @@
         
     }else if (indexPath.section==4){
         
-        UILabel *lblcity=[self createLabelWithTitle:@"Home City" frame:CGRectMake(10, 10, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
-        lblcity.textAlignment=NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblcity];
         
-        UITextField *txtFldcity=[self createTextFieldWithFrame:CGRectMake(110, 10, 180, 30) tag:1111 delegate:self];
-        txtFldcity.placeholder=@"City";
-        txtFldcity.font=[UIFont systemFontOfSize:15];
-       
-        if (strCity.length>0) {
-            txtFldcity.text=strCity;
-        }
-        [cell.contentView addSubview:txtFldcity];
-        
-        
-        UILabel *lblstate=[self createLabelWithTitle:@"State:" frame:CGRectMake(10, 42, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
-        lblstate.textAlignment=NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblstate];
-        
-        UITextField *txtFldstate=[self createTextFieldWithFrame:CGRectMake(110, 42, 180, 30) tag:2222 delegate:self];
-        txtFldstate.placeholder=@"State";
-        txtFldstate.font=[UIFont systemFontOfSize:15];
-        if (strState.length>0) {
-            txtFldstate.text=strState;
-        }
-        [cell.contentView addSubview:txtFldstate];
-        
-        
-        
-        UILabel *lblzipcode=[self createLabelWithTitle:@"Zip code:" frame:CGRectMake(10, 74, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
-        lblzipcode.textAlignment=NSTextAlignmentLeft;
-        [cell.contentView addSubview:lblzipcode];
-        
-        UITextField *txtFldzipcode=[self createTextFieldWithFrame:CGRectMake(110, 74, 180, 30) tag:3333 delegate:self];
-        txtFldzipcode.placeholder=@"Zip code";
-        txtFldzipcode.font=[UIFont systemFontOfSize:15];
-        if (strZipcode.length>0) {
-            txtFldzipcode.text=strZipcode;
-        }
-        [cell.contentView addSubview:txtFldzipcode];
         
         
     }
@@ -1139,7 +1150,7 @@
 
     UITableView *tblView=(UITableView*)[self.view viewWithTag:143225];
     if(isCmgFromGetStarted)
-    [tblView setContentOffset:CGPointMake(0,400+100) animated:YES];
+    [tblView setContentOffset:CGPointMake(0,400+240) animated:YES];
     else
         [tblView setContentOffset:CGPointMake(0,315+100) animated:YES];
 
@@ -1186,7 +1197,7 @@
 #pragma mark----------------TextField Delegates
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    
+    textField.keyboardType=UIKeyboardTypeDefault;
     if(customPickerView!=nil)
     {
         [customPickerView removeFromSuperview];
@@ -1209,11 +1220,15 @@
     else if(textField.tag==456||textField.tag==567)
         [tblView setContentOffset:CGPointMake(0,300) animated:YES];
     else if (textField.tag==1111)
-        [tblView setContentOffset:CGPointMake(0,720) animated:YES];
+        [tblView setContentOffset:CGPointMake(0,400) animated:YES];
     else if (textField.tag==2222)
-        [tblView setContentOffset:CGPointMake(0,750) animated:YES];
+        [tblView setContentOffset:CGPointMake(0,430) animated:YES];
     else if (textField.tag==3333)
-        [tblView setContentOffset:CGPointMake(0,780) animated:YES];
+        [tblView setContentOffset:CGPointMake(0,470) animated:YES];
+    else if (textField.tag==4444){
+        textField.keyboardType=UIKeyboardTypeNumberPad;
+        [tblView setContentOffset:CGPointMake(0,500) animated:YES];
+    }
 
 
    
@@ -1221,14 +1236,17 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
-    if (textField.tag==1111){
+    if (textField.tag==1111) {
+        strEthnicity=[[NSString stringWithFormat:@"%@",textField.text] retain];
+
+    } else if (textField.tag==2222){
         strCity=[[NSString stringWithFormat:@"%@",textField.text] retain];
     }
-    else if (textField.tag==2222){
+    else if (textField.tag==3333){
         strState=[[NSString stringWithFormat:@"%@",textField.text] retain];
         
     }
-    else if (textField.tag==3333){
+    else if (textField.tag==4444){
         strZipcode=[[NSString stringWithFormat:@"%@",textField.text] retain];
     }
 
@@ -1329,6 +1347,13 @@
         else
         {
             [dictResult setObject:[NSString stringWithFormat:@"%@%@",textField.text,string] forKey:@"nickname"];
+        }
+        
+    }else if(textField.tag==4444)
+    {
+        if (textField.text.length>5 && ![string isEqualToString:@""]) {
+            
+            return NO;
         }
         
     }
@@ -1589,16 +1614,34 @@
         [self createAlertViewWithTitle:@"" message:@"Please,enter credit card information" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         return;
     }
-        
+  /*  if ([creditCardInfo.redactedCardNumber length] && (strCity.length<1 || ) {
+        <#statements#>
+    }*/
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+    NSDate *birthdate=[dateFormatter dateFromString:strDOB];
+    NSDate* now = [NSDate date];
+    NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                       components:NSYearCalendarUnit
+                                       fromDate:birthdate
+                                       toDate:now
+                                       options:0];
+    NSInteger age = [ageComponents year];
+    
+    if ([strDOB length]==0 || age<21) {
+        [self createAlertViewWithTitle:@"" message:@"Please,enter your date of birth and make sure user age is at least 21" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        return;
+
+    }
+    [dateFormatter release];
     if([txtFldNickName.text length])
     {
             [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
         NSString *strEncryptedCreditCardNumber=[Crypto encryptRSA:creditCardInfo.cardNumber key:strServerPublicKey];
         
-            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[[NSUserDefaults standardUserDefaults] valueForKey:@"FBUsername"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:strEncryptedCreditCardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] firstName:strFirstName lastname:strLastName delegate:self];
+            [sharedController saveUserProfileWithBartsyLogin:txtFldEmailId.text bartsyPassword:txtFldPassword.text fbUserName:[[NSUserDefaults standardUserDefaults] valueForKey:@"FBUsername"] fbId:[dictResult objectForKey:@"id"] googleId:[dictResult objectForKey:@"googleid"] loginType:@"" gender:strGender profileImage:imgViewProfilePicture.image orientation:strOrientation nickName:txtFldNickName.text showProfile:strProfileStatus creditCardNumber:strEncryptedCreditCardNumber expiryDate:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] expYear:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] firstName:[dictResult objectForKey:@"first_name"] lastName:[dictResult objectForKey:@"last_name"] dob:strDOB status:strStatus description:txtViewDescription.text googleUsername:[dictResult objectForKey:@"googleusername"] firstName:strFirstName lastname:strLastName ethnicity:strEthnicity city:strCity state:strState zipcode:strZipcode delegate:self];
             
     }
-    
     
 }
 

@@ -59,16 +59,20 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
     
-    UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
+    UILabel *lblMsg=[self createLabelWithTitle:@"User Profile" frame:CGRectMake(0, 0, 320, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:1];
+    lblMsg.textAlignment=NSTextAlignmentCenter;
+    [self.view addSubview:lblMsg];
+    
+    /*UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
     imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
     [self.view addSubview:imgLogo];
-    [imgLogo release];
+    [imgLogo release];*/
     
     //Setting's Button declaration
     
     
     UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    settingBtn.frame = CGRectMake(280, 0, 50, 40);
+    settingBtn.frame = CGRectMake(280, 0, 50, 44);
     [settingBtn addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
     settingBtn.tag=401;
     [self.view addSubview:settingBtn];

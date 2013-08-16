@@ -55,6 +55,7 @@
     UITextField *txtFldConfirmPassword;
     NSString *strConfirmPassword;
     
+    NSString *strEthnicity;
     NSString *strCity;
     NSString *strState;
     NSString *strZipcode;
@@ -77,6 +78,7 @@
 @property(nonatomic,retain)NSString *strCity;
 @property(nonatomic,retain)NSString *strState;
 @property(nonatomic,retain)NSString *strZipcode;
+@property(nonatomic,retain)NSString *strEthnicity;
 -(void)saveProfileData:(NSDictionary*)dict;
 -(void)setImageWithURL:(NSURL*)url;
 @end

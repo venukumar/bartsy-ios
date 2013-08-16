@@ -72,7 +72,8 @@
         tblView.backgroundColor = [UIColor blackColor];
         tblView.delegate=self;
         tblView.tag=555;
-        [tblView setSeparatorColor:[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f]];
+        [tblView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
+        //[tblView setSeparatorColor:[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f]];
         [mainScroll addSubview:tblView];
         
         if (IS_IPHONE_5)
@@ -186,8 +187,6 @@
             [arrCustomDrinks addObject:dictitemdetails];
 
         }
-        //[arrCustomDrinks addObject:dictitemdetails];
-        //NSLog(@"%@",arrCustomDrinks);
 
     }
     
@@ -204,10 +203,6 @@
             NSMutableArray *arrContent=[[NSMutableArray alloc]init];
 
             NSArray *arroption=[dictoption valueForKey:@"options"];
-            //[dictOptionList setObject:[dictoption valueForKey:@"text"] forKey:@"text"];
-            NSMutableDictionary *dictOptionList=[[NSMutableDictionary alloc]init];
-
-           // NSMutableArray *arrsubItems=[[NSMutableArray alloc]init];
             for (int k=0;k<[arroption count];k++) {
                 //NSMutableDictionary *dict1Temp=[arroption objectAtIndex:k];
                 //[dict1Temp setObject:@"0" forKey:@"Selected"];
@@ -217,11 +212,7 @@
               
                 for (int l=0; l<1;l++ ) {
                     NSMutableDictionary *dict=[[NSMutableDictionary alloc]initWithDictionary:[arrTemp objectAtIndex:l]];
-                    //[dict setObject:[dict valueForKey:@"type"] forKey:@"type"];
-                    //[dict setObject:[dict valueForKey:@"text"] forKey:@"text"];
-                    //[dict setObject:[dictitemdetails valueForKey:@"description"] forKey:@"description"];
-                   
-                    
+                                        
                     NSArray *arr2Temp=[dict valueForKey:@"options"];
                     NSMutableArray *arrList=[[NSMutableArray alloc]init];
                     for (int x=0;x<arr2Temp.count;x++) {
@@ -357,6 +348,7 @@
                         [dicttemp setObject:[NSNumber numberWithBool:false] forKey:@"selected"];
                     }
                     [arrlist addObject:dicttemp];
+                    //[dicttemp release];
                 }
                 [dictlist setObject:arrlist forKey:@"options"];
                 [arrCustomDrinks addObject:dictlist];
@@ -848,7 +840,6 @@
             
         }else{
             [dictItem setObject:@"" forKey:@"specialInstructions"];
-            
         }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
@@ -865,7 +856,7 @@
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]init];
         
         float totalPrice = 0.0;
-        NSMutableString *itemdescription =[[NSMutableString alloc]init];
+        NSMutableString *str_opt_description =[[NSMutableString alloc]init];
 
         for (NSDictionary *dictTemp in arrCustomDrinks) {
             
@@ -879,7 +870,7 @@
                 for (NSDictionary *dict1Temp in filterarr)
                 {
                     totalPrice+=[[dict1Temp valueForKey:@"price"] floatValue];
-                    [itemdescription appendFormat:@"%@,",[dict1Temp valueForKey:@"name"]];
+                    [str_opt_description appendFormat:@"%@,",[dict1Temp valueForKey:@"name"]];
                 }
                 [dictItem setObject:[dictTemp valueForKey:@"name"] forKey:@"name"];
                 
@@ -891,23 +882,24 @@
                 {
                     
                     totalPrice+=[[dictTemp valueForKey:@"price"] floatValue];
-                    [itemdescription appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
+                    [str_opt_description appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
                    
                 }
                 [arrTemp release];
             }
         }
-
-        [dictItem setObject:itemdescription forKey:@"description"];
+       
+        if ([str_opt_description length]>1) {
+            [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
+        }
+        [dictItem setObject:str_opt_description forKey:@"options_description"];
         [dictItem setObject:[NSNumber numberWithInt:2] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
 
         if (txtFieldSpecialInstructions.text.length>0) {
             [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
-            
         }else{
             [dictItem setObject:@"" forKey:@"specialInstructions"];
-            
         }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         if (!isEdit) {
@@ -916,19 +908,27 @@
         }else
             [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
+        if (totalPrice==0.0 ) {
+            
+            [dictItem release];
+            [str_opt_description release];
+            return;
+        }
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         appDelegate.isCmgForShowingOrderUI=YES;
         
         [dictItem release];
-        [itemdescription release];
+        [str_opt_description release];
+        
+        
         [self.navigationController popViewControllerAnimated:YES];
         
     }else if(viewtype==4){
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]init];
         
         float totalPrice = 0.0;
-        NSMutableString *itemdescription =[[NSMutableString alloc]init];
+        NSMutableString *str_opt_description =[[NSMutableString alloc]init];
         
         for (int x=0;x<arrCustomDrinks.count;x++) {
             
@@ -945,13 +945,16 @@
                 {
                     
                     totalPrice+=[[dictTemp valueForKey:@"price"] floatValue];
-                    [itemdescription appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
+                    [str_opt_description appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
                     
                 }
                 [arrTemp release];
         }
-
-        [dictItem setObject:itemdescription forKey:@"description"];
+       
+        if ([str_opt_description length]>1) {
+            [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
+        }
+        [dictItem setObject:str_opt_description forKey:@"options_description"];
         [dictItem setObject:[NSNumber numberWithInt:4] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
@@ -969,12 +972,19 @@
         }else
             [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
+        if (totalPrice==0.0 ) {
+            
+            [dictItem release];
+            [str_opt_description release];
+            return;
+        }
+        
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         appDelegate.isCmgForShowingOrderUI=YES;
     
         [dictItem release];
-        [itemdescription release];
+        [str_opt_description release];
         [self.navigationController popViewControllerAnimated:YES];
 
     }else if (viewtype==3){
@@ -982,7 +992,7 @@
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]init];
         
         float totalPrice = 0.0;
-        NSMutableString *itemdescription =[[NSMutableString alloc]init];
+        NSMutableString *str_opt_description =[[NSMutableString alloc]init];
         
         for (int x=0;x<arrCustomDrinks.count;x++) {
             NSDictionary *dictTemp =[arrCustomDrinks objectAtIndex:x];
@@ -1000,17 +1010,17 @@
                 {
                     
                     totalPrice+=[[dictTemp valueForKey:@"price"] floatValue];
-                    //[itemdescription appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
+                    [str_opt_description appendFormat:@"%@,",[dictTemp valueForKey:@"name"]];
                     
                 }
             
                 [arrTemp release];
         }
-        if (itemdescription.length>0) {
-            [itemdescription deleteCharactersInRange:NSMakeRange([itemdescription length]-1, 1)];
+        if (str_opt_description.length>1) {
+            [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
         }
         //[dictItem setObject:itemdescription forKey:@"name"];
-        //[dictItem setObject:itemdescription forKey:@"description"];
+        [dictItem setObject:str_opt_description forKey:@"options_description"];
         [dictItem setObject:[NSNumber numberWithInt:3] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
@@ -1028,12 +1038,19 @@
         else
             [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
+        if (totalPrice==0.0 ) {
+            
+            [dictItem release];
+            [str_opt_description release];
+            return;
+        }
+        
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
         [[NSUserDefaults standardUserDefaults]synchronize];
         appDelegate.isCmgForShowingOrderUI=YES;
        
         [dictItem release];
-        [itemdescription release];
+        [str_opt_description release];
         [self.navigationController popViewControllerAnimated:YES];
         
     }
@@ -1098,6 +1115,8 @@
         }else if (viewtype==2){
             NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
             NSMutableDictionary *dictItemList=[[NSMutableDictionary alloc]init];
+            NSMutableString *str_opt_description =[[NSMutableString alloc]init];
+
             float order_Price=0.0;
             for (int i=0;i<arrCustomDrinks.count;i++) {
                 NSDictionary *dictTemp =[arrCustomDrinks objectAtIndex:i];
@@ -1139,7 +1158,9 @@
                         [dictsubItems setObject:[dict3Temp valueForKey:@"name"] forKey:@"name"];
                         [dictsubItems setObject:[dict3Temp valueForKey:@"price"] forKey:@"price"];
                         if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
-                            order_Price+=[[dictsubItems valueForKey:@"price"] floatValue];
+                            order_Price+=[[dict3Temp valueForKey:@"price"] floatValue];
+                            [str_opt_description appendFormat:@"%@,",[dict3Temp valueForKey:@"name"]];
+
                             [dictsubItems setObject:@"true" forKey:@"selected"];
                             
                         }else{
@@ -1172,7 +1193,8 @@
                             [dictsubItems setObject:@"0" forKey:@"price"];
                         }
                         if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
-                            order_Price+=[[dictsubItems valueForKey:@"price"] floatValue];
+                            order_Price+=[[dict3Temp valueForKey:@"price"] floatValue];
+                            [str_opt_description appendFormat:@"%@,",[dict3Temp valueForKey:@"name"]];
 
                             [dictsubItems setObject:@"true" forKey:@"selected"];
                             
@@ -1193,8 +1215,18 @@
                     [arrOptions release];
                 }
                 
-                
             }
+            if (str_opt_description.length>1) {
+                [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
+            }
+            NSString *strsplInst;
+            if ([txtFieldSpecialInstructions.text length]>0) {
+                strsplInst=txtFieldSpecialInstructions.text;
+            }else{
+                strsplInst=@"";
+            }
+            [dictItemList setObject:strsplInst forKey:@"special_instructions"];
+            [dictItemList setObject:str_opt_description forKey:@"options_description"];
             [dictItemList setObject:arrOptionGroup forKey:@"option_groups"];
             [dictItemList setObject:@"ITEM" forKey:@"type"];
             [dictItemList setObject:@"1" forKey:@"quantity"];
@@ -1206,6 +1238,7 @@
         }else if (viewtype==3){
             NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
             NSMutableDictionary *dictItemList=[[NSMutableDictionary alloc]init];
+            NSMutableString *str_opt_description =[[NSMutableString alloc]init];
             float order_Price=0.0;
             for (int i=0;i<arrCustomDrinks.count;i++) {
                 NSDictionary *dictTemp =[arrCustomDrinks objectAtIndex:i];
@@ -1219,13 +1252,12 @@
                     [dictsubItems setObject:[dict3Temp valueForKey:@"name"] forKey:@"name"];
                     if ([dict3Temp valueForKey:@"price"]) {
                         [dictsubItems setObject:[dict3Temp valueForKey:@"price"] forKey:@"price"];
-                        
                     }else{
                         [dictsubItems setObject:@"0" forKey:@"price"];
                     }
                     if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
-                        order_Price+=[[dictsubItems valueForKey:@"price"] floatValue];
-                        
+                        order_Price+=[[dict3Temp valueForKey:@"price"] floatValue];
+                        [str_opt_description appendFormat:@"%@,",[dict3Temp valueForKey:@"name"]];
                         [dictsubItems setObject:@"true" forKey:@"selected"];
                         
                     }else{
@@ -1245,6 +1277,17 @@
                 [dictOptionItems release];
 
             }
+            if (str_opt_description.length>1) {
+                [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
+            }
+            NSString *strsplInst;
+            if ([txtFieldSpecialInstructions.text length]>0) {
+                strsplInst=txtFieldSpecialInstructions.text;
+            }else{
+                strsplInst=@"";
+            }
+            [dictItemList setObject:strsplInst forKey:@"special_instructions"];
+            [dictItemList setObject:str_opt_description forKey:@"options_description"];
             [dictItemList setObject:arrOptionGroup forKey:@"option_groups"];
             [dictItemList setObject:@"ITEM" forKey:@"type"];
             [dictItemList setObject:@"1" forKey:@"quantity"];
@@ -1256,6 +1299,8 @@
         }else if (viewtype==4){
             NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
             NSMutableDictionary *dictItemList=[[NSMutableDictionary alloc]init];
+            NSMutableString *str_opt_description =[[NSMutableString alloc]init];
+
             float order_Price=0.0;
             for (int i=0;i<arrCustomDrinks.count;i++) {
                 NSDictionary *dictTemp =[arrCustomDrinks objectAtIndex:i];
@@ -1274,8 +1319,8 @@
                         [dictsubItems setObject:@"0" forKey:@"price"];
                     }
                     if ([[dict3Temp valueForKey:@"selected"] integerValue]==1 && [dict3Temp valueForKey:@"selected"]) {
-                        order_Price+=[[dictsubItems valueForKey:@"price"] floatValue];
-                        
+                        order_Price+=[[dict3Temp valueForKey:@"price"] floatValue];
+                        [str_opt_description appendFormat:@"%@,",[dict3Temp valueForKey:@"name"]];
                         [dictsubItems setObject:@"true" forKey:@"selected"];
                         
                     }else{
@@ -1287,6 +1332,7 @@
                     [dictsubItems release];
                     
                 }
+                
                 [dictOptionItems setObject:[dictTemp valueForKey:@"type"] forKey:@"type"];
                 [dictOptionItems setObject:[dictTemp valueForKey:@"text"] forKey:@"text"];
                 [dictOptionItems setObject:arrOptions forKey:@"options"];
@@ -1295,6 +1341,17 @@
                 [dictOptionItems release];
                 
             }
+            if (str_opt_description.length>1) {
+                [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
+            }
+            NSString *strsplInst;
+            if ([txtFieldSpecialInstructions.text length]>0) {
+                strsplInst=txtFieldSpecialInstructions.text;
+            }else{
+                strsplInst=@"";
+            }
+            [dictItemList setObject:strsplInst forKey:@"special_instructions"];
+            [dictItemList setObject:str_opt_description forKey:@"options_description"];
             [dictItemList setObject:arrOptionGroup forKey:@"option_groups"];
             [dictItemList setObject:@"ITEM" forKey:@"type"];
             [dictItemList setObject:@"1" forKey:@"quantity"];

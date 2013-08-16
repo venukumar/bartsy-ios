@@ -46,7 +46,7 @@
     [self.view addSubview:lblMsg];
     
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(10, 0, 50, 40);
+    btnBack.frame = CGRectMake(2, 0, 50, 44);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     

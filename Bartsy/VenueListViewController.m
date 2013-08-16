@@ -94,11 +94,11 @@
     [self.view addSubview:imgLogo];
     [imgLogo release];
     
-    UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
+   /* UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
     [self.view addSubview:btnSearch];
     
     UIButton *btnGPS = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"up_arrow.png"] frame:CGRectMake(290, 15.5, 20,19) tag:0 selector:@selector(btnGPS_TouchUpInside:) target:self];
-    [self.view addSubview:btnGPS];
+    [self.view addSubview:btnGPS];*/
     
     UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"Check out" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
     self.navigationItem.rightBarButtonItem=btnLogOut;
@@ -132,6 +132,8 @@
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
+    tblView.backgroundColor = [UIColor blackColor];
+    [tblView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:tblView];
     //[tblView release];
     
@@ -141,7 +143,7 @@
         tblView.frame=CGRectMake(0, 241, 320, 180+108);
     }
     
-    UISearchBar *searchbar = [[UISearchBar alloc] init];
+   /* UISearchBar *searchbar = [[UISearchBar alloc] init];
     [searchbar setTintColor:[UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0]];
     searchbar.frame = CGRectMake(0, -50, 320,50);
     searchbar.delegate = self;
@@ -167,7 +169,7 @@
             [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             break;
         }
-    }
+    }*/
 }
 
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
@@ -283,10 +285,12 @@
     [cell.contentView addSubview:lblName];
     //[lblName release];
     
-    
+    NSString *strTrim=[[NSString alloc]initWithString:[dict objectForKey:@"address"]];
+    NSRange range = [strTrim rangeOfString:@",United"];
+    NSString *shortString = [strTrim substringToIndex:range.location];
     UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 240, 20)];
     lblDescription.numberOfLines=1;
-    lblDescription.text=[dict objectForKey:@"address"];
+    lblDescription.text=shortString;
     lblDescription.font=[UIFont systemFontOfSize:12];
     lblDescription.backgroundColor=[UIColor clearColor];
     lblDescription.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
@@ -644,10 +648,16 @@
 {
     if(alertView.tag==143225&&buttonIndex==1)
     {
-        isRequestForCheckIn=YES;
+        //isRequestForCheckIn=YES;
         self.sharedController=[SharedController sharedController];
         //[self createProgressViewToParentView:self.view withTitle:@"Checking In..."];
         //[self.sharedController checkInAtBartsyVenueWithId:[[arrVenueList objectAtIndex:intIndex] objectForKey:@"venueId"] delegate:self];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"CheckInVenueId"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"OrdersTimedOut"];
+        //[[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"percentTAX"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        
         HomeViewController *obj=[[HomeViewController alloc]init];
         obj.dictVenue=[arrVenueList objectAtIndex:0];
         [self.navigationController pushViewController:obj animated:YES];
