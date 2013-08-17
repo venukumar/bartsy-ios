@@ -335,7 +335,7 @@
         
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"] integerValue]==[[dict valueForKey:@"venueId"] integerValue]) {
         
-        UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(265,20,35, 35)];
+        UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(267,20,35, 35)];
         homecheckimg.image=[UIImage imageNamed:@"home-footer"];
         [cell.contentView addSubview:homecheckimg];
         

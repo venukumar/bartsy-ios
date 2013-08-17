@@ -3279,7 +3279,7 @@
         
         [headerView addSubview:button];
         
-        UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 7, 280, 30)];
+        UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, 280, 53)];
         [headerTitle setBackgroundColor:[UIColor clearColor]];
         [headerTitle setFont:[UIFont systemFontOfSize:18]];
         [headerTitle setTextColor:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0]];
