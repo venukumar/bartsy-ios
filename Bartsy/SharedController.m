@@ -310,7 +310,7 @@ static SharedController *sharedController;
    /* [dictProfile setObject:strethnicity forKey:@"ethnicity"];
     [dictProfile setObject:strcity forKey:@"homeCity"];
     [dictProfile setObject:strstate forKey:@"state"];
-    [dictProfile setObject:[NSString stringWithFormat:@"%d",[strZipcode integerValue]] forKey:@"zipCode"];*/
+    [dictProfile setObject:[NSString stringWithFormat:@"%@",strZipcode ] forKey:@"zipCode"];*/
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"dictprofile %@",dictUserProfile);
@@ -886,7 +886,7 @@ static SharedController *sharedController;
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
-    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"senderId"];
+    [dictCheckIn setObject:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]] forKey:@"senderId"];
     [dictCheckIn setObject:strReceiverBartsyId forKey:@"receiverId"];
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];

@@ -11,7 +11,7 @@
 #import "MyAnnotation.h"
 #import "MapKit/MapKit.h"
 #import "CoreLocation/CoreLocation.h"
-
+#import "UIImageView+WebCache.h"
 @interface VenueListViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,CLLocationManagerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 {
     NSMutableArray *arrVenueList;

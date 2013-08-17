@@ -25,6 +25,8 @@
     NSMutableArray *arrOrdersTimedOut;
     NSMutableArray *arrOrdersOffered;
     NSInteger intNoOfSections;
+    
+    BOOL isLocuMenu;
 
 }
 @property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;

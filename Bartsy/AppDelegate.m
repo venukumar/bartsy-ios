@@ -496,7 +496,7 @@
 
 -(void)checkNewMessages{
     
-    NSLog(@"newmessage");
+    //NSLog(@"newmessage");
     NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/checkedInUsersList",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[[NSUserDefaults standardUserDefaults] valueForKey:@"selectedVenueID"],@"venueId",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"],@"bartsyId",nil];
@@ -551,6 +551,7 @@
     
     [url release];
     [request release];
+    [dictCheckIn release];
 
 }
 - (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification *)notif

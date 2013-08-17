@@ -19,17 +19,17 @@
         venueImgview = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
         [self.contentView addSubview:venueImgview];
         
-        venueName=[[UILabel alloc] initWithFrame:CGRectMake(75, 5, 250, 20) ];
-        venueName.font=[UIFont systemFontOfSize:15];
+        venueName=[[UILabel alloc] initWithFrame:CGRectMake(85, 5, 250, 20) ];
+        venueName.font=[UIFont systemFontOfSize:17];
         venueName.backgroundColor=[UIColor clearColor];
         venueName.textColor=[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
         venueName.textAlignment = NSTextAlignmentLeft;
         [self.contentView addSubview:venueName];
         
-        UIImageView *addresimg=[[UIImageView alloc]initWithFrame:CGRectMake(71, 36, 12.5, 15.5)];
+       /* UIImageView *addresimg=[[UIImageView alloc]initWithFrame:CGRectMake(71, 36, 12.5, 15.5)];
         addresimg.image=[UIImage imageNamed:@"map"];
         [self.contentView addSubview:addresimg];
-        [addresimg release];
+        [addresimg release];*/
         venueaddress=[[UILabel alloc]initWithFrame:CGRectMake(85,25,250,40)];
         venueaddress.font=[UIFont systemFontOfSize:12];
         venueaddress.backgroundColor=[UIColor clearColor];

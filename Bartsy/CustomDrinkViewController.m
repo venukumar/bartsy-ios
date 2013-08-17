@@ -16,6 +16,7 @@
     BOOL isSaveFavorite;
     BOOL isDeleteFavorite;
     BOOL isGettingFavorites;
+    UITextField* instructionfield;
 }
 @property(nonatomic,retain)NSMutableArray *arrCustomDrinks;
 @end
@@ -44,11 +45,25 @@
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
     
-    UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
+    /*UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
     imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
     [self.view addSubview:imgLogo];
-    [imgLogo release];
+    [imgLogo release];*/
    
+    
+    
+    UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 240, 44)];
+    lblMsg.textColor=[UIColor blackColor];
+    if (viewtype==3 || viewtype==1 || viewtype==2 || viewtype==4) {
+        lblMsg.text=[dictitemdetails valueForKey:@"name"];
+    }
+    lblMsg.textAlignment=NSTextAlignmentCenter;
+    lblMsg.backgroundColor=[UIColor clearColor];
+    lblMsg.font=[UIFont boldSystemFontOfSize:18];
+    [self.view addSubview:lblMsg];
+    [lblMsg release];
+
+    
     UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     btnBack.frame = CGRectMake(5, 0, 50, 40);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -65,9 +80,40 @@
     [mainScroll setScrollEnabled:YES];
     [self.view addSubview:mainScroll];
   
+    NSLog(@"%@",dictitemdetails);
+    
+    UIView *favtView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    favtView.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [mainScroll addSubview:favtView];
+    
+    
+    UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
+    buttonFav.frame=CGRectMake(155, 2, 26, 26);
+    if (IS_IPHONE_5)
+        buttonFav.frame=CGRectMake(155,2, 26, 26);
+    
+    buttonFav.tag=557;
+    [buttonFav addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
+    [buttonFav setImage:[UIImage imageNamed:@"unfav_icon"] forState:UIControlStateNormal];
+    [buttonFav setImage:[UIImage imageNamed:@"fav_icon"] forState:UIControlStateSelected];
+    [favtView addSubview:buttonFav];
+
+    UILabel *lblfav=[[UILabel alloc]initWithFrame:CGRectMake(192,0, 125, 30)];
+    if (IS_IPHONE_5)
+        lblfav.frame=CGRectMake(192, 0, 125, 30);
+    
+    lblfav.textColor=[UIColor whiteColor];
+    lblfav.text=@"Save to favorites";
+    lblfav.textAlignment=NSTextAlignmentLeft;
+    lblfav.backgroundColor=[UIColor clearColor];
+    lblfav.font=[UIFont systemFontOfSize:16];
+    [favtView addSubview:lblfav];
+    [lblfav release];
+
+    
     if (viewtype==2 || viewtype==3 || viewtype==4) {
         
-        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 0, 320, 367-100) style:UITableViewStylePlain];
+        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 30, 320, 367-80) style:UITableViewStylePlain];
         tblView.dataSource=self;
         tblView.backgroundColor = [UIColor blackColor];
         tblView.delegate=self;
@@ -78,21 +124,44 @@
         
         if (IS_IPHONE_5)
         {
-            tblView.frame=CGRectMake(0,0, 320, 455-105);
+            tblView.frame=CGRectMake(0,30, 320, 455-80);
         }
         
         [tblView release];
+        UIView *footview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)] autorelease];
+        footview.backgroundColor=[UIColor clearColor];
+        UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 2,180,18)];
+        lblinstruction.text=@"Special instructions";
+        lblinstruction.textColor=[UIColor whiteColor];
+        lblinstruction.backgroundColor=[UIColor clearColor];
+        [footview addSubview:lblinstruction];
+        [lblinstruction release];
+        
+        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,22, 320, 30)] autorelease];
+        [instructionfield setBorderStyle:UITextBorderStyleLine];
+        instructionfield.placeholder=@"Optional";
+        instructionfield.delegate=self;
+        instructionfield.tag=559;
+        instructionfield.textColor=[UIColor whiteColor];
+        instructionfield.layer.borderWidth=1.0;
+        instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
+        [footview addSubview:instructionfield];
+        if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
+            instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
+        }
+
+        tblView.tableFooterView=footview;
 
     }else if (viewtype==1){
        
-        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 38,310, 18)];
+        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 48,310, 18)];
         lblitem.text=[dictitemdetails valueForKey:@"name"];
         lblitem.textColor=[UIColor whiteColor];
         lblitem.backgroundColor=[UIColor clearColor];
         [mainScroll addSubview:lblitem];
         [lblitem release];
         
-        UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 56, 320, 1.5)];
+        UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 66, 320, 1.5)];
         lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
         [mainScroll addSubview:lineview];
         [lineview release];
@@ -100,46 +169,46 @@
         CGSize myStringSize = [[dictitemdetails valueForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize:14]
                                    constrainedToSize:CGSizeMake(310, 100)
                                        lineBreakMode:NSLineBreakByWordWrapping];
-        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 59,310, myStringSize.height+30)];
+        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5,69,310, myStringSize.height+30)];
         lbldescription.text=[dictitemdetails valueForKey:@"description"];
         lbldescription.textColor=[UIColor whiteColor];
         lbldescription.numberOfLines=6;
         lbldescription.backgroundColor=[UIColor clearColor];
         [mainScroll addSubview:lbldescription];
         [lbldescription release];
-
+        
+        UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 175,180,18)];
+        if (IS_IPHONE_5) {
+            lblinstruction.frame=CGRectMake(5, 187,180,18);
+        }
+        lblinstruction.text=@"Special instructions";
+        lblinstruction.textColor=[UIColor whiteColor];
+        lblinstruction.backgroundColor=[UIColor clearColor];
+        [mainScroll addSubview:lblinstruction];
+        [lblinstruction release];
+        
+        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(-1.5,195, 323, 30)] autorelease];
+        if (IS_IPHONE_5) {
+            instructionfield.frame=CGRectMake(-1.5,215, 323, 30);
+        }
+        [instructionfield setBorderStyle:UITextBorderStyleLine];
+        instructionfield.placeholder=@"Optional";
+        instructionfield.delegate=self;
+        instructionfield.tag=559;
+        instructionfield.textColor=[UIColor whiteColor];
+        instructionfield.layer.borderWidth=1.5;
+        instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
+        [mainScroll addSubview:instructionfield];
+        
+        if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
+            instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
+        }
     }
     
-    UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 275,180,18)];
-    if (IS_IPHONE_5) {
-        lblinstruction.frame=CGRectMake(5, 357,180,18);
-    }
-    lblinstruction.text=@"Special instructions";
-    lblinstruction.textColor=[UIColor whiteColor];
-    lblinstruction.backgroundColor=[UIColor clearColor];
-    [mainScroll addSubview:lblinstruction];
-    [lblinstruction release];
-    
-    UITextField* instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(-1.5,295, 323, 30)] autorelease];
-    if (IS_IPHONE_5) {
-        instructionfield.frame=CGRectMake(-1.5,385, 323, 30);
-    }
-    [instructionfield setBorderStyle:UITextBorderStyleLine];
-    instructionfield.placeholder=@"Optional";
-    instructionfield.delegate=self;
-    instructionfield.tag=559;
-    instructionfield.textColor=[UIColor whiteColor];
-    instructionfield.layer.borderWidth=1.5;
-    instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
-    [mainScroll addSubview:instructionfield];
-
-    if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
-        instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
-    }
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    orderBtn.frame=CGRectMake(5,330, 250, 30);
+    orderBtn.frame=CGRectMake(162,330, 150, 30);
     if (IS_IPHONE_5) {
-        orderBtn.frame=CGRectMake(5,418, 250, 30);
+        orderBtn.frame=CGRectMake(162,418, 150, 30);
 
     }
     orderBtn.tag=556;
@@ -150,10 +219,24 @@
         [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%@",@"Add to order",[dictitemdetails valueForKey:@"price"]] forState:UIControlStateNormal];
 
     }
+    [orderBtn setTitle:[NSString stringWithFormat:@"%@",@"Add to order"] forState:UIControlStateNormal];
     [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [orderBtn addTarget:self action:@selector(Button_Order:) forControlEvents:UIControlEventTouchUpInside];
     orderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
     [mainScroll addSubview:orderBtn];
+    
+    
+    UIButton *cancelorderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+    cancelorderBtn.frame=CGRectMake(9,330, 150, 30);
+    if (IS_IPHONE_5) {
+        cancelorderBtn.frame=CGRectMake(9,418, 150, 30);
+    }
+    [cancelorderBtn setTitle:@"Cancel" forState:UIControlStateNormal];
+    [cancelorderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [cancelorderBtn addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+    cancelorderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
+    [mainScroll addSubview:cancelorderBtn];
+    
     if (!isEdit || viewtype==1) {
 
         if ([dictitemdetails valueForKey:@"option_groups"]) {
@@ -249,30 +332,8 @@
         [arrCustomDrinks setValue:[dictitemdetails valueForKey:@"instructions"] forKey:@"instructions"];
         [arrCustomDrinks setValue:[dictitemdetails valueForKey:@"ingredients"] forKey:@"ingredients"];
 
-        NSLog(@"%@",arrCustomDrinks);
     }
-    UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
-    buttonFav.frame=CGRectMake(265, 335, 20, 20);
-    if (IS_IPHONE_5)
-        buttonFav.frame=CGRectMake(265, 422, 20, 20);
-   
-    buttonFav.tag=557;
-    [buttonFav addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
-    [buttonFav setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
-    [buttonFav setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
-    [mainScroll addSubview:buttonFav];
-    
-    UILabel *lblfav=[[UILabel alloc]initWithFrame:CGRectMake(285,335, 100, 18)];
-    if (IS_IPHONE_5)
-        lblfav.frame=CGRectMake(285, 422, 100, 18);
-
-    lblfav.textColor=[UIColor whiteColor];
-    lblfav.text=@"Favorite";
-    lblfav.textAlignment=NSTextAlignmentLeft;
-    lblfav.backgroundColor=[UIColor clearColor];
-    lblfav.font=[UIFont systemFontOfSize:9];
-    [mainScroll addSubview:lblfav];
-    [lblfav release];
+        
     
    /* UIButton *buttonLike=[UIButton buttonWithType:UIButtonTypeCustom];
     buttonLike.frame=CGRectMake(265, 346, 13, 13);
@@ -299,6 +360,8 @@
     isGettingFavorites=YES;
     [self.sharedController getFavoriteDrinksbybartsyID:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] venueID:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:self];
 
+    //[self.sharedController performSelectorOnMainThread:@selector() withObject:nil waitUntilDone:YES];
+    
    if( viewtype==2&&isEdit==YES || viewtype==3&&isEdit==YES || viewtype==4 && isEdit==YES){
       
 
@@ -318,7 +381,6 @@
 
     }
 }
-
 
 
 -(void)HashmappingIngradients:(NSDictionary*)Dict{
@@ -418,43 +480,105 @@
     headerView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"sectionBg.png"]];
     UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 3, 280, 30)];
     [headerTitle setBackgroundColor:[UIColor clearColor]];
-    [headerTitle setFont:[UIFont boldSystemFontOfSize:16]];
+    [headerTitle setFont:[UIFont systemFontOfSize:17]];
     [headerTitle setTextColor:[UIColor whiteColor]];
     UILabel *lbltype=[[UILabel alloc]initWithFrame:CGRectMake(120, 3, 280, 30)];
     [lbltype setBackgroundColor:[UIColor clearColor]];
-    [lbltype setFont:[UIFont systemFontOfSize:10]];
+    [lbltype setFont:[UIFont systemFontOfSize:12]];
     [lbltype setTextColor:[UIColor whiteColor]];
     if (viewtype==4){
         NSDictionary *dictsection=[arrCustomDrinks objectAtIndex:section];
 
          headerTitle.text=[NSString stringWithFormat:@"%@",[dictsection valueForKey:@"text"]];
-        lbltype.text=[NSString stringWithFormat:@"(%@)",[dictsection valueForKey:@"type"]];
+        if ([[dictsection valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"] ||[[dictsection valueForKey:@"type"] isEqualToString:@"ITEM_SELECT"]) {
+            
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose one"];
+        }else{
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose any"];
+        }
+        
     }else if (viewtype==2){
         NSDictionary *dictsection=[arrCustomDrinks objectAtIndex:section];
 
     if (section==0) {
         headerTitle.text=[NSString stringWithFormat:@"%@",[dictsection valueForKey:@"name"]];
-        lbltype.text=[NSString stringWithFormat:@"(%@)",[dictsection valueForKey:@"type"]];
+        if ([[dictsection valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"] ||[[dictsection valueForKey:@"type"] isEqualToString:@"ITEM_SELECT"]) {
+            
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose one"];
+        }else{
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose any"];
+        }
 
 
     }else{
         headerTitle.text=[NSString stringWithFormat:@"%@",[dictsection valueForKey:@"text"]];
-        lbltype.text=[NSString stringWithFormat:@"(%@)",[dictsection valueForKey:@"type"]];
+        if ([[dictsection valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"] ||[[dictsection valueForKey:@"type"] isEqualToString:@"ITEM_SELECT"]) {
+            
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose one"];
+        }else{
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose any"];
+        }
 
 
      }
     }else if(viewtype==3){
         NSDictionary *dictsection=[arrCustomDrinks objectAtIndex:section];
         headerTitle.text=[NSString stringWithFormat:@"%@",[dictsection valueForKey:@"text"]];
-        lbltype.text=[NSString stringWithFormat:@"(%@)",[dictsection valueForKey:@"type"]];
+        if ([[dictsection valueForKey:@"type"] isEqualToString:@"OPTION_CHOOSE"] ||[[dictsection valueForKey:@"type"] isEqualToString:@"ITEM_SELECT"]) {
+            
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose one"];
+        }else{
+            lbltype.text=[NSString stringWithFormat:@"(%@)",@"choose any"];
+        }
 
     }
+    CGSize lblwidth=[headerTitle.text sizeWithFont:[UIFont boldSystemFontOfSize:16] forWidth:280 lineBreakMode:NSLineBreakByWordWrapping];
+    lbltype.frame=CGRectMake(lblwidth.width+14, lbltype.frame.origin.y, lbltype.frame.size.width, lbltype.frame.size.height);
     [headerView addSubview:headerTitle];
     [headerView addSubview:lbltype];
         
     return headerView;
    
 }
+/*
+-(UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (section==[arrCustomDrinks count]-1) {
+        
+        UIView *footview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)] autorelease];
+        footview.backgroundColor=[UIColor clearColor];
+        UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 2,180,18)];
+        lblinstruction.text=@"Special instructions";
+        lblinstruction.textColor=[UIColor whiteColor];
+        lblinstruction.backgroundColor=[UIColor clearColor];
+        [footview addSubview:lblinstruction];
+        [lblinstruction release];
+        
+        UITextField* instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,22, 320, 30)] autorelease];
+        [instructionfield setBorderStyle:UITextBorderStyleLine];
+        instructionfield.placeholder=@"Optional";
+        instructionfield.delegate=self;
+        instructionfield.tag=559;
+        instructionfield.textColor=[UIColor whiteColor];
+        //instructionfield.layer.borderWidth=1.5;
+        //instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
+        [footview addSubview:instructionfield];
+
+        return footview;
+    }else{
+        return nil;
+    }
+    
+}
+-(CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section==[arrCustomDrinks count]-1) {
+        
+        return 100;
+    }else
+    return 0;
+}*/
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (viewtype==4){
@@ -491,8 +615,8 @@
     cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
     cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
-    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(40, 2, 270, 40)];
-    lblName.font=[UIFont systemFontOfSize:14];
+    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 270, 44)];
+    lblName.font=[UIFont systemFontOfSize:16];
     lblName.backgroundColor=[UIColor clearColor];
     lblName.textColor=[UIColor whiteColor];
     [cell.contentView addSubview:lblName];
@@ -501,15 +625,15 @@
     button.frame=CGRectMake(10, 10, 22, 22);
     button.tag=indexPath.row;
     //[button addTarget:self action:@selector(checkboxButton:) forControlEvents:UIControlEventTouchUpInside];
-    [button setImage:[UIImage imageNamed:@"uncheck"] forState:UIControlStateNormal];
-    [button setImage:[UIImage imageNamed:@"checked"] forState:UIControlStateSelected];
+    [button setImage:[UIImage imageNamed:@"uncheck_icon"] forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:@"check_icon"] forState:UIControlStateSelected];
     button.userInteractionEnabled=NO;
     [cell.contentView addSubview:button];
     
-    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(260, 5, 50, 25)];
+    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 44)];
     lblPrice.font=[UIFont boldSystemFontOfSize:18];
-    lblPrice.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
-    lblPrice.adjustsFontSizeToFitWidth=YES;
+    lblPrice.textColor=[UIColor colorWithRed:255.0/255.0 green:55.0/255.0 blue:184.0/255.0 alpha:1.0];
+    //lblPrice.adjustsFontSizeToFitWidth=YES;
     lblPrice.backgroundColor=[UIColor clearColor];
     [cell.contentView addSubview:lblPrice];
     if (viewtype==4) {
@@ -820,7 +944,7 @@
         }
     }
     UIButton *orderBtn=(UIButton*)[mainScroll viewWithTag:556];
-     [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%.2f",@"Add to order",floatTotalPrice] forState:UIControlStateNormal];
+   //  [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%.2f",@"Add to order",floatTotalPrice] forState:UIControlStateNormal];
 }
 
 #pragma mark--------------Saving the Order Details
@@ -830,13 +954,13 @@
     
     NSMutableArray *arrMultiItemOrders=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults]objectForKey:@"multiitemorders"]];
     
-    UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
+    //UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
     // Saving the Locu menu order in UserDefaults
     if (viewtype==1)
     {
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrMultiItemOrders objectAtIndex:arrIndex]];
-        if (txtFieldSpecialInstructions.text.length>0) {
-            [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        if (instructionfield.text.length>0) {
+            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
             
         }else{
             [dictItem setObject:@"" forKey:@"specialInstructions"];
@@ -896,8 +1020,8 @@
         [dictItem setObject:[NSNumber numberWithInt:2] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
 
-        if (txtFieldSpecialInstructions.text.length>0) {
-            [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        if (instructionfield.text.length>0) {
+            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
         }else{
             [dictItem setObject:@"" forKey:@"specialInstructions"];
         }
@@ -958,8 +1082,8 @@
         [dictItem setObject:[NSNumber numberWithInt:4] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
-        if (txtFieldSpecialInstructions.text.length>0) {
-            [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        if (instructionfield.text.length>0) {
+            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
             
         }else{
             [dictItem setObject:@"" forKey:@"specialInstructions"];
@@ -1024,8 +1148,8 @@
         [dictItem setObject:[NSNumber numberWithInt:3] forKey:@"Viewtype"];
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
-        if (txtFieldSpecialInstructions.text.length>0) {
-            [dictItem setObject:txtFieldSpecialInstructions.text forKey:@"specialInstructions"];
+        if (instructionfield.text.length>0) {
+            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
             
         }else{
             [dictItem setObject:@"" forKey:@"specialInstructions"];
@@ -1062,7 +1186,7 @@
 //Saving the favorite
 -(void)SavingFavorites{
     
-    UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
+   // UITextField *txtFieldSpecialInstructions=(UITextField*)[mainScroll viewWithTag:559];
 
     NSMutableArray *arritemlist=[[NSMutableArray alloc]init];
     
@@ -1102,8 +1226,8 @@
               }
             [dictitemlist setObject:[NSString stringWithFormat:@"%@",[dictTemp valueForKey:@"price"]] forKey:@"order_price"];
             [dictitemlist setObject:tempArray forKey:@"option_groups"];
-              if ([txtFieldSpecialInstructions.text length]>0) {
-                  [dictitemlist setObject:txtFieldSpecialInstructions.text forKey:@"special_instructions"];
+              if ([instructionfield.text length]>0) {
+                  [dictitemlist setObject:instructionfield.text forKey:@"special_instructions"];
 
               }else
                   [dictitemlist setObject:@"" forKey:@"special_instructions"];
@@ -1220,8 +1344,8 @@
                 [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
             }
             NSString *strsplInst;
-            if ([txtFieldSpecialInstructions.text length]>0) {
-                strsplInst=txtFieldSpecialInstructions.text;
+            if ([instructionfield.text length]>0) {
+                strsplInst=instructionfield.text;
             }else{
                 strsplInst=@"";
             }
@@ -1281,8 +1405,8 @@
                 [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
             }
             NSString *strsplInst;
-            if ([txtFieldSpecialInstructions.text length]>0) {
-                strsplInst=txtFieldSpecialInstructions.text;
+            if ([instructionfield.text length]>0) {
+                strsplInst=instructionfield.text;
             }else{
                 strsplInst=@"";
             }
@@ -1345,8 +1469,8 @@
                 [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
             }
             NSString *strsplInst;
-            if ([txtFieldSpecialInstructions.text length]>0) {
-                strsplInst=txtFieldSpecialInstructions.text;
+            if ([instructionfield.text length]>0) {
+                strsplInst=instructionfield.text;
             }else{
                 strsplInst=@"";
             }
@@ -1365,8 +1489,8 @@
     
     
     NSString *strDescription;
-    if ([txtFieldSpecialInstructions.text length]>0) {
-        strDescription=txtFieldSpecialInstructions.text;
+    if ([instructionfield.text length]>0) {
+        strDescription=instructionfield.text;
     }else{
         strDescription=@"";
     }
@@ -1520,8 +1644,11 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
     UIScrollView *scrollview=(UIScrollView*)[self.view viewWithTag:554];
-        
-    [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y-90)];
+    if (viewtype==1) {
+        [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y-90)];
+    }else{
+        [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y+60)];
+    }
     
 }
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

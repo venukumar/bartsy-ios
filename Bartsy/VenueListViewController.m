@@ -265,19 +265,21 @@
     else
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
 
-        
+     NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dict objectForKey:@"venueImagePath"]];
 
-//    UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 70, 70)];
-//    imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
-//    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-//    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-//    [[imgViewDrink layer] setShadowRadius:3.0];
-//    [[imgViewDrink layer] setShadowOpacity:0.8];
-//    imgViewDrink.backgroundColor=[UIColor clearColor];
-    //[cell.contentView addSubview:imgViewDrink];
-    //[imgViewDrink release];
+    UIImageView *imgViewDrink=[[UIImageView alloc]initWithFrame:CGRectMake(2, 5, 70, 70)];
+    //imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
+    [imgViewDrink setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+
+    [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
+    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
+    [[imgViewDrink layer] setShadowRadius:3.0];
+    [[imgViewDrink layer] setShadowOpacity:0.8];
+    imgViewDrink.backgroundColor=[UIColor clearColor];
+    [cell.contentView addSubview:imgViewDrink];
+    [imgViewDrink release];
     
-    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(5, 10, 240, 20)];
+    UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(81, 10, 240, 20)];
     lblName.backgroundColor=[UIColor clearColor];
     lblName.text=[dict objectForKey:@"venueName"];
     lblName.font=[UIFont systemFontOfSize:18];
@@ -288,7 +290,7 @@
     NSString *strTrim=[[NSString alloc]initWithString:[dict objectForKey:@"address"]];
     NSRange range = [strTrim rangeOfString:@",United"];
     NSString *shortString = [strTrim substringToIndex:range.location];
-    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5, 30, 240, 20)];
+    UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(81, 30, 240, 20)];
     lblDescription.numberOfLines=1;
     lblDescription.text=shortString;
     lblDescription.font=[UIFont systemFontOfSize:12];
@@ -299,7 +301,7 @@
     
     if([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"])
     {
-        UILabel *lblNoOfPeople=[[UILabel alloc]initWithFrame:CGRectMake(5, 50, 15, 20)];
+        UILabel *lblNoOfPeople=[[UILabel alloc]initWithFrame:CGRectMake(81, 50, 15, 20)];
         lblNoOfPeople.numberOfLines=1;
         lblNoOfPeople.text=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"checkedInUsers"] integerValue]];
         lblNoOfPeople.font=[UIFont systemFontOfSize:12];
@@ -308,7 +310,7 @@
         lblNoOfPeople.textColor=[UIColor colorWithRed:248.0/255.0 green:58.0/255.0 blue:179.0/255.0 alpha:1.0];
         [cell.contentView addSubview:lblNoOfPeople];
         
-        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(20, 50, 200, 20)];
+        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(20+81, 50, 200, 20)];
         lblMsg.numberOfLines=1;
         lblMsg.text=@"People checked in here";
         lblMsg.font=[UIFont systemFontOfSize:12];
@@ -319,10 +321,10 @@
     }
     else
     {
-        UIImageView *imgViewClosed=[self createImageViewWithImage:[UIImage imageNamed:@"exclamatory_icon.png"] frame:CGRectMake(5, 54, 12.5, 12.5) tag:0];
+        UIImageView *imgViewClosed=[self createImageViewWithImage:[UIImage imageNamed:@"exclamatory_icon.png"] frame:CGRectMake(81, 54, 12.5, 12.5) tag:0];
         [cell.contentView addSubview:imgViewClosed];
         
-        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(20, 50, 200, 20)];
+        UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(20+81, 50, 200, 20)];
         lblMsg.numberOfLines=1;
         lblMsg.text=@"Closed";
         lblMsg.font=[UIFont systemFontOfSize:12];
@@ -331,20 +333,29 @@
         [cell.contentView addSubview:lblMsg];
     }
         
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"] integerValue]==[[dict valueForKey:@"venueId"] integerValue]) {
         
-    NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
-    UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 20, 60, 15) tag:0 font:[UIFont systemFontOfSize:20] color:[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] numberOfLines:1];
-    lblDistance.adjustsFontSizeToFitWidth=YES;
-    lblDistance.backgroundColor=[UIColor clearColor];
-    lblDistance.textAlignment=NSTextAlignmentCenter;
-    [cell.contentView addSubview:lblDistance];
-    //[lblDistance release];
-
-    
-    UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 35, 60, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] numberOfLines:1];
-    lblMiles.backgroundColor=[UIColor clearColor];
-    lblMiles.textAlignment=NSTextAlignmentCenter;
-    [cell.contentView addSubview:lblMiles];
+        UIImageView *homecheckimg=[[UIImageView alloc]initWithFrame:CGRectMake(265,20,35, 35)];
+        homecheckimg.image=[UIImage imageNamed:@"home-footer"];
+        [cell.contentView addSubview:homecheckimg];
+        
+    }else{
+        
+        NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
+        UILabel *lblDistance=[self createLabelWithTitle:strDistance frame:CGRectMake(250, 20, 60, 15) tag:0 font:[UIFont systemFontOfSize:20] color:[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] numberOfLines:1];
+        lblDistance.adjustsFontSizeToFitWidth=YES;
+        lblDistance.backgroundColor=[UIColor clearColor];
+        lblDistance.textAlignment=NSTextAlignmentCenter;
+        [cell.contentView addSubview:lblDistance];
+        //[lblDistance release];
+        
+        
+        UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 35, 60, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] numberOfLines:1];
+        lblMiles.backgroundColor=[UIColor clearColor];
+        lblMiles.textAlignment=NSTextAlignmentCenter;
+        [cell.contentView addSubview:lblMiles];
+    }
+        
     // [lblMiles release];
     
 //    if([[dict objectForKey:@"venueStatus"] isEqualToString:@"OFFLINE"])

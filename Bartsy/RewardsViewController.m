@@ -70,7 +70,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:YES];
-    
+    [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
+
     [self.sharedController getUserRewardsbybartsyID:[[NSUserDefaults standardUserDefaults] valueForKey:@"bartsyId"] delegate:self];
 }
 
@@ -118,11 +119,12 @@
         cell.venueName.text=[dictForrewards valueForKey:@"venueName"];
         
         if ([[dictForrewards valueForKey:@"address"] length]==0) {
-            cell.venueaddress.text=@"Address unavailable";
+            //cell.venueaddress.text=@"Address unavailable";
         }else{
            cell.venueaddress.text=[dictForrewards valueForKey:@"address"]; 
         }
         cell.venuepoints.text=[NSString stringWithFormat:@"%d points",[[dictForrewards valueForKey:@"rewards"] integerValue]];
+        
     }else{
         
         cell.venueaddress.text=@"\n\n  No reward points available";
@@ -138,7 +140,9 @@
 
 #pragma mark-----------Sharedcontroller Delegate
 -(void)controllerDidFinishLoadingWithResult:(id)result{
-         
+    
+    [self hideProgressView:nil];
+
     if ([result isKindOfClass:[NSDictionary class]]) {
             
         if ([[result valueForKey:@"errorCode"] integerValue]==0) {
@@ -161,7 +165,7 @@
         }
         else{
             
-            [self createAlertViewWithTitle:@"Error" message:[result valueForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+            [self createAlertViewWithTitle:@"" message:[result valueForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
         }
             
     }else if ([result isKindOfClass:[NSArray class]]){
@@ -174,7 +178,9 @@
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error{
     
-    [self createAlertViewWithTitle:@"Error" message:[error localizedDescription] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
+    [self hideProgressView:nil];
+
+    [self createAlertViewWithTitle:@"" message:[error localizedDescription] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
     
 }
 

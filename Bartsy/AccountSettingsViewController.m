@@ -174,7 +174,7 @@
             profileScreen.isCmgForEditProfile=YES;
             [self.navigationController pushViewController:profileScreen animated:YES];
             [profileScreen release];
-        }else if (indexPath.row==4){
+        }else if (indexPath.row==3){
             
             NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
             NSString *strMsg=nil;

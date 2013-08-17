@@ -290,10 +290,18 @@
         btnCancel.titleLabel.textColor=[UIColor blackColor];
         [viewFooter addSubview:btnCancel];
         
-        UIButton *btnSubmit=[self createUIButtonWithTitle:@"Submit" image:nil frame:CGRectMake(160, 5, 100, 40) tag:0 selector:@selector(btnContinue_TouchUpInside) target:self];
+       /* UIButton *btnSubmit=[self createUIButtonWithTitle:@"Submit" image:nil frame:CGRectMake(160, 5, 100, 40) tag:0 selector:@selector(btnContinue_TouchUpInside) target:self];
         btnSubmit.titleLabel.font=[UIFont boldSystemFontOfSize:18];
-        btnSubmit.titleLabel.textColor=[UIColor blackColor];
-        [viewFooter addSubview:btnSubmit];
+        btnSubmit.titleLabel.textColor=[UIColor blackColor];*/
+        UIButton *btnCustom=[UIButton buttonWithType:UIButtonTypeCustom];
+        //    [btnCustom setBackgroundImage:image forState:UIControlStateNormal];
+        btnCustom.frame=CGRectMake(160, 5, 100, 40);
+        [btnCustom setTitle:@"Submit" forState:UIControlStateNormal];
+        [btnCustom setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btnCustom addTarget:self action:@selector(btnContinue_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        btnCustom.titleLabel.font=[UIFont boldSystemFontOfSize:18];
+
+        [viewFooter addSubview:btnCustom];
         
         return viewFooter;
     }
@@ -321,7 +329,7 @@
     else if(indexPath.section==2)
     {
         if([creditCardInfo.redactedCardNumber length])
-        return 120+155;
+        return 120;
         else
         return 50;
     }
@@ -472,8 +480,10 @@
         lblCreditCard.textAlignment=NSTextAlignmentLeft;
         [cell.contentView addSubview:lblCreditCard];
         
-        if([creditCardInfo.redactedCardNumber length])
+        if([creditCardInfo.redactedCardNumber length]){
+            
             lblCreditCard.text=creditCardInfo.redactedCardNumber;
+        }
         
         [lblCreditCard setUserInteractionEnabled:YES];
         
@@ -549,7 +559,7 @@
             btnDelete.titleLabel.textColor=[UIColor blackColor];
             [cell.contentView addSubview:btnDelete];
             
-            UILabel *lblEthnicity=[self createLabelWithTitle:@"Ethnicity" frame:CGRectMake(10, 125, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+        /*    UILabel *lblEthnicity=[self createLabelWithTitle:@"Ethnicity" frame:CGRectMake(10, 125, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
             lblEthnicity.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblEthnicity];
             
@@ -599,7 +609,7 @@
             if (strZipcode.length>0) {
                 txtFldzipcode.text=strZipcode;
             }
-            [cell.contentView addSubview:txtFldzipcode];
+            [cell.contentView addSubview:txtFldzipcode];*/
         }
         
         
@@ -631,15 +641,18 @@
             self.txtViewDescription=[[UITextView alloc] initWithFrame:CGRectMake(10, 70, 280, 50)];
             self.txtViewDescription.tag=555;
             self.txtViewDescription.delegate=self;
-            if([[dictResult objectForKey:@"description"] length])
+            if([[dictResult objectForKey:@"description"] length]){
+                self.txtViewDescription.textColor=[UIColor blackColor];
                 self.txtViewDescription.text=[dictResult objectForKey:@"description"];
-            else
-            self.txtViewDescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+            }else{
+                self.txtViewDescription.textColor=[UIColor lightGrayColor];
+                self.txtViewDescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+            }
             
             [[txtViewDescription layer]setBorderWidth:1];
             [[txtViewDescription layer]setBorderColor:[[UIColor blackColor] CGColor]];
             [[txtViewDescription layer]setCornerRadius:5];
-            self.txtViewDescription.textColor=[UIColor lightGrayColor];
+            
             self.txtViewDescription.font=[UIFont systemFontOfSize:12];
             [cell.contentView addSubview:txtViewDescription];
             
@@ -1163,16 +1176,22 @@
     
 }
 
+- (void)textViewDidEndEditing:(UITextView *)textView{
+    
+     //txtViewDescription.text=[dictResult objectForKey:@"description"];
+    [dictResult setObject:[NSString stringWithFormat:@"%@",textView.text] forKey:@"description"];
+}
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
 
-    txtViewDescription.text=[dictResult objectForKey:@"description"];
+    //txtViewDescription.text=[dictResult objectForKey:@"description"];
 
-    [dictResult setObject:[NSString stringWithFormat:@"%@%@",textView.text,text] forKey:@"description"];
+   // [dictResult setObject:[NSString stringWithFormat:@"%@%@",textView.text,text] forKey:@"description"];
     
     if(range.length == 1 && [text length] == 0)
     {
-        [dictResult setObject:[NSString stringWithFormat:@"%@",[textView.text substringToIndex:[textView.text length]-1]] forKey:@"description"];
+       // [dictResult setObject:[NSString stringWithFormat:@"%@",[textView.text substringToIndex:[textView.text length]-1]] forKey:@"description"];
     }
     
     if([text isEqualToString:@"\n"])
