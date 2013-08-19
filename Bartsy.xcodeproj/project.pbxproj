@@ -45,6 +45,11 @@
 		CB882A0617C212DB00094EAB /* MuseoSans-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829FC17C212DB00094EAB /* MuseoSans-900.otf */; };
 		CB882A0717C212DB00094EAB /* MuseoSans-900Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829FD17C212DB00094EAB /* MuseoSans-900Italic.otf */; };
 		CB882A0917C22CC400094EAB /* menu-bg20.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A0817C22CC400094EAB /* menu-bg20.png */; };
+		CB882A0D17C255B500094EAB /* percentage_count-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A0A17C255B400094EAB /* percentage_count-selected.png */; };
+		CB882A0E17C255B500094EAB /* percentage_count.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A0B17C255B400094EAB /* percentage_count.png */; };
+		CB882A0F17C255B500094EAB /* count_circle.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A0C17C255B500094EAB /* count_circle.png */; };
+		CB882A1117C266AA00094EAB /* Bartsy_main-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A1017C266AA00094EAB /* Bartsy_main-bg.png */; };
+		CB882A1317C26AE000094EAB /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A1217C26AE000094EAB /* circle.png */; };
 		CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB482177417AB00445934 /* NotificationsViewController.m */; };
 		CB8AB4861774200B00445934 /* MessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4851774200B00445934 /* MessageListViewController.m */; };
 		CB8AB4891774376400445934 /* arrow_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4871774376400445934 /* arrow_chat@2x.png */; };
@@ -361,6 +366,11 @@
 		CB8829FC17C212DB00094EAB /* MuseoSans-900.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-900.otf"; sourceTree = "<group>"; };
 		CB8829FD17C212DB00094EAB /* MuseoSans-900Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-900Italic.otf"; sourceTree = "<group>"; };
 		CB882A0817C22CC400094EAB /* menu-bg20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-bg20.png"; sourceTree = "<group>"; };
+		CB882A0A17C255B400094EAB /* percentage_count-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "percentage_count-selected.png"; sourceTree = "<group>"; };
+		CB882A0B17C255B400094EAB /* percentage_count.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = percentage_count.png; sourceTree = "<group>"; };
+		CB882A0C17C255B500094EAB /* count_circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = count_circle.png; sourceTree = "<group>"; };
+		CB882A1017C266AA00094EAB /* Bartsy_main-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Bartsy_main-bg.png"; sourceTree = "<group>"; };
+		CB882A1217C26AE000094EAB /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		CB8AB481177417AB00445934 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
 		CB8AB482177417AB00445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CB8AB4841774200B00445934 /* MessageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageListViewController.h; sourceTree = "<group>"; };
@@ -1496,6 +1506,11 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB882A1217C26AE000094EAB /* circle.png */,
+				CB882A1017C266AA00094EAB /* Bartsy_main-bg.png */,
+				CB882A0A17C255B400094EAB /* percentage_count-selected.png */,
+				CB882A0B17C255B400094EAB /* percentage_count.png */,
+				CB882A0C17C255B500094EAB /* count_circle.png */,
 				CB882A0817C22CC400094EAB /* menu-bg20.png */,
 				CBED0DCD17BFA206002F2221 /* check_icon.png */,
 				CBED0DCE17BFA206002F2221 /* uncheck_icon.png */,
@@ -1814,6 +1829,11 @@
 				CB882A0617C212DB00094EAB /* MuseoSans-900.otf in Resources */,
 				CB882A0717C212DB00094EAB /* MuseoSans-900Italic.otf in Resources */,
 				CB882A0917C22CC400094EAB /* menu-bg20.png in Resources */,
+				CB882A0D17C255B500094EAB /* percentage_count-selected.png in Resources */,
+				CB882A0E17C255B500094EAB /* percentage_count.png in Resources */,
+				CB882A0F17C255B500094EAB /* count_circle.png in Resources */,
+				CB882A1117C266AA00094EAB /* Bartsy_main-bg.png in Resources */,
+				CB882A1317C26AE000094EAB /* circle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

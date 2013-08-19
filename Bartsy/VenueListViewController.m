@@ -302,7 +302,7 @@
     [cell.contentView addSubview:lblDescription];
     //[lblDescription release];
     
-    if([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"])
+    if([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"] || [[dict objectForKey:@"venueStatus"]isEqualToString:@"OFFLINE"])
     {
         UILabel *lblNoOfPeople=[[UILabel alloc]initWithFrame:CGRectMake(85, 60, 15, 20)];
         lblNoOfPeople.numberOfLines=1;
@@ -355,11 +355,15 @@
         lblDistance.textAlignment=NSTextAlignmentCenter;
         [cell.contentView addSubview:lblDistance];
         //[lblDistance release];
-        if(![[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"])
+        if(![[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"] )
         {
             lblDistance.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
         }
-        
+        if ([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"] || [[dict objectForKey:@"venueStatus"]isEqualToString:@"OFFLINE"]) {
+            lblDistance.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
+        }else{
+            lblDistance.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        }
         UILabel *lblMiles=[self createLabelWithTitle:@"miles" frame:CGRectMake(250, 45, 60, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] numberOfLines:1];
         lblMiles.backgroundColor=[UIColor clearColor];
         lblMiles.font=[UIFont fontWithName:@"Museo Sans" size:12];

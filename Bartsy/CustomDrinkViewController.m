@@ -77,6 +77,7 @@
 
     mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,self.view.bounds.size.height)];
     mainScroll.tag=554;
+    mainScroll.backgroundColor=[UIColor blackColor];
     [mainScroll setScrollEnabled:YES];
     [self.view addSubview:mainScroll];
   
@@ -107,6 +108,7 @@
     lblfav.textAlignment=NSTextAlignmentLeft;
     lblfav.backgroundColor=[UIColor clearColor];
     lblfav.font=[UIFont systemFontOfSize:16];
+    lblfav.font=[UIFont fontWithName:@"Museo Sans" size:16];
     [favtView addSubview:lblfav];
     [lblfav release];
 
@@ -164,6 +166,7 @@
         lblitem.text=[dictitemdetails valueForKey:@"name"];
         lblitem.textColor=[UIColor whiteColor];
         lblitem.backgroundColor=[UIColor clearColor];
+        lblitem.font=[UIFont fontWithName:@"Museo Sans" size:14];
         [mainScroll addSubview:lblitem];
         [lblitem release];
         
@@ -180,12 +183,13 @@
         lbldescription.textColor=[UIColor whiteColor];
         lbldescription.numberOfLines=6;
         lbldescription.backgroundColor=[UIColor clearColor];
+        lbldescription.font=[UIFont fontWithName:@"Museo Sans" size:14];
         [mainScroll addSubview:lbldescription];
         [lbldescription release];
         
         UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 175,180,18)];
         if (IS_IPHONE_5) {
-            lblinstruction.frame=CGRectMake(5, 187,180,18);
+            lblinstruction.frame=CGRectMake(5, 182,180,18);
         }
         lblinstruction.text=@"Special instructions";
         lblinstruction.textColor=[UIColor whiteColor];
@@ -194,18 +198,23 @@
         [mainScroll addSubview:lblinstruction];
         [lblinstruction release];
         
-        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(-1.5,195, 323, 30)] autorelease];
+        UIView *lineview2=[[UIView alloc]initWithFrame:CGRectMake(0,200,320, 1.5)];
+        lineview2.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+        [mainScroll addSubview:lineview2];
+        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,198, 320, 30)] autorelease];
         if (IS_IPHONE_5) {
-            instructionfield.frame=CGRectMake(-1.5,215, 323, 30);
+            instructionfield.frame=CGRectMake(0,212, 320, 30);
         }
         [instructionfield setBorderStyle:UITextBorderStyleLine];
         instructionfield.placeholder=@"Optional";
         instructionfield.delegate=self;
         instructionfield.tag=559;
         instructionfield.textColor=[UIColor whiteColor];
-        instructionfield.layer.borderWidth=1.5;
-        instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
+        instructionfield.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+        //instructionfield.layer.borderWidth=1.0;
+        //instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
         [mainScroll addSubview:instructionfield];
+
         
         if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
             instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
@@ -215,7 +224,7 @@
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     orderBtn.frame=CGRectMake(162,324, 150, 40);
     if (IS_IPHONE_5) {
-        orderBtn.frame=CGRectMake(162,418, 150, 30);
+        orderBtn.frame=CGRectMake(162,418, 150, 40);
 
     }
     orderBtn.tag=556;
@@ -245,7 +254,7 @@
     [cancelorderBtn addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [cancelorderBtn addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
     cancelorderBtn.tag=4445;
-    cancelorderBtn.backgroundColor=[UIColor colorWithRed:5.0/255.0 green:5.0/255.0 blue:6.0/255.0 alpha:1.0];
+    cancelorderBtn.backgroundColor=[UIColor colorWithRed:20.0/255.0 green:20.0/255.0 blue:23.0/255.0 alpha:1.0];
     [mainScroll addSubview:cancelorderBtn];
     
     if (!isEdit || viewtype==1) {
