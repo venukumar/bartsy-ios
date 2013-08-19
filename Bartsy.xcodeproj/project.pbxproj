@@ -34,6 +34,17 @@
 		CB688C7B179FE5C4001C4726 /* CustomDrinkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */; };
 		CB688C7D17A00618001C4726 /* tickmark_select.png in Resources */ = {isa = PBXBuildFile; fileRef = CB688C7C17A00618001C4726 /* tickmark_select.png */; };
 		CB688C7F17A0108C001C4726 /* home-footer.png in Resources */ = {isa = PBXBuildFile; fileRef = CB688C7E17A0108C001C4726 /* home-footer.png */; };
+		CB8829FE17C212DB00094EAB /* MuseoSans-100.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829F417C212DB00094EAB /* MuseoSans-100.otf */; };
+		CB8829FF17C212DB00094EAB /* MuseoSans-100Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829F517C212DB00094EAB /* MuseoSans-100Italic.otf */; };
+		CB882A0017C212DB00094EAB /* MuseoSans-300.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829F617C212DB00094EAB /* MuseoSans-300.otf */; };
+		CB882A0117C212DB00094EAB /* MuseoSans-300Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829F717C212DB00094EAB /* MuseoSans-300Italic.otf */; };
+		CB882A0217C212DB00094EAB /* MuseoSans-500.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829F817C212DB00094EAB /* MuseoSans-500.otf */; };
+		CB882A0317C212DB00094EAB /* MuseoSans-500Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829F917C212DB00094EAB /* MuseoSans-500Italic.otf */; };
+		CB882A0417C212DB00094EAB /* MuseoSans-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829FA17C212DB00094EAB /* MuseoSans-700.otf */; };
+		CB882A0517C212DB00094EAB /* MuseoSans-700Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829FB17C212DB00094EAB /* MuseoSans-700Italic.otf */; };
+		CB882A0617C212DB00094EAB /* MuseoSans-900.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829FC17C212DB00094EAB /* MuseoSans-900.otf */; };
+		CB882A0717C212DB00094EAB /* MuseoSans-900Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB8829FD17C212DB00094EAB /* MuseoSans-900Italic.otf */; };
+		CB882A0917C22CC400094EAB /* menu-bg20.png in Resources */ = {isa = PBXBuildFile; fileRef = CB882A0817C22CC400094EAB /* menu-bg20.png */; };
 		CB8AB483177417AB00445934 /* NotificationsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB482177417AB00445934 /* NotificationsViewController.m */; };
 		CB8AB4861774200B00445934 /* MessageListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB8AB4851774200B00445934 /* MessageListViewController.m */; };
 		CB8AB4891774376400445934 /* arrow_chat@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB8AB4871774376400445934 /* arrow_chat@2x.png */; };
@@ -339,6 +350,17 @@
 		CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomDrinkViewController.xib; sourceTree = "<group>"; };
 		CB688C7C17A00618001C4726 /* tickmark_select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tickmark_select.png; sourceTree = "<group>"; };
 		CB688C7E17A0108C001C4726 /* home-footer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "home-footer.png"; sourceTree = "<group>"; };
+		CB8829F417C212DB00094EAB /* MuseoSans-100.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-100.otf"; sourceTree = "<group>"; };
+		CB8829F517C212DB00094EAB /* MuseoSans-100Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-100Italic.otf"; sourceTree = "<group>"; };
+		CB8829F617C212DB00094EAB /* MuseoSans-300.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-300.otf"; sourceTree = "<group>"; };
+		CB8829F717C212DB00094EAB /* MuseoSans-300Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-300Italic.otf"; sourceTree = "<group>"; };
+		CB8829F817C212DB00094EAB /* MuseoSans-500.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-500.otf"; sourceTree = "<group>"; };
+		CB8829F917C212DB00094EAB /* MuseoSans-500Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-500Italic.otf"; sourceTree = "<group>"; };
+		CB8829FA17C212DB00094EAB /* MuseoSans-700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-700.otf"; sourceTree = "<group>"; };
+		CB8829FB17C212DB00094EAB /* MuseoSans-700Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-700Italic.otf"; sourceTree = "<group>"; };
+		CB8829FC17C212DB00094EAB /* MuseoSans-900.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-900.otf"; sourceTree = "<group>"; };
+		CB8829FD17C212DB00094EAB /* MuseoSans-900Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MuseoSans-900Italic.otf"; sourceTree = "<group>"; };
+		CB882A0817C22CC400094EAB /* menu-bg20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-bg20.png"; sourceTree = "<group>"; };
 		CB8AB481177417AB00445934 /* NotificationsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationsViewController.h; sourceTree = "<group>"; };
 		CB8AB482177417AB00445934 /* NotificationsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationsViewController.m; sourceTree = "<group>"; };
 		CB8AB4841774200B00445934 /* MessageListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageListViewController.h; sourceTree = "<group>"; };
@@ -849,6 +871,31 @@
 			name = SignIn;
 			sourceTree = "<group>";
 		};
+		CB8829F217C212C400094EAB /* CustomFont */ = {
+			isa = PBXGroup;
+			children = (
+				CB8829F317C212DB00094EAB /* Museo Sans */,
+			);
+			name = CustomFont;
+			sourceTree = "<group>";
+		};
+		CB8829F317C212DB00094EAB /* Museo Sans */ = {
+			isa = PBXGroup;
+			children = (
+				CB8829F417C212DB00094EAB /* MuseoSans-100.otf */,
+				CB8829F517C212DB00094EAB /* MuseoSans-100Italic.otf */,
+				CB8829F617C212DB00094EAB /* MuseoSans-300.otf */,
+				CB8829F717C212DB00094EAB /* MuseoSans-300Italic.otf */,
+				CB8829F817C212DB00094EAB /* MuseoSans-500.otf */,
+				CB8829F917C212DB00094EAB /* MuseoSans-500Italic.otf */,
+				CB8829FA17C212DB00094EAB /* MuseoSans-700.otf */,
+				CB8829FB17C212DB00094EAB /* MuseoSans-700Italic.otf */,
+				CB8829FC17C212DB00094EAB /* MuseoSans-900.otf */,
+				CB8829FD17C212DB00094EAB /* MuseoSans-900Italic.otf */,
+			);
+			path = "Museo Sans";
+			sourceTree = "<group>";
+		};
 		CB8AB4E6177457E000445934 /* BubbleTableClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -1017,6 +1064,7 @@
 		E041068E172A8D6F009F1B1E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CB8829F217C212C400094EAB /* CustomFont */,
 				CB10B062178D396800CAF6ED /* New Images */,
 				E0DBAFAE1773474F003524EE /* 1.html */,
 				E0DBAFAF1773474F003524EE /* 2.html */,
@@ -1448,6 +1496,7 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB882A0817C22CC400094EAB /* menu-bg20.png */,
 				CBED0DCD17BFA206002F2221 /* check_icon.png */,
 				CBED0DCE17BFA206002F2221 /* uncheck_icon.png */,
 				CBED0DC917BF6F89002F2221 /* fav_icon.png */,
@@ -1754,6 +1803,17 @@
 				CBED0DCC17BF6F89002F2221 /* unfav_icon.png in Resources */,
 				CBED0DCF17BFA207002F2221 /* check_icon.png in Resources */,
 				CBED0DD017BFA207002F2221 /* uncheck_icon.png in Resources */,
+				CB8829FE17C212DB00094EAB /* MuseoSans-100.otf in Resources */,
+				CB8829FF17C212DB00094EAB /* MuseoSans-100Italic.otf in Resources */,
+				CB882A0017C212DB00094EAB /* MuseoSans-300.otf in Resources */,
+				CB882A0117C212DB00094EAB /* MuseoSans-300Italic.otf in Resources */,
+				CB882A0217C212DB00094EAB /* MuseoSans-500.otf in Resources */,
+				CB882A0317C212DB00094EAB /* MuseoSans-500Italic.otf in Resources */,
+				CB882A0417C212DB00094EAB /* MuseoSans-700.otf in Resources */,
+				CB882A0517C212DB00094EAB /* MuseoSans-700Italic.otf in Resources */,
+				CB882A0617C212DB00094EAB /* MuseoSans-900.otf in Resources */,
+				CB882A0717C212DB00094EAB /* MuseoSans-900Italic.otf in Resources */,
+				CB882A0917C22CC400094EAB /* menu-bg20.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

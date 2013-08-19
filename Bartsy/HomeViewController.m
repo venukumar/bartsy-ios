@@ -200,7 +200,7 @@
     [self getPeopleList];
     [self getPastorderAsynchronously];
     // Pagecontrol with scrollview
-     topscrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,45,320,120)];
+     topscrollView =[[UIScrollView alloc]initWithFrame:CGRectMake(0,45,320,180)];
      topscrollView.scrollEnabled=YES;
      topscrollView.pagingEnabled=YES;
      topscrollView.delegate=self;
@@ -211,42 +211,60 @@
      NSArray *temparray=[NSArray arrayWithObjects:@"background-img",@"background-img-A",@"background-img1",nil];
      for (int i=0; i<3; i++) {
      
-         UIImageView *imgview=[self createImageViewWithImage:[UIImage imageNamed:[temparray objectAtIndex:i] ] frame:CGRectMake(320*i, 0, 320, 120) tag:0];
+         UIImageView *imgview=[self createImageViewWithImage:[UIImage imageNamed:[temparray objectAtIndex:i] ] frame:CGRectMake(320*i, 0, 320, 135) tag:0];
          [topscrollView addSubview:imgview];
      
          if ([[dictVenue valueForKey:@"wifiPresent"] integerValue]==1) {
-             UIImageView *wifiimg=[[UIImageView alloc]initWithFrame:CGRectMake(18+(320*i),85,34, 16)];
+             UIImageView *wifiimg=[[UIImageView alloc]initWithFrame:CGRectMake(18+(320*i),110,30, 16)];
              wifiimg.image=[UIImage imageNamed:@"wifi-icon"];
              [topscrollView addSubview:wifiimg];
              [wifiimg release];
          }
          
-         UIImageView *infoimg=[[UIImageView alloc]initWithFrame:CGRectMake(275+(320*i),80,25, 25)];
+         UIImageView *infoimg=[[UIImageView alloc]initWithFrame:CGRectMake(275+(320*i),106,25, 25)];
          infoimg.image=[UIImage imageNamed:@"i-icon"];
          [topscrollView addSubview:infoimg];
          [infoimg release];
          if (i==0) {
-             UILabel *address=[self createLabelWithTitle:[dictVenue valueForKey:@"address"] frame:CGRectMake(31, 0, 260, 120) tag:0 font:[UIFont systemFontOfSize:22] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:3];
+             UILabel *address=[self createLabelWithTitle:[dictVenue valueForKey:@"address"] frame:CGRectMake(31, 0, 260, 120) tag:0 font:[UIFont systemFontOfSize:22] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:3];
              address.textAlignment=NSTextAlignmentCenter;
+             address.font=[UIFont fontWithName:@"Museo Sans" size:22.0];
+             
              [imgview addSubview:address];
+         }else if (i==1){
+             
+             UILabel *lblwifiname=[self createLabelWithTitle:[NSString stringWithFormat:@"%@ : %@",@"wifiPassword",[dictVenue valueForKey:@"wifiName"]] frame:CGRectMake(31, 10, 260, 30) tag:0 font:[UIFont systemFontOfSize:18] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:1];
+             lblwifiname.textAlignment=NSTextAlignmentCenter;
+             lblwifiname.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
+             [imgview addSubview:lblwifiname];
+             
+             UILabel *lblwifipswd=[self createLabelWithTitle:[NSString stringWithFormat:@"%@ : %@",@"wifiName",[dictVenue valueForKey:@"wifiPassword"]] frame:CGRectMake(31, 40, 260, 30) tag:0 font:[UIFont systemFontOfSize:18] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:1];
+             lblwifipswd.textAlignment=NSTextAlignmentCenter;
+             lblwifipswd.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
+             [imgview addSubview:lblwifipswd];
          }
      
      }
      [topscrollView setContentSize:CGSizeMake(3*320,120)];
-     pagectrl=[[UIPageControl alloc]initWithFrame:CGRectMake(110, 140, 100, 20)];
+     pagectrl=[[UIPageControl alloc]initWithFrame:CGRectMake(116, 140, 100, 20)];
      pagectrl.numberOfPages=3;
      [pagectrl setBackgroundColor:[UIColor clearColor]];
      [self.view addSubview:pagectrl];
      [pagectrl addTarget:self action:@selector(changePage:) forControlEvents:UIControlEventValueChanged];
     
     UISegmentedControl *segmentControl=[[UISegmentedControl alloc]initWithItems:[NSArray arrayWithObjects:@"Menu",strPeopleCount,strOrder,@"Past Orders", nil]];
-    segmentControl.frame=CGRectMake(2, 167, 316, 40);
-    UIFont *font = [UIFont systemFontOfSize:14.0f];
+    segmentControl.frame=CGRectMake(2, 187, 316, 44);
+    //UIFont *font = [UIFont systemFontOfSize:14.0f];
+    UIFont *font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+
     NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
                                                            forKey:UITextAttributeFont];
     [segmentControl setTitleTextAttributes:attributes
                                     forState:UIControlStateNormal];
+    [segmentControl setTintColor:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0]];
     segmentControl.segmentedControlStyle=UISegmentedControlStyleBar;
+    [segmentControl setDividerImage:[UIImage imageNamed:@"menu-bg20.png"] forLeftSegmentState:UIControlStateNormal
+                      rightSegmentState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
     segmentControl.selectedSegmentIndex=0;
     segmentControl.tag=1111;
     [segmentControl addTarget:self action:@selector(segmentControl_ValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -259,7 +277,7 @@
     
     self.sharedController=[SharedController sharedController];
     
-    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323-topscrollView.frame.size.height)];
+    UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 356-topscrollView.frame.size.height)];
     tblView.dataSource=self;
     tblView.backgroundColor = [UIColor blackColor];
     tblView.delegate=self;
@@ -267,8 +285,8 @@
     [tblView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:tblView];
     
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    if (screenBounds.size.height == 568)
+   
+    if (IS_IPHONE_5)
     {
         tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323+90-topscrollView.frame.size.height);
     }
@@ -308,7 +326,7 @@
         //storing the tax percentage
         [[NSUserDefaults standardUserDefaults] setFloat:[[dictVenue valueForKey:@"totalTaxRate"] floatValue]  forKey:@"percentTAX"];
         UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-        segmentControl.frame=CGRectMake(2, 47, 316, 40);
+        segmentControl.frame=CGRectMake(2, 47, 316, 44);
         UITableView *tblView=(UITableView*)[self.view viewWithTag:111];
         if (IS_IPHONE_5)
             tblView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 323+90);
@@ -482,9 +500,6 @@
             [self.view addSubview:drinkBtn];
         }
         
-        
-        
-        
     }else if (sender.tag==1116){
         
         NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
@@ -492,7 +507,9 @@
         isRequestForOrder=YES;
         self.sharedController=[SharedController sharedController];
         //NSLog(@":%@",dictPeopleSelectedForDrink);
-        if([[dictPeopleSelectedForDrink objectForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] ] )
+        NSString *strReseverID=[NSString stringWithFormat:@"%@",[dictPeopleSelectedForDrink objectForKey:@"bartsyId"]];
+        NSString *strSenderID=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
+        if([strReseverID isEqualToString:strSenderID ] )
         {
             [self createProgressViewToParentView:self.view withTitle:@"Sending Order details to Bartender..."];
         }
@@ -1404,13 +1421,32 @@
     dictPeopleSelectedForDrink=[[NSDictionary alloc ]initWithDictionary:dictuserInfo];
 
     UIView *Backgroundview=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 568)];
-    Backgroundview.backgroundColor=[UIColor clearColor];
+    Backgroundview.backgroundColor=[UIColor blackColor];
     Backgroundview.tag=2221;
     //Backgroundview.userInteractionEnabled=NO;
     //Backgroundview.exclusiveTouch=NO;
     [self.view addSubview:Backgroundview];
     
-    UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 45, 320, 360)];
+    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
+    [Backgroundview addSubview:imgViewForTop];
+    [imgViewForTop release];
+    
+    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnBack.frame = CGRectMake(2, 0, 44, 44);
+    [btnBack addTarget:self action:@selector(Btn_Closepopup:) forControlEvents:UIControlEventTouchUpInside];
+    [Backgroundview addSubview:btnBack];
+    
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+    imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
+    [btnBack addSubview:imgViewBack];
+    [imgViewBack release];
+
+    UILabel *lblVenueName=[self createLabelWithTitle:@"Place Order" frame:CGRectMake(40, 0, 240, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:0];
+    lblVenueName.textAlignment=NSTextAlignmentCenter;
+    [Backgroundview addSubview:lblVenueName];
+    
+    UIView *popupView=[[UIView alloc]initWithFrame:CGRectMake(0, 45, 320, 366)];
     popupView.backgroundColor=[UIColor colorWithRed:(40.0f/255.0f) green:(40.0f/255.0f) blue:(40.0f/255.0f) alpha:1.0];
     popupView.tag=2222;
    // popupView.layer.borderWidth=1;
@@ -1432,13 +1468,13 @@
     [btnclose addTarget:self action:@selector(Btn_Closepopup:) forControlEvents:UIControlEventTouchUpInside];
     [popupView addSubview:btnclose];*/
    
-    UIButton *btnclose = [UIButton buttonWithType:UIButtonTypeCustom];
+   /* UIButton *btnclose = [UIButton buttonWithType:UIButtonTypeCustom];
     btnclose.frame = CGRectMake(210,1,120,40);
     [btnclose setTitle:@"Cancel Order" forState:UIControlStateNormal];
     btnclose.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     btnclose.titleLabel.textColor = [UIColor colorWithRed:255.0/255.0 green:55.0/255.0 blue:184.0/255.0 alpha:1.0];
    [btnclose addTarget:self action:@selector(Btn_Closepopup:) forControlEvents:UIControlEventTouchUpInside];
-    [popupView addSubview:btnclose];
+    [popupView addSubview:btnclose];*/
 
     UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 35, 320, 1.0)];
     lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
@@ -1657,15 +1693,17 @@
     [popupView addSubview:lineview3];
     [lineview3 release];
 
-    
     UIButton *btnaddmore = [UIButton buttonWithType:UIButtonTypeCustom];
     btnaddmore.frame = CGRectMake(0,popupView.frame.size.height-41,160,40);
     [btnaddmore setTitle:@"Add more items" forState:UIControlStateNormal];
     btnaddmore.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    btnaddmore.titleLabel.textColor = [UIColor whiteColor];
+    btnaddmore.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+    btnaddmore.titleLabel.textColor = [UIColor blackColor];
    // btnaddmore.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
     btnaddmore.tag=1115;
     [btnaddmore addTarget:self action:@selector(btnOrder_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    btnaddmore.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+
     [popupView addSubview:btnaddmore];
 
     UIView *lineview4=[[UIView alloc]initWithFrame:CGRectMake(161, popupView.frame.size.height-42, 1.0, 40)];
@@ -1677,10 +1715,14 @@
     btnOrder.frame = CGRectMake(161,popupView.frame.size.height-41,159,40);
     [btnOrder setTitle:@"Place Order" forState:UIControlStateNormal];
     btnOrder.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    btnOrder.titleLabel.textColor = [UIColor whiteColor];
+    btnOrder.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+
+    btnOrder.titleLabel.textColor = [UIColor blackColor];
    // btnOrder.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
     btnOrder.tag=1116;
     [btnOrder addTarget:self action:@selector(btnOrder_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+    btnOrder.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+
     [popupView addSubview:btnOrder];
     
    /* [[popview subviews]
@@ -3282,7 +3324,8 @@
         UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 0, 280, 53)];
         [headerTitle setBackgroundColor:[UIColor clearColor]];
         [headerTitle setFont:[UIFont systemFontOfSize:18]];
-        [headerTitle setTextColor:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0]];
+        headerTitle.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
+        [headerTitle setTextColor:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0]];
         if (section==0|| section==1) {
             headerTitle.text= [NSString stringWithFormat:@"%@",[[ArrMenuSections objectAtIndex:section]valueForKey:@"SectionName"]];
         }else if (section>1&&section<2+[arrCustomDrinks count])
@@ -3388,7 +3431,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(isSelectedForDrinks){
-        return 65;
+        return 86;
     }else if(isSelectedForPeople)
         return 75;
     else if(isSelectedForPastOrders == YES)
@@ -3410,11 +3453,11 @@
         
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
 
-        UIImageView *drinkImg=[[UIImageView alloc]initWithFrame:CGRectMake(5,13,13.5, 13.5)];
+        UIImageView *drinkImg=[[UIImageView alloc]initWithFrame:CGRectMake(5,26,24, 24)];
         drinkImg.image=[UIImage imageNamed:@"drink"];
         [cell.contentView addSubview:drinkImg];
         [drinkImg release];
-        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(25,0, 260, 40)];
+        UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(34,0, 260,46)];
         if (indexPath.section==0)
         {
                
@@ -3455,17 +3498,17 @@
             lblName.text=[[tempArray objectAtIndex:indexPath.row] valueForKey:@"name"];
         }
         
-        
-        lblName.font=[UIFont systemFontOfSize:14];
+        lblName.font=[UIFont systemFontOfSize:16];
+        lblName.font=[UIFont fontWithName:@"MuseoSans-100" size:16.0];
         lblName.backgroundColor=[UIColor clearColor];
-        lblName.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+        lblName.textColor=[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
         [cell.contentView addSubview:lblName];
         [lblName release];
         
       //  CGSize lblnamesize=[lblName.text sizeWithFont:[UIFont systemFontOfSize:14] forWidth:260 lineBreakMode:NSLineBreakByWordWrapping];
         
-        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(5,25, 265, 50)];
-        lblDescription.numberOfLines=3;
+        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(32,25, 280, 50)];
+        lblDescription.numberOfLines=2;
         if(indexPath.section==0)
         {
             NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
@@ -3502,12 +3545,13 @@
         }
         
         lblDescription.font=[UIFont systemFontOfSize:12];
+        lblDescription.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
         lblDescription.backgroundColor=[UIColor clearColor];
         lblDescription.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
         [cell.contentView addSubview:lblDescription];
         [lblDescription release];
         
-        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(285, 22, 50, 25)];
+        UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(285, 28, 50, 25)];
         if(indexPath.section==0)
         {
             NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
@@ -3530,7 +3574,12 @@
             id object=[arrMenu objectAtIndex:indexPath.section-([arrCustomDrinks count]+2)];
             NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
             NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
+             if ([dict valueForKey:@"price"] && [[dict valueForKey:@"price"] integerValue] !=0) {
             lblPrice.text=[NSString stringWithFormat:@"$%d",[[dict valueForKey:@"price"] integerValue]];
+                 
+             }else{
+                 lblPrice.text=@"";
+             }
         }else if(indexPath.section>1&&indexPath.section<2+[arrCustomDrinks count]){
             NSArray *tempArray=[[arrCustomDrinks objectAtIndex:indexPath.section-2] valueForKey:@"contents"];
             if ([[[tempArray objectAtIndex:indexPath.row] valueForKey:@"price"] integerValue]!=0) {
@@ -3552,15 +3601,16 @@
         }
         
         lblPrice.font=[UIFont systemFontOfSize:18];
-        lblPrice.textColor=[UIColor colorWithRed:255.0/255.0 green:55.0/255.0 blue:184.0/255.0 alpha:1.0];
+        lblPrice.font=[UIFont fontWithName:@"Museo Sans" size:19.0];
+        lblPrice.textColor=[UIColor colorWithRed:33.0/255.0 green:169.0/255.0 blue:204.0/255.0 alpha:1.0];
         //lblPrice.adjustsFontSizeToFitWidth=YES;
         lblPrice.backgroundColor=[UIColor clearColor];
         [cell.contentView addSubview:lblPrice];
         [lblPrice release];
         
         if (![lblDescription.text length]>0) {
-            lblName.frame=CGRectMake(lblName.frame.origin.x, lblName.frame.origin.y+16,lblName.frame.size.width,lblName.frame.size.height);
-            drinkImg.frame=CGRectMake(drinkImg.frame.origin.x, drinkImg.frame.origin.y+16,drinkImg.frame.size.width,drinkImg.frame.size.height);
+            lblName.frame=CGRectMake(lblName.frame.origin.x, lblName.frame.origin.y+20,lblName.frame.size.width,lblName.frame.size.height);
+            //drinkImg.frame=CGRectMake(drinkImg.frame.origin.x, drinkImg.frame.origin.y+16,drinkImg.frame.size.width,drinkImg.frame.size.height);
             
         }
         

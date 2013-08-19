@@ -216,8 +216,9 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 
 -(void)Get_Messagetimer:(NSTimer*)sender{
     
-    isGetMessageWebService = YES;
-    [self.sharedController getMessagesWithReceiverId:[NSString stringWithFormat:@"%@",[dictForReceiver objectForKey:@"bartsyId"]] delegate:self];
+    //isGetMessageWebService = YES;
+    //[self.sharedController getMessagesWithReceiverId:[NSString stringWithFormat:@"%@",[dictForReceiver objectForKey:@"bartsyId"]] delegate:self];
+    [self GetMessages];
     
 }
 #pragma mark - Keyboard notification methods
@@ -339,6 +340,127 @@ completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
 {
     return [bubbleData objectAtIndex:row];
 }
+
+-(void)GetMessages{
+    
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/data/getMessages",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    [dictCheckIn setObject:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]] forKey:@"senderId"];
+    [dictCheckIn setObject:[NSString stringWithFormat:@"%@",[dictForReceiver objectForKey:@"bartsyId"]] forKey:@"receiverId"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+    
+    NSLog(@"dict for get Messages is %@",dictCheckIn);
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
+     {
+         if(error==nil)
+         {
+             SBJSON *jsonParser = [[SBJSON new] autorelease];
+             NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
+             id result = [jsonParser objectWithString:jsonString error:nil];
+             
+             [bubbleData removeAllObjects];
+             
+             NSMutableArray *arrayForMessages = [[NSMutableArray alloc] initWithArray:[result objectForKey:@"messages"]];
+             
+             for (int i = 0 ; i<[arrayForMessages count]; i++)
+             {
+                 NSDictionary *dictMsg=[arrayForMessages objectAtIndex:i];
+                 NSDateFormatter *dateFormatter = [NSDateFormatter new];
+                 dateFormatter.dateFormat       = @"dd MMM yyyy HH':'mm':'ss 'GMT";
+                 NSDate *date    = [dateFormatter dateFromString:[dictMsg objectForKey:@"date"]];
+                 
+                 BOOL isSentByMe=NO;
+                 
+                 NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
+                 if([strBartsyId doubleValue] ==[[dictMsg objectForKey:@"senderId"]doubleValue])
+                 {
+                     isSentByMe=YES;
+                 }
+                 isSentByMe=!isSentByMe;
+                 NSData *data = [[dictMsg objectForKey:@"message"] dataUsingEncoding:NSUTF8StringEncoding];
+                 NSString *decodedstr = [[NSString alloc] initWithData:data encoding:NSNonLossyASCIIStringEncoding];
+                 
+                 NSBubbleData *bubbleMsg = [NSBubbleData dataWithText:decodedstr date:date type:isSentByMe];
+                 
+                 if(!isSentByMe)
+                     bubbleMsg.avatar=imgSelf;
+                 else
+                     bubbleMsg.avatar=imgReceiver;
+                 
+                 [bubbleData addObject:bubbleMsg];
+                 [decodedstr release];
+             }
+             [bubbleTableView reloadData];
+             
+             [bubbleTableView layoutIfNeeded];
+             
+             CGSize tableViewSize=bubbleTableView.contentSize;
+             intHeight=tableViewSize.height;
+             
+             if (IS_IPHONE_5)
+             {
+                 if(intHeight>465)
+                 {
+                     if (isSelectedTxtField) {
+                         if (bubbleData.count<4)
+                             [bubbleTableView setContentOffset:CGPointMake(0, intHeight-420) animated:YES];
+                         else
+                             [bubbleTableView setContentOffset:CGPointMake(0, intHeight-240) animated:YES];
+                     }else{
+                         [bubbleTableView setContentOffset:CGPointMake(0, intHeight-415) animated:YES];
+                         
+                     }
+                 }
+             }
+             else if(intHeight>382)
+             {
+                 
+                 if (isSelectedTxtField) {
+                     
+                     if (bubbleData.count<4) {
+                         [bubbleTableView setContentOffset:CGPointMake(0,intHeight-348) animated:YES];
+                     }else
+                         [bubbleTableView setContentOffset:CGPointMake(0,intHeight-160) animated:YES];
+                 }else{
+                     
+                     [bubbleTableView setContentOffset:CGPointMake(0,intHeight-330) animated:YES];
+                 }
+                 
+             }
+
+                          
+         }
+         else
+         {
+             NSLog(@"Error is %@",error);
+         }
+         
+     }
+     ];
+    
+    
+    [url release];
+    [request release];
+    [dictCheckIn release];
+
+}
+
 #pragma mark- Shared controller delegates
 
 -(void)controllerDidFinishLoadingWithResult:(id)result

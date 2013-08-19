@@ -104,7 +104,6 @@
     lblDOB.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:lblDOB];
     
- 
     
     UILabel *lblGender=[[UILabel alloc]initWithFrame:CGRectMake(20,270, 320, 30)];
     lblGender.backgroundColor=[UIColor clearColor];
@@ -114,7 +113,7 @@
     lblGender.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:lblGender];
     
-    UILabel *lblAboutme=[[UILabel alloc]initWithFrame:CGRectMake(20,300, 100, 30)];
+  /*  UILabel *lblAboutme=[[UILabel alloc]initWithFrame:CGRectMake(20,300, 100, 30)];
     lblAboutme.backgroundColor=[UIColor clearColor];
     lblAboutme.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     lblAboutme.text = [NSString stringWithFormat:@"About me:"];
@@ -133,7 +132,7 @@
     [self.view addSubview:aboutme];
     [[aboutme layer]setBorderWidth:1];
     [[aboutme layer]setBorderColor:[[UIColor whiteColor] CGColor]];
-    [[aboutme layer]setCornerRadius:5];
+    [[aboutme layer]setCornerRadius:5];*/
     
     UITextView *txtViewDesc = [[UITextView alloc]initWithFrame:CGRectMake(12,250, 320, 60)];
     txtViewDesc.backgroundColor=[UIColor clearColor];
@@ -152,14 +151,21 @@
     }
     footerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"city_tavern_bg.png"]];
     [self.view addSubview:footerView];
-    NSLog(@"%@",dictPeople);
     
-    if (![[dictPeople valueForKey:@"bartsyId"] isEqualToString:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]]) {
-        UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 9, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
-        [footerView addSubview:btnSendMessage];
-
-    }
+    
    
+    UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 9, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
+        [footerView addSubview:btnSendMessage];
+   
+    NSString *strReseverID=[NSString stringWithFormat:@"%@",[dictPeople valueForKey:@"bartsyId"]];
+    NSString *strSenderID=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
+     NSLog(@"%@->%@",strReseverID,strSenderID);
+   if ([strReseverID isEqualToString:strSenderID]) {
+     
+       btnSendMessage.enabled=NO;
+       NSLog(@"%@",dictPeople);
+   }
+    
     UIButton *btnSendDrink = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-drink-hover.png"] frame:CGRectMake(163, 9, 150, 44) tag:2222 selector:@selector(btnSendDrink_TouchUpInside) target:self];
     [footerView addSubview:btnSendDrink];
 

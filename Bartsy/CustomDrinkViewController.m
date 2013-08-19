@@ -134,17 +134,23 @@
         lblinstruction.text=@"Special instructions";
         lblinstruction.textColor=[UIColor whiteColor];
         lblinstruction.backgroundColor=[UIColor clearColor];
+        lblinstruction.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
         [footview addSubview:lblinstruction];
         [lblinstruction release];
         
-        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,22, 320, 30)] autorelease];
+        UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0,21,320, 1.5)];
+        lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+        [footview addSubview:lineview];
+        
+        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,23, 320, 30)] autorelease];
         [instructionfield setBorderStyle:UITextBorderStyleLine];
         instructionfield.placeholder=@"Optional";
         instructionfield.delegate=self;
         instructionfield.tag=559;
         instructionfield.textColor=[UIColor whiteColor];
-        instructionfield.layer.borderWidth=1.0;
-        instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
+        instructionfield.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+        //instructionfield.layer.borderWidth=1.0;
+        //instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
         [footview addSubview:instructionfield];
         if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
             instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
@@ -184,6 +190,7 @@
         lblinstruction.text=@"Special instructions";
         lblinstruction.textColor=[UIColor whiteColor];
         lblinstruction.backgroundColor=[UIColor clearColor];
+        lblinstruction.font=[UIFont fontWithName:@"Museo Sans" size:17.0];
         [mainScroll addSubview:lblinstruction];
         [lblinstruction release];
         
@@ -206,7 +213,7 @@
     }
     
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    orderBtn.frame=CGRectMake(162,330, 150, 30);
+    orderBtn.frame=CGRectMake(162,324, 150, 40);
     if (IS_IPHONE_5) {
         orderBtn.frame=CGRectMake(162,418, 150, 30);
 
@@ -220,21 +227,25 @@
 
     }
     [orderBtn setTitle:[NSString stringWithFormat:@"%@",@"Add to order"] forState:UIControlStateNormal];
-    [orderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [orderBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [orderBtn addTarget:self action:@selector(Button_Order:) forControlEvents:UIControlEventTouchUpInside];
-    orderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
+    [orderBtn addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
+    orderBtn.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+    orderBtn.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
     [mainScroll addSubview:orderBtn];
     
-    
     UIButton *cancelorderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    cancelorderBtn.frame=CGRectMake(9,330, 150, 30);
+    cancelorderBtn.frame=CGRectMake(9,324, 150, 40);
     if (IS_IPHONE_5) {
-        cancelorderBtn.frame=CGRectMake(9,418, 150, 30);
+        cancelorderBtn.frame=CGRectMake(9,418, 150, 40);
     }
+    cancelorderBtn.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
     [cancelorderBtn setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelorderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [cancelorderBtn addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    cancelorderBtn.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
+    [cancelorderBtn addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
+    cancelorderBtn.tag=4445;
+    cancelorderBtn.backgroundColor=[UIColor colorWithRed:5.0/255.0 green:5.0/255.0 blue:6.0/255.0 alpha:1.0];
     [mainScroll addSubview:cancelorderBtn];
     
     if (!isEdit || viewtype==1) {
@@ -382,6 +393,16 @@
     }
 }
 
+-(void)ButtonHighlight:(UIButton*)sender{
+    
+    if (sender.tag==4445) {
+        sender.backgroundColor=[UIColor colorWithRed:1.0/255.0 green:1.0/255.0 blue:1.0/255.0 alpha:1.0];
+
+    }else{
+        sender.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:92.0/255.0 blue:118.0/255.0 alpha:1.0];
+
+    }
+}
 
 -(void)HashmappingIngradients:(NSDictionary*)Dict{
     
@@ -472,6 +493,7 @@
 {
     return 36;
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
             
@@ -481,10 +503,14 @@
     UILabel *headerTitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 3, 280, 30)];
     [headerTitle setBackgroundColor:[UIColor clearColor]];
     [headerTitle setFont:[UIFont systemFontOfSize:17]];
+    headerTitle.font=[UIFont fontWithName:@"Museo Sans" size:17.0];
+
     [headerTitle setTextColor:[UIColor whiteColor]];
     UILabel *lbltype=[[UILabel alloc]initWithFrame:CGRectMake(120, 3, 280, 30)];
     [lbltype setBackgroundColor:[UIColor clearColor]];
     [lbltype setFont:[UIFont systemFontOfSize:12]];
+    lbltype.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+
     [lbltype setTextColor:[UIColor whiteColor]];
     if (viewtype==4){
         NSDictionary *dictsection=[arrCustomDrinks objectAtIndex:section];
@@ -536,7 +562,11 @@
     lbltype.frame=CGRectMake(lblwidth.width+14, lbltype.frame.origin.y, lbltype.frame.size.width, lbltype.frame.size.height);
     [headerView addSubview:headerTitle];
     [headerView addSubview:lbltype];
-        
+    
+    UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0,32,320, 1.5)];
+    lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
+    [headerView addSubview:lineview];
+    [lineview release];
     return headerView;
    
 }
@@ -606,6 +636,40 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(viewtype==3){
+        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
+        if (indexPath.row==[subitemArray count]-1) {
+            
+            return 64;
+        }
+    }else if (viewtype==4){
+        NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
+        if (indexPath.row==[subitemArray count]-1) {
+            
+            return 64;
+        }
+        
+    }else if (viewtype==2 ){
+        
+        if (indexPath.section==0) {
+            NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"option_groups"];
+            NSArray *arraytemp=[subitemArray valueForKey:@"options"];
+            
+            if (indexPath.row==[arraytemp count]-1) {
+                
+                return 64;
+            }
+            
+        }else{
+            NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
+            if (indexPath.row==[subitemArray count]-1) {
+                
+                return 64;
+            }
+        }
+        
+    }
+    
     return 44;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView1 cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -614,9 +678,10 @@
    
     cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     
-    cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
+   // cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
     UILabel *lblName=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 270, 44)];
     lblName.font=[UIFont systemFontOfSize:16];
+    lblName.font=[UIFont fontWithName:@"Museo Sans" size:16.0];
     lblName.backgroundColor=[UIColor clearColor];
     lblName.textColor=[UIColor whiteColor];
     [cell.contentView addSubview:lblName];
@@ -632,9 +697,10 @@
     
     UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 44)];
     lblPrice.font=[UIFont boldSystemFontOfSize:18];
-    lblPrice.textColor=[UIColor colorWithRed:255.0/255.0 green:55.0/255.0 blue:184.0/255.0 alpha:1.0];
+    lblPrice.textColor=[UIColor colorWithRed:33.0/255.0 green:169.0/255.0 blue:204.0/255.0 alpha:1.0];
     //lblPrice.adjustsFontSizeToFitWidth=YES;
     lblPrice.backgroundColor=[UIColor clearColor];
+    lblPrice.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
     [cell.contentView addSubview:lblPrice];
     if (viewtype==4) {
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
