@@ -939,6 +939,11 @@
      float tiptotal=(ttlPrice*((float)btnValue/100));
     UILabel *lblTipprice=(UILabel*)[popview viewWithTag:4446];
     lblTipprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal];
+    
+    UILabel *lbltaxprice=(UILabel*)[popview viewWithTag:4447];
+
+    UILabel *lblttlprice=(UILabel*)[popview viewWithTag:4448];
+lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text floatValue]+ttlPrice];
     //[sender setBackgroundImage:[UIImage imageNamed:@"radio_button_selected1.png"] forState:UIControlStateNormal];
     [sender setSelected:YES];
 }
@@ -1510,7 +1515,7 @@
     [Backgroundview addSubview:popupView];
     
     UILabel *lbltitle=[[UILabel alloc]initWithFrame:CGRectMake(10, 20, 120, 40)];
-    lbltitle.text=@"Is this Drinks\nfor a Friend?";
+    lbltitle.text=@"Is this order\nfor a friend?";
     lbltitle.font=[UIFont systemFontOfSize:15];
     lbltitle.tag=111222333;
     lbltitle.backgroundColor=[UIColor clearColor];
@@ -1775,7 +1780,7 @@
     lblTaxPrice.backgroundColor = [UIColor clearColor];
     lblTaxPrice.textColor = [UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
     lblTaxPrice.textAlignment = NSTextAlignmentLeft;
-    lblTaxPrice.tag=2228;
+    lblTaxPrice.tag=4447;
     [popupView addSubview:lblTaxPrice];
     
     UILabel *lblTotal = [[UILabel alloc]initWithFrame:CGRectMake(235, popupView.frame.size.height-80, 150, 30)];
@@ -1789,13 +1794,13 @@
     lblTotal.font=[UIFont fontWithName:@"Museo Sans" size:14];
     [lblTotal release];
     
-    UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(275, popupView.frame.size.height-80, 150, 30)];
+    UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(272, popupView.frame.size.height-80, 150, 30)];
     lblTotalPrice.font = [UIFont systemFontOfSize:12];
     lblTotalPrice.text = [NSString stringWithFormat:@"$%@",[NSString stringWithFormat:@"%.2f",totalPrice+tiptotal+floatTotalTax]];
     lblTotalPrice.backgroundColor = [UIColor clearColor];
     lblTotalPrice.textColor = [UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
     lblTotalPrice.textAlignment = NSTextAlignmentLeft;
-    lblTotalPrice.tag=2229;
+    lblTotalPrice.tag=4448;
     [popupView addSubview:lblTotalPrice];
     lblTotalPrice.font=[UIFont fontWithName:@"Museo Sans" size:14];
     [lblTotalPrice release];
