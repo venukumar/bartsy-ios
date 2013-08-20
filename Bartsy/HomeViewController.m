@@ -2864,7 +2864,7 @@
         lblplacedtime.textAlignment = NSTextAlignmentLeft;
         [viewBg2 addSubview:lblplacedtime];
         NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblplacedtime.attributedText];
-        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
+        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
         [lblplacedtime setAttributedText: text];
         [text release];
         [lblplacedtime release];
@@ -2879,7 +2879,7 @@
         lblexpired.textAlignment = NSTextAlignmentLeft;
         [viewBg2 addSubview:lblexpired];
         NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblexpired.attributedText];
-        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0] range: NSMakeRange(8, 7)];
+        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
         [lblexpired setAttributedText: attribstrg];
         [attribstrg release];
         [lblexpired release];
@@ -2930,8 +2930,9 @@
             lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
             lblDescription.numberOfLines = 1;
             lblDescription.backgroundColor = [UIColor clearColor];
-            lblDescription.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
+            lblDescription.textColor = [UIColor whiteColor] ;
             lblDescription.textAlignment = NSTextAlignmentLeft;
+            lblDescription.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
             [viewBg2 addSubview:lblDescription];
             
             UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+5+(j*15)+40, 45, 15)];
@@ -2941,6 +2942,7 @@
             lblPrice.backgroundColor = [UIColor clearColor];
             lblPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
             lblPrice.textAlignment = NSTextAlignmentRight;
+            lblPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
             [viewBg2 addSubview:lblPrice];
             
             floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
@@ -2956,6 +2958,7 @@
                 
         UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
+        lblTipFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
         floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
         if(floattipvalue>0.01)
         {
@@ -2976,6 +2979,7 @@
         
         UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 150, 15)];
         lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
+        lblTaxFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
         floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
         if(floatTaxFee>0.01)
         {
@@ -2998,6 +3002,7 @@
        
         UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 153, 15)];
         lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
+        lblTotalPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
         if(floatTotalPrice>0.01)
             lblTotalPrice.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
         else
