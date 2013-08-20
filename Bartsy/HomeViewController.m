@@ -175,6 +175,10 @@
     UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(276, 1, 44, 44) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
     [self.view addSubview:checkinBtn];
     
+    UILabel *lblcheckin=[self createLabelWithTitle:@"Check in:" frame:CGRectMake(-35, 0, 140, 44) tag:0 font:[UIFont boldSystemFontOfSize:10] color:[UIColor blackColor] numberOfLines:0];
+    lblcheckin.textAlignment=NSTextAlignmentLeft;
+    [checkinBtn addSubview:lblcheckin];
+    
     UIImageView *imgcheckin = [[UIImageView alloc] initWithFrame:CGRectMake(10, 6, 30, 30)];
     imgcheckin.image = [UIImage imageNamed:@"tick_mark"];
     imgcheckin.tag=9995;
