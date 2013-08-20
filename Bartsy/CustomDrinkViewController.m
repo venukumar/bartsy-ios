@@ -1165,7 +1165,12 @@
             if (x==0) {
                 
                  if(viewtype==4){
-                   [dictItem setObject:[dictTemp valueForKey:@"name"] forKey:@"name"];
+                     if ([dictTemp valueForKey:@"text"]) {
+                         [dictItem setObject:[dictTemp valueForKey:@"text"] forKey:@"name"];
+                     }else if ([dictTemp valueForKey:@"name"]){
+                         [dictItem setObject:[dictTemp valueForKey:@"name"] forKey:@"name"];
+                     }
+                   
                  }else{
                      
                      [dictItem setObject:[dictitemdetails valueForKey:@"name"] forKey:@"name"];
