@@ -516,7 +516,7 @@
         
         UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
         if (!drinkBtn) {
-            UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 27, 27) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
+            UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 30, 30) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
             [self.view addSubview:drinkBtn];
             
         }
@@ -1498,6 +1498,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     [Backgroundview addSubview:lblVenueName];
     
     UIImageView *imgcount = [[UIImageView alloc] initWithFrame:CGRectMake(280, 10, 25, 25)];
+    imgcount.tag=1005;
     imgcount.image = [UIImage imageNamed:@"count_circle.png"];
     [Backgroundview addSubview:imgcount];
     [imgcount release];
@@ -1825,7 +1826,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     btnaddmore.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
     btnaddmore.titleLabel.textColor = [UIColor blackColor];
    // btnaddmore.backgroundColor=[UIColor colorWithRed:92.0/255.0 green:92.0/255.0 blue:104.0/255.0 alpha:1.0];
-    [btnaddmore addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
+    //[btnaddmore addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
 
     btnaddmore.tag=1115;
     [btnaddmore addTarget:self action:@selector(btnOrder_TouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
@@ -2784,7 +2785,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         lblOrderStatus.textAlignment = NSTextAlignmentLeft;
         [viewBg addSubview:lblOrderStatus];
         
-        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
+        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
         {
             UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 2.5, 44, 30) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
             btnDismiss.titleLabel.font=[UIFont systemFontOfSize:10];
@@ -4677,6 +4678,19 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
 
 -(void)selectedPeople:(NSNotification*)notification
 {
+    UIView *popview=(UIView*)[self.view viewWithTag:2221];
+    //UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
+    UIImageView *imgcount=(UIImageView*)[popview viewWithTag:1005];
+    imgcount.image=[UIImage imageNamed:@"drink"];
+    /*[imgcount removeFromSuperview];
+    if (!drinkBtn) {
+        UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 30, 30) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
+        [popview addSubview:drinkBtn];
+        
+    }else{
+        [popview addSubview:drinkBtn];
+    }*/
+
     dictPeopleSelectedForDrink=[[NSDictionary alloc]initWithDictionary:notification.object];
     UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];
     NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeopleSelectedForDrink objectForKey:@"userImagePath"]];
