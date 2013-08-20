@@ -740,7 +740,7 @@
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
         if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"selected"] integerValue]==1) {
             button.selected=YES;
-            if ([[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]) {
+            if ([[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"] && ![[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"] isKindOfClass:[NSNull class]]) {
                 lblPrice.text=[NSString stringWithFormat:@"$%@",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
             }else{
                 lblPrice.text=@"$0";
@@ -759,7 +759,13 @@
 
              if ([[[arraytemp objectAtIndex:indexPath.row] valueForKey:@"selected"] integerValue]==1) {
                  button.selected=YES;
-                 lblPrice.text=[NSString stringWithFormat:@"$%@",[[arraytemp objectAtIndex:indexPath.row] valueForKey:@"price"]];
+                 if ([[arraytemp objectAtIndex:indexPath.row] valueForKey:@"price"] && ![[[arraytemp objectAtIndex:indexPath.row] valueForKey:@"price"] isKindOfClass:[NSNull class]]) {
+                      lblPrice.text=[NSString stringWithFormat:@"$%@",[[arraytemp objectAtIndex:indexPath.row] valueForKey:@"price"]];
+                 }else{
+                     lblPrice.text=@"$0";
+                 }
+
+                
              }else{
                  lblPrice.text=nil;
                  button.selected=NO;
