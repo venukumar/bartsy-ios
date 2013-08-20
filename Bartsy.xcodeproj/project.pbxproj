@@ -74,6 +74,7 @@
 		CB98321E17994F0300DC63AC /* background-img-A.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321C17994F0300DC63AC /* background-img-A.png */; };
 		CB98321F17994F0300DC63AC /* background-img1.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321D17994F0300DC63AC /* background-img1.png */; };
 		CB98322117996F2100DC63AC /* tick_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98322017996F2100DC63AC /* tick_mark.png */; };
+		CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = CBAC59FB17C36F950047BDBB /* cancel-btn.png */; };
 		CBED0DCB17BF6F89002F2221 /* fav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DC917BF6F89002F2221 /* fav_icon.png */; };
 		CBED0DCC17BF6F89002F2221 /* unfav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCA17BF6F89002F2221 /* unfav_icon.png */; };
 		CBED0DCF17BFA207002F2221 /* check_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCD17BFA206002F2221 /* check_icon.png */; };
@@ -403,6 +404,7 @@
 		CB98321C17994F0300DC63AC /* background-img-A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img-A.png"; sourceTree = "<group>"; };
 		CB98321D17994F0300DC63AC /* background-img1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img1.png"; sourceTree = "<group>"; };
 		CB98322017996F2100DC63AC /* tick_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick_mark.png; sourceTree = "<group>"; };
+		CBAC59FB17C36F950047BDBB /* cancel-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel-btn.png"; sourceTree = "<group>"; };
 		CBED0DC917BF6F89002F2221 /* fav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fav_icon.png; sourceTree = "<group>"; };
 		CBED0DCA17BF6F89002F2221 /* unfav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfav_icon.png; sourceTree = "<group>"; };
 		CBED0DCD17BFA206002F2221 /* check_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_icon.png; sourceTree = "<group>"; };
@@ -1506,6 +1508,7 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CBAC59FB17C36F950047BDBB /* cancel-btn.png */,
 				CB882A1217C26AE000094EAB /* circle.png */,
 				CB882A1017C266AA00094EAB /* Bartsy_main-bg.png */,
 				CB882A0A17C255B400094EAB /* percentage_count-selected.png */,
@@ -1834,6 +1837,7 @@
 				CB882A0F17C255B500094EAB /* count_circle.png in Resources */,
 				CB882A1117C266AA00094EAB /* Bartsy_main-bg.png in Resources */,
 				CB882A1317C26AE000094EAB /* circle.png in Resources */,
+				CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

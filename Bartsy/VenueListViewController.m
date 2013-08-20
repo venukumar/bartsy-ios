@@ -81,8 +81,6 @@
     //    self.navigationItem.hidesBackButton=YES;
     self.trackedViewName = @"Bartsy Venues";
 
-    NSLog(@"%@",[UIFont familyNames]);
-    
     arrVenueList=[[NSMutableArray alloc]init];
     
     UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];

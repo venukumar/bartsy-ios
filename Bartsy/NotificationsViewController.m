@@ -106,7 +106,7 @@
             
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImagePath"]];
             
-            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
+            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 60, 70)];
             [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
             //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
@@ -119,7 +119,7 @@
         {
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
-            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
+            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 60, 70)];
             [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
             //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
@@ -155,7 +155,7 @@
         {
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueImage"]];
             
-            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
+            UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 60, 70)];
             [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
             //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
             //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
@@ -189,12 +189,12 @@
             
             NSString *strURL1=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"recieverImage"]];
 
-            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(260, 18, 60, 60)];
+            UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(260, 10, 60, 70)];
             [imgView setImageWithURL:[NSURL URLWithString:[strURL1 stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-            [[imgView layer] setShadowOffset:CGSizeMake(0, 1)];
-            [[imgView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
-            [[imgView layer] setShadowRadius:3.0];
-            [[imgView layer] setShadowOpacity:0.8];
+            //[[imgView layer] setShadowOffset:CGSizeMake(0, 1)];
+            //[[imgView layer] setShadowColor:[[UIColor whiteColor] CGColor]];
+            //[[imgView layer] setShadowRadius:3.0];
+            //[[imgView layer] setShadowOpacity:0.8];
             [cell.contentView addSubview:imgView];
         }
     }
@@ -235,7 +235,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return 100;
+    return 90;
 }
 -(void)reloadTable
 {

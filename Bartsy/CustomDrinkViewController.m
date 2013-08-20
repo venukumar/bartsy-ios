@@ -115,9 +115,9 @@
     
     if (viewtype==2 || viewtype==3 || viewtype==4) {
         
-        UIView *headview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
+        UIView *headview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
         headview.backgroundColor=[UIColor clearColor];
-        UILabel *lblOps_Desp=[[UILabel alloc]initWithFrame:CGRectMake(5, 2,180,40)];
+        UILabel *lblOps_Desp=[[UILabel alloc]initWithFrame:CGRectMake(5, 0,310,50)];
         if ([dictitemdetails valueForKey:@"options_description"]) {
             lblOps_Desp.text=[dictitemdetails valueForKey:@"options_description"];
  
@@ -127,6 +127,7 @@
         lblOps_Desp.textColor=[UIColor whiteColor];
         lblOps_Desp.backgroundColor=[UIColor clearColor];
         lblOps_Desp.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+        lblOps_Desp.numberOfLines=2;
         [headview addSubview:lblOps_Desp];
         [lblOps_Desp release];
         
@@ -240,9 +241,9 @@
     }
     
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    orderBtn.frame=CGRectMake(162,324, 150, 40);
+    orderBtn.frame=CGRectMake(162,324, 155, 40);
     if (IS_IPHONE_5) {
-        orderBtn.frame=CGRectMake(162,415, 150, 40);
+        orderBtn.frame=CGRectMake(162,412, 150, 40);
 
     }
     orderBtn.tag=556;
@@ -262,17 +263,18 @@
     [mainScroll addSubview:orderBtn];
     
     UIButton *cancelorderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
-    cancelorderBtn.frame=CGRectMake(9,324, 150, 40);
+    cancelorderBtn.frame=CGRectMake(4,324, 155, 40);
     if (IS_IPHONE_5) {
-        cancelorderBtn.frame=CGRectMake(9,415, 150, 40);
+        cancelorderBtn.frame=CGRectMake(9,412, 150, 40);
     }
     cancelorderBtn.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
-    [cancelorderBtn setTitle:@"Cancel" forState:UIControlStateNormal];
-    [cancelorderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    //[cancelorderBtn setTitle:@"Cancel" forState:UIControlStateNormal];
+   // [cancelorderBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [cancelorderBtn addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    [cancelorderBtn addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
+    //[cancelorderBtn addTarget:self action:@selector(ButtonHighlight:) forControlEvents:UIControlEventTouchDown];
     cancelorderBtn.tag=4445;
-    cancelorderBtn.backgroundColor=[UIColor colorWithRed:20.0/255.0 green:20.0/255.0 blue:23.0/255.0 alpha:1.0];
+   // cancelorderBtn.backgroundColor=[UIColor colorWithRed:20.0/255.0 green:20.0/255.0 blue:23.0/255.0 alpha:1.0];
+    [cancelorderBtn setImage:[UIImage imageNamed:@"cancel-btn.png"] forState:UIControlStateNormal];
     [mainScroll addSubview:cancelorderBtn];
     
     if (!isEdit || viewtype==1) {

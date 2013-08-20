@@ -127,7 +127,11 @@
         
     }else{
         
-        cell.venueaddress.text=@"\n\n  No reward points available";
+        //cell.venueaddress.text=@"\n\n  No reward points available";
+        cell.textLabel.text=@"No reward points available";
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.textLabel.textAlignment = NSTextAlignmentCenter;
+        cell.textLabel.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     }
     
     return cell;

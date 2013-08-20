@@ -21,8 +21,9 @@
         
         venueName=[[UILabel alloc] initWithFrame:CGRectMake(85, 5, 250, 20) ];
         venueName.font=[UIFont systemFontOfSize:17];
+        venueName.font=[UIFont fontWithName:@"MuseoSans-300" size:17.0];
         venueName.backgroundColor=[UIColor clearColor];
-        venueName.textColor=[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0];
+        venueName.textColor=[UIColor whiteColor];
         venueName.textAlignment = NSTextAlignmentLeft;
         [self.contentView addSubview:venueName];
         
@@ -33,6 +34,7 @@
         venueaddress=[[UILabel alloc]initWithFrame:CGRectMake(85,25,250,40)];
         venueaddress.font=[UIFont systemFontOfSize:12];
         venueaddress.backgroundColor=[UIColor clearColor];
+        venueaddress.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
         venueaddress.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
         venueaddress.textAlignment=NSTextAlignmentLeft;
         [self.contentView addSubview:venueaddress];
@@ -42,6 +44,7 @@
         venuepoints.backgroundColor=[UIColor clearColor];
         venuepoints.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
         venuepoints.textAlignment=NSTextAlignmentLeft;
+        venuepoints.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
         [self.contentView addSubview:venuepoints];
         
     }

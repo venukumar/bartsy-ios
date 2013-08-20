@@ -109,9 +109,19 @@
     NSInteger age = [ageComponents year];
 
     
-    NSString *strdetails=[NSString stringWithFormat:@"%d/%@/%@/%@",age,[dictPeople valueForKey:@"gender"],[dictPeople valueForKey:@"status"],[dictPeople valueForKey:@"orientation"]];
+    NSMutableString *strdetails=[[NSMutableString alloc]init];
+    [strdetails appendFormat:@"%d",age];
+    if ([dictPeople valueForKey:@"gender"]) {
+        [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"gender"]];
+    }
+    if ([dictPeople valueForKey:@"status"]) {
+        [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"status"]];
+    }
+    if ([dictPeople valueForKey:@"orientation"]) {
+        [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"orientation"]];
+    }
     
-    UILabel *lblDOB=[[UILabel alloc]initWithFrame:CGRectMake(160,90, 100, 50)];
+    UILabel *lblDOB=[[UILabel alloc]initWithFrame:CGRectMake(160,90, 150, 50)];
     lblDOB.backgroundColor=[UIColor clearColor];
     lblDOB.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     lblDOB.text = [NSString stringWithFormat:@"%@",strdetails];
@@ -172,8 +182,6 @@
     footerView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"city_tavern_bg.png"]];
     [self.view addSubview:footerView];
     
-    
-   
     UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 9, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
         [footerView addSubview:btnSendMessage];
    
