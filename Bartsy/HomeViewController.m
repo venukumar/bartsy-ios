@@ -2237,7 +2237,22 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
 //Removing the OrderView from top
 -(void)Btn_Closepopup:(UIButton*)sender
 {
-    //Deleting all orders added to list
+    NSArray *arraylistitem=[[NSUserDefaults standardUserDefaults]arrayForKey:@"multiitemorders"];
+    if (arraylistitem.count) {
+        UIView *popupView=(UIView*)[self.view viewWithTag:2221];
+        popupView.hidden=YES;
+        UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
+        checkinBtn.hidden=YES;
+        
+        UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
+        if (!drinkBtn) {
+            UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 30, 30) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
+            [self.view addSubview:drinkBtn];
+            
+        }
+
+    }else{
+        //Deleting all orders added to list
     [[NSUserDefaults standardUserDefaults]removeObjectForKey:@"multiitemorders"];
 
     UIView *Backgroundview=(UIView*)[self.view viewWithTag:2221];
@@ -2253,6 +2268,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     UIImageView *imgcheckin=(UIImageView*)[checkinBtn viewWithTag:9995];
     imgcheckin.image=[UIImage imageNamed:@"tickmark_select"];
     [checkinBtn addSubview:imgcheckin];
+    }
 }
 #pragma mark----------Parsing the Locumenu Data
 -(void)modifyData
@@ -2909,7 +2925,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         
         if([[dict objectForKey:@"senderBartsyId"] doubleValue]!=[[dict objectForKey:@"recieverBartsyId"] doubleValue])
         {
-            UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(60, 45, 210, 15)];
+            UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(60, 45, 208, 15)];
             lblName.font = [UIFont systemFontOfSize:12];
             lblName.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"senderNickname"]];
             lblName.backgroundColor = [UIColor clearColor];
@@ -2920,7 +2936,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             [lblName release];
             
             NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"senderBartsyId"]]];
-            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(270,10,40,40)];
+            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(270,16,40,40)];
             [imgViewPhoto setImageWithURL:urlPhoto];
             [viewBg2 addSubview:imgViewPhoto];
             [imgViewPhoto release];
@@ -4694,7 +4710,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     dictPeopleSelectedForDrink=[[NSDictionary alloc]initWithDictionary:notification.object];
     UIImageView *imgView=(UIImageView*)[self.view viewWithTag:143225];
     NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeopleSelectedForDrink objectForKey:@"userImagePath"]];
-    NSLog(@"URL is %@",strURL);
+    NSLog(@"URL is %@",dictPeopleSelectedForDrink);
     //[imgView setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:strURL]]]];
     [imgView setImageWithURL:[NSURL URLWithString:strURL]];
     UILabel *lblName=(UILabel*)[self.view viewWithTag:2223];
