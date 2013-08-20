@@ -98,6 +98,7 @@
     aboutme.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
     aboutme.font=[UIFont systemFontOfSize:14];
     aboutme.textAlignment=NSTextAlignmentLeft;
+    aboutme.editable=NO;
     [self.view addSubview:aboutme];
     
     pastorderArray=[[NSMutableArray alloc]init];

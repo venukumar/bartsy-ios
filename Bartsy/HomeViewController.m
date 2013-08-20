@@ -3669,13 +3669,13 @@
         
       //  CGSize lblnamesize=[lblName.text sizeWithFont:[UIFont systemFontOfSize:14] forWidth:260 lineBreakMode:NSLineBreakByWordWrapping];
         
-        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(32,25, 260, 50)];
+        UILabel *lblDescription=[[UILabel alloc]initWithFrame:CGRectMake(32,25, 280, 50)];
         lblDescription.numberOfLines=2;
         if(indexPath.section==1)
         {
             NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
-            if ([dictRecTemp valueForKey:@"description"]) {
-                lblDescription.text=[dictRecTemp valueForKey:@"description"];
+            if ([dictRecTemp valueForKey:@"options_description"]) {
+                lblDescription.text=[dictRecTemp valueForKey:@"options_description"];
 
             }else{
                 lblDescription.text=@"";
@@ -3684,9 +3684,9 @@
         else if(indexPath.section==0)
         {
             NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
-            if ([dictFavTemp valueForKey:@"description"])
+            if ([dictFavTemp valueForKey:@"options_description"])
             
-                lblDescription.text=[dictFavTemp valueForKey:@"description"];
+                lblDescription.text=[dictFavTemp valueForKey:@"options_description"];
             else
                 lblDescription.text=@"";
             
@@ -3713,6 +3713,34 @@
         [cell.contentView addSubview:lblDescription];
         [lblDescription release];
         
+        UILabel *lblOpt_Desp=[[UILabel alloc]initWithFrame:CGRectMake(32,45, 280, 50)];
+        lblOpt_Desp.numberOfLines=2;
+        lblOpt_Desp.font=[UIFont systemFontOfSize:12];
+        lblOpt_Desp.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+        lblOpt_Desp.backgroundColor=[UIColor clearColor];
+        lblOpt_Desp.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        [cell.contentView addSubview:lblOpt_Desp];
+        [lblOpt_Desp release];
+        if(indexPath.section==1)
+        {
+            NSDictionary *dictRecTemp=[arrRecentOrders objectAtIndex:indexPath.row];
+            if ([dictRecTemp valueForKey:@"special_instructions"]) {
+                lblOpt_Desp.text=[dictRecTemp valueForKey:@"special_instructions"];
+                
+            }else{
+                lblOpt_Desp.text=@"";
+            }
+        }
+        else if(indexPath.section==0)
+        {
+            NSDictionary *dictFavTemp=[arrFavorites objectAtIndex:indexPath.row];
+            if ([dictFavTemp valueForKey:@"special_instructions"])
+                
+                lblOpt_Desp.text=[dictFavTemp valueForKey:@"special_instructions"];
+            else
+                lblOpt_Desp.text=@"";
+            
+        }
         UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(285, 0, 50, 46)];
         if(indexPath.section==1)
         {
