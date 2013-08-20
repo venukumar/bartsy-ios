@@ -622,7 +622,7 @@
     
     if([result isKindOfClass:[NSDictionary class]]&&[[result objectForKey:@"errorCode"] integerValue]!=0)
     {
-        [self createAlertViewWithTitle:@"Error" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
     }
     else if(isRequestForCheckIn==NO)
     {
@@ -688,7 +688,7 @@
         [[NSUserDefaults standardUserDefaults]synchronize];
         
         HomeViewController *obj=[[HomeViewController alloc]init];
-        obj.dictVenue=[arrVenueList objectAtIndex:0];
+        obj.dictVenue=[arrVenueList objectAtIndex:intIndex];
         [self.navigationController pushViewController:obj animated:YES];
         [obj release];
 

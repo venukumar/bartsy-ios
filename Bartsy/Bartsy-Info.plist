@@ -46,6 +46,7 @@
 	<array>
 		<string>MuseoSans-100.otf</string>
 		<string>MuseoSans-300.otf</string>
+		<string>MuseoSans-700.otf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>

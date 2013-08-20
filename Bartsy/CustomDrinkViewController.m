@@ -54,7 +54,7 @@
     
     UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 240, 44)];
     lblMsg.textColor=[UIColor blackColor];
-    if (viewtype==3 || viewtype==1 || viewtype==2 || viewtype==4) {
+    if (viewtype==3 || viewtype==1 || viewtype==2 || viewtype==4 || viewtype==5) {
         lblMsg.text=[dictitemdetails valueForKey:@"name"];
     }
     lblMsg.textAlignment=NSTextAlignmentCenter;
@@ -113,7 +113,7 @@
     [lblfav release];
 
     
-    if (viewtype==2 || viewtype==3 || viewtype==4) {
+    if (viewtype==2 || viewtype==3 || viewtype==4 ||viewtype==5) {
         
         UIView *headview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
         headview.backgroundColor=[UIColor clearColor];
@@ -402,7 +402,7 @@
 
     //[self.sharedController performSelectorOnMainThread:@selector() withObject:nil waitUntilDone:YES];
     
-   if( viewtype==2&&isEdit==YES || viewtype==3&&isEdit==YES || viewtype==4 && isEdit==YES){
+   if( viewtype==2&&isEdit==YES || viewtype==3&&isEdit==YES || viewtype==4 && isEdit==YES || viewtype==5 && isEdit==YES){
       
 
        [arrCustomDrinks addObjectsFromArray:arrayEditInfo];
@@ -415,6 +415,11 @@
        
        [arrCustomDrinks addObjectsFromArray:arrayTemp];
        
+   }else if (viewtype==5 && isEdit==NO){
+       [arrCustomDrinks removeAllObjects];
+       NSArray *arrayTemp=[dictitemdetails valueForKey:@"option_groups"];
+       
+       [arrCustomDrinks addObjectsFromArray:arrayTemp];
    }
     if (viewtype==2||viewtype==3||viewtype==4) {
         [self calculateTotalPrice:0];
@@ -541,7 +546,7 @@
     lbltype.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
 
     [lbltype setTextColor:[UIColor whiteColor]];
-    if (viewtype==4){
+    if (viewtype==4 || viewtype==5){
         NSDictionary *dictsection=[arrCustomDrinks objectAtIndex:section];
 
          headerTitle.text=[NSString stringWithFormat:@"%@",[dictsection valueForKey:@"text"]];
@@ -640,7 +645,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (viewtype==4){
+    if (viewtype==4 || viewtype==5){
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:section] valueForKey:@"options"];
         return [subitemArray count];
     }else if (viewtype==2 ){
@@ -724,14 +729,14 @@
     button.userInteractionEnabled=NO;
     [cell.contentView addSubview:button];
     
-    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 44)];
+    UILabel *lblPrice=[[UILabel alloc]initWithFrame:CGRectMake(270, 0, 55, 44)];
     lblPrice.font=[UIFont boldSystemFontOfSize:18];
     lblPrice.textColor=[UIColor colorWithRed:33.0/255.0 green:169.0/255.0 blue:204.0/255.0 alpha:1.0];
     //lblPrice.adjustsFontSizeToFitWidth=YES;
     lblPrice.backgroundColor=[UIColor clearColor];
     lblPrice.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
     [cell.contentView addSubview:lblPrice];
-    if (viewtype==4) {
+    if (viewtype==4 || viewtype==5) {
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
         if ([[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"selected"] integerValue]==1) {
             button.selected=YES;
@@ -789,11 +794,10 @@
              lblPrice.text=nil;
              button.selected=NO;
          }
-
      }
         [lblPrice release];
     
-    if(viewtype==4){
+    if(viewtype==4 ||viewtype==5){
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"];
         if ([[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]) {
             lblName.text=[NSString stringWithFormat:@"%@ (%@)",[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"name"],[[subitemArray objectAtIndex:indexPath.row] valueForKey:@"price"]];
@@ -837,7 +841,7 @@
 {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (viewtype==4) {
+    if (viewtype==4 || viewtype==5) {
         id item=[arrCustomDrinks objectAtIndex:indexPath.section];
         NSMutableDictionary *dictitemlist=[[NSMutableDictionary alloc]initWithDictionary:[arrCustomDrinks objectAtIndex:indexPath.section]];
         NSMutableArray *subitemArray=[[NSMutableArray alloc]initWithArray:[dictitemlist valueForKey:@"options"]];
@@ -1143,7 +1147,7 @@
         
         [self.navigationController popViewControllerAnimated:YES];
         
-    }else if(viewtype==4){
+    }else if(viewtype==4|| viewtype==5){
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]init];
         
         float totalPrice = 0.0;
@@ -1153,7 +1157,13 @@
             
             NSDictionary *dictTemp =[arrCustomDrinks objectAtIndex:x];
             if (x==0) {
-                [dictItem setObject:[dictTemp valueForKey:@"text"] forKey:@"name"];
+                
+                 if(viewtype==4){
+                   [dictItem setObject:[dictTemp valueForKey:@"name"] forKey:@"name"];
+                 }else{
+                     
+                     [dictItem setObject:[dictitemdetails valueForKey:@"name"] forKey:@"name"];
+                 }
                 [dictItem setObject:arrCustomDrinks forKey:@"ArrayInfo"];
 
             }
@@ -1174,7 +1184,13 @@
             [str_opt_description deleteCharactersInRange:NSMakeRange([str_opt_description length]-1, 1)];
         }
         [dictItem setObject:str_opt_description forKey:@"options_description"];
-        [dictItem setObject:[NSNumber numberWithInt:4] forKey:@"Viewtype"];
+        if (viewtype==4) {
+            [dictItem setObject:[NSNumber numberWithInt:4] forKey:@"Viewtype"];
+
+        }else{
+            [dictItem setObject:[NSNumber numberWithInt:5] forKey:@"Viewtype"];
+
+        }
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
         if (instructionfield.text.length>0) {

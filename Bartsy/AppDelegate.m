@@ -374,11 +374,11 @@
                              [[NSUserDefaults standardUserDefaults]synchronize];
                              
                              UILocalNotification *localNotificationForOrderStatusUpdate = [[UILocalNotification alloc]init];
-                             localNotificationForOrderStatusUpdate.alertBody =[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]],[[dict objectForKey:@"orderId"] integerValue]];
+                             localNotificationForOrderStatusUpdate.alertBody =[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]],[[dict objectForKey:@"userSessionCode"] integerValue]];
                              localNotificationForOrderStatusUpdate.fireDate = [NSDate date];
                              localNotificationForOrderStatusUpdate.soundName = UILocalNotificationDefaultSoundName;
                              localNotificationForOrderStatusUpdate.userInfo = [NSDictionary
-                                                                               dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]],[[dict objectForKey:@"orderId"] integerValue]],@"Message", nil];
+                                                                               dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%@ with number %i",[arrStatus objectAtIndex:[[dict objectForKey:@"orderStatus"] integerValue]],[[dict objectForKey:@"userSessionCode"] integerValue]],@"Message", nil];
                              
                              [[UIApplication sharedApplication] scheduleLocalNotification:localNotificationForOrderStatusUpdate];
                          }

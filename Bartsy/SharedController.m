@@ -217,7 +217,7 @@ static SharedController *sharedController;
 }
  */
 
--(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName firstName:(NSString*)strFirstName lastname:(NSString*)strLastName ethnicity:(NSString*)strethnicity city:(NSString*)strcity state:(NSString*)strstate zipcode:(NSString*)strZipcode delegate:(id)aDelegate
+-(void)saveUserProfileWithBartsyLogin:(NSString*)strBartsyLogin bartsyPassword:(NSString*)strBartsyPassword fbUserName:(NSString*)strFbUserName fbId:(NSString*)strFbID googleId:(NSString*)strGoogleId loginType:(NSString*)strLoginType gender:(NSString*)strGender profileImage:(UIImage*)imgProfile orientation:(NSString*)strOrientation nickName:(NSString*)strNickName showProfile:(NSString*)strShowProfileStatus creditCardNumber:(NSString*)strcreditCardNumber expiryDate:(NSString*)strExpiryMonth expYear:(NSString*)strExpYear firstName:(NSString*)strFirstName lastName:(NSString*)strLastName dob:(NSString*)strDOB status:(NSString*)strStatus description:(NSString*)strDescription googleUsername:(NSString*)strGoogleUserName firstName:(NSString*)str2FirstName lastname:(NSString*)str2LastName ethnicity:(NSString*)strethnicity city:(NSString*)strcity state:(NSString*)strstate zipcode:(NSString*)strZipcode delegate:(id)aDelegate
 {
     
     self.delegate=aDelegate;
@@ -248,7 +248,11 @@ static SharedController *sharedController;
         [dictProfile setObject:strFbUserName forKey:@"facebookUserName"];
         
         [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:strFbUserName,@"facebookUserName",strFbID,@"facebookId", nil] forKey:@"LoginDetails"];
-
+        if(strFirstName!=nil&&[strFirstName length])
+            [dictProfile setObject:strFirstName forKey:@"firstname"];
+        
+        if (strLastName!=nil&&[strLastName length])
+            [dictProfile setObject:strLastName forKey:@"lastname"];
     }
    
     
@@ -260,11 +264,24 @@ static SharedController *sharedController;
         
         [[NSUserDefaults standardUserDefaults]setObject:[NSDictionary dictionaryWithObjectsAndKeys:strGoogleId,@"googleId",strGoogleUserName,@"googleUserName", nil] forKey:@"LoginDetails"];
 
+        if(strFirstName!=nil&&[strFirstName length])
+            [dictProfile setObject:strFirstName forKey:@"firstname"];
+        
+        if(strLastName!=nil&&[strLastName length])
+            [dictProfile setObject:strLastName forKey:@"lastname"];
     }
     
     [[NSUserDefaults standardUserDefaults]synchronize];
 
-   
+    if(!(strGoogleId!=nil&&[strGoogleId length] )|| !(strFbID!=nil&&[strFbID length]))
+    {
+        if(str2FirstName!=nil&&[str2FirstName length])
+            [dictProfile setObject:str2FirstName forKey:@"firstname"];
+        
+        if(str2LastName!=nil&&[str2LastName length])
+            [dictProfile setObject:str2LastName forKey:@"lastname"];
+    }
+
     [dictProfile setObject:strGender forKey:@"gender"];
     [dictProfile setObject:strNickName forKey:@"nickname"];
     [dictProfile setObject:@"1" forKey:@"deviceType"];
@@ -291,21 +308,17 @@ static SharedController *sharedController;
     
     [dictProfile setObject:strDescription forKey:@"description"];
     
-    if(strFirstName!=nil&&[strFirstName length])
-    [dictProfile setObject:strFirstName forKey:@"firstname"];
     
-    if (strLastName!=nil&&[strLastName length])
-    [dictProfile setObject:strLastName forKey:@"lastname"];
     
     [dictProfile setObject:strStatus forKey:@"status"];
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
-    if(strFirstName!=nil&&[strFirstName length])
+    /*if(strFirstName!=nil&&[strFirstName length])
         [dictProfile setObject:strFirstName forKey:@"firstname"];
     
     if(strLastName!=nil&&[strLastName length])
-        [dictProfile setObject:strLastName forKey:@"lastname"];
+        [dictProfile setObject:strLastName forKey:@"lastname"];*/
 
    /* [dictProfile setObject:strethnicity forKey:@"ethnicity"];
     [dictProfile setObject:strcity forKey:@"homeCity"];
@@ -1018,7 +1031,7 @@ static SharedController *sharedController;
 -(void)getCocktailsbyvenueID:(NSString *)venueID delegate:(id)aDelegate{
     
     self.delegate=aDelegate;
-    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getCocktails",KServerURL];
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/inventory/getSpecialMenus",KServerURL];
     
     NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
     [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -1055,9 +1068,14 @@ static SharedController *sharedController;
     [dictCheckIn setObject:venuID forKey:@"venueId"];
     [dictCheckIn setObject:bartsyID forKey:@"bartsyId"];
     [dictCheckIn setObject:description forKey:@"description"];
-    [dictCheckIn setObject:instructions forKey:@"special_instructions"];
+
     [dictCheckIn setObject:itemlist forKey:@"itemsList"];
-    
+    if (instructions.length) {
+        [dictCheckIn setObject:instructions forKey:@"special_instructions"];
+        
+    }else{
+        [dictCheckIn setObject:@"" forKey:@"special_instructions"];
+    }
     [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
     
     NSLog(@"dict is %@",dictCheckIn);
@@ -1123,8 +1141,13 @@ static SharedController *sharedController;
     [dictProfile setValue:strTotalPrice forKey:@"totalPrice"];
     [dictProfile setValue:strPercentage forKey:@"tipPercentage"];
     [dictProfile setValue:strName forKey:@"itemName"];
-    [dictProfile setValue:splcomments forKey:@"special_Instructions"];
-    [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
+    if (splcomments.length) {
+        [dictProfile setValue:splcomments forKey:@"specialInstructions"];
+ 
+    }else{
+        [dictProfile setValue:@"" forKey:@"specialInstructions"];
+    }
+        [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
     [dictProfile setValue:strDescription forKey:@"description"];
     [dictProfile setValue:arritemlist forKey:@"itemsList"];

@@ -15,7 +15,8 @@ enum{
     CustomDrinksView=2,
     CocktailsView=3,
     RecentOrderView=4,
-    FavoriteView=4
+    FavoriteView=4,
+    LocuOptionView=5
     
 };
 typedef NSInteger viewtype;
