@@ -383,7 +383,7 @@ static SharedController *sharedController;
     [dictProfile setValue:strDescription forKey:@"description"];
     [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
     [dictProfile setValue:@"NO" forKey:@"drinkAcceptance"];
-    [dictProfile setValue:@"Take care" forKey:@"specialInstructions"];
+    [dictProfile setValue:@"Take care" forKey:@"special_Instructions"];
     [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     //NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"New",@"orderStatus",@"10",@"basePrice",@"11",@"totalPrice",@"10",@"tipPercentage",@"Chilled Beer(Knockout)",@"itemName",@"143",@"itemId", nil];
@@ -630,7 +630,7 @@ static SharedController *sharedController;
     [dictProfile setValue:arrIngredients forKey:@"ingredients"];
     [dictProfile setValue:@"custom" forKey:@"type"];
     [dictProfile setValue:strReceiverId forKey:@"recieverBartsyId"];
-    [dictProfile setValue:@"Take Care" forKey:@"specialInstructions"];
+    [dictProfile setValue:@"Take Care" forKey:@"special_Instructions"];
     [dictProfile setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
 
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -1123,7 +1123,7 @@ static SharedController *sharedController;
     [dictProfile setValue:strTotalPrice forKey:@"totalPrice"];
     [dictProfile setValue:strPercentage forKey:@"tipPercentage"];
     [dictProfile setValue:strName forKey:@"itemName"];
-    [dictProfile setValue:splcomments forKey:@"specialInstructions"];
+    [dictProfile setValue:splcomments forKey:@"special_Instructions"];
     [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] forKey:@"venueId"];
     [dictProfile setValue:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
     [dictProfile setValue:strDescription forKey:@"description"];

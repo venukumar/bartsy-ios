@@ -519,8 +519,8 @@
         region.center=venueLocation.coordinate;
         
         MKCoordinateSpan span;
-        span.latitudeDelta=0.1;
-        span.longitudeDelta=0.1;
+        span.latitudeDelta=0.01;
+        span.longitudeDelta=0.01;
         region.span=span;
         
         [mapView setRegion:region animated:YES];

@@ -61,6 +61,7 @@
     tblView.dataSource=self;
     tblView.delegate=self;
     tblView.tag=111;
+    [tblView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:tblView];
 
 	// Do any additional setup after loading the view.
@@ -100,16 +101,17 @@
             UILabel *lblnewmsg = [self createLabelWithTitle:[NSString stringWithFormat:@"You got a message from %@",[[arrayForNotifications objectAtIndex:indexPath.row] valueForKey:@"nickName"]] frame:CGRectMake(71, 15, 250, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblnewmsg.backgroundColor=[UIColor clearColor];
             lblnewmsg.textAlignment = NSTextAlignmentLeft;
+            lblnewmsg.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
             [cell.contentView addSubview:lblnewmsg];
             
             NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"userImagePath"]];
             
             UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
             [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-            [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
-            [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
-            [imageForPeople.layer setShadowRadius:3.0];
-            [imageForPeople.layer setShadowOpacity:0.8];
+            //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+            //[imageForPeople.layer setShadowRadius:3.0];
+            //[imageForPeople.layer setShadowOpacity:0.8];
             [cell.contentView addSubview:imageForPeople];
             [imageForPeople release];
 
@@ -119,28 +121,32 @@
             
             UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
             [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-            [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
-            [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
-            [imageForPeople.layer setShadowRadius:3.0];
-            [imageForPeople.layer setShadowOpacity:0.8];
+            //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+            //[imageForPeople.layer setShadowRadius:3.0];
+            //[imageForPeople.layer setShadowOpacity:0.8];
             [cell.contentView addSubview:imageForPeople];
             [imageForPeople release];
 
             UILabel *lblVenueName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"venueName"] frame:CGRectMake(71, 5, 250, 20) tag:0 font:[UIFont boldSystemFontOfSize:15] color:[UIColor grayColor] numberOfLines:1];
             lblVenueName.backgroundColor=[UIColor clearColor];
             lblVenueName.textAlignment = NSTextAlignmentLeft;
+             lblVenueName.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
+            lblVenueName.textColor=[UIColor whiteColor];
             [cell.contentView addSubview:lblVenueName];
             //[lblVenueName release];
             
             UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(71,25,250,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
+            lblItemName.font=[UIFont fontWithName:@"MuseoSans-100" size:13.0];
             [cell.contentView addSubview:lblItemName];
             //[lblItemName release];
             
             UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(71,65,250,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblDate.backgroundColor=[UIColor clearColor];
             lblDate.textAlignment = NSTextAlignmentLeft;
+            lblDate.font=[UIFont fontWithName:@"MuseoSans-100" size:13.0];
             [cell.contentView addSubview:lblDate];
             //[lblDate release];
             
@@ -151,10 +157,10 @@
             
             UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 18, 60, 60)];
             [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-            [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
-            [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
-            [imageForPeople.layer setShadowRadius:3.0];
-            [imageForPeople.layer setShadowOpacity:0.8];
+            //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+            //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+            //[imageForPeople.layer setShadowRadius:3.0];
+            //[imageForPeople.layer setShadowOpacity:0.8];
             [cell.contentView addSubview:imageForPeople];
             [imageForPeople release];
 
@@ -162,18 +168,22 @@
             //lblVenueName.text=@"VenueName";
             lblVenueName.backgroundColor=[UIColor clearColor];
             lblVenueName.textAlignment = NSTextAlignmentLeft;
+            lblVenueName.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
+            lblVenueName.textColor=[UIColor whiteColor];
             [cell.contentView addSubview:lblVenueName];
             //[lblVenueName release];
             
             UILabel *lblItemName = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"message"] frame:CGRectMake(71,25,200,40) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:2];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
+            lblItemName.font=[UIFont fontWithName:@"MuseoSans-100" size:13.0];
             [cell.contentView addSubview:lblItemName];
             //[lblItemName release];
             
             UILabel *lblDate = [self createLabelWithTitle:[[arrayForNotifications objectAtIndex:indexPath.row] objectForKey:@"createdTime"] frame:CGRectMake(71,65,200,20) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblDate.backgroundColor=[UIColor clearColor];
             lblDate.textAlignment = NSTextAlignmentLeft;
+            lblDate.font=[UIFont fontWithName:@"MuseoSans-100" size:13.0];
             [cell.contentView addSubview:lblDate];
             //[lblDate release];
             

@@ -652,8 +652,8 @@
                     
                 }
                 [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
-                if ([dicttemp valueForKey:@"specialInstructions"]) {
-                    [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];
+                if ([dicttemp valueForKey:@"special_Instructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"special_Instructions"] forKey:@"special_Instructions"];
                 }
                 [arritemlist addObject:dictitem];
                
@@ -718,8 +718,8 @@
                     
                 }
                 [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
-                if ([dicttemp valueForKey:@"specialInstructions"]) {
-                   [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];  
+                if ([dicttemp valueForKey:@"special_Instructions"]) {
+                   [dictitem setObject:[dicttemp valueForKey:@"special_Instructions"] forKey:@"special_Instructions"];
                 }
                 if ([dicttemp valueForKey:@"description"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"description"] forKey:@"description"]; 
@@ -777,8 +777,8 @@
                     
                 }
                 [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
-                if ([dicttemp valueForKey:@"specialInstructions"]) {
-                    [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];
+                if ([dicttemp valueForKey:@"special_Instructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"special_Instructions"] forKey:@"special_Instructions"];
                 }
                 [arritemlist addObject:dictitem];
 
@@ -818,8 +818,8 @@
                 if ([dicttemp valueForKey:@"type"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
                 }
-                if ([dicttemp valueForKey:@"specialInstructions"]) {
-                    [dictitem setObject:[dicttemp valueForKey:@"specialInstructions"] forKey:@"specialInstructions"];
+                if ([dicttemp valueForKey:@"special_Instructions"]) {
+                    [dictitem setObject:[dicttemp valueForKey:@"special_Instructions"] forKey:@"special_Instructions"];
                 }
                 [arritemlist addObject:dictitem];
                 [dictitem release];
@@ -978,7 +978,7 @@
         if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
         [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         else{
-            if (!isGetFavorites) {
+            if (!isGetFavorites && !isGettingCocktails) {
                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
             }
         }
@@ -1619,7 +1619,7 @@
         [lbl_Optdespt release];
         
         UILabel *lbl_splinst=[[UILabel alloc]initWithFrame:CGRectMake(40, (i*60)+38, 290, 22)];
-        lbl_splinst.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"specialInstructions"];
+        lbl_splinst.text=[[arrMultiItems objectAtIndex:i] valueForKey:@"special_Instructions"];
         lbl_splinst.font=[UIFont systemFontOfSize:10];
         lbl_splinst.tag=111222333;
         lbl_splinst.backgroundColor=[UIColor clearColor];
@@ -3829,6 +3829,7 @@
             UILabel *lblItemName = [self createLabelWithTitle:strTrim frame:CGRectMake(10, 3, 250, 15) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:1];
             lblItemName.backgroundColor=[UIColor clearColor];
             lblItemName.textAlignment = NSTextAlignmentLeft;
+            lblItemName.font=[UIFont fontWithName:@"Museo Sans" size:13.0];
             [cell.contentView addSubview:lblItemName];
             [itemName release];
             UILabel *lbldescription;
@@ -4031,7 +4032,7 @@
         NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
 
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrContents objectAtIndex:indexPath.row]];
-        [dictItem setObject:@"" forKey:@"specialInstructions"];
+        [dictItem setObject:@"" forKey:@"special_Instructions"];
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
         [dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
@@ -4425,7 +4426,7 @@
             
             NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrContents objectAtIndex:indexPath.row]];
             
-            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"" forKey:@"special_Instructions"];
             [dictItem setObject:@"Menu" forKey:@"ItemType"];
             [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
             
@@ -4457,7 +4458,7 @@
                 id object=[arrFavorites objectAtIndex:indexPath.row];
                 
                 NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
-                [dictItem setObject:@"" forKey:@"specialInstructions"];
+                [dictItem setObject:@"" forKey:@"special_Instructions"];
                 [dictItem setObject:@"Menu" forKey:@"ItemType"];
                 [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
                 //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];
@@ -4492,7 +4493,7 @@
                 id object=[arrRecentOrders objectAtIndex:indexPath.row];
                 
                 NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:object];
-                [dictItem setObject:@"" forKey:@"specialInstructions"];
+                [dictItem setObject:@"" forKey:@"special_Instructions"];
                 [dictItem setObject:@"Menu" forKey:@"ItemType"];
                 [dictItem setObject:[NSNumber numberWithInt:1] forKey:@"Viewtype"];
                 //[dictItem setObject:[object objectForKey:@"section_name"] forKey:@"menu_path"];

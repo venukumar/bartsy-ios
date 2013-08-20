@@ -75,73 +75,93 @@
     
     UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(20, 60, 130, 130)];
     [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
-    [imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
-    [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
-    [imageForPeople.layer setShadowRadius:3.0];
-    [imageForPeople.layer setShadowOpacity:0.8];
+    //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
+    //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
+    //[imageForPeople.layer setShadowRadius:3.0];
+    //[imageForPeople.layer setShadowOpacity:0.8];
     [self.view addSubview:imageForPeople];
     [imageForPeople release];
     
-    UIButton *btnLike = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"liked-btn@2x.png"] frame:CGRectMake(165, 60, 126, 44) tag:1122 selector:@selector(btnLike_TouchUpInside) target:self];
+   /* UIButton *btnLike = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"liked-btn@2x.png"] frame:CGRectMake(165, 60, 126, 44) tag:1122 selector:@selector(btnLike_TouchUpInside) target:self];
     //[self.view addSubview:btnLike];
     
     UIButton *btnShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"share@2x.png"] frame:CGRectMake(165, 115, 126, 44) tag:2233 selector:@selector(btnShare_TouchUpInside) target:self];
-    //[self.view addSubview:btnShare];
+    //[self.view addSubview:btnShare];*/
 
-    UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(20,200, 320, 50)];
+    UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(160,60, 320, 50)];
     lblName.backgroundColor=[UIColor clearColor];
-    lblName.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+    lblName.textColor=[UIColor whiteColor];
     lblName.text = [dictPeople objectForKey:@"nickName"];
     lblName.font=[UIFont boldSystemFontOfSize:20];
+    lblName.font=[UIFont fontWithName:@"Museo Sans" size:20];
     lblName.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:lblName];
     
-    UILabel *lblDOB=[[UILabel alloc]initWithFrame:CGRectMake(20,240, 320, 30)];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+    NSDate *birthdate=[dateFormatter dateFromString:[dictPeople valueForKey:@"dateOfBirth"]];
+    NSDate* now = [NSDate date];
+    NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                       components:NSYearCalendarUnit
+                                       fromDate:birthdate
+                                       toDate:now
+                                       options:0];
+    NSInteger age = [ageComponents year];
+
+    
+    NSString *strdetails=[NSString stringWithFormat:@"%d/%@/%@/%@",age,[dictPeople valueForKey:@"gender"],[dictPeople valueForKey:@"status"],[dictPeople valueForKey:@"orientation"]];
+    
+    UILabel *lblDOB=[[UILabel alloc]initWithFrame:CGRectMake(160,90, 100, 50)];
     lblDOB.backgroundColor=[UIColor clearColor];
     lblDOB.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-    lblDOB.text = [NSString stringWithFormat:@"Date of birth: %@",[dictPeople valueForKey:@"dateOfBirth"]];
+    lblDOB.text = [NSString stringWithFormat:@"%@",strdetails];
+    lblDOB.lineBreakMode=NSLineBreakByWordWrapping;
     lblDOB.font=[UIFont systemFontOfSize:14];
+    lblDOB.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    lblDOB.numberOfLines=2;
     lblDOB.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:lblDOB];
     
     
-    UILabel *lblGender=[[UILabel alloc]initWithFrame:CGRectMake(20,270, 320, 30)];
+   /* UILabel *lblGender=[[UILabel alloc]initWithFrame:CGRectMake(20,270, 320, 30)];
     lblGender.backgroundColor=[UIColor clearColor];
     lblGender.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     lblGender.text = [NSString stringWithFormat:@"Gender: %@",[dictPeople valueForKey:@"gender"]];
     lblGender.font=[UIFont systemFontOfSize:14];
     lblGender.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:lblGender];
+    [self.view addSubview:lblGender];*/
     
-  /*  UILabel *lblAboutme=[[UILabel alloc]initWithFrame:CGRectMake(20,300, 100, 30)];
+   /* UILabel *lblAboutme=[[UILabel alloc]initWithFrame:CGRectMake(20,300, 100, 30)];
     lblAboutme.backgroundColor=[UIColor clearColor];
     lblAboutme.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     lblAboutme.text = [NSString stringWithFormat:@"About me:"];
     lblAboutme.font=[UIFont systemFontOfSize:14];
     lblAboutme.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:lblAboutme];
+    [self.view addSubview:lblAboutme];*/
     
-    UITextView *aboutme=[[UITextView alloc]initWithFrame:CGRectMake(86,302, 233, 50)];
+    UITextView *aboutme=[[UITextView alloc]initWithFrame:CGRectMake(20,220, 280, 50)];
     aboutme.backgroundColor=[UIColor clearColor];
     aboutme.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
     aboutme.font=[UIFont systemFontOfSize:14];
     aboutme.textAlignment=NSTextAlignmentLeft;
     aboutme.text=[dictPeople valueForKey:@"description"];
-    aboutme.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+    aboutme.textColor=[UIColor whiteColor];
+    aboutme.font=[UIFont fontWithName:@"Museo Sans" size:14];
     aboutme.editable=NO;
     [self.view addSubview:aboutme];
-    [[aboutme layer]setBorderWidth:1];
-    [[aboutme layer]setBorderColor:[[UIColor whiteColor] CGColor]];
-    [[aboutme layer]setCornerRadius:5];*/
+   // [[aboutme layer]setBorderWidth:1];
+   // [[aboutme layer]setBorderColor:[[UIColor whiteColor] CGColor]];
+   // [[aboutme layer]setCornerRadius:5];
     
-    UITextView *txtViewDesc = [[UITextView alloc]initWithFrame:CGRectMake(12,250, 320, 60)];
+    /*UITextView *txtViewDesc = [[UITextView alloc]initWithFrame:CGRectMake(12,250, 320, 60)];
     txtViewDesc.backgroundColor=[UIColor clearColor];
     txtViewDesc.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     txtViewDesc.editable=NO;
 //    txtViewDesc.text = [NSString stringWithFormat:@"Orientation:%@\nStatus: %@",[dictPeople objectForKey:@"orientation"],[dictPeople objectForKey:@"status"]];
     txtViewDesc.font=[UIFont boldSystemFontOfSize:12];
+    txtViewDesc.font=[UIFont fontWithName:@"Museo Sans" size:12];
     txtViewDesc.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:txtViewDesc];
+    [self.view addSubview:txtViewDesc];*/
 
 
     UIView *footerView = [self createViewWithFrame:CGRectMake(0, 350, 320, 65) tag:111];

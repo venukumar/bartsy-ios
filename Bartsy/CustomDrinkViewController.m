@@ -115,7 +115,22 @@
     
     if (viewtype==2 || viewtype==3 || viewtype==4) {
         
-        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 30, 320, 367-80) style:UITableViewStylePlain];
+        UIView *headview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)] autorelease];
+        headview.backgroundColor=[UIColor clearColor];
+        UILabel *lblOps_Desp=[[UILabel alloc]initWithFrame:CGRectMake(5, 2,180,40)];
+        if ([dictitemdetails valueForKey:@"options_description"]) {
+            lblOps_Desp.text=[dictitemdetails valueForKey:@"options_description"];
+ 
+        }else{
+           lblOps_Desp.text=@"";
+        }
+        lblOps_Desp.textColor=[UIColor whiteColor];
+        lblOps_Desp.backgroundColor=[UIColor clearColor];
+        lblOps_Desp.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
+        [headview addSubview:lblOps_Desp];
+        [lblOps_Desp release];
+        
+        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 50, 320, 367-80) style:UITableViewStylePlain];
         tblView.dataSource=self;
         tblView.backgroundColor = [UIColor blackColor];
         tblView.delegate=self;
@@ -154,15 +169,18 @@
         //instructionfield.layer.borderWidth=1.0;
         //instructionfield.layer.borderColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f].CGColor;
         [footview addSubview:instructionfield];
-        if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
-            instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
+        if ([dictitemdetails valueForKey:@"special_Instructions"] && [[dictitemdetails valueForKey:@"special_Instructions"] length]>0) {
+            instructionfield.text=[dictitemdetails valueForKey:@"special_Instructions"];
         }
 
         tblView.tableFooterView=footview;
+        if ([dictitemdetails valueForKey:@"options_description"]) {
+            tblView.tableHeaderView=headview;
 
+        }
     }else if (viewtype==1){
        
-        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 48,310, 18)];
+        UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 68,310, 18)];
         lblitem.text=[dictitemdetails valueForKey:@"name"];
         lblitem.textColor=[UIColor whiteColor];
         lblitem.backgroundColor=[UIColor clearColor];
@@ -170,7 +188,7 @@
         [mainScroll addSubview:lblitem];
         [lblitem release];
         
-        UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 66, 320, 1.5)];
+        UIView *lineview=[[UIView alloc]initWithFrame:CGRectMake(0, 86, 320, 1.5)];
         lineview.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
         [mainScroll addSubview:lineview];
         [lineview release];
@@ -178,7 +196,7 @@
         CGSize myStringSize = [[dictitemdetails valueForKey:@"description"] sizeWithFont:[UIFont systemFontOfSize:14]
                                    constrainedToSize:CGSizeMake(310, 100)
                                        lineBreakMode:NSLineBreakByWordWrapping];
-        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5,69,310, myStringSize.height+30)];
+        UILabel *lbldescription=[[UILabel alloc]initWithFrame:CGRectMake(5,89,310, myStringSize.height+30)];
         lbldescription.text=[dictitemdetails valueForKey:@"description"];
         lbldescription.textColor=[UIColor whiteColor];
         lbldescription.numberOfLines=6;
@@ -187,9 +205,9 @@
         [mainScroll addSubview:lbldescription];
         [lbldescription release];
         
-        UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 175,180,18)];
+        UILabel *lblinstruction=[[UILabel alloc]initWithFrame:CGRectMake(5, 195,180,18)];
         if (IS_IPHONE_5) {
-            lblinstruction.frame=CGRectMake(5, 182,180,18);
+            lblinstruction.frame=CGRectMake(5, 202,180,18);
         }
         lblinstruction.text=@"Special instructions";
         lblinstruction.textColor=[UIColor whiteColor];
@@ -198,12 +216,12 @@
         [mainScroll addSubview:lblinstruction];
         [lblinstruction release];
         
-        UIView *lineview2=[[UIView alloc]initWithFrame:CGRectMake(0,200,320, 1.5)];
+        UIView *lineview2=[[UIView alloc]initWithFrame:CGRectMake(0,220,320, 1.5)];
         lineview2.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
         [mainScroll addSubview:lineview2];
-        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,198, 320, 30)] autorelease];
+        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,208, 320, 30)] autorelease];
         if (IS_IPHONE_5) {
-            instructionfield.frame=CGRectMake(0,212, 320, 30);
+            instructionfield.frame=CGRectMake(0,232, 320, 30);
         }
         [instructionfield setBorderStyle:UITextBorderStyleLine];
         instructionfield.placeholder=@"Optional";
@@ -216,15 +234,15 @@
         [mainScroll addSubview:instructionfield];
 
         
-        if ([dictitemdetails valueForKey:@"specialInstructions"] && [[dictitemdetails valueForKey:@"specialInstructions"] length]>0) {
-            instructionfield.text=[dictitemdetails valueForKey:@"specialInstructions"];
+        if ([dictitemdetails valueForKey:@"special_Instructions"] && [[dictitemdetails valueForKey:@"special_Instructions"] length]>0) {
+            instructionfield.text=[dictitemdetails valueForKey:@"special_Instructions"];
         }
     }
     
     UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     orderBtn.frame=CGRectMake(162,324, 150, 40);
     if (IS_IPHONE_5) {
-        orderBtn.frame=CGRectMake(162,418, 150, 40);
+        orderBtn.frame=CGRectMake(162,415, 150, 40);
 
     }
     orderBtn.tag=556;
@@ -246,7 +264,7 @@
     UIButton *cancelorderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     cancelorderBtn.frame=CGRectMake(9,324, 150, 40);
     if (IS_IPHONE_5) {
-        cancelorderBtn.frame=CGRectMake(9,418, 150, 40);
+        cancelorderBtn.frame=CGRectMake(9,415, 150, 40);
     }
     cancelorderBtn.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:14.0];
     [cancelorderBtn setTitle:@"Cancel" forState:UIControlStateNormal];
@@ -1035,10 +1053,10 @@
     {
         NSMutableDictionary *dictItem=[[NSMutableDictionary alloc]initWithDictionary:[arrMultiItemOrders objectAtIndex:arrIndex]];
         if (instructionfield.text.length>0) {
-            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
+            [dictItem setObject:instructionfield.text forKey:@"special_Instructions"];
             
         }else{
-            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"" forKey:@"special_Instructions"];
         }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
@@ -1096,9 +1114,9 @@
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
 
         if (instructionfield.text.length>0) {
-            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
+            [dictItem setObject:instructionfield.text forKey:@"special_Instructions"];
         }else{
-            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"" forKey:@"special_Instructions"];
         }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
         if (!isEdit) {
@@ -1158,10 +1176,10 @@
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
         if (instructionfield.text.length>0) {
-            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
+            [dictItem setObject:instructionfield.text forKey:@"special_Instructions"];
             
         }else{
-            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"" forKey:@"special_Instructions"];
             
         }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
@@ -1224,10 +1242,10 @@
         [dictItem setObject:[NSString stringWithFormat:@"%.2f",totalPrice] forKey:@"price"];
         
         if (instructionfield.text.length>0) {
-            [dictItem setObject:instructionfield.text forKey:@"specialInstructions"];
+            [dictItem setObject:instructionfield.text forKey:@"special_Instructions"];
             
         }else{
-            [dictItem setObject:@"" forKey:@"specialInstructions"];
+            [dictItem setObject:@"" forKey:@"special_Instructions"];
             
         }
         [dictItem setObject:@"Menu" forKey:@"ItemType"];
