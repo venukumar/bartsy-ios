@@ -170,12 +170,10 @@
     [self.view addSubview:btnCheckOut];*/
     
     
-    
-    
     UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(276, 1, 44, 44) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
     [self.view addSubview:checkinBtn];
     
-    UILabel *lblcheckin=[self createLabelWithTitle:@"Check in:" frame:CGRectMake(-35, 0, 140, 44) tag:0 font:[UIFont boldSystemFontOfSize:10] color:[UIColor blackColor] numberOfLines:0];
+    UILabel *lblcheckin=[self createLabelWithTitle:@"Check in:" frame:CGRectMake(-42, 0, 140, 44) tag:9996 font:[UIFont boldSystemFontOfSize:10] color:[UIColor blackColor] numberOfLines:0];
     lblcheckin.textAlignment=NSTextAlignmentLeft;
     [checkinBtn addSubview:lblcheckin];
     
@@ -335,7 +333,8 @@
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3333];
         //[checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
         checkinBtn.tag=3334;
-        
+        UILabel *lblcheckout=(UILabel*)[checkinBtn viewWithTag:9996];
+        lblcheckout.text=@"Check out:";
         UIImageView *imgcheckin=(UIImageView*)[self.view viewWithTag:9995];
         imgcheckin.image=[UIImage imageNamed:@"tickmark_select"];
         [checkinBtn addSubview:imgcheckin];
@@ -858,6 +857,8 @@
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
         //[checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
         checkinBtn.hidden=NO;
+        UILabel *lblcheckout=(UILabel*)[checkinBtn viewWithTag:9996];
+        lblcheckout.text=@"Check out:";
         UIImageView *imgcheckin=(UIImageView*)[checkinBtn viewWithTag:9995];
         imgcheckin.image=[UIImage imageNamed:@"tickmark_select"];
         imgcheckin.hidden=NO;
@@ -872,7 +873,8 @@
         UIImageView *imgcheckin=(UIImageView*)[checkinBtn viewWithTag:9995];
         imgcheckin.image=[UIImage imageNamed:@"tickmark_select"];
         imgcheckin.hidden=NO;
-
+        UILabel *lblcheckout=(UILabel*)[checkinBtn viewWithTag:9996];
+        lblcheckout.text=@"Check out:";
         UIView *popupView=(UIView*)[self.view viewWithTag:2221];
         popupView.hidden=NO;
 
@@ -1319,6 +1321,8 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             UIImageView *imgcheckin=(UIImageView*)[checkinBtn viewWithTag:9995];
             imgcheckin.image=[UIImage imageNamed:@"tickmark_select"];
             [checkinBtn addSubview:imgcheckin];
+            UILabel *lblcheckout=(UILabel*)[checkinBtn viewWithTag:9996];
+            lblcheckout.text=@"Check out:";
             [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
             [[NSUserDefaults standardUserDefaults]synchronize];
             appDelegate.intPeopleCount=[[result objectForKey:@"userCount"]integerValue];
@@ -2243,7 +2247,8 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
     //[checkinBtn setImage:[UIImage imageNamed:@"tickmark_select"] forState:UIControlStateNormal];
     checkinBtn.hidden=NO;
-    
+    UILabel *lblcheckout=(UILabel*)[checkinBtn viewWithTag:9996];
+    lblcheckout.text=@"Check out:";
     UIImageView *imgcheckin=(UIImageView*)[checkinBtn viewWithTag:9995];
     imgcheckin.image=[UIImage imageNamed:@"tickmark_select"];
     [checkinBtn addSubview:imgcheckin];
