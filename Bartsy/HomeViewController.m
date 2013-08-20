@@ -987,7 +987,7 @@
         if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
         [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         else{
-            if (!isGetFavorites && !isGettingCocktails) {
+            if (!isGetFavorites && !isGettingCocktails ) {
                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
             }
         }
@@ -1791,7 +1791,7 @@
     
     UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(275, popupView.frame.size.height-80, 150, 30)];
     lblTotalPrice.font = [UIFont systemFontOfSize:12];
-    lblTotalPrice.text = [NSString stringWithFormat:@"$%@",[NSString stringWithFormat:@"%.2f",totalPrice]];
+    lblTotalPrice.text = [NSString stringWithFormat:@"$%@",[NSString stringWithFormat:@"%.2f",totalPrice+tiptotal+floatTotalTax]];
     lblTotalPrice.backgroundColor = [UIColor clearColor];
     lblTotalPrice.textColor = [UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
     lblTotalPrice.textAlignment = NSTextAlignmentLeft;

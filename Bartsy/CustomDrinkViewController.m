@@ -1138,7 +1138,7 @@
             [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
         if (totalPrice==0.0 ) {
-            
+            [self createAlertViewWithTitle:@"" message:@"Please,select the items to add the order" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
             [dictItem release];
             [str_opt_description release];
             return;
@@ -1217,6 +1217,7 @@
             
             [dictItem release];
             [str_opt_description release];
+            [self createAlertViewWithTitle:@"" message:@"Please,select the items to add the order" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
             return;
         }
         
@@ -1280,7 +1281,7 @@
             [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
         if (totalPrice==0.0 ) {
-            
+            [self createAlertViewWithTitle:@"" message:@"Please,select the items to add the order" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
             [dictItem release];
             [str_opt_description release];
             return;
