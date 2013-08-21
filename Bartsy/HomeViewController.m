@@ -508,7 +508,7 @@
 -(void)btnOrder_TouchUpInside:(UIButton*)sender
 {
     if (sender.tag==1115) {
-        
+  //Showing glass image (Indicating order in list)
         UIView *popupView=(UIView*)[self.view viewWithTag:2221];
         popupView.hidden=YES;
         UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
@@ -522,7 +522,8 @@
         }
         
     }else if (sender.tag==1116){
-        
+   
+    // Saving the order
         NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
         
         isRequestForOrder=YES;
@@ -4694,10 +4695,22 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
 
 -(void)selectedPeople:(NSNotification*)notification
 {
+    
+    UIButton *checkinBtn=(UIButton*)[self.view viewWithTag:3334];
+    checkinBtn.hidden=YES;
+    
+    UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
+    if (!drinkBtn) {
+        UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 30, 30) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
+        [self.view addSubview:drinkBtn];
+        
+    }
+
     UIView *popview=(UIView*)[self.view viewWithTag:2221];
+    [self.view bringSubviewToFront:popview];
     //UIButton *drinkBtn=(UIButton*)[self.view viewWithTag:1117];
-    UIImageView *imgcount=(UIImageView*)[popview viewWithTag:1005];
-    imgcount.image=[UIImage imageNamed:@"drink"];
+    //UIImageView *imgcount=(UIImageView*)[popview viewWithTag:1005];
+   // imgcount.image=[UIImage imageNamed:@"drink"];
     /*[imgcount removeFromSuperview];
     if (!drinkBtn) {
         UIButton *drinkBtn=[self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"drink"] frame:CGRectMake(280, 8, 30, 30) tag:1117 selector:@selector(btnOrder_TouchUpInside:) target:self];
