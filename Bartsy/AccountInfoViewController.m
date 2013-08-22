@@ -53,7 +53,7 @@
     self.sharedController=[SharedController sharedController];
     
     //Navigation Bar implementation
-    self.view.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
+   /* self.view.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
     UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
     [self.view addSubview:imgViewForTop];
@@ -61,7 +61,7 @@
     
     UILabel *lblMsg=[self createLabelWithTitle:@"User Profile" frame:CGRectMake(0, 0, 320, 44) tag:0 font:[UIFont boldSystemFontOfSize:18] color:[UIColor blackColor] numberOfLines:1];
     lblMsg.textAlignment=NSTextAlignmentCenter;
-    [self.view addSubview:lblMsg];
+    [self.view addSubview:lblMsg];*/
     
     /*UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
     imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
@@ -71,17 +71,21 @@
     //Setting's Button declaration
     
     
-    UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+  /*  UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     settingBtn.frame = CGRectMake(280, 0, 50, 44);
     [settingBtn addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
     settingBtn.tag=401;
     [self.view addSubview:settingBtn];
     
-    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 22, 22)];
+    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 9, 22, 22)];
     imgViewBack.image = [UIImage imageNamed:@"settings"];
     [settingBtn addSubview:imgViewBack];
     [imgViewBack release];
   
+    
+    UILabel *lblcheckin=[self createLabelWithTitle:@"Edit:" frame:CGRectMake(-22, 0, 140, 44) tag:9996 font:[UIFont boldSystemFontOfSize:12] color:[UIColor blackColor] numberOfLines:0];
+    lblcheckin.textAlignment=NSTextAlignmentLeft;
+    [settingBtn addSubview:lblcheckin];
     
     is_pastOrders=NO;
     
@@ -93,7 +97,7 @@
     profileName=[self createLabelWithTitle:@"" frame:CGRectMake(20, profileImg.frame.size.height+profileImg.frame.origin.y+2, 300, 70) tag:0 font:[UIFont systemFontOfSize:30] color:[UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] numberOfLines:1];
     [self.view addSubview:profileName];
     
-    aboutme=[[UITextView alloc]initWithFrame:CGRectMake(12,profileName.frame.size.height+profileName.frame.origin.y, 300, 50)];
+    aboutme=[[UITextView alloc]initWithFrame:CGRectMake(12,profileName.frame.size.height+profileName.frame.origin.y-10, 300, 45)];
     aboutme.backgroundColor=[UIColor clearColor];
     aboutme.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
     aboutme.font=[UIFont systemFontOfSize:14];
@@ -113,11 +117,19 @@
     pastordersTbl.backgroundColor=[UIColor colorWithRed:0.09 green:0.09 blue:0.098 alpha:1.0];
     [pastordersTbl setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [pastordersTbl setShowsVerticalScrollIndicator:NO];
-	[self.view addSubview:pastordersTbl];
+	[self.view addSubview:pastordersTbl];*/
     
+    lblStatus.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    lbldetails.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    TxtViewDescription.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    lblNickName.font=[UIFont fontWithName:@"Museo Sans" size:14];
+
     
 }
-
+-(IBAction)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 #pragma mark-----------Button Actions
 
 -(void)Button_Action:(UIButton*)sender{
@@ -281,8 +293,8 @@
 
 #pragma mark-----------Sharedcontroller Delegate
 -(void)controllerDidFinishLoadingWithResult:(id)result{
-    if (!is_pastOrders) {
-        
+   // if (!is_pastOrders) {
+    [self hideProgressView:nil];
         SDImageCache *sharedSDImageCache=[SDImageCache sharedImageCache];
         [sharedSDImageCache clearMemory];
         [sharedSDImageCache clearDisk];
@@ -294,13 +306,40 @@
                 
                 NSLog(@"Dictionary %@  \n URL is %@",result,[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]);
         
-                resultAccountInfo=[result retain];
-                
-                [profileImg setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
+                //resultAccountInfo=[result retain];
+                lblNickName.text=[result valueForKey:@"nickname"];
+                [ProfileImage setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]]];
                 profileName.text=[result valueForKey:@"nickname"];
-                aboutme.text=[result valueForKey:@"description"];
-    
-                [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadPIC) userInfo:nil repeats:NO];
+                
+                
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+                NSDate *birthdate=[dateFormatter dateFromString:[result valueForKey:@"dateofbirth"]];
+                NSDate* now = [NSDate date];
+                NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                                   components:NSYearCalendarUnit
+                                                   fromDate:birthdate
+                                                   toDate:now
+                                                   options:0];
+                NSInteger age = [ageComponents year];
+                
+                
+                NSMutableString *strdetails=[[NSMutableString alloc]init];
+                [strdetails appendFormat:@"%d",age];
+                if ([result valueForKey:@"gender"]) {
+                    [strdetails appendFormat:@"/%@",[result valueForKey:@"gender"]];
+                }
+                
+                if ([result valueForKey:@"orientation"] && [[result valueForKey:@"orientation"] length]) {
+                    [strdetails appendFormat:@"/%@",[result valueForKey:@"orientation"]];
+                }
+                lbldetails.text=strdetails;
+
+                lblStatus.text=[result valueForKey:@"status"];
+                
+                TxtViewDescription.text=[result valueForKey:@"description"];
+                [dateFormatter release];
+                //[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(reloadPIC) userInfo:nil repeats:NO];
             }else{
                 
                 [self createAlertViewWithTitle:@"Error" message:[result valueForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:nil tag:0];
@@ -312,10 +351,10 @@
             NSLog(@"Array %@",result);
     
         }
-        is_pastOrders=YES;
-        [pastorderArray removeAllObjects];
-        [self.sharedController getPastOrderbbybartsyId:[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"] delegate:self];
-    }else{
+        //is_pastOrders=YES;
+        //[pastorderArray removeAllObjects];
+        //[self.sharedController getPastOrderbbybartsyId:[[NSUserDefaults standardUserDefaults] objectForKey:@"bartsyId"] delegate:self];
+    /*}else{
         [self hideProgressView:nil];
 
         if ([result isKindOfClass:[NSDictionary class]]) {
@@ -343,7 +382,7 @@
             
         }
         is_pastOrders=NO;
-    }
+    }*/
 }
 -(void)controllerDidFailLoadingWithError:(NSError*)error{
     

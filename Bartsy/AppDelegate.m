@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
-@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen;
+@synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen,arrOrdersList;
 @synthesize  tabBar;
 @synthesize isComingForPeople,timerforGetMessages,isComingForMenu;
 @synthesize isCmgForShowingOrderUI;
@@ -52,7 +52,7 @@
     
     arrPeople=[[NSMutableArray alloc]init];
     arrOrders=[[NSMutableArray alloc]init];
-    
+    arrOrdersList=[[NSMutableArray alloc]init];
 //    // Optional: automatically send uncaught exceptions to Google Analytics.
 //    [GAI sharedInstance].trackUncaughtExceptions = YES;
 //    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.

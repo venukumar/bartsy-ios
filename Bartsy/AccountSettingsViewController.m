@@ -135,6 +135,8 @@
         lblItemName = [self createLabelWithTitle:@"Payment Information" frame:CGRectMake(10, 8, 250, 25) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:192 green:188 blue:189 alpha:1.0] numberOfLines:1];
         lblItemName.backgroundColor=[UIColor clearColor];
         lblItemName.textAlignment = NSTextAlignmentLeft;
+        lblItemName.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
+        
         [cell.contentView addSubview:lblItemName];
     }
     else if(indexPath.section == 1 )
@@ -142,6 +144,7 @@
         lblItemName = [self createLabelWithTitle:[arySettings objectAtIndex:indexPath.row] frame:CGRectMake(10, 8, 250, 25) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:192 green:188 blue:189 alpha:1.0] numberOfLines:1];
         lblItemName.backgroundColor=[UIColor clearColor];
         lblItemName.textAlignment = NSTextAlignmentLeft;
+        lblItemName.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
         [cell.contentView addSubview:lblItemName];
     }
     else if(indexPath.section == 2)
@@ -149,6 +152,7 @@
         lblItemName = [self createLabelWithTitle:[aryMsg objectAtIndex:indexPath.row] frame:CGRectMake(10, 8, 250, 25) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor colorWithRed:192 green:188 blue:189 alpha:1.0] numberOfLines:1];
         lblItemName.backgroundColor=[UIColor clearColor];
         lblItemName.textAlignment = NSTextAlignmentLeft;
+        lblItemName.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
         [cell.contentView addSubview:lblItemName];
     }
     

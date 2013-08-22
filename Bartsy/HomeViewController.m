@@ -243,12 +243,12 @@
              [imgview addSubview:address];
          }else if (i==1){
              
-             UILabel *lblwifiname=[self createLabelWithTitle:[NSString stringWithFormat:@"%@ : %@",@"wifiPassword",[dictVenue valueForKey:@"wifiName"]] frame:CGRectMake(31, 10, 260, 30) tag:0 font:[UIFont systemFontOfSize:18] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:1];
+             UILabel *lblwifiname=[self createLabelWithTitle:[NSString stringWithFormat:@"%@ : %@",@"wifiPassword",[dictVenue valueForKey:@"wifiName"]] frame:CGRectMake(5, 10, 310, 30) tag:0 font:[UIFont systemFontOfSize:18] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:1];
              lblwifiname.textAlignment=NSTextAlignmentCenter;
              lblwifiname.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
              [imgview addSubview:lblwifiname];
              
-             UILabel *lblwifipswd=[self createLabelWithTitle:[NSString stringWithFormat:@"%@ : %@",@"wifiName",[dictVenue valueForKey:@"wifiPassword"]] frame:CGRectMake(31, 40, 260, 30) tag:0 font:[UIFont systemFontOfSize:18] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:1];
+             UILabel *lblwifipswd=[self createLabelWithTitle:[NSString stringWithFormat:@"%@ : %@",@"wifiName",[dictVenue valueForKey:@"wifiPassword"]] frame:CGRectMake(5, 40, 310, 30) tag:0 font:[UIFont systemFontOfSize:18] color:[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0] numberOfLines:1];
              lblwifipswd.textAlignment=NSTextAlignmentCenter;
              lblwifipswd.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
              [imgview addSubview:lblwifipswd];
@@ -2812,7 +2812,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         }
        
         
-        UIView *viewBg2=[self createViewWithFrame:CGRectMake(0, 35, viewBg.bounds.size.width, 140+[arrBundledOrdersObject count]*20) tag:0];
+        UIView *viewBg2=[self createViewWithFrame:CGRectMake(0, 35, viewBg.bounds.size.width, 140+[arrBundledOrdersObject count]*35) tag:0];
         viewBg2.backgroundColor=[UIColor blackColor];
         [viewBg addSubview:viewBg2];
         
@@ -2957,12 +2957,22 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         {
             NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
             
-            UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*15)+40, 242, 15)];
+            UILabel *lblitemName = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*30)+40, 242, 15)];
+            lblitemName.font = [UIFont boldSystemFontOfSize:12];
+            lblitemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+            lblitemName.numberOfLines = 1;
+            lblitemName.backgroundColor = [UIColor clearColor];
+            lblitemName.textColor = [UIColor whiteColor] ;
+            lblitemName.textAlignment = NSTextAlignmentLeft;
+            lblitemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
+            [viewBg2 addSubview:lblitemName];
+            
+            UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*30)+55, 242, 15)];
             lblDescription.font = [UIFont boldSystemFontOfSize:12];
-            lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+            lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"options_description"]];
             lblDescription.numberOfLines = 1;
             lblDescription.backgroundColor = [UIColor clearColor];
-            lblDescription.textColor = [UIColor whiteColor] ;
+            lblDescription.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
             lblDescription.textAlignment = NSTextAlignmentLeft;
             lblDescription.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
             [viewBg2 addSubview:lblDescription];
@@ -2983,12 +2993,13 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             {
                 lblPrice.text=@"-";
             }
-            [lblDescription release];
+            [lblitemName release];
+            //[lblDescription release];
             [lblPrice release];
             
         }
                 
-        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 120, 15)];
+        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 120, 15)];
         lblTipFee.font = [UIFont boldSystemFontOfSize:11];
         lblTipFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
         floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
@@ -3009,7 +3020,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [attribstrgTIP release];
         [lblTipFee release];
         
-        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 150, 15)];
+        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 150, 15)];
         lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
         lblTaxFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
         floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
@@ -3032,7 +3043,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         
         NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
        
-        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([[dict objectForKey:@"itemsList"] count]*15)+45, 153, 15)];
+        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 153, 15)];
         lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
         lblTotalPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
         if(floatTotalPrice>0.01)
@@ -3053,20 +3064,24 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         
         if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
         {
-            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 30+87+[[dict objectForKey:@"itemsList"] count]*20+42+25, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
+            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 3, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
             btnReject.titleLabel.font=[UIFont systemFontOfSize:10];
-            btnReject.backgroundColor=[UIColor grayColor];
-            [viewBg addSubview:btnReject];
+            btnReject.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+            [scrollView addSubview:btnReject];
             
-
+//30+87+[[dict objectForKey:@"itemsList"] count]*20+42+20
             
-            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 30+87+[[dict objectForKey:@"itemsList"] count]*20+42+25, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
+            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 3, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
             btnAccept.titleLabel.font=[UIFont systemFontOfSize:10];
-            btnAccept.backgroundColor=[UIColor grayColor];
-            [viewBg addSubview:btnAccept];
+            btnAccept.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+            [scrollView addSubview:btnAccept];
+            
+            //30+87+[[dict objectForKey:@"itemsList"] count]*20+42+20
+            viewBg.frame=CGRectMake(viewBg.frame.origin.x
+                                    , viewBg.frame.origin.y+38, viewBg.frame.size.width, viewBg.frame.size.height);
         }
         
-        intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*20 + intHeightForOfferedDrinks+50;
+        intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*35 + intHeightForOfferedDrinks+50;
     }
     
     if (arrBundledOrders.count==0) {
@@ -4012,17 +4027,19 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             if([[arrDateComps objectAtIndex:0] isEqualToString:@"PM"]&&comps.hour>12)
                 comps.hour-=12;
             
-            NSString *strDate1 = [NSString stringWithFormat:@"Placed at: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
+            NSString *strDate1 = [NSString stringWithFormat:@"Placed on: %@%i:%@%i:%@%i %@ on %@ %i,%i",(comps.hour<10? @"0" : @""),comps.hour,(comps.minute<10? @"0":@""),comps.minute,(comps.second<10? @"0":@""),comps.second,[arrDateComps objectAtIndex:0],[arrDateComps objectAtIndex:4],comps.day,comps.year];
             
             
-            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 280, 15)];
+            UILabel *lblTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, 280, 15)];
             lblTime.font = [UIFont systemFontOfSize:14];
             lblTime.text = strDate1;
             lblTime.tag = 1234234567;
             lblTime.backgroundColor = [UIColor clearColor];
-            lblTime.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+            lblTime.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+            lblTime.font=[UIFont fontWithName:@"MuseoSans-100" size:14.0];
+            lblTime.textColor=[UIColor whiteColor];
             lblTime.textAlignment = NSTextAlignmentLeft;
-            //[cell.contentView addSubview:lblTime];
+            [cell.contentView addSubview:lblTime];
             [lblTime release];
             
            /* UILabel *lblSender = [[UILabel alloc]initWithFrame:CGRectMake(10, 80, 280, 15)];

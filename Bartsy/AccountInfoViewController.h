@@ -15,6 +15,15 @@
 @interface AccountInfoViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>{
     
     id resultAccountInfo;
+    
+    IBOutlet UIImageView *ProfileImage;
+    
+    IBOutlet UITextView *TxtViewDescription;
+    
+    IBOutlet UILabel *lblStatus;
+    IBOutlet UILabel *lbldetails;
+    IBOutlet UILabel *lblNickName;
 }
 @property(nonatomic,retain)id resultAccountInfo;
+-(IBAction)btnBack_TouchUpInside;
 @end

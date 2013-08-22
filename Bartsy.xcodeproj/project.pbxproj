@@ -29,6 +29,14 @@
 		CB10B088178D6F3300CAF6ED /* top_header_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B087178D6F3100CAF6ED /* top_header_bar.png */; };
 		CB10B08A178D6FDE00CAF6ED /* arrow-left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */; };
 		CB10B08C178D700400CAF6ED /* arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B08B178D700300CAF6ED /* arrow-left.png */; };
+		CB3E90EB17C60AEE00A5B83A /* UserSettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */; };
+		CB3E90EC17C60AEE00A5B83A /* UserSettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */; };
+		CB3E90F217C619B000A5B83A /* BAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90F117C619B000A5B83A /* BAccountCell.xib */; };
+		CB3E90F717C624DA00A5B83A /* UserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */; };
+		CB3E90F817C624DA00A5B83A /* UserProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */; };
+		CB3E90FD17C633FD00A5B83A /* flower_icon-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90FC17C633FB00A5B83A /* flower_icon-selected.png */; };
+		CB3E90FF17C6348B00A5B83A /* exclamatory_icon_ping.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90FE17C6348A00A5B83A /* exclamatory_icon_ping.png */; };
+		CB3E910117C6432700A5B83A /* AccountInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E910017C6432500A5B83A /* AccountInfoViewController.xib */; };
 		CB443CA617A8D93400127BB4 /* deleteicon.png in Resources */ = {isa = PBXBuildFile; fileRef = CB443CA517A8D93400127BB4 /* deleteicon.png */; };
 		CB688C7A179FE5C4001C4726 /* CustomDrinkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */; };
 		CB688C7B179FE5C4001C4726 /* CustomDrinkViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */; };
@@ -350,6 +358,16 @@
 		CB10B087178D6F3100CAF6ED /* top_header_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_header_bar.png; sourceTree = "<group>"; };
 		CB10B089178D6FDD00CAF6ED /* arrow-left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left@2x.png"; sourceTree = "<group>"; };
 		CB10B08B178D700300CAF6ED /* arrow-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow-left.png"; sourceTree = "<group>"; };
+		CB3E90E817C60AEE00A5B83A /* UserSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingsView.h; sourceTree = "<group>"; };
+		CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsView.m; sourceTree = "<group>"; };
+		CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingsView.xib; sourceTree = "<group>"; };
+		CB3E90F117C619B000A5B83A /* BAccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BAccountCell.xib; sourceTree = "<group>"; };
+		CB3E90F417C624DA00A5B83A /* UserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProfileViewController.h; sourceTree = "<group>"; };
+		CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProfileViewController.m; sourceTree = "<group>"; };
+		CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserProfileViewController.xib; sourceTree = "<group>"; };
+		CB3E90FC17C633FB00A5B83A /* flower_icon-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flower_icon-selected.png"; sourceTree = "<group>"; };
+		CB3E90FE17C6348A00A5B83A /* exclamatory_icon_ping.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclamatory_icon_ping.png; sourceTree = "<group>"; };
+		CB3E910017C6432500A5B83A /* AccountInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountInfoViewController.xib; sourceTree = "<group>"; };
 		CB443CA517A8D93400127BB4 /* deleteicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deleteicon.png; sourceTree = "<group>"; };
 		CB688C77179FE5C4001C4726 /* CustomDrinkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDrinkViewController.h; sourceTree = "<group>"; };
 		CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDrinkViewController.m; sourceTree = "<group>"; };
@@ -881,6 +899,19 @@
 				CB10B07B178D6B0800CAF6ED /* signin-btn.png */,
 			);
 			name = SignIn;
+			sourceTree = "<group>";
+		};
+		CB3E90F317C624A200A5B83A /* NewViews */ = {
+			isa = PBXGroup;
+			children = (
+				CB3E90E817C60AEE00A5B83A /* UserSettingsView.h */,
+				CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */,
+				CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */,
+				CB3E90F417C624DA00A5B83A /* UserProfileViewController.h */,
+				CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */,
+				CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */,
+			);
+			name = NewViews;
 			sourceTree = "<group>";
 		};
 		CB8829F217C212C400094EAB /* CustomFont */ = {
@@ -1495,12 +1526,15 @@
 				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
 				CBFAF1121797B3E600E953AC /* RewardsTableCell.h */,
 				CBFAF1131797B3E600E953AC /* RewardsTableCell.m */,
+				CB3E90F117C619B000A5B83A /* BAccountCell.xib */,
 				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
 				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
+				CB3E910017C6432500A5B83A /* AccountInfoViewController.xib */,
 				CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */,
 				CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */,
 				E0FD62B01794292800776EE0 /* PastOrdersCell.h */,
 				E0FD62B11794292800776EE0 /* PastOrdersCell.m */,
+				CB3E90F317C624A200A5B83A /* NewViews */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -1508,6 +1542,8 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB3E90FE17C6348A00A5B83A /* exclamatory_icon_ping.png */,
+				CB3E90FC17C633FB00A5B83A /* flower_icon-selected.png */,
 				CBAC59FB17C36F950047BDBB /* cancel-btn.png */,
 				CB882A1217C26AE000094EAB /* circle.png */,
 				CB882A1017C266AA00094EAB /* Bartsy_main-bg.png */,
@@ -1838,6 +1874,12 @@
 				CB882A1117C266AA00094EAB /* Bartsy_main-bg.png in Resources */,
 				CB882A1317C26AE000094EAB /* circle.png in Resources */,
 				CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */,
+				CB3E90EC17C60AEE00A5B83A /* UserSettingsView.xib in Resources */,
+				CB3E90F217C619B000A5B83A /* BAccountCell.xib in Resources */,
+				CB3E90F817C624DA00A5B83A /* UserProfileViewController.xib in Resources */,
+				CB3E90FD17C633FD00A5B83A /* flower_icon-selected.png in Resources */,
+				CB3E90FF17C6348B00A5B83A /* exclamatory_icon_ping.png in Resources */,
+				CB3E910117C6432700A5B83A /* AccountInfoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1968,6 +2010,8 @@
 				E0539F3517969DD800E16677 /* NSData+Base64.m in Sources */,
 				CBFAF1141797B3E600E953AC /* RewardsTableCell.m in Sources */,
 				CB688C7A179FE5C4001C4726 /* CustomDrinkViewController.m in Sources */,
+				CB3E90EB17C60AEE00A5B83A /* UserSettingsView.m in Sources */,
+				CB3E90F717C624DA00A5B83A /* UserProfileViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

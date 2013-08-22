@@ -17,7 +17,7 @@
 @end
 
 @implementation PeopleDetailViewController
-@synthesize dictPeople;
+@synthesize dictPeople,TypeofView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -39,9 +39,9 @@
     appDelegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     appDelegate.delegateForCurrentViewController=self;
     
-    self.view.backgroundColor = [UIColor blackColor];
+   // self.view.backgroundColor = [UIColor blackColor];
     
-    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+  /*  UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
     [self.view addSubview:imgViewForTop];
     [imgViewForTop release];
@@ -69,18 +69,18 @@
     NSLog(@"People details is %@",dictPeople);
     UILabel *lblHeader=[self createLabelWithTitle:[dictPeople objectForKey:@"nickName"] frame:CGRectMake(5, 2, 320, 40) tag:0 font:[UIFont boldSystemFontOfSize:16] color:[UIColor blackColor] numberOfLines:1];
     lblHeader.textAlignment=NSTextAlignmentCenter;
-    [self.view addSubview:lblHeader];
-    
+    [self.view addSubview:lblHeader];*/
+    lblNickName.text=[dictPeople objectForKey:@"nickName"];
     NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
     
-    UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(20, 60, 130, 130)];
-    [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    //UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(20, 60, 130, 130)];
+    [ProfileImage setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
     //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
     //[imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
     //[imageForPeople.layer setShadowRadius:3.0];
     //[imageForPeople.layer setShadowOpacity:0.8];
-    [self.view addSubview:imageForPeople];
-    [imageForPeople release];
+   // [self.view addSubview:imageForPeople];
+    //[imageForPeople release];
     
    /* UIButton *btnLike = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"liked-btn@2x.png"] frame:CGRectMake(165, 60, 126, 44) tag:1122 selector:@selector(btnLike_TouchUpInside) target:self];
     //[self.view addSubview:btnLike];
@@ -88,15 +88,7 @@
     UIButton *btnShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"share@2x.png"] frame:CGRectMake(165, 115, 126, 44) tag:2233 selector:@selector(btnShare_TouchUpInside) target:self];
     //[self.view addSubview:btnShare];*/
 
-    UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(160,60, 320, 50)];
-    lblName.backgroundColor=[UIColor clearColor];
-    lblName.textColor=[UIColor whiteColor];
-    lblName.text = [dictPeople objectForKey:@"nickName"];
-    lblName.font=[UIFont boldSystemFontOfSize:20];
-    lblName.font=[UIFont fontWithName:@"Museo Sans" size:20];
-    lblName.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:lblName];
-    
+
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MM/dd/yyyy"];
     NSDate *birthdate=[dateFormatter dateFromString:[dictPeople valueForKey:@"dateOfBirth"]];
@@ -114,67 +106,19 @@
     if ([dictPeople valueForKey:@"gender"]) {
         [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"gender"]];
     }
-    if ([dictPeople valueForKey:@"status"]) {
-        [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"status"]];
-    }
+    
     if ([dictPeople valueForKey:@"orientation"]) {
         [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"orientation"]];
     }
+    lbldetails.text=strdetails;
+    lblStatus.text=[dictPeople valueForKey:@"status"];
+    lbldetails.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    lblStatus.font=[UIFont fontWithName:@"Museo Sans" size:14];
     
-    UILabel *lblDOB=[[UILabel alloc]initWithFrame:CGRectMake(160,90, 150, 50)];
-    lblDOB.backgroundColor=[UIColor clearColor];
-    lblDOB.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-    lblDOB.text = [NSString stringWithFormat:@"%@",strdetails];
-    lblDOB.lineBreakMode=NSLineBreakByWordWrapping;
-    lblDOB.font=[UIFont systemFontOfSize:14];
-    lblDOB.font=[UIFont fontWithName:@"Museo Sans" size:14];
-    lblDOB.numberOfLines=2;
-    lblDOB.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:lblDOB];
-    
-    
-   /* UILabel *lblGender=[[UILabel alloc]initWithFrame:CGRectMake(20,270, 320, 30)];
-    lblGender.backgroundColor=[UIColor clearColor];
-    lblGender.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-    lblGender.text = [NSString stringWithFormat:@"Gender: %@",[dictPeople valueForKey:@"gender"]];
-    lblGender.font=[UIFont systemFontOfSize:14];
-    lblGender.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:lblGender];*/
-    
-   /* UILabel *lblAboutme=[[UILabel alloc]initWithFrame:CGRectMake(20,300, 100, 30)];
-    lblAboutme.backgroundColor=[UIColor clearColor];
-    lblAboutme.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-    lblAboutme.text = [NSString stringWithFormat:@"About me:"];
-    lblAboutme.font=[UIFont systemFontOfSize:14];
-    lblAboutme.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:lblAboutme];*/
-    
-    UITextView *aboutme=[[UITextView alloc]initWithFrame:CGRectMake(20,220, 280, 50)];
-    aboutme.backgroundColor=[UIColor clearColor];
-    aboutme.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
-    aboutme.font=[UIFont systemFontOfSize:14];
-    aboutme.textAlignment=NSTextAlignmentLeft;
-    aboutme.text=[dictPeople valueForKey:@"description"];
-    aboutme.textColor=[UIColor whiteColor];
-    aboutme.font=[UIFont fontWithName:@"Museo Sans" size:14];
-    aboutme.editable=NO;
-    [self.view addSubview:aboutme];
-   // [[aboutme layer]setBorderWidth:1];
-   // [[aboutme layer]setBorderColor:[[UIColor whiteColor] CGColor]];
-   // [[aboutme layer]setCornerRadius:5];
-    
-    /*UITextView *txtViewDesc = [[UITextView alloc]initWithFrame:CGRectMake(12,250, 320, 60)];
-    txtViewDesc.backgroundColor=[UIColor clearColor];
-    txtViewDesc.textColor=[UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
-    txtViewDesc.editable=NO;
-//    txtViewDesc.text = [NSString stringWithFormat:@"Orientation:%@\nStatus: %@",[dictPeople objectForKey:@"orientation"],[dictPeople objectForKey:@"status"]];
-    txtViewDesc.font=[UIFont boldSystemFontOfSize:12];
-    txtViewDesc.font=[UIFont fontWithName:@"Museo Sans" size:12];
-    txtViewDesc.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:txtViewDesc];*/
-
-
-    UIView *footerView = [self createViewWithFrame:CGRectMake(0, 350, 320, 65) tag:111];
+    TxtViewDescription.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    TxtViewDescription.text=[dictPeople valueForKey:@"description"];
+    TxtViewDescription.textColor=[UIColor whiteColor];
+  /*  UIView *footerView = [self createViewWithFrame:CGRectMake(0, 350, 320, 65) tag:111];
     if (IS_IPHONE_5)
     {
         footerView.frame = CGRectMake(0, 360+77, 320, 65);
@@ -183,19 +127,26 @@
     [self.view addSubview:footerView];
     
     UIButton *btnSendMessage = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-message.png"] frame:CGRectMake(7, 9, 150, 44) tag:1111 selector:@selector(btnSendMessage_TouchUpInside) target:self];
-        [footerView addSubview:btnSendMessage];
+        [footerView addSubview:btnSendMessage];*/
    
     NSString *strReseverID=[NSString stringWithFormat:@"%@",[dictPeople valueForKey:@"bartsyId"]];
     NSString *strSenderID=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
-     NSLog(@"%@->%@",strReseverID,strSenderID);
+    
    if ([strReseverID isEqualToString:strSenderID]) {
      
-       btnSendMessage.enabled=NO;
-       NSLog(@"%@",dictPeople);
+       btnSendMsg.enabled=NO;
+
    }
+   
+    if (!IS_IPHONE_5) {
+        
+        Footview.frame=CGRectMake(Footview.frame.origin.x, Footview.frame.origin.y-80, Footview.frame.size.width, Footview.frame.size.height);
+        btnSendMsg.frame=CGRectMake(btnSendMsg.frame.origin.x, btnSendMsg.frame.origin.y-80, btnSendMsg.frame.size.width, btnSendMsg.frame.size.height);
+        btnSendDrink.frame=CGRectMake(btnSendDrink.frame.origin.x, btnSendDrink.frame.origin.y-80, btnSendDrink.frame.size.width, btnSendDrink.frame.size.height);
+    }
     
-    UIButton *btnSendDrink = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-drink-hover.png"] frame:CGRectMake(163, 9, 150, 44) tag:2222 selector:@selector(btnSendDrink_TouchUpInside) target:self];
-    [footerView addSubview:btnSendDrink];
+   // UIButton *btnSendDrink = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"send-drink-hover.png"] frame:CGRectMake(163, 9, 150, 44) tag:2222 selector:@selector(btnSendDrink_TouchUpInside) target:self];
+   // [footerView addSubview:btnSendDrink];
 
 }
 -(void)btnTopShare_TouchUpInside
@@ -224,14 +175,14 @@
 {
     
 }
--(void)btnSendMessage_TouchUpInside
+-(IBAction)btnSendMessage_TouchUpInside
 {
     MessageListViewController *obj = [[MessageListViewController alloc] init];
     obj.dictForReceiver = dictPeople;
     [self.navigationController pushViewController:obj animated:YES];
     [obj release];
 }
--(void)btnSendDrink_TouchUpInside
+-(IBAction)btnSendDrink_TouchUpInside
 {
     appDelegate.isComingForMenu=YES;
     
@@ -241,7 +192,7 @@
     [self.navigationController popViewControllerAnimated:NO];
 
 }
--(void)btnBack_TouchUpInside
+-(IBAction)btnBack_TouchUpInside
 {
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -428,10 +428,10 @@
 
         
         [url release];
-        [[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
-        [[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
-        [[imgViewProfilePicture layer] setShadowRadius:3.0];
-        [[imgViewProfilePicture layer] setShadowOpacity:0.8];
+        //[[imgViewProfilePicture layer] setShadowOffset:CGSizeMake(0, 1)];
+        //[[imgViewProfilePicture layer] setShadowColor:[[UIColor redColor] CGColor]];
+        //[[imgViewProfilePicture layer] setShadowRadius:3.0];
+       // [[imgViewProfilePicture layer] setShadowOpacity:0.8];
         imgViewProfilePicture.tag=333;
         [cell.contentView addSubview:imgViewProfilePicture];
         [imgViewProfilePicture setUserInteractionEnabled:YES];
@@ -1542,6 +1542,7 @@
     else if(buttonIndex==1)
     {
         picker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
+        
         [self presentViewController:picker animated:YES completion:nil];
     }
     [picker release];

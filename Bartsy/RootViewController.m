@@ -11,7 +11,7 @@
 #import "RewardsViewController.h"
 #import "NotificationsViewController.h"
 #import "AccountInfoViewController.h"
-
+#import "UserSettingsView.h"
 @interface RootViewController ()
 
 @end
@@ -58,7 +58,7 @@
     [view3 release];
     [nav3 release];
     
-    AccountInfoViewController *view4 = [[AccountInfoViewController alloc] init];
+    UserSettingsView *view4 = [[UserSettingsView alloc] initWithNibName:@"UserSettingsView" bundle:nil];
     UINavigationController *nav4=[[UINavigationController alloc]initWithRootViewController:  view4];
     [viewControllers addObject:nav4];
     [view4 release];
