@@ -1652,7 +1652,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [popupscrollview addSubview:lbl_splinst];
         [lbl_splinst release];
 
-        UILabel *lblprice=[[UILabel alloc]initWithFrame:CGRectMake(275, (i*60)+15, 190, 22)];
+        UILabel *lblprice=[[UILabel alloc]initWithFrame:CGRectMake(275, (i*60)+5, 190, 22)];
         lblprice.text=[NSString stringWithFormat:@"$%d",[[[arrMultiItems objectAtIndex:i] valueForKey:@"price"] integerValue]];
         lblprice.font=[UIFont boldSystemFontOfSize:18];
         lblprice.font=[UIFont fontWithName:@"Museo Sans" size:18];
@@ -1664,6 +1664,8 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         if (lbl_Optdespt.text.length<1) {
             
             lblitemName.frame=CGRectMake(lblitemName.frame.origin.x, lblitemName.frame.origin.y+10, lblitemName.frame.size.width, lblitemName.frame.size.height);
+            lblprice.frame=CGRectMake(lblprice.frame.origin.x, lblprice.frame.origin.y+10, lblprice.frame.size.width, lblprice.frame.size.height);
+
         }
         UIButton *indexButton=[UIButton buttonWithType:UIButtonTypeCustom];
         indexButton.tag=i;
@@ -2776,9 +2778,28 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     
     NSInteger intContentSizeHeight=0;
     NSInteger intHeight=0;
+   /* UIView *ScrollOrders = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:0];
+    ScrollOrders.frame=CGRectMake(0, 0, 320, 320);
+    [scrollView addSubview:ScrollOrders];*/
     //Loop for bundled orders to show on UI
     for (int i=0; i<[arrBundledOrders count]; i++)
     {
+       /* NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
+        NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
+        
+        UIView *inerview = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
+        inerview.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+
+        inerview.frame=CGRectMake(0, intContentSizeHeight, 320, 144);
+        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
+        {
+            btnDismiss.hidden=NO;
+        }else{
+            btnDismiss.hidden=YES;
+        }
+        [ScrollOrders addSubview:inerview];
+        intContentSizeHeight+=intContentSizeHeight+144;*/
+
         NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
         NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
         
@@ -2792,7 +2813,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         UIView *viewBg=[self createViewWithFrame:CGRectMake(0, intContentSizeHeight, 320, 150+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks) tag:0];
         viewBg.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
         [scrollView addSubview:viewBg];
-        
+       
         UIImageView *statusImg=[self createImageViewWithImage:[UIImage imageNamed:@"exclametory"] frame:CGRectMake(10, 5, 20, 20) tag:0];
         [viewBg addSubview:statusImg];
         
@@ -2822,15 +2843,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [viewBg2 addSubview:imgViewPhoto];
         [imgViewPhoto release];
         
-        /*UILabel *lblOrderTO = [[UILabel alloc]initWithFrame:CGRectMake(69, 2, 180, 23)];
-        lblOrderTO.font = [UIFont systemFontOfSize:18];
-        lblOrderTO.text = [NSString stringWithFormat:@"Pickup Code:%@",[dict objectForKey:@"userSessionCode"]];
-        lblOrderTO.adjustsFontSizeToFitWidth=YES;
-        lblOrderTO.backgroundColor = [UIColor clearColor];
-        lblOrderTO.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
-        lblOrderTO.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblOrderTO];
-        [lblOrderTO release];*/
+        
         UILabel *lblOrderTO = [[UILabel alloc]initWithFrame:CGRectMake(100, 5, 180, 60)];
         lblOrderTO.font = [UIFont systemFontOfSize:18];
         lblOrderTO.font=[UIFont fontWithName:@"MuseoSans-700" size:55.0];
@@ -2865,15 +2878,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [viewBg2 addSubview:lblOrderId];
         [lblOrderId release];
         
-       /* UILabel *lblCode = [[UILabel alloc]initWithFrame:CGRectMake(69, lblOrderId.frame.origin.y+lblOrderId.bounds.size.height, 200, 16)];
-        lblCode.font = [UIFont systemFontOfSize:14];
-        lblCode.text = [NSString stringWithFormat:@"For: %@",[dict objectForKey:@"recipientNickname"]];
-        lblCode.adjustsFontSizeToFitWidth=YES;
-        lblCode.backgroundColor = [UIColor clearColor];
-        lblCode.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
-        lblCode.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblCode];
-        [lblCode release];*/
+       
 
         //Calculating the number of minutes from ordered time
         NSDateFormatter *dateFormatter = [NSDateFormatter new];
@@ -2904,7 +2909,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         UILabel *lblexpired = [[UILabel alloc]initWithFrame:CGRectMake(240, lblpickinfo.frame.origin.y+lblpickinfo.bounds.size.height, 180, 15)];
         lblexpired.font = [UIFont systemFontOfSize:10];
         lblexpired.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
-        lblexpired.text = [NSString stringWithFormat:@"Expires: %@",@"15 min"];
+        lblexpired.text = [NSString stringWithFormat:@"Expires: %@",@"<15 min"];
         lblexpired.adjustsFontSizeToFitWidth=YES;
         lblexpired.backgroundColor = [UIColor clearColor];
         lblexpired.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
@@ -2915,14 +2920,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [lblexpired setAttributedText: attribstrg];
         [attribstrg release];
         [lblexpired release];
-       /* UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(61, 40, 200, 15)];
-        lblName.font = [UIFont boldSystemFontOfSize:12];
-        lblName.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"recipientNickname"]];
-        lblName.backgroundColor = [UIColor clearColor];
-        lblName.textColor = [UIColor whiteColor] ;
-        lblName.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblName];
-        [lblName release];*/
+       
         
         if([[dict objectForKey:@"senderBartsyId"] doubleValue]!=[[dict objectForKey:@"recieverBartsyId"] doubleValue])
         {
@@ -3871,7 +3869,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
       
-        UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(10, 8, 54, 54)];
+        UIImageView *imageForPeople = [[UIImageView alloc]initWithFrame:CGRectMake(5, 7, 64, 60)];
         [imageForPeople setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
         //[imageForPeople.layer setShadowColor:[[UIColor whiteColor] CGColor]];
        // [imageForPeople.layer setShadowOffset:CGSizeMake(0, 1)];
@@ -3889,33 +3887,56 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [cell.contentView addSubview:lblForPeopleName];
         [lblForPeopleName release];
 
-        UIImageView *imgTickMark = [[UIImageView alloc] initWithFrame:CGRectMake(75, 30, 15, 15)];
-        imgTickMark.image=[UIImage imageNamed:@"tickmark.png"];
+        UIImageView *imgTickMark = [[UIImageView alloc] initWithFrame:CGRectMake(75, 25, 15, 15)];
+        imgTickMark.image=[UIImage imageNamed:@"exclamatory_icon_ping"];
         [cell.contentView addSubview:imgTickMark];
         [imgTickMark release];
+        
+        if ([dictPeople valueForKey:@"status"])
+        {
+            
+            UIImageView *imgstatus = [[UIImageView alloc] initWithFrame:CGRectMake(75, 42, 15, 15)];
+            imgstatus.image=[UIImage imageNamed:@"flower_icon-selected"];
+            [cell.contentView addSubview:imgstatus];            
+            [imgstatus release];
+
+            UILabel *lblstatus = [[UILabel alloc]initWithFrame:CGRectMake(93, 30, 150, 35)];
+            lblstatus.text = [dictPeople valueForKey:@"status"];
+            lblstatus.font = [UIFont systemFontOfSize:11];
+            lblstatus.font=[UIFont fontWithName:@"Museo Sans" size:11.0];
+            lblstatus.backgroundColor = [UIColor clearColor];
+            lblstatus.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+            [cell.contentView addSubview:lblstatus];
+            [lblstatus release];
+        }
+        
+
+        NSMutableString *strdetails=[[NSMutableString alloc]init];
+        [strdetails appendFormat:@"%d",[[dictPeople valueForKey:@"age"] integerValue]];
+        if ([dictPeople valueForKey:@"gender"]) {
+            [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"gender"]];
+        }
+        
+        if ([dictPeople valueForKey:@"orientation"]) {
+            [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"orientation"]];
+        }
         
         UIImageView *imgForRightArrow = [[UIImageView alloc] initWithFrame:CGRectMake(300, 28, 10, 15)];
         imgForRightArrow.image=[UIImage imageNamed:@"right-arrow.png"];
         [cell.contentView addSubview:imgForRightArrow];
         [imgForRightArrow release];
 
-        UILabel *lblForCheckIn = [[UILabel alloc]initWithFrame:CGRectMake(93, 20, 100, 35)];
-        lblForCheckIn.text = @"Checked In";
+        UILabel *lblForCheckIn = [[UILabel alloc]initWithFrame:CGRectMake(93, 15, 150, 35)];
+        lblForCheckIn.text = strdetails;
         lblForCheckIn.font = [UIFont systemFontOfSize:11];
         lblForCheckIn.font=[UIFont fontWithName:@"Museo Sans" size:11.0];
         lblForCheckIn.backgroundColor = [UIColor clearColor];
         lblForCheckIn.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
         [cell.contentView addSubview:lblForCheckIn];
         [lblForCheckIn release];
-
-        UILabel *lblForPeopleGender = [[UILabel alloc]initWithFrame:CGRectMake(75, 40, 220, 35)];
-        lblForPeopleGender.text = [dictPeople objectForKey:@"gender"];
-        lblForPeopleGender.font = [UIFont systemFontOfSize:12];
-        lblForPeopleGender.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
-        lblForPeopleGender.backgroundColor = [UIColor clearColor];
-        lblForPeopleGender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
-        [cell.contentView addSubview:lblForPeopleGender];
-        [lblForPeopleGender release];
+        [strdetails release];
+        
+       
 
 //        cell.textLabel.text=[dictPeople objectForKey:@"nickName"];
 //        cell.detailTextLabel.text=[dictPeople objectForKey:@"gender"];
@@ -3923,13 +3944,31 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
         {
             if ([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"New"]) {
-                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail.png"] frame:CGRectMake(250, 10, 30, 20) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
+                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail.png"] frame:CGRectMake(75, 58, 18, 12) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
                 [cell.contentView addSubview:btnChat];
+                UILabel *lblForPeopleGender = [[UILabel alloc]initWithFrame:CGRectMake(100, 45, 220, 35)];
+                lblForPeopleGender.text = @"You have new chats";
+                lblForPeopleGender.font = [UIFont systemFontOfSize:12];
+                lblForPeopleGender.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+                lblForPeopleGender.backgroundColor = [UIColor clearColor];
+                lblForPeopleGender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+                [cell.contentView addSubview:lblForPeopleGender];
+                [lblForPeopleGender release];
                
-            }else{
-                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail_gray.png"] frame:CGRectMake(250, 10, 30, 20) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
+            }else if([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"Old"]){
+                UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail_gray.png"] frame:CGRectMake(75, 58, 18, 12) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
     
                 [cell.contentView addSubview:btnChat];
+                UILabel *lblForPeopleGender = [[UILabel alloc]initWithFrame:CGRectMake(100, 45, 220, 35)];
+                lblForPeopleGender.text = @"You've chatted!";
+                lblForPeopleGender.font = [UIFont systemFontOfSize:12];
+                lblForPeopleGender.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+                lblForPeopleGender.backgroundColor = [UIColor clearColor];
+                lblForPeopleGender.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+                [cell.contentView addSubview:lblForPeopleGender];
+                [lblForPeopleGender release];
+
+                
             }
             
         }
