@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">12C3103</string>
+		<string key="IBDocument.SystemVersion">12E55</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1187.34</string>
-		<string key="IBDocument.HIToolboxVersion">625.00</string>
+		<string key="IBDocument.AppKitVersion">1187.39</string>
+		<string key="IBDocument.HIToolboxVersion">626.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">2083</string>
@@ -153,7 +153,7 @@
 					<object class="IBUITextView" id="329319581">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{8, 217}, {303, 200}}</string>
+						<string key="NSFrame">{{8, 217}, {304, 207}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="804643300"/>
@@ -185,7 +185,7 @@
 					<object class="IBUIImageView" id="87286374">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{163, 76}, {25, 23}}</string>
+						<string key="NSFrame">{{161, 62}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="403981373"/>
@@ -200,7 +200,7 @@
 					<object class="IBUIImageView" id="779128403">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{163, 130}, {25, 25}}</string>
+						<string key="NSFrame">{{161, 91}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="438479309"/>
@@ -215,7 +215,7 @@
 					<object class="IBUILabel" id="438479309">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{196, 130}, {117, 30}}</string>
+						<string key="NSFrame">{{189, 91}, {117, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="329319581"/>
@@ -246,7 +246,7 @@
 					<object class="IBUILabel" id="403981373">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{196, 76}, {117, 21}}</string>
+						<string key="NSFrame">{{189, 62}, {117, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="779128403"/>
@@ -436,6 +436,22 @@
 					<int key="connectionID">48</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">InterestView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="779128403"/>
+					</object>
+					<int key="connectionID">49</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">InfoView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="87286374"/>
+					</object>
+					<int key="connectionID">50</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">btnBack_TouchUpInside</string>
 						<reference key="source" ref="465003628"/>
@@ -478,16 +494,16 @@
 							<reference ref="191618529"/>
 							<reference ref="286765145"/>
 							<reference ref="465003628"/>
-							<reference ref="952587503"/>
 							<reference ref="199166402"/>
 							<reference ref="329319581"/>
 							<reference ref="779128403"/>
 							<reference ref="87286374"/>
-							<reference ref="403981373"/>
-							<reference ref="438479309"/>
 							<reference ref="804643300"/>
 							<reference ref="279696126"/>
 							<reference ref="230808513"/>
+							<reference ref="952587503"/>
+							<reference ref="438479309"/>
+							<reference ref="403981373"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -593,7 +609,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">48</int>
+			<int key="maxID">50</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -637,6 +653,8 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="Footview">UIImageView</string>
+						<string key="InfoView">UIImageView</string>
+						<string key="InterestView">UIImageView</string>
 						<string key="ProfileImage">UIImageView</string>
 						<string key="TxtViewDescription">UITextView</string>
 						<string key="btnSendDrink">UIButton</string>
@@ -648,6 +666,14 @@
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="Footview">
 							<string key="name">Footview</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="InfoView">
+							<string key="name">InfoView</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="InterestView">
+							<string key="name">InterestView</string>
 							<string key="candidateClassName">UIImageView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="ProfileImage">
