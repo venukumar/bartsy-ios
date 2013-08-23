@@ -33,6 +33,8 @@ typedef NSInteger TypeofView;
     IBOutlet UIButton *btnSendMsg;
     IBOutlet UIButton *btnSendDrink;
     IBOutlet UIImageView *Footview;
+    IBOutlet UIImageView *InterestView;
+    IBOutlet UIImageView *InfoView;
     NSInteger TypeofView;
 }
 @property(nonatomic,retain)NSDictionary *dictPeople;
