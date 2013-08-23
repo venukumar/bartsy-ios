@@ -24,6 +24,15 @@ typedef NSInteger viewtype;
 {
     NSDictionary *dictitemdetails;
     
+    IBOutlet UILabel *titleName;
+    IBOutlet UIButton *btnBack;
+    IBOutlet UIButton *btnFavt;
+    
+    IBOutlet UIButton *btnCancel;
+    IBOutlet UIButton *btnaddOrder;
+    IBOutlet UIImageView *Footview;
+    
+    IBOutlet UIView *contentView;
     NSInteger viewtype;
     
     int arrIndex;
@@ -37,5 +46,7 @@ typedef NSInteger viewtype;
 @property(nonatomic,assign)NSInteger viewtype;
 @property(nonatomic,assign)int arrIndex;
 @property(nonatomic,assign)BOOL isEdit;
-
+-(IBAction)btnBack_TouchUpInside;
+-(IBAction)Button_Action:(UIButton*)sender;
+-(IBAction)Button_Order:(UIButton*)button;
 @end
