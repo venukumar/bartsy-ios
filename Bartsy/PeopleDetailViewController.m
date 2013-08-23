@@ -88,7 +88,7 @@
     UIButton *btnShare = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"share@2x.png"] frame:CGRectMake(165, 115, 126, 44) tag:2233 selector:@selector(btnShare_TouchUpInside) target:self];
     //[self.view addSubview:btnShare];*/
 
-
+    //Age Calculation from the date of Birth
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MM/dd/yyyy"];
     NSDate *birthdate=[dateFormatter dateFromString:[dictPeople valueForKey:@"dateOfBirth"]];
@@ -111,10 +111,12 @@
         [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"orientation"]];
     }
     lbldetails.text=strdetails;
+    
     lblStatus.text=[dictPeople valueForKey:@"status"];
-    lbldetails.font=[UIFont fontWithName:@"Museo Sans" size:14];
     lblStatus.font=[UIFont fontWithName:@"Museo Sans" size:14];
     
+    lbldetails.font=[UIFont fontWithName:@"Museo Sans" size:14];
+   
     TxtViewDescription.font=[UIFont fontWithName:@"Museo Sans" size:14];
     TxtViewDescription.text=[dictPeople valueForKey:@"description"];
     TxtViewDescription.textColor=[UIColor whiteColor];
