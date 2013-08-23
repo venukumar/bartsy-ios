@@ -65,7 +65,7 @@
         // Load the top-level objects from the custom cell XIB.
 
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 
         UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)];
         bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
