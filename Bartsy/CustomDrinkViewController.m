@@ -40,10 +40,12 @@
     self.sharedController=[SharedController sharedController];
     
     self.view.backgroundColor=[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:18.0/255.0 alpha:1.0];
-    UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    
+    
+    /*UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
     [self.view addSubview:imgViewForTop];
-    [imgViewForTop release];
+    [imgViewForTop release];*/
     
     /*UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
     imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
@@ -52,43 +54,43 @@
    
     
     
-    UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 240, 44)];
+    /*UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 240, 44)];
     lblMsg.textColor=[UIColor blackColor];
-    if (viewtype==3 || viewtype==1 || viewtype==2 || viewtype==4 || viewtype==5) {
-        lblMsg.text=[dictitemdetails valueForKey:@"name"];
-    }
+    
     lblMsg.textAlignment=NSTextAlignmentCenter;
     lblMsg.backgroundColor=[UIColor clearColor];
     lblMsg.font=[UIFont boldSystemFontOfSize:18];
     [self.view addSubview:lblMsg];
-    [lblMsg release];
-
+    [lblMsg release];*/
+    if (viewtype==3 || viewtype==1 || viewtype==2 || viewtype==4 || viewtype==5) {
+        titleName.text=[dictitemdetails valueForKey:@"name"];
+    }
     
-    UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+    /*UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
     btnBack.frame = CGRectMake(5, 0, 50, 40);
     [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnBack];
     UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
     imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
     [btnBack addSubview:imgViewBack];
-    [imgViewBack release];
+    [imgViewBack release];*/
     
     arrCustomDrinks=[[NSMutableArray alloc]init];
 
-    mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,self.view.bounds.size.height)];
+  /*  mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,self.view.bounds.size.height)];
     mainScroll.tag=554;
     mainScroll.backgroundColor=[UIColor blackColor];
     [mainScroll setScrollEnabled:YES];
-    [self.view addSubview:mainScroll];
+    [self.view addSubview:mainScroll];*/
   
     NSLog(@"%@",dictitemdetails);
     
-    UIView *favtView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+   /* UIView *favtView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
     favtView.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
-    [mainScroll addSubview:favtView];
+    [mainScroll addSubview:favtView];*/
     
     
-    UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
+  /*  UIButton *buttonFav=[UIButton buttonWithType:UIButtonTypeCustom];
     buttonFav.frame=CGRectMake(155, 2, 26, 26);
     if (IS_IPHONE_5)
         buttonFav.frame=CGRectMake(155,2, 26, 26);
@@ -97,9 +99,9 @@
     [buttonFav addTarget:self action:@selector(Button_Action:) forControlEvents:UIControlEventTouchUpInside];
     [buttonFav setImage:[UIImage imageNamed:@"unfav_icon"] forState:UIControlStateNormal];
     [buttonFav setImage:[UIImage imageNamed:@"fav_icon"] forState:UIControlStateSelected];
-    [favtView addSubview:buttonFav];
+    [favtView addSubview:buttonFav];*/
 
-    UILabel *lblfav=[[UILabel alloc]initWithFrame:CGRectMake(192,0, 125, 30)];
+   /* UILabel *lblfav=[[UILabel alloc]initWithFrame:CGRectMake(192,0, 125, 30)];
     if (IS_IPHONE_5)
         lblfav.frame=CGRectMake(192, 0, 125, 30);
     
@@ -110,10 +112,16 @@
     lblfav.font=[UIFont systemFontOfSize:16];
     lblfav.font=[UIFont fontWithName:@"Museo Sans" size:16];
     [favtView addSubview:lblfav];
-    [lblfav release];
-
+    [lblfav release];*/
+    mainScroll=[[UIScrollView alloc]initWithFrame:CGRectMake(0,46,320,390)];
+    mainScroll.tag=554;
+    mainScroll.backgroundColor=[UIColor blackColor];
+    [mainScroll setScrollEnabled:YES];
+    [self.view addSubview:mainScroll];
     
     if (viewtype==2 || viewtype==3 || viewtype==4 ||viewtype==5) {
+        
+        
         
         UIView *headview=[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)] autorelease];
         headview.backgroundColor=[UIColor clearColor];
@@ -181,6 +189,9 @@
         }
     }else if (viewtype==1){
        
+        
+        //contentView.frame=CGRectMake(0, 45, 320, contentView.frame.size.height);
+        //[self .view addSubview:contentView];
         UILabel *lblitem=[[UILabel alloc]initWithFrame:CGRectMake(5, 68,310, 18)];
         lblitem.text=[dictitemdetails valueForKey:@"name"];
         lblitem.textColor=[UIColor whiteColor];
@@ -240,7 +251,7 @@
         }
     }
     
-    UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
+  /*  UIButton *orderBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     orderBtn.frame=CGRectMake(162,324, 155, 40);
     if (IS_IPHONE_5) {
         orderBtn.frame=CGRectMake(162,412, 150, 40);
@@ -275,7 +286,7 @@
     cancelorderBtn.tag=4445;
    // cancelorderBtn.backgroundColor=[UIColor colorWithRed:20.0/255.0 green:20.0/255.0 blue:23.0/255.0 alpha:1.0];
     [cancelorderBtn setImage:[UIImage imageNamed:@"cancel-btn.png"] forState:UIControlStateNormal];
-    [mainScroll addSubview:cancelorderBtn];
+    [mainScroll addSubview:cancelorderBtn];*/
     
     if (!isEdit || viewtype==1) {
 
@@ -421,9 +432,17 @@
        
        [arrCustomDrinks addObjectsFromArray:arrayTemp];
    }
-    if (viewtype==2||viewtype==3||viewtype==4) {
+   /* if (viewtype==2||viewtype==3||viewtype==4) {
         [self calculateTotalPrice:0];
 
+    }*/
+    
+    
+    if (!IS_IPHONE_5) {
+        
+        Footview.frame=CGRectMake(Footview.frame.origin.x, Footview.frame.origin.y-80, Footview.frame.size.width, Footview.frame.size.height);
+        btnCancel.frame=CGRectMake(btnCancel.frame.origin.x, btnCancel.frame.origin.y-80, btnCancel.frame.size.width, btnCancel.frame.size.height);
+        btnaddOrder.frame=CGRectMake(btnaddOrder.frame.origin.x, btnaddOrder.frame.origin.y-80, btnaddOrder.frame.size.width, btnaddOrder.frame.size.height);
     }
 }
 
@@ -477,18 +496,18 @@
     }
 }
 
--(void)btnBack_TouchUpInside
+-(IBAction)btnBack_TouchUpInside
 {
     
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(void)Button_Order:(UIButton*)button{
+-(IBAction)Button_Order:(UIButton*)button{
     
     [self Saving_Orderitems];
 }
 
--(void)Button_Action:(UIButton*)sender{
+-(IBAction)Button_Action:(UIButton*)sender{
     
    // UITextField *txtfield=(UITextField*)[mainScroll viewWithTag:559];
     if (sender.tag==557) {
