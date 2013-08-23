@@ -142,7 +142,7 @@
 					<object class="IBUIImageView" id="199166402">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{8, 62}, {140, 140}}</string>
+						<string key="NSFrame">{{10, 60}, {140, 140}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="87286374"/>
@@ -185,7 +185,7 @@
 					<object class="IBUIImageView" id="87286374">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{161, 62}, {20, 20}}</string>
+						<string key="NSFrame">{{160, 60}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="403981373"/>
@@ -200,7 +200,7 @@
 					<object class="IBUIImageView" id="779128403">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{161, 91}, {20, 20}}</string>
+						<string key="NSFrame">{{161, 88}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="438479309"/>
@@ -215,7 +215,7 @@
 					<object class="IBUILabel" id="438479309">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{189, 91}, {117, 21}}</string>
+						<string key="NSFrame">{{189, 88}, {117, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="329319581"/>
@@ -285,6 +285,7 @@
 						<string key="NSFrame">{{161, 443}, {156, 44}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -496,14 +497,14 @@
 							<reference ref="465003628"/>
 							<reference ref="199166402"/>
 							<reference ref="329319581"/>
-							<reference ref="779128403"/>
-							<reference ref="87286374"/>
 							<reference ref="804643300"/>
 							<reference ref="279696126"/>
 							<reference ref="230808513"/>
-							<reference ref="952587503"/>
-							<reference ref="438479309"/>
 							<reference ref="403981373"/>
+							<reference ref="952587503"/>
+							<reference ref="87286374"/>
+							<reference ref="779128403"/>
+							<reference ref="438479309"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
