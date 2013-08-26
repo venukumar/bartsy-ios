@@ -56,7 +56,7 @@
     
     if (!IS_IPHONE_5) {
         
-        [scrollview setFrame:CGRectMake(0,44, 320, 400)];
+        [scrollview setFrame:CGRectMake(0,44, 320, 380)];
     }
     txtEmail.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
     txtGender.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
