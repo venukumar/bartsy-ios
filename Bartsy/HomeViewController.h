@@ -11,7 +11,7 @@
 #import "AppDelegate.h"
 #import "MobileDeviceLoginRequest.h"
 #import "AuthNet.h"
-
+#import "PeopleCell.h"
 @interface HomeViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,AuthNetDelegate>
 {
     NSDictionary *dictSelectedToMakeOrder;
@@ -27,6 +27,9 @@
     NSInteger intNoOfSections;
     
     BOOL isLocuMenu;
+    
+    IBOutlet UIView *innerView;
+   // IBOutlet UIButton *btnDismiss;
 
 }
 @property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;

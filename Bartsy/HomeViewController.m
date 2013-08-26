@@ -3651,10 +3651,11 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Configure the cell...
-    UITableViewCell *cell;
     
     if(isSelectedForDrinks==YES)
     {
+        UITableViewCell *cell;
+
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
         
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
@@ -3862,7 +3863,71 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     }
     else if(isSelectedForPeople)
     {
-        cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+         NSDictionary *dictPeople=[arrPeople objectAtIndex:indexPath.row];
+        PeopleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PeopleCell"];
+        
+        if (cell == nil)
+        {
+            cell = [[PeopleCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"PeopleCell"];
+            UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
+            cell.backgroundView = bg;
+            [bg release];
+        }
+         NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dictPeople objectForKey:@"userImagePath"]];
+       [cell.imgProfile setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+        cell.lblName.text = [dictPeople objectForKey:@"nickName"];
+        cell.lblName.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+        
+        NSMutableString *strdetails=[[NSMutableString alloc]init];
+        [strdetails appendFormat:@"%d",[[dictPeople valueForKey:@"age"] integerValue]];
+        if ([dictPeople valueForKey:@"gender"]) {
+            [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"gender"]];
+        }
+        
+        if ([dictPeople valueForKey:@"orientation"]) {
+            [strdetails appendFormat:@"/%@",[dictPeople valueForKey:@"orientation"]];
+        }
+        cell.lbldetails.text=strdetails;
+        cell.lbldetails.font=[UIFont fontWithName:@"Museo Sans" size:11.0];
+        
+        if ([dictPeople valueForKey:@"status"] && [[dictPeople valueForKey:@"status"] length])
+        {
+            cell.lblStatus.text = [dictPeople valueForKey:@"status"];
+            cell.lblStatus.font=[UIFont fontWithName:@"Museo Sans" size:11.0];
+        }else{
+            cell.lblStatus.text=nil;
+            cell.imgRelation.image=nil;
+        }
+        NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
+
+        if ([strBartsyId doubleValue] != [[dictPeople objectForKey:@"bartsyId"] doubleValue])
+        {
+            if ([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"New"]) {
+               // UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail.png"] frame:CGRectMake(75, 58, 18, 12) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
+                cell.imgMsg.image=[UIImage imageNamed:@"mail.png"];
+                cell.lblMessage.text = @"You have new chats";
+                
+                cell.lblMessage.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+                cell.lblMessage.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+              
+                
+            }else if([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"Old"]){
+                //UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail_gray.png"] frame:CGRectMake(75, 58, 18, 12) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
+                cell.imgMsg.image=[UIImage imageNamed:@"mail_gray.png"];
+                
+              
+                cell.lblMessage.text = @"You've chatted!";
+                cell.lblMessage.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+                cell.lblMessage.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
+                
+            }else{
+                cell.lblMessage.text=nil;
+                cell.imgMsg.image=nil;
+            }
+        }
+        return cell;
+       /* cell =[[PeopleCustomCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
         NSString *strBartsyId=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]];
 
@@ -3974,9 +4039,11 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         }
 
         //UILabel *lbl
-    }
-    else if (isSelectedForPastOrders == YES)
+    */
+}else if (isSelectedForPastOrders == YES)
     {
+        UITableViewCell *cell;
+
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
         
         cell.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage            imageNamed:@"fathers_office-bg.png"]];
@@ -4127,6 +4194,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             [topView addSubview:lblOrderId];
             [lblOrderId release];
             
+        
         }
         else
         {
@@ -4135,14 +4203,19 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             lblItemName.textAlignment = NSTextAlignmentCenter;
             [cell.contentView addSubview:lblItemName];
         }
+        
+        return cell;
     }
 
     else
     {
+        UITableViewCell *cell;
+
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+        return cell;
     }
     
-    return cell;
+    
 }
 
 -(void)btnChat_TouchUpInside:(UIButton*)sender
