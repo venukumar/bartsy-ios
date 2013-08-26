@@ -198,7 +198,7 @@
 						<reference key="IBUINormalTitleShadowColor" ref="1042603253"/>
 						<object class="NSCustomResource" key="IBUINormalImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">send-drink-hover.png</string>
+							<string key="NSResourceName">add-order.png</string>
 						</object>
 						<reference key="IBUIFontDescription" ref="955974088"/>
 						<reference key="IBUIFont" ref="1007681955"/>
@@ -271,7 +271,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{9, 177}, {301, 31}}</string>
 								<reference key="NSSuperview" ref="374349939"/>
-								<reference key="NSNextKeyView" ref="201194468"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -301,7 +301,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{9, 146}, {301, 21}}</string>
 								<reference key="NSSuperview" ref="374349939"/>
-								<reference key="NSNextKeyView" ref="54761664"/>
+								<reference key="NSNextKeyView" ref="339605351"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -321,7 +321,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{10, 77}, {301, 69}}</string>
 								<reference key="NSSuperview" ref="374349939"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSNextKeyView" ref="201194468"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -341,7 +341,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{10, 46}, {301, 31}}</string>
 								<reference key="NSSuperview" ref="374349939"/>
-								<reference key="NSNextKeyView" ref="295771150"/>
+								<reference key="NSNextKeyView" ref="54761664"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -361,7 +361,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{4, 10}, {301, 27}}</string>
 								<reference key="NSSuperview" ref="374349939"/>
-								<reference key="NSNextKeyView" ref="339605351"/>
+								<reference key="NSNextKeyView" ref="47622931"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -379,7 +379,7 @@
 						</array>
 						<string key="NSFrameSize">{320, 313}</string>
 						<reference key="NSSuperview" ref="481308323"/>
-						<reference key="NSNextKeyView" ref="47622931"/>
+						<reference key="NSNextKeyView" ref="295771150"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -682,11 +682,11 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="Bartsy_main-bg.png">{640, 1036}</string>
+			<string key="add-order.png">{300, 85}</string>
 			<string key="arrow-left.png">{12, 20}</string>
 			<string key="cancel-btn.png">{345, 98}</string>
 			<string key="city_tavern_bg.png">{722, 192}</string>
 			<string key="fav_icon.png">{48, 48}</string>
-			<string key="send-drink-hover.png">{150, 44}</string>
 			<string key="top_header_bar.png">{320, 44}</string>
 			<string key="unfav_icon.png">{48, 48}</string>
 		</dictionary>
