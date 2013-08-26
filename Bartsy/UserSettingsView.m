@@ -102,13 +102,34 @@
         }else if (indexPath.row==1){
             
                 appDelegate.isLoginForFB=NO;
-                ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
+               /* ProfileViewController *profileScreen=[[ProfileViewController alloc]init];
                 profileScreen.isCmgFromGetStarted=NO;
                 profileScreen.isCmgForEditProfile=YES;
                 [self.navigationController pushViewController:profileScreen animated:YES];
-                [profileScreen release];
+                [profileScreen release];*/
+            UserProfileViewController *pview=[[UserProfileViewController alloc]initWithNibName:@"UserProfileViewController" bundle:nil];
+            [self.navigationController pushViewController:pview animated:NO];
         
         }
+    }else if(indexPath.section==2){
+        
+        if (indexPath.row==2) {
+                            
+                NSDictionary *dict=[[NSUserDefaults standardUserDefaults]objectForKey:@"VenueDetails"];
+                NSString *strMsg=nil;
+                
+                if(appDelegate.intOrderCount)
+                {
+                    strMsg=[NSString stringWithFormat:@"You have open orders placed at %@. If you logout they will be cancelled and you will still be charged for it.Do you want to logout from %@",[dict objectForKey:@"venueName"],[dict objectForKey:@"venueName"]];
+                }
+                else
+                {
+                    strMsg=[NSString stringWithFormat:@"Do you want to logout"];
+                }
+                [self createAlertViewWithTitle:@"" message:strMsg cancelBtnTitle:@"No" otherBtnTitle:@"Yes" delegate:self tag:225];
+
+        }
+        
     }else if (indexPath.section==3){
         
         if (indexPath.row==0) {
@@ -132,6 +153,27 @@
             [obj release];
         }
 
+    }
+}
+
+#pragma mark---------------AlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag==225&&buttonIndex==1)
+    {
+        if([[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"]!=nil)
+        {
+            self.sharedController=[SharedController sharedController];
+            [self.sharedController checkOutAtBartsyVenueWithId:[[NSUserDefaults standardUserDefaults]objectForKey:@"CheckInVenueId"] delegate:nil];
+            
+        }
+        
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"CheckInVenueId"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"OrdersTimedOut"];
+        [[NSUserDefaults standardUserDefaults]setObject:nil forKey:@"bartsyId"];
+        [[NSUserDefaults standardUserDefaults]synchronize];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"logOut" object:nil];
     }
 }
 
