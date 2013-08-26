@@ -12,6 +12,7 @@
 #import "MapKit/MapKit.h"
 #import "CoreLocation/CoreLocation.h"
 #import "UIImageView+WebCache.h"
+#import "VenueCell.h"
 @interface VenueListViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,CLLocationManagerDelegate,UISearchBarDelegate,UISearchDisplayDelegate>
 {
     NSMutableArray *arrVenueList;
@@ -20,4 +21,5 @@
 }
 -(void)reloadMapView;
 @property (nonatomic, strong) UISearchDisplayController * SearchDisplayController;
+
 @end

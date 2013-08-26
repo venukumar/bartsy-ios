@@ -118,7 +118,7 @@
         UIImageView *imgViewToolTip=[self createImageViewWithImage:[UIImage imageNamed:@"select-bartsy.png"] frame:CGRectMake(10, 196, 300, 40) tag:225143];
         [self.view addSubview:imgViewToolTip];
         
-        [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(removeToolTip) userInfo:nil repeats:NO];
+       // [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(removeToolTip) userInfo:nil repeats:NO];
     }
     
     
@@ -254,7 +254,83 @@
 {
     NSDictionary *dict=[arrVenueList objectAtIndex:indexPath.row];
     // Configure the cell...
-    UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    
+    VenueCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VenueCell"];
+    
+    if (cell == nil)
+    {
+        cell = [[VenueCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"VenueCell"];
+        UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+        bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
+        cell.backgroundView = bg;
+        [bg release];
+    }
+
+    NSString *strURL=[NSString stringWithFormat:@"%@/%@",KServerURL,[dict objectForKey:@"venueImagePath"]];
+    [cell.imgVenue setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+    
+    cell.lblVenueName.text=[dict objectForKey:@"venueName"];
+    cell.lblVenueName.font=[UIFont fontWithName:@"Museo Sans" size:18];
+    cell.lblVenueName.textColor=[UIColor colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0];
+   
+    NSString *strTrim=[[NSString alloc]initWithString:[dict objectForKey:@"address"]];
+    NSRange range = [strTrim rangeOfString:@",United"];
+    NSString *shortString = [strTrim substringToIndex:range.location];
+    
+    cell.lblVenueAddress.text=shortString;
+    cell.lblVenueAddress.font=[UIFont fontWithName:@"Museo Sans" size:12];
+    cell.lblVenueAddress.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+
+    if([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"] || [[dict objectForKey:@"venueStatus"]isEqualToString:@"OFFLINE"])
+    {
+        cell.lblNoCheckin.text=[NSString stringWithFormat:@"%i",[[dict objectForKey:@"checkedInUsers"] integerValue]];
+        cell.lblNoCheckin.font=[UIFont fontWithName:@"Museo Sans" size:12];
+        cell.lblNoCheckin.textColor=[UIColor colorWithRed:248.0/255.0 green:58.0/255.0 blue:179.0/255.0 alpha:1.0];
+
+        cell.lblVenueStatus.text=@"checkins";
+        cell.lblVenueStatus.font=[UIFont fontWithName:@"Museo Sans" size:12];
+        cell.lblVenueStatus.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+
+    }else{
+        
+        cell.lblVenueStatus.text=@"Closed";
+        cell.lblVenueStatus.font=[UIFont fontWithName:@"Museo Sans" size:12];
+        cell.lblVenueStatus.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        cell.lblNoCheckin.text=nil;
+    }
+    
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"CheckInVenueId"] integerValue]==[[dict valueForKey:@"venueId"] integerValue]) {
+        
+        cell.lbldistance.text=nil;
+        cell.lblmiles.text=nil;
+         cell.imgChecked.hidden=NO;
+        
+    }else{
+        
+        cell.imgChecked.hidden=YES;
+        NSString *strDistance=[NSString stringWithFormat:@"%.1f",[[dict objectForKey:@"distance"] floatValue]];
+        cell.lbldistance.text=strDistance;
+        cell.lbldistance.font=[UIFont fontWithName:@"Museo Sans" size:20];
+       
+        if(![[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"] )
+        {
+            cell.lbldistance.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        }
+        if ([[dict objectForKey:@"venueStatus"]isEqualToString:@"OPEN"] || [[dict objectForKey:@"venueStatus"]isEqualToString:@"OFFLINE"]) {
+            cell.lbldistance.textColor=[UIColor colorWithRed:35.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0];
+        }else{
+            cell.lbldistance.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        }
+        cell.lblmiles.font=[UIFont fontWithName:@"Museo Sans" size:12];
+        cell.lblmiles.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+    }
+    if ([[dict valueForKey:@"wifiPresent"] boolValue]==NO) {
+        
+        cell.imgwifi.image=nil;
+    }
+
+    
+   /* UITableViewCell *cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     if (tableView == self.searchDisplayController.searchResultsTableView)
 	{
         cell.textLabel.text = [dict objectForKey:@"venueName"];
@@ -270,10 +346,7 @@
     //imgViewDrink.image=[UIImage imageNamed:@"drinks.png"];
     [imgViewDrink setImageWithURL:[NSURL URLWithString:[strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
 
-   /* [[imgViewDrink layer] setShadowOffset:CGSizeMake(0, 1)];
-    [[imgViewDrink layer] setShadowColor:[[UIColor grayColor] CGColor]];
-    [[imgViewDrink layer] setShadowRadius:3.0];
-    [[imgViewDrink layer] setShadowOpacity:0.8];*/
+   
     imgViewDrink.backgroundColor=[UIColor clearColor];
     [cell.contentView addSubview:imgViewDrink];
     [imgViewDrink release];
@@ -382,7 +455,7 @@
 //        cell.contentView.backgroundColor=[UIColor grayColor];
 //        imgViewDrink.alpha=0.1;
 //    }
-    }
+    }*/
     
     return cell;
 }
