@@ -2765,7 +2765,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     UIScrollView *scrollViewOld=(UIScrollView*)[self.view viewWithTag:987];
     [scrollViewOld removeFromSuperview];
     UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
-    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 320)];
+    UIScrollView *scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0,segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 320)];
     scrollView.tag=987;
     scrollView.backgroundColor=[UIColor blackColor];
     [self.view addSubview:scrollView];
@@ -2773,34 +2773,171 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     if (screenBounds.size.height == 568)
     {
-        scrollView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 320+88);
+        scrollView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 320+70);
     }
     
     NSInteger intContentSizeHeight=0;
     NSInteger intHeight=0;
-   /* UIView *ScrollOrders = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:0];
+    if (arrBundledOrders.count==0) {
+        
+        UILabel *lblItemName = [self createLabelWithTitle:@"No orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
+        lblItemName.backgroundColor=[UIColor clearColor];
+        lblItemName.textAlignment = NSTextAlignmentCenter;
+        [scrollView addSubview:lblItemName];
+    }else{
+
+    UIScrollView *ScrollOrders = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:0];
     ScrollOrders.frame=CGRectMake(0, 0, 320, 320);
-    [scrollView addSubview:ScrollOrders];*/
+    [scrollView addSubview:ScrollOrders];
+    NSDictionary *dicttemp= [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"VenueDetails"];
+
+    NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dicttemp objectForKey:@"venueImagePath"]]];
+    [imgSender setImageWithURL:urlPhoto];
     //Loop for bundled orders to show on UI
     for (int i=0; i<[arrBundledOrders count]; i++)
     {
-       /* NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
-        NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
+        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
         
-        UIView *inerview = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
-        inerview.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+        NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
+        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+        {
+            btnAccept.hidden=NO;
+            btnReject.hidden=NO;
+            intHeight=30;
+        }else{
+            btnAccept.hidden=YES;
+            btnReject.hidden=YES;
+            intHeight=0;
+        }
+        UIView *innerView;
+        if([[dict objectForKey:@"senderBartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+        {
+        innerView = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
+        innerView.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+            
+        innerView.frame=CGRectMake(0, intContentSizeHeight+125+intHeight, 320, 144);
+            lblOrderStatus.text=[self getTheStatusMessageForOrder:dict];
+           
+        }
 
-        inerview.frame=CGRectMake(0, intContentSizeHeight, 320, 144);
         if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
         {
             btnDismiss.hidden=NO;
         }else{
             btnDismiss.hidden=YES;
         }
-        [ScrollOrders addSubview:inerview];
-        intContentSizeHeight+=intContentSizeHeight+144;*/
+        
+        lblOrderCode.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
+        lblOrderCode.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
+        lblOrderCode.font=[UIFont fontWithName:@"MuseoSans-100" size:62.0];
 
-        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
+        lblOrderID.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
+        lblOrderID.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+        lblOrderID.font=[UIFont fontWithName:@"MuseoSans-100" size:15.0];
+        //Calculating the number of minutes from ordered time
+        NSDateFormatter *dateFormatter = [NSDateFormatter new];
+        dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ssZZZ";
+        NSDate *indate   = [dateFormatter dateFromString:[dict objectForKey:@"orderTime"]];
+        dateFormatter.dateFormat = @"dd MM yyyy HH:mm:ssZZZ";
+        NSDate *outDate=[dateFormatter dateFromString:[dict objectForKey:@"currentTime"]];
+        NSTimeInterval distanceBetweenDates = [outDate timeIntervalSinceDate:indate];
+        
+        NSInteger minutes = floor(distanceBetweenDates/60);
+        NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
+        [dateFormatter release];
+        
+        
+        lblPlacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+        lblPlacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
+        lblPlacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblPlacedtime.attributedText];
+        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
+        [lblPlacedtime setAttributedText: text];
+        [text release];
+        
+        lblExpires.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+        lblExpires.text = [NSString stringWithFormat:@"Expires:%@",@"<15 min"];
+        lblExpires.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+        NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblExpires.attributedText];
+        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
+        [lblExpires setAttributedText: attribstrg];
+        [attribstrg release];
+        
+        
+        float floatPrice=0;
+        float floatTotalPrice=0;
+        float floatTaxFee=0;
+        float floattipvalue=0;
+        intHeight=72;
+        
+        for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
+        {
+            NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
+            
+            
+            lblIOrdertemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+            lblIOrdertemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
+            
+            
+            floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
+            floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
+            if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
+            {
+            }
+          
+            //[lblDescription release];
+                      
+        }
+        
+       
+        lblOrderTip.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+        floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
+        if(floattipvalue>0.01)
+        {
+            lblOrderTip.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
+        }
+        else
+            lblOrderTip.text = [NSString stringWithFormat:@"Tip: -"];
+      
+        lblOrderTip.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+       
+        NSMutableAttributedString *attribstrgTIP = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTip.attributedText];
+        [attribstrgTIP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblOrderTip.text.length-sizeof(floattipvalue)-1,sizeof(floattipvalue)+1 )];
+        [lblOrderTip setAttributedText: attribstrgTIP];
+        [attribstrgTIP release];
+        
+        lblOrderTax.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+        floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
+        if(floatTaxFee>0.01)
+        {
+            lblOrderTax.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
+        }
+        else
+            lblOrderTax.text = [NSString stringWithFormat:@"Tax: -"];
+        lblOrderTax.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+        NSMutableAttributedString *attribstrgTAX = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTax.attributedText];
+        [attribstrgTAX addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblOrderTax.text.length-sizeof(floatTaxFee)-1,sizeof(floatTaxFee)+1 )];
+        [lblOrderTax setAttributedText: attribstrgTAX];
+        [attribstrgTAX release];
+        
+        NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
+        
+       
+        lblOrderTotal.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+        if(floatTotalPrice>0.01)
+            lblOrderTotal.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
+        else
+            lblOrderTotal.text = [NSString stringWithFormat:@"Total:-"];
+        lblOrderTotal.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+        NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTotal.attributedText];
+        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
+        [lblOrderTotal setAttributedText: attribstrgTP];
+        [attribstrgTP release];
+
+        [ScrollOrders addSubview:innerView];
+        intContentSizeHeight+=intContentSizeHeight+144;
+
+    /*    NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
         NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
         
         int intHeightForOfferedDrinks=0;
@@ -3079,18 +3216,12 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
                                     , viewBg.frame.origin.y+38, viewBg.frame.size.width, viewBg.frame.size.height);
         }
         
-        intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*35 + intHeightForOfferedDrinks+50;
+        intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*35 + intHeightForOfferedDrinks+50;*/
     }
-    
-    if (arrBundledOrders.count==0) {
-        
-        UILabel *lblItemName = [self createLabelWithTitle:@"No orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
-        lblItemName.backgroundColor=[UIColor clearColor];
-        lblItemName.textAlignment = NSTextAlignmentCenter;
-        [scrollView addSubview:lblItemName];
-    }
-    scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+10);
+    [ScrollOrders setContentSize:CGSizeMake(320, intContentSizeHeight+150)];
+    scrollView.contentSize=CGSizeMake(320, intContentSizeHeight+ScrollOrders.contentSize.height);
     [scrollView release];
+    }
 }
 
 -(void)btnDismiss_TouchUpInside:(UIButton*)sender
@@ -3687,17 +3818,11 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             
             
             id object=[arrMenu objectAtIndex:indexPath.section-([arrCustomDrinks count]+2)];
-            if(indexPath.section==2&&[object isKindOfClass:[NSArray class]])
-            {
-                NSDictionary *dict=[object objectAtIndex:indexPath.row];
-                lblName.text=[dict objectForKey:@"name"];
-            }
-            else
-            {
+            
                 NSArray *arrContents=[[NSArray alloc]initWithArray:[object objectForKey:@"contents"]];
                 NSDictionary *dict=[arrContents objectAtIndex:indexPath.row];
                 lblName.text=[dict objectForKey:@"name"];
-            }
+            
 
         }else if (indexPath.section>1+[arrCustomDrinks count]+[arrMenu count]&&indexPath.section<2+[arrCustomDrinks count]+[arrMenu count]+[arrCocktailsSection count]){
             
@@ -3859,7 +3984,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         lblDollars.backgroundColor=[UIColor clearColor];
         [cell.contentView addSubview:lblDollars];
         [lblDollars release];*/
-
+        return cell;
     }
     else if(isSelectedForPeople)
     {

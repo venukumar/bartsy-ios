@@ -27,9 +27,22 @@
     NSInteger intNoOfSections;
     
     BOOL isLocuMenu;
-    
-    IBOutlet UIView *innerView;
-   // IBOutlet UIButton *btnDismiss;
+    IBOutlet UIScrollView *scrollmain;
+    IBOutlet UIButton *btnDismiss;
+    IBOutlet UILabel *lblOrderStatus;
+    IBOutlet UILabel *lblOrderID;
+    IBOutlet UILabel *lblPlacedtime;
+    IBOutlet UILabel *lblExpires;
+    IBOutlet UILabel *lblIOrdertemName;
+    IBOutlet UILabel *lblOrderOpt_Desp;
+    IBOutlet UILabel *lblItemPrice;
+    IBOutlet UILabel *lblOrderTip;
+    IBOutlet UILabel *lblOrderTax;
+    IBOutlet UILabel *lblOrderTotal;
+    IBOutlet UIButton *btnAccept;
+    IBOutlet UIButton *btnReject;
+    IBOutlet UIImageView *imgSender;
+    IBOutlet UILabel *lblOrderCode;
 
 }
 @property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;
