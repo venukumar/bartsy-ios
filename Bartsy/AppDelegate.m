@@ -532,9 +532,9 @@
                  if ([[dic valueForKey:@"hasMessages"] isEqualToString:@"New"]) {
                      
                      i++;
-                     alertView=[[UIAlertView alloc]initWithTitle:@"" message:[NSString stringWithFormat:@"You got a message from %@",[dic valueForKey:@"nickName"]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                     /*alertView=[[UIAlertView alloc]initWithTitle:@"" message:[NSString stringWithFormat:@"You got a message from %@",[dic valueForKey:@"nickName"]] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                      alertView.tag=0;
-                     [alertView show];
+                     [alertView show];*/
 
                  }
                  [[self.tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = [NSString stringWithFormat:@"%d",i];

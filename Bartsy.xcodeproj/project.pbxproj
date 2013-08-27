@@ -82,6 +82,11 @@
 		CB98321E17994F0300DC63AC /* background-img-A.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321C17994F0300DC63AC /* background-img-A.png */; };
 		CB98321F17994F0300DC63AC /* background-img1.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98321D17994F0300DC63AC /* background-img1.png */; };
 		CB98322117996F2100DC63AC /* tick_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CB98322017996F2100DC63AC /* tick_mark.png */; };
+		CB9C277417CB27C800B55355 /* VenueCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9C277317CB27C800B55355 /* VenueCell.m */; };
+		CB9C277617CB27D700B55355 /* VenueCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277517CB27D700B55355 /* VenueCell.xib */; };
+		CB9C277A17CB3E1900B55355 /* PeopleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9C277917CB3E1900B55355 /* PeopleCell.m */; };
+		CB9C277C17CB3E3000B55355 /* PeopleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277B17CB3E3000B55355 /* PeopleCell.xib */; };
+		CB9C277E17CB92C700B55355 /* add-order.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277D17CB92C300B55355 /* add-order.png */; };
 		CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = CBAC59FB17C36F950047BDBB /* cancel-btn.png */; };
 		CBED0DCB17BF6F89002F2221 /* fav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DC917BF6F89002F2221 /* fav_icon.png */; };
 		CBED0DCC17BF6F89002F2221 /* unfav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCA17BF6F89002F2221 /* unfav_icon.png */; };
@@ -105,6 +110,8 @@
 		CBF9B6DB1796CCC00030D269 /* send-message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBF9B6D31796CCC00030D269 /* send-message@2x.png */; };
 		CBFAF1141797B3E600E953AC /* RewardsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFAF1131797B3E600E953AC /* RewardsTableCell.m */; };
 		CBFAF1161798212A00E953AC /* exclametory.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFAF1151798212A00E953AC /* exclametory.png */; };
+		CBFCD25A17C74A6E007712A1 /* OrdersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBFCD25917C74A6E007712A1 /* OrdersView.xib */; };
+		CBFCD25C17C759FD007712A1 /* CustomDrinksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBFCD25B17C759FC007712A1 /* CustomDrinksViewController.xib */; };
 		CBFD9A21176B5B63006A7DB6 /* pic4.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFD9A20176B5B63006A7DB6 /* pic4.png */; };
 		CBFDEE231768C96800E9DB56 /* PastOrdersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */; };
 		CBFE3C1D178FD95700DF6F50 /* tickmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CBFE3C1C178FD95600DF6F50 /* tickmark@2x.png */; };
@@ -422,6 +429,13 @@
 		CB98321C17994F0300DC63AC /* background-img-A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img-A.png"; sourceTree = "<group>"; };
 		CB98321D17994F0300DC63AC /* background-img1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-img1.png"; sourceTree = "<group>"; };
 		CB98322017996F2100DC63AC /* tick_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick_mark.png; sourceTree = "<group>"; };
+		CB9C277217CB27C800B55355 /* VenueCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenueCell.h; sourceTree = "<group>"; };
+		CB9C277317CB27C800B55355 /* VenueCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueCell.m; sourceTree = "<group>"; };
+		CB9C277517CB27D700B55355 /* VenueCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VenueCell.xib; sourceTree = "<group>"; };
+		CB9C277817CB3E1900B55355 /* PeopleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeopleCell.h; sourceTree = "<group>"; };
+		CB9C277917CB3E1900B55355 /* PeopleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleCell.m; sourceTree = "<group>"; };
+		CB9C277B17CB3E3000B55355 /* PeopleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PeopleCell.xib; sourceTree = "<group>"; };
+		CB9C277D17CB92C300B55355 /* add-order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-order.png"; sourceTree = "<group>"; };
 		CBAC59FB17C36F950047BDBB /* cancel-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel-btn.png"; sourceTree = "<group>"; };
 		CBED0DC917BF6F89002F2221 /* fav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fav_icon.png; sourceTree = "<group>"; };
 		CBED0DCA17BF6F89002F2221 /* unfav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfav_icon.png; sourceTree = "<group>"; };
@@ -447,6 +461,8 @@
 		CBFAF1121797B3E600E953AC /* RewardsTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RewardsTableCell.h; sourceTree = "<group>"; };
 		CBFAF1131797B3E600E953AC /* RewardsTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RewardsTableCell.m; sourceTree = "<group>"; };
 		CBFAF1151798212A00E953AC /* exclametory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exclametory.png; sourceTree = "<group>"; };
+		CBFCD25917C74A6E007712A1 /* OrdersView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OrdersView.xib; sourceTree = "<group>"; };
+		CBFCD25B17C759FC007712A1 /* CustomDrinksViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomDrinksViewController.xib; sourceTree = "<group>"; };
 		CBFD9A20176B5B63006A7DB6 /* pic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pic4.png; sourceTree = "<group>"; };
 		CBFDEE211768C96700E9DB56 /* PastOrdersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrdersViewController.h; sourceTree = "<group>"; };
 		CBFDEE221768C96700E9DB56 /* PastOrdersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrdersViewController.m; sourceTree = "<group>"; };
@@ -982,6 +998,70 @@
 			name = Rewards;
 			sourceTree = "<group>";
 		};
+		CB9C277717CB3DF000B55355 /* CustomCells */ = {
+			isa = PBXGroup;
+			children = (
+				CB9C277217CB27C800B55355 /* VenueCell.h */,
+				CB9C277317CB27C800B55355 /* VenueCell.m */,
+				CB9C277517CB27D700B55355 /* VenueCell.xib */,
+				CB9C277817CB3E1900B55355 /* PeopleCell.h */,
+				CB9C277917CB3E1900B55355 /* PeopleCell.m */,
+				CB9C277B17CB3E3000B55355 /* PeopleCell.xib */,
+				E0FD62B01794292800776EE0 /* PastOrdersCell.h */,
+				E0FD62B11794292800776EE0 /* PastOrdersCell.m */,
+			);
+			name = CustomCells;
+			sourceTree = "<group>";
+		};
+		CBE6E2A317CC7BB400BB4BE5 /* PeopleDetailsView */ = {
+			isa = PBXGroup;
+			children = (
+				E0F956CD1778586B00F1EB71 /* PeopleDetailViewController.h */,
+				E0F956CE1778586C00F1EB71 /* PeopleDetailViewController.m */,
+				E0F956CF1778586C00F1EB71 /* PeopleDetailViewController.xib */,
+			);
+			name = PeopleDetailsView;
+			sourceTree = "<group>";
+		};
+		CBE6E2A417CC7BD800BB4BE5 /* RewardsView */ = {
+			isa = PBXGroup;
+			children = (
+				E0C446D6178EBCC200261B74 /* RewardsViewController.h */,
+				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
+				CBFAF1121797B3E600E953AC /* RewardsTableCell.h */,
+				CBFAF1131797B3E600E953AC /* RewardsTableCell.m */,
+			);
+			name = RewardsView;
+			sourceTree = "<group>";
+		};
+		CBE6E2A517CC7BF900BB4BE5 /* NotificationView */ = {
+			isa = PBXGroup;
+			children = (
+				CB8AB481177417AB00445934 /* NotificationsViewController.h */,
+				CB8AB482177417AB00445934 /* NotificationsViewController.m */,
+			);
+			name = NotificationView;
+			sourceTree = "<group>";
+		};
+		CBE6E2A617CC7C2600BB4BE5 /* VenuesView */ = {
+			isa = PBXGroup;
+			children = (
+				E0D56E7517424B6A00257870 /* VenueListViewController.h */,
+				E0D56E7617424B6A00257870 /* VenueListViewController.m */,
+			);
+			name = VenuesView;
+			sourceTree = "<group>";
+		};
+		CBE6E2A717CC7C5800BB4BE5 /* MenuScreen */ = {
+			isa = PBXGroup;
+			children = (
+				E092F98E173054E800E1CC15 /* HomeViewController.h */,
+				E092F98F173054EC00E1CC15 /* HomeViewController.m */,
+				CBFCD25917C74A6E007712A1 /* OrdersView.xib */,
+			);
+			name = MenuScreen;
+			sourceTree = "<group>";
+		};
 		CBF8F35317941C35008EBBB8 /* AccountInfoimages */ = {
 			isa = PBXGroup;
 			children = (
@@ -1480,10 +1560,8 @@
 				E005DE341743D2B300EDDCFB /* WelcomeViewController.m */,
 				E0C446D3178EB90B00261B74 /* RootViewController.h */,
 				E0C446D4178EB90B00261B74 /* RootViewController.m */,
-				E0D56E7517424B6A00257870 /* VenueListViewController.h */,
-				E0D56E7617424B6A00257870 /* VenueListViewController.m */,
-				E092F98E173054E800E1CC15 /* HomeViewController.h */,
-				E092F98F173054EC00E1CC15 /* HomeViewController.m */,
+				CBE6E2A617CC7C2600BB4BE5 /* VenuesView */,
+				CBE6E2A717CC7C5800BB4BE5 /* MenuScreen */,
 				CB688C77179FE5C4001C4726 /* CustomDrinkViewController.h */,
 				CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */,
 				CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */,
@@ -1491,6 +1569,7 @@
 				E00E4B711742765400749466 /* MyAnnotation.m */,
 				E0CDC8C81758A0360070E31D /* CustomDrinksViewController.h */,
 				E0CDC8C91758A0360070E31D /* CustomDrinksViewController.m */,
+				CBFCD25B17C759FC007712A1 /* CustomDrinksViewController.xib */,
 				E0CDC8CB1758BBE00070E31D /* RevealController.h */,
 				E0CDC8CC1758BBE20070E31D /* RevealController.m */,
 				E0CDC8CE1758BBF40070E31D /* FrontViewController.h */,
@@ -1515,25 +1594,18 @@
 				E0DBAFA917733993003524EE /* AgreementViewController.m */,
 				E0DBAFAB177342CF003524EE /* WebViewController.h */,
 				E0DBAFAC177342CF003524EE /* WebViewController.m */,
-				CB8AB481177417AB00445934 /* NotificationsViewController.h */,
-				CB8AB482177417AB00445934 /* NotificationsViewController.m */,
+				CBE6E2A517CC7BF900BB4BE5 /* NotificationView */,
 				CB8AB4841774200B00445934 /* MessageListViewController.h */,
 				CB8AB4851774200B00445934 /* MessageListViewController.m */,
-				E0F956CD1778586B00F1EB71 /* PeopleDetailViewController.h */,
-				E0F956CE1778586C00F1EB71 /* PeopleDetailViewController.m */,
-				E0F956CF1778586C00F1EB71 /* PeopleDetailViewController.xib */,
-				E0C446D6178EBCC200261B74 /* RewardsViewController.h */,
-				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
-				CBFAF1121797B3E600E953AC /* RewardsTableCell.h */,
-				CBFAF1131797B3E600E953AC /* RewardsTableCell.m */,
+				CBE6E2A317CC7BB400BB4BE5 /* PeopleDetailsView */,
+				CBE6E2A417CC7BD800BB4BE5 /* RewardsView */,
 				CB3E90F117C619B000A5B83A /* BAccountCell.xib */,
 				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
 				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
 				CB3E910017C6432500A5B83A /* AccountInfoViewController.xib */,
 				CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */,
 				CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */,
-				E0FD62B01794292800776EE0 /* PastOrdersCell.h */,
-				E0FD62B11794292800776EE0 /* PastOrdersCell.m */,
+				CB9C277717CB3DF000B55355 /* CustomCells */,
 				CB3E90F317C624A200A5B83A /* NewViews */,
 			);
 			name = View;
@@ -1542,6 +1614,7 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CB9C277D17CB92C300B55355 /* add-order.png */,
 				CB3E90FE17C6348A00A5B83A /* exclamatory_icon_ping.png */,
 				CB3E90FC17C633FB00A5B83A /* flower_icon-selected.png */,
 				CBAC59FB17C36F950047BDBB /* cancel-btn.png */,
@@ -1880,6 +1953,11 @@
 				CB3E90FD17C633FD00A5B83A /* flower_icon-selected.png in Resources */,
 				CB3E90FF17C6348B00A5B83A /* exclamatory_icon_ping.png in Resources */,
 				CB3E910117C6432700A5B83A /* AccountInfoViewController.xib in Resources */,
+				CBFCD25A17C74A6E007712A1 /* OrdersView.xib in Resources */,
+				CBFCD25C17C759FD007712A1 /* CustomDrinksViewController.xib in Resources */,
+				CB9C277617CB27D700B55355 /* VenueCell.xib in Resources */,
+				CB9C277C17CB3E3000B55355 /* PeopleCell.xib in Resources */,
+				CB9C277E17CB92C700B55355 /* add-order.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2012,6 +2090,8 @@
 				CB688C7A179FE5C4001C4726 /* CustomDrinkViewController.m in Sources */,
 				CB3E90EB17C60AEE00A5B83A /* UserSettingsView.m in Sources */,
 				CB3E90F717C624DA00A5B83A /* UserProfileViewController.m in Sources */,
+				CB9C277417CB27C800B55355 /* VenueCell.m in Sources */,
+				CB9C277A17CB3E1900B55355 /* PeopleCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
