@@ -999,7 +999,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         if ([[result objectForKey:@"errorMessage"] isKindOfClass:[NSNull class]])
         [self createAlertViewWithTitle:@"Error" message:@"Oops! Server failed to return" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
         else{
-            if (!isGetFavorites && !isGettingCocktails ) {
+            if (!isGetFavorites && !isGettingCocktails && !isGettingIngradients && !isLocuMenu) {
                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
             }
         }
@@ -2666,7 +2666,10 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
              [arrPeople addObjectsFromArray:[result objectForKey:@"checkedInUsers"]];
              [appDelegate.arrPeople removeAllObjects];
              [appDelegate.arrPeople addObjectsFromArray:arrPeople];
-             
+             UISegmentedControl *segmentControl=(UISegmentedControl*)[self.view viewWithTag:1111];
+             NSString *strOrder=[NSString stringWithFormat:@"People (%i)",[arrPeople count]];
+             appDelegate.intPeopleCount=[arrPeople count];
+             [segmentControl setTitle:strOrder forSegmentAtIndex:1];
              int i=0;
              for (NSDictionary *dic in appDelegate.arrPeople) {
                  
@@ -2775,8 +2778,6 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         scrollView.frame=CGRectMake(0, segmentControl.frame.origin.y+segmentControl.frame.size.height+3, 320, 410);
     }
     
-   
-    NSInteger intHeight=0;
     if (arrBundledOrders.count==0) {
         
         UILabel *lblItemName = [self createLabelWithTitle:@"No orders\nGo to menu tab to place an order" frame:CGRectMake(30, 50, 250,50) tag:0 font:[UIFont boldSystemFontOfSize:13] color:[UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] numberOfLines:5];
@@ -2785,500 +2786,47 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         [scrollView addSubview:lblItemName];
     }else{
 
-   
-    NSDictionary *dicttemp= [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"VenueDetails"];
+    //NSDictionary *dicttemp= [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"VenueDetails"];
 
-    NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dicttemp objectForKey:@"venueImagePath"]]];
-    [imgSender setImageWithURL:urlPhoto];
+   // NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dicttemp objectForKey:@"venueImagePath"]]];
+   // [imgSender setImageWithURL:urlPhoto];
         NSLog(@"%@",arrBundledOrders);
-    NSMutableArray *arrOrdersTemp=[[NSMutableArray alloc]initWithArray:arrBundledOrders];
-
-    NSPredicate *pred=[NSPredicate predicateWithFormat:@"recieverBartsyId ==%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] ];
-        [arrOrdersTemp filteredArrayUsingPredicate:pred];
-        UIScrollView *ScrollOrders = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:0];
-        ScrollOrders.frame=CGRectMake(0, 0, 320, 157);
-        if (IS_IPHONE_5) {
-            ScrollOrders.frame=CGRectMake(0, 0, 320, 157);
-            
-        }
-        [scrollView addSubview:ScrollOrders];
-    NSInteger intContentSizeHeight=0;
-    //Loop for bundled orders to show on UI
-    for (int i=0; i<[arrOrdersTemp count]; i++)
-    {
-        NSArray *arrBundledOrdersObject=[arrOrdersTemp objectAtIndex:i];
+    NSInteger Xposition=0;
+    btnDismiss.titleLabel.font=[UIFont fontWithName:@"MuseoSans-300" size:14.0];
+    for (int i=0; i<arrBundledOrders.count; i++) {
+        NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
         
         NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
-        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-        {
-            btnAccept.hidden=NO;
-            btnReject.hidden=NO;
-            intHeight=30;
-        }else{
-            btnAccept.hidden=YES;
-            btnReject.hidden=YES;
-            intHeight=0;
-        }
-        UIView *innerView;
-        if([[dict objectForKey:@"senderBartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-        {
-        innerView = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
-        innerView.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+  //Sending and Recieving the Order for self      
+        if (([[dict valueForKey:@"recieverBartsyId"] doubleValue] ==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]doubleValue] && [[dict valueForKey:@"senderBartsyId"]doubleValue ] ==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]doubleValue] )|| ([[dict valueForKey:@"recieverBartsyId"] doubleValue] ==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]doubleValue] && [[dict valueForKey:@"senderBartsyId"]doubleValue ] !=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]doubleValue])) {
+            UIScrollView *scrollCodeView=[[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:0];
+            scrollCodeView.frame=CGRectMake(0,Xposition, 320, 118);
+            [scrollView addSubview:scrollCodeView];
+            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dict objectForKey:@"recipientImagePath"]]];
+            [imgSender setImageWithURL:urlPhoto];
+            lblOrderCode.font=[UIFont fontWithName:@"MuseoSans-100" size:62.0];
             
-        innerView.frame=CGRectMake(0, intContentSizeHeight+intHeight, 320, 156);
+            lblOrderCode.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
+            lblPickInfo.font=[UIFont fontWithName:@"MuseoSans-100" size:10.0];
+            lblOrderCode.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
+            Xposition+=118;
+            UIView *innerView = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
+            innerView.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+                
+            //innerView.frame=CGRectMake(0, Xposition, 320, 159);
             lblOrderStatus.text=[self getTheStatusMessageForOrder:dict];
+            lblOrderStatus.font=[UIFont fontWithName:@"MuseoSans-300" size:14.0];
+
            
-        }
-
-        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
-        {
-            btnDismiss.hidden=NO;
-        }else{
-            btnDismiss.hidden=YES;
-        }
-        
-        lblOrderCode.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
-        lblOrderCode.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
-        lblOrderCode.font=[UIFont fontWithName:@"MuseoSans-100" size:62.0];
-
-        lblOrderID.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
-        lblOrderID.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
-        lblOrderID.font=[UIFont fontWithName:@"MuseoSans-100" size:15.0];
-        //Calculating the number of minutes from ordered time
-        NSDateFormatter *dateFormatter = [NSDateFormatter new];
-        dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ssZZZ";
-        NSDate *indate   = [dateFormatter dateFromString:[dict objectForKey:@"orderTime"]];
-        dateFormatter.dateFormat = @"dd MM yyyy HH:mm:ssZZZ";
-        NSDate *outDate=[dateFormatter dateFromString:[dict objectForKey:@"currentTime"]];
-        NSTimeInterval distanceBetweenDates = [outDate timeIntervalSinceDate:indate];
-        
-        NSInteger minutes = floor(distanceBetweenDates/60);
-        NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
-        [dateFormatter release];
-        
-        
-        lblPlacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
-        lblPlacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
-        lblPlacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblPlacedtime.attributedText];
-        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
-        [lblPlacedtime setAttributedText: text];
-        [text release];
-        
-        lblExpires.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
-        lblExpires.text = [NSString stringWithFormat:@"Expires:%@",@"<15 min"];
-        lblExpires.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblExpires.attributedText];
-        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
-        [lblExpires setAttributedText: attribstrg];
-        [attribstrg release];
-        
-        
-        float floatPrice=0;
-        float floatTotalPrice=0;
-        float floatTaxFee=0;
-        float floattipvalue=0;
-        intHeight=72;
-        
-        for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
-        {
-            NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
-            
-            
-            lblIOrdertemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
-            lblIOrdertemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
-            if ([dictTempOrder objectForKey:@"options_description"]) {
-                lblOrderOpt_Desp.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"options_description"]];
-            }else{
-                lblOrderOpt_Desp.text =@"";
-            }
-           
-            lblOrderOpt_Desp.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
-            lblOrderOpt_Desp.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
-            
-            
-            lblItemPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
-            lblItemPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
-            lblItemPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
-            
-            floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
-            floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
-            if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
-            {
-                lblItemPrice.text=@"-";
-            }
-        }
-        
-        lblOrderTip.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
-        floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
-        if(floattipvalue>0.01)
-        {
-            lblOrderTip.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
-        }
-        else
-            lblOrderTip.text = [NSString stringWithFormat:@"Tip: -"];
-      
-        lblOrderTip.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-       
-        NSMutableAttributedString *attribstrgTIP = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTip.attributedText];
-        [attribstrgTIP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblOrderTip.text.length-sizeof(floattipvalue)-1,sizeof(floattipvalue)+1 )];
-        [lblOrderTip setAttributedText: attribstrgTIP];
-        [attribstrgTIP release];
-        
-        lblOrderTax.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
-        floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
-        if(floatTaxFee>0.01)
-        {
-            lblOrderTax.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
-        }
-        else
-            lblOrderTax.text = [NSString stringWithFormat:@"Tax: -"];
-        lblOrderTax.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        NSMutableAttributedString *attribstrgTAX = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTax.attributedText];
-        [attribstrgTAX addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblOrderTax.text.length-sizeof(floatTaxFee)-1,sizeof(floatTaxFee)+1 )];
-        [lblOrderTax setAttributedText: attribstrgTAX];
-        [attribstrgTAX release];
-        
-        NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
-        
-       
-        lblOrderTotal.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
-        if(floatTotalPrice>0.01)
-            lblOrderTotal.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
-        else
-            lblOrderTotal.text = [NSString stringWithFormat:@"Total:-"];
-        lblOrderTotal.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTotal.attributedText];
-        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
-        [lblOrderTotal setAttributedText: attribstrgTP];
-        [attribstrgTP release];
-
-        [ScrollOrders addSubview:innerView];
-        intContentSizeHeight+=intContentSizeHeight+156;
-
-    /*    NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
-        NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
-        
-        int intHeightForOfferedDrinks=0;
-        
-        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-        {
-            intHeightForOfferedDrinks=35;
-        }
-        
-        UIView *viewBg=[self createViewWithFrame:CGRectMake(0, intContentSizeHeight, 320, 150+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks) tag:0];
-        viewBg.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
-        [scrollView addSubview:viewBg];
-       
-        UIImageView *statusImg=[self createImageViewWithImage:[UIImage imageNamed:@"exclametory"] frame:CGRectMake(10, 5, 20, 20) tag:0];
-        [viewBg addSubview:statusImg];
-        
-        UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(40, 0, 240, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:3];
-        lblOrderStatus.text = [self getTheStatusMessageForOrder:dict];
-        lblOrderStatus.adjustsFontSizeToFitWidth=YES;
-        lblOrderStatus.textAlignment = NSTextAlignmentLeft;
-        [viewBg addSubview:lblOrderStatus];
-        
-        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
-        {
-            UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 2.5, 44, 30) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
-            btnDismiss.titleLabel.font=[UIFont systemFontOfSize:10];
-            btnDismiss.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
-            btnDismiss.backgroundColor=[UIColor blackColor];
-            [viewBg addSubview:btnDismiss];
-        }
-       
-        
-        UIView *viewBg2=[self createViewWithFrame:CGRectMake(0, 35, viewBg.bounds.size.width, 140+[arrBundledOrdersObject count]*35) tag:0];
-        viewBg2.backgroundColor=[UIColor blackColor];
-        [viewBg addSubview:viewBg2];
-        
-        NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"recieverBartsyId"]]];
-        UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(5,5,60,65)];
-        [imgViewPhoto setImageWithURL:urlPhoto];
-        [viewBg2 addSubview:imgViewPhoto];
-        [imgViewPhoto release];
-        
-        
-        UILabel *lblOrderTO = [[UILabel alloc]initWithFrame:CGRectMake(100, 5, 180, 60)];
-        lblOrderTO.font = [UIFont systemFontOfSize:18];
-        lblOrderTO.font=[UIFont fontWithName:@"MuseoSans-700" size:55.0];
-        lblOrderTO.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
-        lblOrderTO.adjustsFontSizeToFitWidth=YES;
-        lblOrderTO.backgroundColor = [UIColor clearColor];
-        lblOrderTO.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
-        lblOrderTO.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblOrderTO];
-        [lblOrderTO release];
-        
-        UILabel *lblpickinfo = [[UILabel alloc]initWithFrame:CGRectMake(100,55, 210, 40)];
-        lblpickinfo.font = [UIFont systemFontOfSize:10];
-        lblpickinfo.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
-        lblpickinfo.text = [NSString stringWithFormat:@"%@",@"To pick up your order,look for the \n Bartsy sign and present this number."];
-        lblpickinfo.adjustsFontSizeToFitWidth=YES;
-        lblpickinfo.backgroundColor = [UIColor clearColor];
-        lblpickinfo.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        lblpickinfo.textColor=[UIColor whiteColor];
-        lblpickinfo.numberOfLines=2;
-        lblpickinfo.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblpickinfo];
-        
-        UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(0, 90, 180, 23)];
-        lblOrderId.font = [UIFont systemFontOfSize:15];
-        lblOrderId.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
-        lblOrderId.adjustsFontSizeToFitWidth=YES;
-        lblOrderId.backgroundColor = [UIColor clearColor];
-        lblOrderId.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
-        lblOrderId.textAlignment = NSTextAlignmentLeft;
-        lblOrderId.font=[UIFont fontWithName:@"MuseoSans-100" size:15.0];
-        [viewBg2 addSubview:lblOrderId];
-        [lblOrderId release];
-        
-       
-
-        //Calculating the number of minutes from ordered time
-        NSDateFormatter *dateFormatter = [NSDateFormatter new];
-        dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ssZZZ";
-        NSDate *indate   = [dateFormatter dateFromString:[dict objectForKey:@"orderTime"]];
-        dateFormatter.dateFormat = @"dd MM yyyy HH:mm:ssZZZ";
-        NSDate *outDate=[dateFormatter dateFromString:[dict objectForKey:@"currentTime"]];
-        NSTimeInterval distanceBetweenDates = [outDate timeIntervalSinceDate:indate];
-        
-        NSInteger minutes = floor(distanceBetweenDates/60);
-        NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
-        [dateFormatter release];
-        UILabel *lblplacedtime = [[UILabel alloc]initWithFrame:CGRectMake(130, lblpickinfo.frame.origin.y+lblpickinfo.bounds.size.height, 180, 15)];
-        lblplacedtime.font = [UIFont systemFontOfSize:10];
-        lblplacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
-        lblplacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
-        lblplacedtime.adjustsFontSizeToFitWidth=YES;
-        lblplacedtime.backgroundColor = [UIColor clearColor];
-        lblplacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        lblplacedtime.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblplacedtime];
-        NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblplacedtime.attributedText];
-        [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
-        [lblplacedtime setAttributedText: text];
-        [text release];
-        [lblplacedtime release];
-        
-        UILabel *lblexpired = [[UILabel alloc]initWithFrame:CGRectMake(240, lblpickinfo.frame.origin.y+lblpickinfo.bounds.size.height, 180, 15)];
-        lblexpired.font = [UIFont systemFontOfSize:10];
-        lblexpired.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
-        lblexpired.text = [NSString stringWithFormat:@"Expires: %@",@"<15 min"];
-        lblexpired.adjustsFontSizeToFitWidth=YES;
-        lblexpired.backgroundColor = [UIColor clearColor];
-        lblexpired.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        lblexpired.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblexpired];
-        NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblexpired.attributedText];
-        [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
-        [lblexpired setAttributedText: attribstrg];
-        [attribstrg release];
-        [lblexpired release];
-       
-        
-        if([[dict objectForKey:@"senderBartsyId"] doubleValue]!=[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-        {
-            UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(60, 45, 208, 15)];
-            lblName.font = [UIFont systemFontOfSize:12];
-            lblName.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"senderNickname"]];
-            lblName.backgroundColor = [UIColor clearColor];
-            lblName.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
-            lblName.textAlignment = NSTextAlignmentRight;
-            lblName.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
-            [viewBg2 addSubview:lblName];
-            [lblName release];
-            
-            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"senderBartsyId"]]];
-            UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(270,16,40,40)];
-            [imgViewPhoto setImageWithURL:urlPhoto];
-            [viewBg2 addSubview:imgViewPhoto];
-            [imgViewPhoto release];
-        }
-        
-        UIView *viewLine=[self createViewWithFrame:CGRectMake(5, 111, 310, 1) tag:0];
-        viewLine.backgroundColor=[UIColor colorWithRed:39.0/255 green:39.0/255 blue:39.0/255 alpha:1.0];
-        [viewBg2 addSubview:viewLine];
-
-        float floatPrice=0;
-        float floatTotalPrice=0;
-        float floatTaxFee=0;
-        float floattipvalue=0;
-        intHeight=72;
-        
-        for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
-        {
-            NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
-            
-            UILabel *lblitemName = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*30)+40, 242, 15)];
-            lblitemName.font = [UIFont boldSystemFontOfSize:12];
-            lblitemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
-            lblitemName.numberOfLines = 1;
-            lblitemName.backgroundColor = [UIColor clearColor];
-            lblitemName.textColor = [UIColor whiteColor] ;
-            lblitemName.textAlignment = NSTextAlignmentLeft;
-            lblitemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
-            [viewBg2 addSubview:lblitemName];
-            
-            UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*30)+55, 242, 15)];
-            lblDescription.font = [UIFont boldSystemFontOfSize:12];
-            lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"options_description"]];
-            lblDescription.numberOfLines = 1;
-            lblDescription.backgroundColor = [UIColor clearColor];
-            lblDescription.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
-            lblDescription.textAlignment = NSTextAlignmentLeft;
-            lblDescription.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
-            [viewBg2 addSubview:lblDescription];
-            
-            UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+5+(j*15)+40, 45, 15)];
-            lblPrice.font = [UIFont systemFontOfSize:12];
-            lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
-            lblPrice.numberOfLines = 1;
-            lblPrice.backgroundColor = [UIColor clearColor];
-            lblPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
-            lblPrice.textAlignment = NSTextAlignmentRight;
-            lblPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
-            [viewBg2 addSubview:lblPrice];
-            
-            floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
-            floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
-            if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
-            {
-                lblPrice.text=@"-";
-            }
-            [lblitemName release];
-            //[lblDescription release];
-            [lblPrice release];
-            
-        }
-                
-        UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 120, 15)];
-        lblTipFee.font = [UIFont boldSystemFontOfSize:11];
-        lblTipFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
-        floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
-        if(floattipvalue>0.01)
-        {
-            lblTipFee.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
-        }
-        else
-            lblTipFee.text = [NSString stringWithFormat:@"Tip: -"];
-        lblTipFee.tag = 12347890;
-        lblTipFee.backgroundColor = [UIColor clearColor];
-        lblTipFee.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        lblTipFee.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblTipFee];
-        NSMutableAttributedString *attribstrgTIP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTipFee.attributedText];
-        [attribstrgTIP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblTipFee.text.length-sizeof(floattipvalue)-1,sizeof(floattipvalue)+1 )];
-        [lblTipFee setAttributedText: attribstrgTIP];
-        [attribstrgTIP release];
-        [lblTipFee release];
-        
-        UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 150, 15)];
-        lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
-        lblTaxFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
-        floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
-        if(floatTaxFee>0.01)
-        {
-            lblTaxFee.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
-        }
-        else
-            lblTaxFee.text = [NSString stringWithFormat:@"Tax: -"];
-        lblTaxFee.tag = 12347890;
-        lblTaxFee.backgroundColor = [UIColor clearColor];
-        lblTaxFee.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        lblTaxFee.textAlignment = NSTextAlignmentLeft;
-        [viewBg2 addSubview:lblTaxFee];
-        NSMutableAttributedString *attribstrgTAX = [[NSMutableAttributedString alloc] initWithAttributedString: lblTaxFee.attributedText];
-        [attribstrgTAX addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblTaxFee.text.length-sizeof(floatTaxFee)-1,sizeof(floatTaxFee)+1 )];
-        [lblTaxFee setAttributedText: attribstrgTAX];
-        [attribstrgTAX release];
-        [lblTaxFee release];
-        
-        NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
-       
-        UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 153, 15)];
-        lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
-        lblTotalPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
-        if(floatTotalPrice>0.01)
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
-        else
-            lblTotalPrice.text = [NSString stringWithFormat:@"Total:-"];
-        lblTotalPrice.tag = 12347890;
-        lblTotalPrice.backgroundColor = [UIColor clearColor];
-        lblTotalPrice.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
-        lblTotalPrice.textAlignment = NSTextAlignmentRight;
-        [viewBg2 addSubview:lblTotalPrice];
-        NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTotalPrice.attributedText];
-        [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
-        [lblTotalPrice setAttributedText: attribstrgTP];
-        [attribstrgTP release];
-        [lblTotalPrice release];
-        
-        
-        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-        {
-            UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 3, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
-            btnReject.titleLabel.font=[UIFont systemFontOfSize:10];
-            btnReject.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
-            [scrollView addSubview:btnReject];
-            
-//30+87+[[dict objectForKey:@"itemsList"] count]*20+42+20
-            
-            UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 3, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
-            btnAccept.titleLabel.font=[UIFont systemFontOfSize:10];
-            btnAccept.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
-            [scrollView addSubview:btnAccept];
-            
-            //30+87+[[dict objectForKey:@"itemsList"] count]*20+42+20
-            viewBg.frame=CGRectMake(viewBg.frame.origin.x
-                                    , viewBg.frame.origin.y+38, viewBg.frame.size.width, viewBg.frame.size.height);
-        }
-        
-        intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*35 + intHeightForOfferedDrinks+50;*/
-    }
-        
-    [ScrollOrders setContentSize:CGSizeMake(320, intContentSizeHeight+150)];
-   /* NSMutableArray *arrOrdersTemp2=[[NSMutableArray alloc]initWithArray:arrBundledOrders];
-     NSPredicate *pred2=[NSPredicate predicateWithFormat:@"recieverBartsyId !=%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] ];
-        [arrOrdersTemp2 filteredArrayUsingPredicate:pred2];
-        
-        for (int i=0; i<[arrOrdersTemp2 count]; i++)
-        {
-            NSArray *arrBundledOrdersObject=[arrOrdersTemp objectAtIndex:i];
-            
-            NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
-            if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-            {
-                btnAccept.hidden=NO;
-                btnReject.hidden=NO;
-                intHeight=30;
-            }else{
-                btnAccept.hidden=YES;
-                btnReject.hidden=YES;
-                intHeight=0;
-            }
-            UIView *innerView;
-            if([[dict objectForKey:@"senderBartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
-            {
-                innerView = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
-                innerView.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
-                
-                innerView.frame=CGRectMake(0, intContentSizeHeight+125+intHeight, 320, 144);
-                lblOrderStatus.text=[self getTheStatusMessageForOrder:dict];
-                
-            }
-            
             if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
             {
                 btnDismiss.hidden=NO;
+                btnDismiss.titleLabel.font=[UIFont fontWithName:@"MuseoSans-300" size:14.0];
+
             }else{
                 btnDismiss.hidden=YES;
             }
             
-            lblOrderCode.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
-            lblOrderCode.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
-            lblOrderCode.font=[UIFont fontWithName:@"MuseoSans-100" size:62.0];
             
             lblOrderID.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
             lblOrderID.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
@@ -3294,7 +2842,6 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             NSInteger minutes = floor(distanceBetweenDates/60);
             NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
             [dateFormatter release];
-            
             
             lblPlacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
             lblPlacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
@@ -3312,12 +2859,10 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             [lblExpires setAttributedText: attribstrg];
             [attribstrg release];
             
-            
             float floatPrice=0;
             float floatTotalPrice=0;
             float floatTaxFee=0;
             float floattipvalue=0;
-            intHeight=72;
             
             for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
             {
@@ -3391,17 +2936,620 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
             [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
             [lblOrderTotal setAttributedText: attribstrgTP];
             [attribstrgTP release];
+    //Accept and Reject Buttons
+            btnAccept.tag=i;
+            btnReject.tag=i;
+            if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+            {
+                btnAccept.hidden=NO;
+                btnReject.hidden=NO;
+                innerView.frame=CGRectMake(innerView.frame.origin.x, Xposition, innerView.frame.size.width, innerView.frame.size.height);
+                 Xposition+=202;
+            }else{
+                btnAccept.hidden=YES;
+                btnReject.hidden=YES;
+                innerView.frame=CGRectMake(innerView.frame.origin.x, Xposition, innerView.frame.size.width, innerView.frame.size.height-45);
+                Xposition+=153;
+
+            }
+
             
             [scrollView addSubview:innerView];
-            intContentSizeHeight+=intContentSizeHeight+144;
+           
+
+            
+        }
+        else if ([[dict valueForKey:@"recieverBartsyId"] doubleValue] !=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]doubleValue] && [[dict valueForKey:@"senderBartsyId"]doubleValue ] ==[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"]doubleValue]){
+//Sending the Order to friend
+            UIView *innerView = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:2];
+            innerView.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+            
+            innerView.frame=CGRectMake(0, Xposition, 320, 211);
+            lblfOrderStatus.text=[self getTheStatusMessageForOrder:dict];
+            lblfOrderStatus.font=[UIFont fontWithName:@"MuseoSans-300" size:14.0];
+
+            
+            if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
+            {
+                btnfDismiss.hidden=NO;
+                btnfDismiss.titleLabel.font=[UIFont fontWithName:@"MuseoSans-300" size:14.0];
+            }else{
+                btnfDismiss.hidden=YES;
+            }
+            
+            
+            lblfOrderID.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
+            lblfOrderID.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+            lblfOrderID.font=[UIFont fontWithName:@"MuseoSans-100" size:15.0];
+            //Calculating the number of minutes from ordered time
+            NSDateFormatter *dateFormatter = [NSDateFormatter new];
+            dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ssZZZ";
+            NSDate *indate   = [dateFormatter dateFromString:[dict objectForKey:@"orderTime"]];
+            dateFormatter.dateFormat = @"dd MM yyyy HH:mm:ssZZZ";
+            NSDate *outDate=[dateFormatter dateFromString:[dict objectForKey:@"currentTime"]];
+            NSTimeInterval distanceBetweenDates = [outDate timeIntervalSinceDate:indate];
+            
+            NSInteger minutes = floor(distanceBetweenDates/60);
+            NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
+            [dateFormatter release];
+            
+            
+            lblfPlacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+            lblfPlacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
+            lblfPlacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblfPlacedtime.attributedText];
+            [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
+            [lblfPlacedtime setAttributedText: text];
+            [text release];
+            
+            lblfExpires.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+            lblfExpires.text = [NSString stringWithFormat:@"Expires:%@",@"<15 min"];
+            lblfExpires.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblfExpires.attributedText];
+            [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
+            [lblfExpires setAttributedText: attribstrg];
+            [attribstrg release];
+            
+            float floatPrice=0;
+            float floatTotalPrice=0;
+            float floatTaxFee=0;
+            float floattipvalue=0;
+            
+            NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dict objectForKey:@"senderImagePath"]]];
+            [Senderimg setImageWithURL:urlPhoto];
+            lblfOrdersender.text=[dict objectForKey:@"senderNickname"];
+            lblfOrdersender.font=[UIFont fontWithName:@"Museo Sans" size:15.0];
+            lblfOrderreciever.text=[dict objectForKey:@"recipientNickname"];
+            lblfOrderreciever.font=[UIFont fontWithName:@"Museo Sans" size:15.0];
+            NSURL *urlrecPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dict objectForKey:@"recipientImagePath"]]];
+            [Recieverimg setImageWithURL:urlrecPhoto];
+            
+            for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
+            {
+                NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
+                
+                
+                lblfOrdertemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+                lblfOrdertemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
+                if ([dictTempOrder objectForKey:@"options_description"]) {
+                    lblfOrderOpt_Desp.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"options_description"]];
+                }else{
+                    lblfOrderOpt_Desp.text =@"";
+                }
+                
+                lblfOrderOpt_Desp.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
+                lblfOrderOpt_Desp.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+                
+                
+                lblfItemPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
+                lblfItemPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+                lblfItemPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+                
+                floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
+                floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
+                if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
+                {
+                    lblfItemPrice.text=@"-";
+                }
+            }
+            
+            lblfOrderTip.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+            floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
+            if(floattipvalue>0.01)
+            {
+                lblfOrderTip.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
+            }
+            else
+                lblfOrderTip.text = [NSString stringWithFormat:@"Tip: -"];
+            
+            lblfOrderTip.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            
+            NSMutableAttributedString *attribstrgTIP = [[NSMutableAttributedString alloc] initWithAttributedString: lblfOrderTip.attributedText];
+            [attribstrgTIP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblfOrderTip.text.length-sizeof(floattipvalue)-1,sizeof(floattipvalue)+1 )];
+            [lblfOrderTip setAttributedText: attribstrgTIP];
+            [attribstrgTIP release];
+            
+            lblfOrderTax.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+            floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
+            if(floatTaxFee>0.01)
+            {
+                lblfOrderTax.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
+            }
+            else
+                lblfOrderTax.text = [NSString stringWithFormat:@"Tax: -"];
+            lblfOrderTax.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *attribstrgTAX = [[NSMutableAttributedString alloc] initWithAttributedString: lblfOrderTax.attributedText];
+            [attribstrgTAX addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblfOrderTax.text.length-sizeof(floatTaxFee)-1,sizeof(floatTaxFee)+1 )];
+            [lblfOrderTax setAttributedText: attribstrgTAX];
+            [attribstrgTAX release];
+            
+            NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
+            
+            
+            lblfOrderTotal.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+            if(floatTotalPrice>0.01)
+                lblfOrderTotal.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
+            else
+                lblfOrderTotal.text = [NSString stringWithFormat:@"Total:-"];
+            lblfOrderTotal.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblfOrderTotal.attributedText];
+            [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
+            [lblfOrderTotal setAttributedText: attribstrgTP];
+            [attribstrgTP release];
+            
+
+            Xposition+=212;
+            [scrollView addSubview:innerView];
+        }
+        
+    }
+   
+        
+        
+        scrollView.contentSize=CGSizeMake(320, Xposition);
+        [scrollView release];/*    NSArray *arrBundledOrdersObject=[arrBundledOrders objectAtIndex:i];
+             NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
+             
+             int intHeightForOfferedDrinks=0;
+             
+             if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+             {
+             intHeightForOfferedDrinks=35;
+             }
+             
+             UIView *viewBg=[self createViewWithFrame:CGRectMake(0, intContentSizeHeight, 320, 150+[arrBundledOrdersObject count]*20 + intHeightForOfferedDrinks) tag:0];
+             viewBg.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+             [scrollView addSubview:viewBg];
+             
+             UIImageView *statusImg=[self createImageViewWithImage:[UIImage imageNamed:@"exclametory"] frame:CGRectMake(10, 5, 20, 20) tag:0];
+             [viewBg addSubview:statusImg];
+             
+             UILabel *lblOrderStatus=[self createLabelWithTitle:@"" frame:CGRectMake(40, 0, 240, 30) tag:0 font:[UIFont systemFontOfSize:12] color:[UIColor blackColor] numberOfLines:3];
+             lblOrderStatus.text = [self getTheStatusMessageForOrder:dict];
+             lblOrderStatus.adjustsFontSizeToFitWidth=YES;
+             lblOrderStatus.textAlignment = NSTextAlignmentLeft;
+             [viewBg addSubview:lblOrderStatus];
+             
+             if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
+             {
+             UIButton *btnDismiss=[self createUIButtonWithTitle:@"Dismiss" image:nil frame:CGRectMake(275, 2.5, 44, 30) tag:i selector:@selector(btnDismiss_TouchUpInside:) target:self];
+             btnDismiss.titleLabel.font=[UIFont systemFontOfSize:10];
+             btnDismiss.titleLabel.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+             btnDismiss.backgroundColor=[UIColor blackColor];
+             [viewBg addSubview:btnDismiss];
+             }
+             
+             
+             UIView *viewBg2=[self createViewWithFrame:CGRectMake(0, 35, viewBg.bounds.size.width, 140+[arrBundledOrdersObject count]*35) tag:0];
+             viewBg2.backgroundColor=[UIColor blackColor];
+             [viewBg addSubview:viewBg2];
+             
+             NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"recieverBartsyId"]]];
+             UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(5,5,60,65)];
+             [imgViewPhoto setImageWithURL:urlPhoto];
+             [viewBg2 addSubview:imgViewPhoto];
+             [imgViewPhoto release];
+             
+             
+             UILabel *lblOrderTO = [[UILabel alloc]initWithFrame:CGRectMake(100, 5, 180, 60)];
+             lblOrderTO.font = [UIFont systemFontOfSize:18];
+             lblOrderTO.font=[UIFont fontWithName:@"MuseoSans-700" size:55.0];
+             lblOrderTO.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
+             lblOrderTO.adjustsFontSizeToFitWidth=YES;
+             lblOrderTO.backgroundColor = [UIColor clearColor];
+             lblOrderTO.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
+             lblOrderTO.textAlignment = NSTextAlignmentLeft;
+             [viewBg2 addSubview:lblOrderTO];
+             [lblOrderTO release];
+             
+             UILabel *lblpickinfo = [[UILabel alloc]initWithFrame:CGRectMake(100,55, 210, 40)];
+             lblpickinfo.font = [UIFont systemFontOfSize:10];
+             lblpickinfo.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+             lblpickinfo.text = [NSString stringWithFormat:@"%@",@"To pick up your order,look for the \n Bartsy sign and present this number."];
+             lblpickinfo.adjustsFontSizeToFitWidth=YES;
+             lblpickinfo.backgroundColor = [UIColor clearColor];
+             lblpickinfo.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+             lblpickinfo.textColor=[UIColor whiteColor];
+             lblpickinfo.numberOfLines=2;
+             lblpickinfo.textAlignment = NSTextAlignmentLeft;
+             [viewBg2 addSubview:lblpickinfo];
+             
+             UILabel *lblOrderId = [[UILabel alloc]initWithFrame:CGRectMake(0, 90, 180, 23)];
+             lblOrderId.font = [UIFont systemFontOfSize:15];
+             lblOrderId.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
+             lblOrderId.adjustsFontSizeToFitWidth=YES;
+             lblOrderId.backgroundColor = [UIColor clearColor];
+             lblOrderId.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+             lblOrderId.textAlignment = NSTextAlignmentLeft;
+             lblOrderId.font=[UIFont fontWithName:@"MuseoSans-100" size:15.0];
+             [viewBg2 addSubview:lblOrderId];
+             [lblOrderId release];
+             
+             
+             
+             //Calculating the number of minutes from ordered time
+             NSDateFormatter *dateFormatter = [NSDateFormatter new];
+             dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ssZZZ";
+             NSDate *indate   = [dateFormatter dateFromString:[dict objectForKey:@"orderTime"]];
+             dateFormatter.dateFormat = @"dd MM yyyy HH:mm:ssZZZ";
+             NSDate *outDate=[dateFormatter dateFromString:[dict objectForKey:@"currentTime"]];
+             NSTimeInterval distanceBetweenDates = [outDate timeIntervalSinceDate:indate];
+             
+             NSInteger minutes = floor(distanceBetweenDates/60);
+             NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
+             [dateFormatter release];
+             UILabel *lblplacedtime = [[UILabel alloc]initWithFrame:CGRectMake(130, lblpickinfo.frame.origin.y+lblpickinfo.bounds.size.height, 180, 15)];
+             lblplacedtime.font = [UIFont systemFontOfSize:10];
+             lblplacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+             lblplacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
+             lblplacedtime.adjustsFontSizeToFitWidth=YES;
+             lblplacedtime.backgroundColor = [UIColor clearColor];
+             lblplacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+             lblplacedtime.textAlignment = NSTextAlignmentLeft;
+             [viewBg2 addSubview:lblplacedtime];
+             NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblplacedtime.attributedText];
+             [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
+             [lblplacedtime setAttributedText: text];
+             [text release];
+             [lblplacedtime release];
+             
+             UILabel *lblexpired = [[UILabel alloc]initWithFrame:CGRectMake(240, lblpickinfo.frame.origin.y+lblpickinfo.bounds.size.height, 180, 15)];
+             lblexpired.font = [UIFont systemFontOfSize:10];
+             lblexpired.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+             lblexpired.text = [NSString stringWithFormat:@"Expires: %@",@"<15 min"];
+             lblexpired.adjustsFontSizeToFitWidth=YES;
+             lblexpired.backgroundColor = [UIColor clearColor];
+             lblexpired.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+             lblexpired.textAlignment = NSTextAlignmentLeft;
+             [viewBg2 addSubview:lblexpired];
+             NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblexpired.attributedText];
+             [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
+             [lblexpired setAttributedText: attribstrg];
+             [attribstrg release];
+             [lblexpired release];
+             
+             
+             if([[dict objectForKey:@"senderBartsyId"] doubleValue]!=[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+             {
+             UILabel *lblName = [[UILabel alloc]initWithFrame:CGRectMake(60, 45, 208, 15)];
+             lblName.font = [UIFont systemFontOfSize:12];
+             lblName.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"senderNickname"]];
+             lblName.backgroundColor = [UIColor clearColor];
+             lblName.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
+             lblName.textAlignment = NSTextAlignmentRight;
+             lblName.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
+             [viewBg2 addSubview:lblName];
+             [lblName release];
+             
+             NSURL *urlPhoto=[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@%@",KServerURL,[[NSUserDefaults standardUserDefaults]objectForKey:@"ImagePath"],[dict objectForKey:@"senderBartsyId"]]];
+             UIImageView *imgViewPhoto=[[UIImageView alloc] initWithFrame:CGRectMake(270,16,40,40)];
+             [imgViewPhoto setImageWithURL:urlPhoto];
+             [viewBg2 addSubview:imgViewPhoto];
+             [imgViewPhoto release];
+             }
+             
+             UIView *viewLine=[self createViewWithFrame:CGRectMake(5, 111, 310, 1) tag:0];
+             viewLine.backgroundColor=[UIColor colorWithRed:39.0/255 green:39.0/255 blue:39.0/255 alpha:1.0];
+             [viewBg2 addSubview:viewLine];
+             
+             float floatPrice=0;
+             float floatTotalPrice=0;
+             float floatTaxFee=0;
+             float floattipvalue=0;
+             intHeight=72;
+             
+             for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
+             {
+             NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
+             
+             UILabel *lblitemName = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*30)+40, 242, 15)];
+             lblitemName.font = [UIFont boldSystemFontOfSize:12];
+             lblitemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+             lblitemName.numberOfLines = 1;
+             lblitemName.backgroundColor = [UIColor clearColor];
+             lblitemName.textColor = [UIColor whiteColor] ;
+             lblitemName.textAlignment = NSTextAlignmentLeft;
+             lblitemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
+             [viewBg2 addSubview:lblitemName];
+             
+             UILabel *lblDescription = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+(j*30)+55, 242, 15)];
+             lblDescription.font = [UIFont boldSystemFontOfSize:12];
+             lblDescription.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"options_description"]];
+             lblDescription.numberOfLines = 1;
+             lblDescription.backgroundColor = [UIColor clearColor];
+             lblDescription.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
+             lblDescription.textAlignment = NSTextAlignmentLeft;
+             lblDescription.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+             [viewBg2 addSubview:lblDescription];
+             
+             UILabel *lblPrice = [[UILabel alloc]initWithFrame:CGRectMake(265, intHeight+5+(j*15)+40, 45, 15)];
+             lblPrice.font = [UIFont systemFontOfSize:12];
+             lblPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
+             lblPrice.numberOfLines = 1;
+             lblPrice.backgroundColor = [UIColor clearColor];
+             lblPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+             lblPrice.textAlignment = NSTextAlignmentRight;
+             lblPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+             [viewBg2 addSubview:lblPrice];
+             
+             floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
+             floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
+             if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
+             {
+             lblPrice.text=@"-";
+             }
+             [lblitemName release];
+             //[lblDescription release];
+             [lblPrice release];
+             
+             }
+             
+             UILabel *lblTipFee = [[UILabel alloc]initWithFrame:CGRectMake(5, intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 120, 15)];
+             lblTipFee.font = [UIFont boldSystemFontOfSize:11];
+             lblTipFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+             floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
+             if(floattipvalue>0.01)
+             {
+             lblTipFee.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
+             }
+             else
+             lblTipFee.text = [NSString stringWithFormat:@"Tip: -"];
+             lblTipFee.tag = 12347890;
+             lblTipFee.backgroundColor = [UIColor clearColor];
+             lblTipFee.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+             lblTipFee.textAlignment = NSTextAlignmentLeft;
+             [viewBg2 addSubview:lblTipFee];
+             NSMutableAttributedString *attribstrgTIP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTipFee.attributedText];
+             [attribstrgTIP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblTipFee.text.length-sizeof(floattipvalue)-1,sizeof(floattipvalue)+1 )];
+             [lblTipFee setAttributedText: attribstrgTIP];
+             [attribstrgTIP release];
+             [lblTipFee release];
+             
+             UILabel *lblTaxFee = [[UILabel alloc]initWithFrame:CGRectMake(lblTipFee.bounds.origin.x+60, intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 150, 15)];
+             lblTaxFee.font = [UIFont boldSystemFontOfSize:11];
+             lblTaxFee.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+             floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
+             if(floatTaxFee>0.01)
+             {
+             lblTaxFee.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
+             }
+             else
+             lblTaxFee.text = [NSString stringWithFormat:@"Tax: -"];
+             lblTaxFee.tag = 12347890;
+             lblTaxFee.backgroundColor = [UIColor clearColor];
+             lblTaxFee.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+             lblTaxFee.textAlignment = NSTextAlignmentLeft;
+             [viewBg2 addSubview:lblTaxFee];
+             NSMutableAttributedString *attribstrgTAX = [[NSMutableAttributedString alloc] initWithAttributedString: lblTaxFee.attributedText];
+             [attribstrgTAX addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblTaxFee.text.length-sizeof(floatTaxFee)-1,sizeof(floatTaxFee)+1 )];
+             [lblTaxFee setAttributedText: attribstrgTAX];
+             [attribstrgTAX release];
+             [lblTaxFee release];
+             
+             NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
+             
+             UILabel *lblTotalPrice = [[UILabel alloc]initWithFrame:CGRectMake(160,intHeight+5+([[dict objectForKey:@"itemsList"] count]*30)+45, 153, 15)];
+             lblTotalPrice.font = [UIFont boldSystemFontOfSize:11];
+             lblTotalPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+             if(floatTotalPrice>0.01)
+             lblTotalPrice.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
+             else
+             lblTotalPrice.text = [NSString stringWithFormat:@"Total:-"];
+             lblTotalPrice.tag = 12347890;
+             lblTotalPrice.backgroundColor = [UIColor clearColor];
+             lblTotalPrice.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+             lblTotalPrice.textAlignment = NSTextAlignmentRight;
+             [viewBg2 addSubview:lblTotalPrice];
+             NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblTotalPrice.attributedText];
+             [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
+             [lblTotalPrice setAttributedText: attribstrgTP];
+             [attribstrgTP release];
+             [lblTotalPrice release];
+             
+             
+             if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+             {
+             UIButton *btnReject=[self createUIButtonWithTitle:@"Reject" image:nil frame:CGRectMake(2, 3, 120, 30) tag:i selector:@selector(btnReject_TouchUpInside:) target:self];
+             btnReject.titleLabel.font=[UIFont systemFontOfSize:10];
+             btnReject.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+             [scrollView addSubview:btnReject];
+             
+             //30+87+[[dict objectForKey:@"itemsList"] count]*20+42+20
+             
+             UIButton *btnAccept=[self createUIButtonWithTitle:@"Accept" image:nil frame:CGRectMake(125, 3, 192, 30) tag:i selector:@selector(btnAccept_TouchUpInside:) target:self];
+             btnAccept.titleLabel.font=[UIFont systemFontOfSize:10];
+             btnAccept.backgroundColor=[UIColor colorWithRed:0.0/255.0 green:175.0/255.0 blue:222.0/255.0 alpha:1.0];
+             [scrollView addSubview:btnAccept];
+             
+             //30+87+[[dict objectForKey:@"itemsList"] count]*20+42+20
+             viewBg.frame=CGRectMake(viewBg.frame.origin.x
+             , viewBg.frame.origin.y+38, viewBg.frame.size.width, viewBg.frame.size.height);
+             }
+             
+             intContentSizeHeight+=123+[[dict objectForKey:@"itemsList"] count]*35 + intHeightForOfferedDrinks+50;*/
+    }
+    
+    
+   /* NSString *stringid=[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] ];
+    NSMutableArray *arrOrdersTemp2=[[NSMutableArray alloc]initWithArray:arrBundledOrders];
+     NSPredicate *pred2=[NSPredicate predicateWithFormat:@"NOT (recieverBartsyId ==%@)",stringid];
+    [arrOrdersTemp2 filterUsingPredicate:pred2];
+        
+    for (int i=0; i<[arrOrdersTemp2 count]; i++)
+    {
+        NSArray *arrBundledOrdersObject=[arrOrdersTemp2 objectAtIndex:i];
+            
+        NSDictionary *dict=[arrBundledOrdersObject objectAtIndex:0];
+        if([[dict objectForKey:@"orderStatus"] integerValue]==9&&[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+        {
+                btnAccept.hidden=NO;
+                btnReject.hidden=NO;
+                
+        }else{
+                btnAccept.hidden=YES;
+                btnReject.hidden=YES;
+               
+        }
+        UIView *innerView;
+        
+        if([[dict objectForKey:@"senderBartsyId"] doubleValue]==[[dict objectForKey:@"recieverBartsyId"] doubleValue])
+            {
+                innerView = [[[NSBundle mainBundle] loadNibNamed:@"OrdersView" owner:self options:nil] objectAtIndex:1];
+                innerView.backgroundColor=[self getTheColorForOrderStatus:[[dict objectForKey:@"orderStatus"] integerValue]];
+                
+                innerView.frame=CGRectMake(0, 125, 320, 144);
+                lblOrderStatus.text=[self getTheStatusMessageForOrder:dict];
+                
+        }
+            
+        if([[dict objectForKey:@"orderStatus"] integerValue]==1||[[dict objectForKey:@"orderStatus"] integerValue]==4||[[dict objectForKey:@"orderStatus"] integerValue]==5||[[dict objectForKey:@"orderStatus"] integerValue]==6||[[dict objectForKey:@"orderStatus"] integerValue]==7||[[dict objectForKey:@"orderStatus"] integerValue]==8)
+            {
+                btnDismiss.hidden=NO;
+            }else{
+                btnDismiss.hidden=YES;
+            }
+            
+            lblOrderCode.text = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userSessionCode"]];
+            lblOrderCode.textColor = [UIColor colorWithRed:0.98f green:0.223f blue:0.709f alpha:1.0];
+            lblOrderCode.font=[UIFont fontWithName:@"MuseoSans-100" size:62.0];
+            
+            lblOrderID.text = [NSString stringWithFormat:@"#%@",[dict objectForKey:@"orderId"]];
+            lblOrderID.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+            lblOrderID.font=[UIFont fontWithName:@"MuseoSans-100" size:15.0];
+            //Calculating the number of minutes from ordered time
+            NSDateFormatter *dateFormatter = [NSDateFormatter new];
+            dateFormatter.dateFormat       = @"dd MM yyyy HH:mm:ssZZZ";
+            NSDate *indate   = [dateFormatter dateFromString:[dict objectForKey:@"orderTime"]];
+            dateFormatter.dateFormat = @"dd MM yyyy HH:mm:ssZZZ";
+            NSDate *outDate=[dateFormatter dateFromString:[dict objectForKey:@"currentTime"]];
+            NSTimeInterval distanceBetweenDates = [outDate timeIntervalSinceDate:indate];
+            
+            NSInteger minutes = floor(distanceBetweenDates/60);
+            NSString *minlength=[NSString stringWithFormat:@"%d",minutes];
+            [dateFormatter release];
+            
+            lblPlacedtime.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+            lblPlacedtime.text = [NSString stringWithFormat:@"Placed: %d mins ago",minutes];
+            lblPlacedtime.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString: lblPlacedtime.attributedText];
+            [text addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(7, minlength.length+10)];
+            [lblPlacedtime setAttributedText: text];
+            [text release];
+            
+            lblExpires.font=[UIFont fontWithName:@"Museo Sans" size:10.0];
+            lblExpires.text = [NSString stringWithFormat:@"Expires:%@",@"<15 min"];
+            lblExpires.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *attribstrg = [[NSMutableAttributedString alloc] initWithAttributedString: lblExpires.attributedText];
+            [attribstrg addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] range: NSMakeRange(8, 7)];
+            [lblExpires setAttributedText: attribstrg];
+            [attribstrg release];
+            
+            
+            float floatPrice=0;
+            float floatTotalPrice=0;
+            float floatTaxFee=0;
+            float floattipvalue=0;
+
+            for (int j=0; j<[[dict objectForKey:@"itemsList"] count]; j++)
+            {
+                NSDictionary *dictTempOrder=[[dict objectForKey:@"itemsList"] objectAtIndex:j];
+                
+        
+                lblIOrdertemName.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"itemName"]];
+                lblIOrdertemName.font=[UIFont fontWithName:@"MuseoSans-300" size:12.0];
+                if ([dictTempOrder objectForKey:@"options_description"]) {
+                    lblOrderOpt_Desp.text = [NSString stringWithFormat:@"%@",[dictTempOrder objectForKey:@"options_description"]];
+                }else{
+                    lblOrderOpt_Desp.text =@"";
+                }
+                
+                lblOrderOpt_Desp.textColor = [UIColor colorWithRed:191.0/255.0 green:187.0/255.0 blue:188.0/255.0 alpha:1.0] ;
+                lblOrderOpt_Desp.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+                
+                
+                lblItemPrice.text = [NSString stringWithFormat:@"$%.2f",[[dictTempOrder objectForKey:@"price"] floatValue]];
+                lblItemPrice.textColor = [UIColor colorWithRed:32.0/255 green:188.0/255 blue:226.0/255 alpha:1.0] ;
+                lblItemPrice.font=[UIFont fontWithName:@"MuseoSans-100" size:12.0];
+                
+                floatTotalPrice=[[dict objectForKey:@"totalPrice"]floatValue];
+                floatPrice=[[dict objectForKey:@"basePrice"] integerValue];
+                if([[dict objectForKey:@"senderBartsyId"]doubleValue]!=[[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] doubleValue]&&[[dictTempOrder objectForKey:@"orderStatus"] integerValue]!=9)
+                {
+                    lblItemPrice.text=@"-";
+                }
+            }
+            
+            lblOrderTip.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+            floattipvalue= [[dict objectForKey:@"tipPercentage"] floatValue];
+            if(floattipvalue>0.01)
+            {
+                lblOrderTip.text = [NSString stringWithFormat:@"Tip: $%.2f",floattipvalue];
+            }
+            else
+                lblOrderTip.text = [NSString stringWithFormat:@"Tip: -"];
+            
+            lblOrderTip.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            
+            NSMutableAttributedString *attribstrgTIP = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTip.attributedText];
+            [attribstrgTIP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblOrderTip.text.length-sizeof(floattipvalue)-1,sizeof(floattipvalue)+1 )];
+            [lblOrderTip setAttributedText: attribstrgTIP];
+            [attribstrgTIP release];
+            
+            lblOrderTax.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+            floatTaxFee=floatTotalPrice-(floattipvalue+floatPrice);
+            if(floatTaxFee>0.01)
+            {
+                lblOrderTax.text = [NSString stringWithFormat:@"Tax: $%.2f",floatTaxFee];
+            }
+            else
+                lblOrderTax.text = [NSString stringWithFormat:@"Tax: -"];
+            lblOrderTax.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *attribstrgTAX = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTax.attributedText];
+            [attribstrgTAX addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(lblOrderTax.text.length-sizeof(floatTaxFee)-1,sizeof(floatTaxFee)+1 )];
+            [lblOrderTax setAttributedText: attribstrgTAX];
+            [attribstrgTAX release];
+            
+            NSString *ttpricelenght=[NSString stringWithFormat:@"%.2f",floatTotalPrice];
+            
+            
+            lblOrderTotal.font=[UIFont fontWithName:@"MuseoSans-100" size:11.0];
+            if(floatTotalPrice>0.01)
+                lblOrderTotal.text = [NSString stringWithFormat:@"Total:$%.2f",floatTotalPrice];
+            else
+                lblOrderTotal.text = [NSString stringWithFormat:@"Total:-"];
+            lblOrderTotal.textColor = [UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0] ;
+            NSMutableAttributedString *attribstrgTP = [[NSMutableAttributedString alloc] initWithAttributedString: lblOrderTotal.attributedText];
+            [attribstrgTP addAttribute: NSForegroundColorAttributeName value: [UIColor colorWithRed:32.0/255.0 green:188.0/255.0 blue:226.0/255.0 alpha:1.0] range: NSMakeRange(6,ttpricelenght.length+1 )];
+            [lblOrderTotal setAttributedText: attribstrgTP];
+            [attribstrgTP release];
+            
+            [scrollView addSubview:innerView];
             
     }*/
-    scrollView.contentSize=CGSizeMake(320, 144+ScrollOrders.contentSize.height);
-    [scrollView release];
-    }
+    
 }
 
--(void)btnDismiss_TouchUpInside:(UIButton*)sender
+-(IBAction)btnDismiss_TouchUpInside:(UIButton*)sender
 {
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -3470,7 +3618,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     }
 }
 
--(void)btnReject_TouchUpInside:(UIButton*)sender
+-(IBAction)btnReject_TouchUpInside:(UIButton*)sender
 {
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];
@@ -3495,7 +3643,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
 
 }
 
--(void)btnAccept_TouchUpInside:(UIButton*)sender
+-(IBAction)btnAccept_TouchUpInside:(UIButton*)sender
 {
     self.sharedController=[SharedController sharedController];
     [self createProgressViewToParentView:self.view withTitle:@"Loading..."];

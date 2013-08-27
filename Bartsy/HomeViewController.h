@@ -29,20 +29,16 @@
     BOOL isLocuMenu;
     IBOutlet UIScrollView *scrollmain;
     IBOutlet UIButton *btnDismiss;
-    IBOutlet UILabel *lblOrderStatus;
-    IBOutlet UILabel *lblOrderID;
-    IBOutlet UILabel *lblPlacedtime;
-    IBOutlet UILabel *lblExpires;
-    IBOutlet UILabel *lblIOrdertemName;
-    IBOutlet UILabel *lblOrderOpt_Desp;
-    IBOutlet UILabel *lblItemPrice;
-    IBOutlet UILabel *lblOrderTip;
-    IBOutlet UILabel *lblOrderTax;
-    IBOutlet UILabel *lblOrderTotal;
+    IBOutlet UILabel *lblOrderStatus,*lblOrderID,*lblPlacedtime,*lblExpires,*lblIOrdertemName,*lblOrderOpt_Desp,*lblItemPrice, *lblOrderTip, *lblOrderTax, *lblOrderTotal,*lblOrderCode;
     IBOutlet UIButton *btnAccept;
     IBOutlet UIButton *btnReject;
     IBOutlet UIImageView *imgSender;
-    IBOutlet UILabel *lblOrderCode;
+   
+    IBOutlet UILabel *lblfOrderStatus,*lblfOrderID,*lblfPlacedtime,*lblfExpires,*lblfOrdertemName,*lblfOrderOpt_Desp,*lblfItemPrice, *lblfOrderTip, *lblfOrderTax, *lblfOrderTotal;
+    IBOutlet UIImageView *Senderimg,*Recieverimg;
+    IBOutlet UILabel *lblfOrdersender,*lblfOrderreciever;
+    IBOutlet UIButton *btnfDismiss;
+    IBOutlet UILabel *lblPickInfo;
 
 }
 @property (nonatomic,retain)NSDictionary *dictPeopleSelectedForDrink;
@@ -55,4 +51,7 @@
 -(void)updateOrderStatusForaOfferedDrinkWithStatus:(NSString*)strStatus withOrderId:(NSString*)strOrderId;
 -(NSString*)getTheStatusMessageForOrder:(NSDictionary*)dictOrder;
 -(void)showMultiItemOrderUI;
+-(IBAction)btnDismiss_TouchUpInside:(UIButton*)sender;
+-(IBAction)btnReject_TouchUpInside:(UIButton*)sender;
+-(IBAction)btnAccept_TouchUpInside:(UIButton*)sender;
 @end

@@ -31,7 +31,6 @@
 		CB10B08C178D700400CAF6ED /* arrow-left.png in Resources */ = {isa = PBXBuildFile; fileRef = CB10B08B178D700300CAF6ED /* arrow-left.png */; };
 		CB3E90EB17C60AEE00A5B83A /* UserSettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */; };
 		CB3E90EC17C60AEE00A5B83A /* UserSettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */; };
-		CB3E90F217C619B000A5B83A /* BAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90F117C619B000A5B83A /* BAccountCell.xib */; };
 		CB3E90F717C624DA00A5B83A /* UserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */; };
 		CB3E90F817C624DA00A5B83A /* UserProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */; };
 		CB3E90FD17C633FD00A5B83A /* flower_icon-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90FC17C633FB00A5B83A /* flower_icon-selected.png */; };
@@ -89,6 +88,9 @@
 		CB9C277E17CB92C700B55355 /* add-order.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277D17CB92C300B55355 /* add-order.png */; };
 		CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = CBAC59FB17C36F950047BDBB /* cancel-btn.png */; };
 		CBE6E2A917CCA55200BB4BE5 /* submit.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2A817CCA55200BB4BE5 /* submit.png */; };
+		CBE6E2AC17CCA97000BB4BE5 /* accept.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2AA17CCA97000BB4BE5 /* accept.png */; };
+		CBE6E2AD17CCA97000BB4BE5 /* reject.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2AB17CCA97000BB4BE5 /* reject.png */; };
+		CBE6E2B717CD09D100BB4BE5 /* PlaceOrderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2B617CD09D100BB4BE5 /* PlaceOrderView.xib */; };
 		CBED0DCB17BF6F89002F2221 /* fav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DC917BF6F89002F2221 /* fav_icon.png */; };
 		CBED0DCC17BF6F89002F2221 /* unfav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCA17BF6F89002F2221 /* unfav_icon.png */; };
 		CBED0DCF17BFA207002F2221 /* check_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCD17BFA206002F2221 /* check_icon.png */; };
@@ -369,7 +371,6 @@
 		CB3E90E817C60AEE00A5B83A /* UserSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingsView.h; sourceTree = "<group>"; };
 		CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsView.m; sourceTree = "<group>"; };
 		CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingsView.xib; sourceTree = "<group>"; };
-		CB3E90F117C619B000A5B83A /* BAccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BAccountCell.xib; sourceTree = "<group>"; };
 		CB3E90F417C624DA00A5B83A /* UserProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProfileViewController.h; sourceTree = "<group>"; };
 		CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProfileViewController.m; sourceTree = "<group>"; };
 		CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserProfileViewController.xib; sourceTree = "<group>"; };
@@ -439,6 +440,9 @@
 		CB9C277D17CB92C300B55355 /* add-order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-order.png"; sourceTree = "<group>"; };
 		CBAC59FB17C36F950047BDBB /* cancel-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel-btn.png"; sourceTree = "<group>"; };
 		CBE6E2A817CCA55200BB4BE5 /* submit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = submit.png; sourceTree = "<group>"; };
+		CBE6E2AA17CCA97000BB4BE5 /* accept.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accept.png; sourceTree = "<group>"; };
+		CBE6E2AB17CCA97000BB4BE5 /* reject.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reject.png; sourceTree = "<group>"; };
+		CBE6E2B617CD09D100BB4BE5 /* PlaceOrderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceOrderView.xib; sourceTree = "<group>"; };
 		CBED0DC917BF6F89002F2221 /* fav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fav_icon.png; sourceTree = "<group>"; };
 		CBED0DCA17BF6F89002F2221 /* unfav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfav_icon.png; sourceTree = "<group>"; };
 		CBED0DCD17BFA206002F2221 /* check_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_icon.png; sourceTree = "<group>"; };
@@ -922,12 +926,6 @@
 		CB3E90F317C624A200A5B83A /* NewViews */ = {
 			isa = PBXGroup;
 			children = (
-				CB3E90E817C60AEE00A5B83A /* UserSettingsView.h */,
-				CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */,
-				CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */,
-				CB3E90F417C624DA00A5B83A /* UserProfileViewController.h */,
-				CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */,
-				CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */,
 			);
 			name = NewViews;
 			sourceTree = "<group>";
@@ -1062,6 +1060,81 @@
 				CBFCD25917C74A6E007712A1 /* OrdersView.xib */,
 			);
 			name = MenuScreen;
+			sourceTree = "<group>";
+		};
+		CBE6E2AE17CD085E00BB4BE5 /* TabbarView */ = {
+			isa = PBXGroup;
+			children = (
+				E0C446D3178EB90B00261B74 /* RootViewController.h */,
+				E0C446D4178EB90B00261B74 /* RootViewController.m */,
+			);
+			name = TabbarView;
+			sourceTree = "<group>";
+		};
+		CBE6E2AF17CD088400BB4BE5 /* SlideView */ = {
+			isa = PBXGroup;
+			children = (
+				E0CDC8CB1758BBE00070E31D /* RevealController.h */,
+				E0CDC8CC1758BBE20070E31D /* RevealController.m */,
+				E0CDC8CE1758BBF40070E31D /* FrontViewController.h */,
+				E0CDC8CF1758BBF40070E31D /* FrontViewController.m */,
+				E0CDC8D01758BBF50070E31D /* FrontViewController~iPad.xib */,
+				E0CDC8D11758BBF50070E31D /* FrontViewController.xib */,
+				E0CDC8D51758BC050070E31D /* RearViewController.h */,
+				E0CDC8D61758BC050070E31D /* RearViewController.m */,
+				E0CDC8D71758BC050070E31D /* RearViewController~iPad.xib */,
+				E0CDC8D81758BC060070E31D /* RearViewController.xib */,
+				E0CDC8E31758BC370070E31D /* ZUUIRevealController.h */,
+				E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */,
+			);
+			name = SlideView;
+			sourceTree = "<group>";
+		};
+		CBE6E2B017CD08DF00BB4BE5 /* AccountInformation */ = {
+			isa = PBXGroup;
+			children = (
+				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
+				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
+				CB3E910017C6432500A5B83A /* AccountInfoViewController.xib */,
+			);
+			name = AccountInformation;
+			sourceTree = "<group>";
+		};
+		CBE6E2B117CD090600BB4BE5 /* AccountSettings */ = {
+			isa = PBXGroup;
+			children = (
+				CB3E90E817C60AEE00A5B83A /* UserSettingsView.h */,
+				CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */,
+				CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */,
+			);
+			name = AccountSettings;
+			sourceTree = "<group>";
+		};
+		CBE6E2B317CD095100BB4BE5 /* EditProfile View */ = {
+			isa = PBXGroup;
+			children = (
+				CB3E90F417C624DA00A5B83A /* UserProfileViewController.h */,
+				CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */,
+				CB3E90F617C624DA00A5B83A /* UserProfileViewController.xib */,
+			);
+			name = "EditProfile View";
+			sourceTree = "<group>";
+		};
+		CBE6E2B417CD096C00BB4BE5 /* Chat View */ = {
+			isa = PBXGroup;
+			children = (
+				CB8AB4841774200B00445934 /* MessageListViewController.h */,
+				CB8AB4851774200B00445934 /* MessageListViewController.m */,
+			);
+			name = "Chat View";
+			sourceTree = "<group>";
+		};
+		CBE6E2B517CD09A500BB4BE5 /* PlaceOrderView */ = {
+			isa = PBXGroup;
+			children = (
+				CBE6E2B617CD09D100BB4BE5 /* PlaceOrderView.xib */,
+			);
+			name = PlaceOrderView;
 			sourceTree = "<group>";
 		};
 		CBF8F35317941C35008EBBB8 /* AccountInfoimages */ = {
@@ -1561,10 +1634,10 @@
 				E0FD86D01730037B006CB0A8 /* ProfileViewController.m */,
 				E005DE331743D2B200EDDCFB /* WelcomeViewController.h */,
 				E005DE341743D2B300EDDCFB /* WelcomeViewController.m */,
-				E0C446D3178EB90B00261B74 /* RootViewController.h */,
-				E0C446D4178EB90B00261B74 /* RootViewController.m */,
+				CBE6E2AE17CD085E00BB4BE5 /* TabbarView */,
 				CBE6E2A617CC7C2600BB4BE5 /* VenuesView */,
 				CBE6E2A717CC7C5800BB4BE5 /* MenuScreen */,
+				CBE6E2B517CD09A500BB4BE5 /* PlaceOrderView */,
 				CB688C77179FE5C4001C4726 /* CustomDrinkViewController.h */,
 				CB688C78179FE5C4001C4726 /* CustomDrinkViewController.m */,
 				CB688C79179FE5C4001C4726 /* CustomDrinkViewController.xib */,
@@ -1573,18 +1646,7 @@
 				E0CDC8C81758A0360070E31D /* CustomDrinksViewController.h */,
 				E0CDC8C91758A0360070E31D /* CustomDrinksViewController.m */,
 				CBFCD25B17C759FC007712A1 /* CustomDrinksViewController.xib */,
-				E0CDC8CB1758BBE00070E31D /* RevealController.h */,
-				E0CDC8CC1758BBE20070E31D /* RevealController.m */,
-				E0CDC8CE1758BBF40070E31D /* FrontViewController.h */,
-				E0CDC8CF1758BBF40070E31D /* FrontViewController.m */,
-				E0CDC8D01758BBF50070E31D /* FrontViewController~iPad.xib */,
-				E0CDC8D11758BBF50070E31D /* FrontViewController.xib */,
-				E0CDC8D51758BC050070E31D /* RearViewController.h */,
-				E0CDC8D61758BC050070E31D /* RearViewController.m */,
-				E0CDC8D71758BC050070E31D /* RearViewController~iPad.xib */,
-				E0CDC8D81758BC060070E31D /* RearViewController.xib */,
-				E0CDC8E31758BC370070E31D /* ZUUIRevealController.h */,
-				E0CDC8E41758BC380070E31D /* ZUUIRevealController.m */,
+				CBE6E2AF17CD088400BB4BE5 /* SlideView */,
 				E05F8085175D138900937E80 /* MixerViewController.h */,
 				E05F8086175D138A00937E80 /* MixerViewController.m */,
 				E065D8AF1768BC0D00DE7502 /* MyRewardsViewController.h */,
@@ -1598,16 +1660,14 @@
 				E0DBAFAB177342CF003524EE /* WebViewController.h */,
 				E0DBAFAC177342CF003524EE /* WebViewController.m */,
 				CBE6E2A517CC7BF900BB4BE5 /* NotificationView */,
-				CB8AB4841774200B00445934 /* MessageListViewController.h */,
-				CB8AB4851774200B00445934 /* MessageListViewController.m */,
+				CBE6E2B417CD096C00BB4BE5 /* Chat View */,
 				CBE6E2A317CC7BB400BB4BE5 /* PeopleDetailsView */,
 				CBE6E2A417CC7BD800BB4BE5 /* RewardsView */,
-				CB3E90F117C619B000A5B83A /* BAccountCell.xib */,
-				E0C446D9178EBD4300261B74 /* AccountInfoViewController.h */,
-				E0C446DA178EBD4400261B74 /* AccountInfoViewController.m */,
-				CB3E910017C6432500A5B83A /* AccountInfoViewController.xib */,
+				CBE6E2B017CD08DF00BB4BE5 /* AccountInformation */,
+				CBE6E2B117CD090600BB4BE5 /* AccountSettings */,
 				CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */,
 				CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */,
+				CBE6E2B317CD095100BB4BE5 /* EditProfile View */,
 				CB9C277717CB3DF000B55355 /* CustomCells */,
 				CB3E90F317C624A200A5B83A /* NewViews */,
 			);
@@ -1617,6 +1677,8 @@
 		E0C446EE178EE72D00261B74 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				CBE6E2AA17CCA97000BB4BE5 /* accept.png */,
+				CBE6E2AB17CCA97000BB4BE5 /* reject.png */,
 				CB9C277D17CB92C300B55355 /* add-order.png */,
 				CB3E90FE17C6348A00A5B83A /* exclamatory_icon_ping.png */,
 				CB3E90FC17C633FB00A5B83A /* flower_icon-selected.png */,
@@ -1951,7 +2013,6 @@
 				CB882A1317C26AE000094EAB /* circle.png in Resources */,
 				CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */,
 				CB3E90EC17C60AEE00A5B83A /* UserSettingsView.xib in Resources */,
-				CB3E90F217C619B000A5B83A /* BAccountCell.xib in Resources */,
 				CB3E90F817C624DA00A5B83A /* UserProfileViewController.xib in Resources */,
 				CB3E90FD17C633FD00A5B83A /* flower_icon-selected.png in Resources */,
 				CB3E90FF17C6348B00A5B83A /* exclamatory_icon_ping.png in Resources */,
@@ -1962,6 +2023,9 @@
 				CB9C277C17CB3E3000B55355 /* PeopleCell.xib in Resources */,
 				CB9C277E17CB92C700B55355 /* add-order.png in Resources */,
 				CBE6E2A917CCA55200BB4BE5 /* submit.png in Resources */,
+				CBE6E2AC17CCA97000BB4BE5 /* accept.png in Resources */,
+				CBE6E2AD17CCA97000BB4BE5 /* reject.png in Resources */,
+				CBE6E2B717CD09D100BB4BE5 /* PlaceOrderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
