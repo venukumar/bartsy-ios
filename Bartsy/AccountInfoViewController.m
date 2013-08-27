@@ -122,7 +122,7 @@
     lblStatus.font=[UIFont fontWithName:@"Museo Sans" size:14];
     lbldetails.font=[UIFont fontWithName:@"Museo Sans" size:14];
     TxtViewDescription.font=[UIFont fontWithName:@"Museo Sans" size:14];
-    lblNickName.font=[UIFont fontWithName:@"Museo Sans" size:14];
+    //lblNickName.font=[UIFont fontWithName:@"MuseoSans-300" size:14];
 
     
 }
