@@ -50,21 +50,23 @@
     
     [datepicker addTarget:self action:@selector(Dateformate:) forControlEvents:UIControlEventValueChanged];
     
-    arrayGender=[[NSArray alloc]initWithObjects:@"Male",@"Female", nil];
-    arrayLookingTo=[[NSArray alloc]initWithObjects:@"Meet singles",@"Make friends", nil];
-    arrayOrientation=[[NSArray alloc]initWithObjects:@"Straight",@"Gay",@"Bisexual", nil];
+    arrayGender=[[NSArray alloc]initWithObjects:@"",@"Male",@"Female", nil];
+    arrayLookingTo=[[NSArray alloc]initWithObjects:@"",@"singles",@"friends", nil];
+    arrayOrientation=[[NSArray alloc]initWithObjects:@"",@"Straight",@"Gay",@"Bisexual", nil];
     
     if (!IS_IPHONE_5) {
         
         [scrollview setFrame:CGRectMake(0,44, 320, 380)];
     }
-    txtEmail.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
-    txtGender.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
-    txtLookingto.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
-    txtNickname.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
-    txtOrientation.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
-    txtdescription.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
-    txtDOB.font=[UIFont fontWithName:@"MuseoSans-300" size:15.0];
+    txtEmail.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    txtGender.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    txtLookingto.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    txtNickname.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    txtOrientation.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    txtdescription.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    txtDOB.font=[UIFont fontWithName:@"MuseoSans-300" size:16.0];
+    
+    
 }
 
 -(IBAction)btnBack_TouchUpInside
@@ -231,20 +233,26 @@ numberOfRowsInComponent:(NSInteger)component
     
     txtDOB.text=[dictProfileInfo valueForKey:@"dateofbirth"];
     txtGender.text=[dictProfileInfo valueForKey:@"gender"];
-    if ([[dictProfileInfo valueForKey:@"state"] length]) {
-        txtLookingto.text=[dictProfileInfo valueForKey:@"state"];
-    }else{
-        txtLookingto.text=[arrayLookingTo objectAtIndex:0];
-    }
     if ([[dictProfileInfo valueForKey:@"status"] length]) {
-        txtOrientation.text=[dictProfileInfo valueForKey:@"status"];
+        txtLookingto.text=[dictProfileInfo valueForKey:@"status"];
+    }else{
+        txtLookingto.text=@"";
+    }
+    if ([[dictProfileInfo valueForKey:@"orientation"] length]) {
+        txtOrientation.text=[dictProfileInfo valueForKey:@"orientation"];
 
     }else{
-        txtOrientation.text=[arrayOrientation objectAtIndex:0];
+        txtOrientation.text=@"";
+
+    }
+    if ([[dictProfileInfo valueForKey:@"description"] length]) {
+       txtdescription.text=[dictProfileInfo valueForKey:@"description"]; 
+    }else{
+        txtdescription.text=@"Enter something about you that you'd like others to see while you're checked in at a venue";
+        txtdescription.textColor=[UIColor lightGrayColor];
 
     }
     
-    txtdescription.text=[dictProfileInfo valueForKey:@"description"];
     
 }
 -(IBAction)DismissPicker:(id)sender{
@@ -319,6 +327,8 @@ numberOfRowsInComponent:(NSInteger)component
 }
 #pragma mark------------Update User Profile
 -(IBAction)UpdateProfile{
+    
+    [self createProgressViewToParentView:self.view withTitle:@"Updating profile..."];
     NSData *imageData= UIImagePNGRepresentation(ProfileImage.image);
     
     NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] init];
@@ -339,7 +349,7 @@ numberOfRowsInComponent:(NSInteger)component
     
     
     
-    [dictProfile setObject:txtOrientation.text forKey:@"status"];
+    [dictProfile setObject:txtLookingto.text forKey:@"status"];
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
@@ -389,7 +399,7 @@ numberOfRowsInComponent:(NSInteger)component
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *dataOrder, NSError *error)
      {
-         
+         [self hideProgressView:nil];
          if(error==nil)
          {
              SBJSON *jsonParser = [[SBJSON new] autorelease];
@@ -409,6 +419,14 @@ numberOfRowsInComponent:(NSInteger)component
 
     
 }
+
+-(IBAction)PickerView:(id)sender
+{
+    pickerObj = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 200, 320, 200)];
+    [self.view addSubview:pickerObj];
+    pickerObj.delegate = self;
+    pickerObj.showsSelectionIndicator = YES;
+}
 #pragma mark------------TextField Delegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     
@@ -416,30 +434,35 @@ numberOfRowsInComponent:(NSInteger)component
     textField.inputView=nil;
     
     if (textField==txtDOB) {
-       
+       [scrollview setContentOffset:CGPointMake(0,250 )];
         textField.inputAccessoryView=accesoryView;
         textField.inputView=datepicker;
     }else if (textField==txtGender){
+        [scrollview setContentOffset:CGPointMake(0,290 )];
+
+        [self PickerView:nil];
         pickerObj.tag=101;
-       // txtGender.inputAccessoryView=accesoryView;
+        txtGender.inputAccessoryView=accesoryView;
         txtGender.inputView=pickerObj;
         [pickerObj reloadComponent:0];
     }else if (textField==txtLookingto){
-        
+        [scrollview setContentOffset:CGPointMake(0,320 )];
+        [self PickerView:nil];
         pickerObj.tag=102;
-        //txtLookingto.inputAccessoryView=accesoryView;
+        txtLookingto.inputAccessoryView=accesoryView;
         txtLookingto.inputView=pickerObj;
         [pickerObj reloadComponent:0];
     }else if (textField==txtOrientation){
-      
+        [scrollview setContentOffset:CGPointMake(0,360 )];
+        [self PickerView:nil];
         
         pickerObj.tag=103;
 
         textField.inputAccessoryView=accesoryView;
         textField.inputView=pickerObj;
         [pickerObj reloadComponent:0];
-    }
-    [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y-20)];
+    }else
+     [scrollview setContentOffset:CGPointMake(0, textField.frame.origin.y-20)];
 
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField{
@@ -454,9 +477,19 @@ numberOfRowsInComponent:(NSInteger)component
     return YES;
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView{
+    
+    if([textView.text isEqualToString:@"Enter something about you that you'd like others to see while you're checked in at a venue"])
+    {
+        textView.text=@"";
+        textView.textColor=[UIColor whiteColor];
+    }
+    [scrollview setContentOffset:CGPointMake(0, textView.frame.origin.y-50)];
+    
+}
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-       
+    
     if([text isEqualToString:@"\n"])
     {
         [textView resignFirstResponder];
