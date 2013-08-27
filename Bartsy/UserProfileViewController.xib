@@ -404,14 +404,16 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
-								<int key="IBUIButtonType">1</int>
-								<string key="IBUINormalTitle">Cancel</string>
 								<reference key="IBUIHighlightedTitleColor" ref="997091351"/>
 								<object class="NSColor" key="IBUINormalTitleColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MC4xOTYwNzg0MzE0IDAuMzA5ODAzOTIxNiAwLjUyMTU2ODYyNzUAA</bytes>
 								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="1083113"/>
+								<object class="NSCustomResource" key="IBUINormalImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">cancel-btn.png</string>
+								</object>
 								<object class="IBUIFontDescription" key="IBUIFontDescription" id="11747758">
 									<int key="type">2</int>
 									<int key="size">2</int>
@@ -1081,6 +1083,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA</b
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="Bartsy_main-bg.png">{640, 1036}</string>
 			<string key="arrow-left.png">{12, 20}</string>
+			<string key="cancel-btn.png">{345, 98}</string>
 			<string key="sectionBg.png">{320, 53}</string>
 			<string key="top_header_bar.png">{320, 44}</string>
 		</dictionary>
