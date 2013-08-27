@@ -88,6 +88,7 @@
 		CB9C277C17CB3E3000B55355 /* PeopleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277B17CB3E3000B55355 /* PeopleCell.xib */; };
 		CB9C277E17CB92C700B55355 /* add-order.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277D17CB92C300B55355 /* add-order.png */; };
 		CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = CBAC59FB17C36F950047BDBB /* cancel-btn.png */; };
+		CBE6E2A917CCA55200BB4BE5 /* submit.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2A817CCA55200BB4BE5 /* submit.png */; };
 		CBED0DCB17BF6F89002F2221 /* fav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DC917BF6F89002F2221 /* fav_icon.png */; };
 		CBED0DCC17BF6F89002F2221 /* unfav_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCA17BF6F89002F2221 /* unfav_icon.png */; };
 		CBED0DCF17BFA207002F2221 /* check_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CBED0DCD17BFA206002F2221 /* check_icon.png */; };
@@ -437,6 +438,7 @@
 		CB9C277B17CB3E3000B55355 /* PeopleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PeopleCell.xib; sourceTree = "<group>"; };
 		CB9C277D17CB92C300B55355 /* add-order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-order.png"; sourceTree = "<group>"; };
 		CBAC59FB17C36F950047BDBB /* cancel-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel-btn.png"; sourceTree = "<group>"; };
+		CBE6E2A817CCA55200BB4BE5 /* submit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = submit.png; sourceTree = "<group>"; };
 		CBED0DC917BF6F89002F2221 /* fav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fav_icon.png; sourceTree = "<group>"; };
 		CBED0DCA17BF6F89002F2221 /* unfav_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unfav_icon.png; sourceTree = "<group>"; };
 		CBED0DCD17BFA206002F2221 /* check_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_icon.png; sourceTree = "<group>"; };
@@ -1066,6 +1068,7 @@
 			isa = PBXGroup;
 			children = (
 				CBF8F35417941C70008EBBB8 /* settings.png */,
+				CBE6E2A817CCA55200BB4BE5 /* submit.png */,
 				CBF8F35617941CB0008EBBB8 /* listarrow.png */,
 			);
 			name = AccountInfoimages;
@@ -1958,6 +1961,7 @@
 				CB9C277617CB27D700B55355 /* VenueCell.xib in Resources */,
 				CB9C277C17CB3E3000B55355 /* PeopleCell.xib in Resources */,
 				CB9C277E17CB92C700B55355 /* add-order.png in Resources */,
+				CBE6E2A917CCA55200BB4BE5 /* submit.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
