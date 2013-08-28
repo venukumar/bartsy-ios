@@ -102,7 +102,8 @@
 {
     static NSString *MyIdentifier = @"cell";
     RewardsTableCell *cell = [tableView dequeueReusableCellWithIdentifier:MyIdentifier];
-
+    UILabel *lblnotif=(UILabel*)[cell.contentView viewWithTag:10001];
+    [lblnotif removeFromSuperview];
     if (cell == nil)
     {
         cell = [[[RewardsTableCell alloc] initWithStyle:UITableViewCellStyleSubtitle
@@ -128,10 +129,16 @@
     }else{
         
         //cell.venueaddress.text=@"\n\n  No reward points available";
-        cell.textLabel.text=@"No reward points available";
-        cell.textLabel.backgroundColor = [UIColor clearColor];
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.textLabel.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
+       UILabel  *notificationlbl=[[UILabel alloc]initWithFrame:CGRectMake(0,25,320,40)];
+        notificationlbl.font=[UIFont systemFontOfSize:12];
+        notificationlbl.backgroundColor=[UIColor clearColor];
+        notificationlbl.font=[UIFont fontWithName:@"Museo Sans" size:20.0];
+        notificationlbl.tag=10001;
+        notificationlbl.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
+        notificationlbl.textAlignment=NSTextAlignmentCenter;
+        [cell.contentView addSubview:notificationlbl];
+        notificationlbl.text=@"No reward points available";
+        
     }
     
     return cell;
