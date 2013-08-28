@@ -62,10 +62,12 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
     
     if (!appDelegate.session.isOpen&&appDelegate.isCmgForWelcomeScreen==NO)
     {
-        // create a fresh session object
-        appDelegate.session = [[FBSession alloc] init];//WithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
         
-        //        appDelegate.session = [[FBSession alloc] initWithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions", nil]];
+        // create a fresh session object
+         NSArray* permissions = [[NSArray alloc] initWithObjects:@"publish_stream", @"publish_actions",@"email",@"read_friendlists",@"offline_access", nil];
+        appDelegate.session = [[FBSession alloc] initWithPermissions:permissions];//WithPermissions:[NSArray arrayWithObjects:@"publish_stream", @"publish_actions",@"user_checkins",@"friends_checkins",@"user_photos",nil]];
+        
+       
         
         // if we don't have a cached token, a call to open here would cause UX for login to
         // occur; we don't want that to happen unless the user clicks the login button, and so
@@ -277,10 +279,12 @@ static NSString * const kClientId =@"1066724567663.apps.googleusercontent.com"; 
         [self createProgressViewToParentView:self.view withTitle:@"Connecting to Facebook..."];
         if (appDelegate.session.state != FBSessionStateCreated)
         {
+        NSArray* permissions = [[NSArray alloc] initWithObjects:@"publish_stream", @"publish_actions",@"email",@"read_friendlists",@"offline_access", nil];
+
             // Create a new, logged out session.
-            appDelegate.session = [[FBSession alloc] init];
+            appDelegate.session = [[FBSession alloc] initWithPermissions:permissions];
         }
-        
+       
         // if the session isn't open, let's open it now and present the login UX to the user
         [appDelegate.session openWithCompletionHandler:^(FBSession *session,
                                                          FBSessionState status,

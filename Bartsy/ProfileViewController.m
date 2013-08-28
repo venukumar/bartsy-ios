@@ -188,6 +188,29 @@
     
     [imgBg release];
 
+    if (appDelegate.isLoginForFB) {
+        [FBSession setActiveSession:appDelegate.session];
+        FBRequest* friendsRequest = [FBRequest requestForMyFriends];
+        [friendsRequest startWithCompletionHandler: ^(FBRequestConnection *connection,
+                                                      NSDictionary* result,
+                                                      NSError *error) {
+            NSArray* friends =[[NSArray alloc]initWithArray:[result objectForKey:@"data"]];
+            if (friends.count) {
+                appDelegate.arrFBfriensList=[NSMutableArray arrayWithArray:friends];
+                [[NSUserDefaults standardUserDefaults] setObject:friends forKey:@"FBFriends"];
+            }else{
+                friends=[NSArray arrayWithArray:[[NSUserDefaults standardUserDefaults] arrayForKey:@"FBFriends"]];
+                appDelegate.arrFBfriensList=[NSMutableArray arrayWithArray:friends];
+            }
+           
+            for (NSDictionary<FBGraphUser>* friend in friends) {
+               // NSLog(@"I have a friend named %@ with id %@", friend.name, friend.id);
+            }
+            NSLog(@"error%@",error);
+ 
+            [friends release];
+        }];
+    }
 }
 
 -(void)getServerPublicKey
