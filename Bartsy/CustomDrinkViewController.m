@@ -139,7 +139,7 @@
         [headview addSubview:lblOps_Desp];
         [lblOps_Desp release];
         
-        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 50, 320, 367-80) style:UITableViewStylePlain];
+        UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 50, 320, 367-100) style:UITableViewStylePlain];
         tblView.dataSource=self;
         tblView.backgroundColor = [UIColor blackColor];
         tblView.delegate=self;
@@ -361,8 +361,11 @@
                         [arrList addObject:dict2Temp];
                         [dict2Temp release];
                     }
-                    [dict setObject:arrList forKey:@"options"];
-                    [arrContent addObject:dict];
+                    if ([arrList count]) {
+                        [dict setObject:arrList forKey:@"options"];
+                        [arrContent addObject:dict];
+                    }
+                    
                     
                     [dict release];
                     [arrList release];
@@ -370,7 +373,10 @@
                 [dictOptionGroup release];
                 
             }
-            [arrCustomDrinks addObjectsFromArray:arrContent];
+            if ([arrContent count]) {
+                [arrCustomDrinks addObjectsFromArray:arrContent];
+ 
+            }
             
 
         }
@@ -443,6 +449,9 @@
         Footview.frame=CGRectMake(Footview.frame.origin.x, Footview.frame.origin.y-80, Footview.frame.size.width, Footview.frame.size.height);
         btnCancel.frame=CGRectMake(btnCancel.frame.origin.x, btnCancel.frame.origin.y-80, btnCancel.frame.size.width, btnCancel.frame.size.height);
         btnaddOrder.frame=CGRectMake(btnaddOrder.frame.origin.x, btnaddOrder.frame.origin.y-80, btnaddOrder.frame.size.width, btnaddOrder.frame.size.height);
+        [self.view bringSubviewToFront:Footview];
+        [self.view bringSubviewToFront:btnCancel];
+        [self.view bringSubviewToFront:btnaddOrder];
     }
 }
 
@@ -753,7 +762,7 @@
     lblPrice.textColor=[UIColor colorWithRed:33.0/255.0 green:169.0/255.0 blue:204.0/255.0 alpha:1.0];
     //lblPrice.adjustsFontSizeToFitWidth=YES;
     lblPrice.backgroundColor=[UIColor clearColor];
-    lblPrice.font=[UIFont fontWithName:@"Museo Sans" size:18.0];
+    lblPrice.font=[UIFont fontWithName:@"Museo Sans" size:16.0];
     [cell.contentView addSubview:lblPrice];
     if (viewtype==4 || viewtype==5) {
         NSArray *subitemArray=[[arrCustomDrinks objectAtIndex:indexPath.section] valueForKey:@"options"] ;
