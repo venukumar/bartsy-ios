@@ -43,7 +43,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{142, 74}, {168, 38}}</string>
 						<reference key="NSSuperview" ref="271609544"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -469,7 +468,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{163, 157}, {150, 40}}</string>
 						<reference key="NSSuperview" ref="444669151"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -670,7 +668,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{246, 137}, {82, 21}}</string>
 								<reference key="NSSuperview" ref="105758589"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -863,7 +860,6 @@
 								<int key="NSvFlags">274</int>
 								<string key="NSFrameSize">{320, 548}</string>
 								<reference key="NSSuperview" ref="190419517"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -1185,12 +1181,12 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">btnDismiss_TouchUpInside:</string>
+						<string key="label">btnfDismiss_TouchUpInside:</string>
 						<reference key="source" ref="625429364"/>
 						<reference key="destination" ref="372490531"/>
 						<int key="IBEventType">7</int>
 					</object>
-					<int key="connectionID">142</int>
+					<int key="connectionID">155</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -1539,7 +1535,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">154</int>
+			<int key="maxID">155</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

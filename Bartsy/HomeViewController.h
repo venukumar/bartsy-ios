@@ -52,6 +52,7 @@
 -(NSString*)getTheStatusMessageForOrder:(NSDictionary*)dictOrder;
 -(void)showMultiItemOrderUI;
 -(IBAction)btnDismiss_TouchUpInside:(UIButton*)sender;
+-(IBAction)btnfDismiss_TouchUpInside:(UIButton*)sender;
 -(IBAction)btnReject_TouchUpInside:(UIButton*)sender;
 -(IBAction)btnAccept_TouchUpInside:(UIButton*)sender;
 @end
