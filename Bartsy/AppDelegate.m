@@ -21,7 +21,7 @@
 @synthesize deviceToken,delegateForCurrentViewController,isComingForOrders,isLoginForFB,intPeopleCount,intOrderCount;
 @synthesize internetActive, hostActive,arrOrders,arrOrdersTimer,timerForOrderStatusUpdate,timerForHeartBeat,arrPeople,isCmgForWelcomeScreen,arrOrdersList;
 @synthesize  tabBar;
-@synthesize isComingForPeople,timerforGetMessages,isComingForMenu;
+@synthesize isComingForPeople,timerforGetMessages,isComingForMenu,isMenuUpdate,arrFBfriensList;
 @synthesize isCmgForShowingOrderUI;
 - (void)dealloc
 {
@@ -53,6 +53,7 @@
     arrPeople=[[NSMutableArray alloc]init];
     arrOrders=[[NSMutableArray alloc]init];
     arrOrdersList=[[NSMutableArray alloc]init];
+    arrFBfriensList=[[NSMutableArray alloc]init];
 //    // Optional: automatically send uncaught exceptions to Google Analytics.
 //    [GAI sharedInstance].trackUncaughtExceptions = YES;
 //    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
@@ -97,7 +98,10 @@
     
     [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    NSArray* permissions = [[NSArray alloc] initWithObjects:@"publish_stream", @"publish_actions",@"email",@"read_friendlists",@"offline_access", nil];
     
+    // Create a new, logged out session.
+
     
     [self checkNetworkStatus:nil];
     //hostReachable = [[Reachability reachabilityWithHostName:KServerURL] retain];
@@ -433,7 +437,7 @@
 {
     if(self.timerForHeartBeat==nil)
     {
-        self.timerForHeartBeat = [[NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(checkHeartBeat) userInfo:nil repeats:YES] retain];
+        self.timerForHeartBeat = [[NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(checkHeartBeat) userInfo:nil repeats:YES] retain];
     }
     
 }
@@ -771,6 +775,19 @@
         alertView.tag=6666;
         [alertView show];
         [[tabBar.viewControllers objectAtIndex:2] tabBarItem].badgeValue = @"1";
+    }else if ([[userInfo objectForKey:@"messageType"] isEqualToString:@"menuUpdated"]){
+        
+        AudioServicesPlaySystemSound(1007);
+        if(alertView!=nil)
+        {
+            [alertView dismissWithClickedButtonIndex:0 animated:YES];
+            [alertView release];
+            alertView=nil;
+        }
+        
+        alertView=[[UIAlertView alloc]initWithTitle:@"" message:[[userInfo objectForKey:@"aps"] valueForKey:@"alert"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alertView.tag=7777;
+        [alertView show];
     }
 }
 
@@ -826,6 +843,19 @@
         }
 
         
+    }else if (alertView1.tag==7777){
+        
+        isMenuUpdate=YES;
+        if(tabBar.selectedIndex==0)
+        {
+            [delegateForCurrentViewController viewWillAppear:YES];
+        }
+        else
+        {
+            [tabBar setSelectedIndex:0];
+            [delegateForCurrentViewController viewWillAppear:YES];
+        }
+
     }
 //    else if(alertView1.tag==225)
 //    {

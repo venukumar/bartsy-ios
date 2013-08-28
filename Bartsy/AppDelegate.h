@@ -38,6 +38,8 @@
     NSTimer *timerforGetMessages;
     BOOL isComingForMenu;
     BOOL isCmgForShowingOrderUI;
+    
+    BOOL isMenuUpdate;
 }
 @property(nonatomic,assign)BOOL isCmgForShowingOrderUI;
 @property (nonatomic,retain)UITabBarController *tabBar;
@@ -55,7 +57,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
-@property (strong, nonatomic) FBSession *session;
+@property (retain, nonatomic) FBSession *session;
 @property (nonatomic,assign)BOOL isComingForOrders;
 @property (nonatomic,assign)BOOL isComingForPeople;
 @property(nonatomic,assign)NSInteger intPeopleCount;
@@ -64,6 +66,9 @@
 @property BOOL hostActive;
 @property(nonatomic,assign)BOOL isCmgForWelcomeScreen;
 @property(nonatomic,assign)BOOL isComingForMenu;
+@property(nonatomic,assign)BOOL isMenuUpdate;
+@property(nonatomic,retain)NSMutableArray *arrFBfriensList;
+
 - (void) checkNetworkStatus:(NSNotification *)notice;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
