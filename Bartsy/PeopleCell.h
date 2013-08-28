@@ -17,4 +17,6 @@
 @property(nonatomic,retain)IBOutlet UILabel *lblStatus;
 @property(nonatomic,retain)IBOutlet UIImageView *imgMsg;
 @property(nonatomic,retain)IBOutlet UILabel *lblMessage;
+@property(nonatomic,retain)IBOutlet UILabel *lblfacebookid;
+@property(nonatomic,retain)IBOutlet UIImageView *imgFacebook;
 @end

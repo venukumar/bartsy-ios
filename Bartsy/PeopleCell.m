@@ -9,7 +9,7 @@
 #import "PeopleCell.h"
 
 @implementation PeopleCell
-@synthesize imgExclation,imgMsg,imgProfile,imgRelation,lbldetails,lblName,lblMessage,lblStatus;
+@synthesize imgExclation,imgMsg,imgProfile,imgRelation,lbldetails,lblName,lblMessage,lblStatus,lblfacebookid,imgFacebook;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
