@@ -158,6 +158,8 @@
    NSString *strDOB= [NSString stringWithFormat:@"%@",
               [df stringFromDate:datepicker.date]];
     txtDOB.text=strDOB;
+    
+    
 }
 #pragma mark PickerView DataSource
 
@@ -328,6 +330,23 @@ numberOfRowsInComponent:(NSInteger)component
 #pragma mark------------Update User Profile
 -(IBAction)UpdateProfile{
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+    NSDate *birthdate=[dateFormatter dateFromString:txtDOB.text];
+    NSDate* now = [NSDate date];
+    NSDateComponents* ageComponents = [[NSCalendar currentCalendar]
+                                       components:NSYearCalendarUnit
+                                       fromDate:birthdate
+                                       toDate:now
+                                       options:0];
+    NSInteger age = [ageComponents year];
+     [dateFormatter release];
+    if ( age<21) {
+        [self createAlertViewWithTitle:@"" message:@"Please,enter your date of birth and make sure user age is at least 21" cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+        return;
+        
+    }
+   
     [self createProgressViewToParentView:self.view withTitle:@"Updating profile..."];
     NSData *imageData= UIImagePNGRepresentation(ProfileImage.image);
     
@@ -345,7 +364,10 @@ numberOfRowsInComponent:(NSInteger)component
        
     [dictProfile setObject:txtDOB.text forKey:@"dateofbirth"];
     
-    [dictProfile setObject:txtdescription.text forKey:@"description"];
+    if ([txtdescription.text isEqualToString:@"Enter something about you that you'd like others to see while you're checked in at a venue"]) {
+        [dictProfile setObject:@"" forKey:@"description"];
+    }else
+       [dictProfile setObject:txtdescription.text forKey:@"description"];
     
     
     
@@ -405,8 +427,15 @@ numberOfRowsInComponent:(NSInteger)component
              SBJSON *jsonParser = [[SBJSON new] autorelease];
              NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
              id result = [jsonParser objectWithString:jsonString error:nil];
+ 
+             if ([[result valueForKey:@"errorCode"] integerValue]==0) {
+                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+                 [self.navigationController popViewControllerAnimated:YES];
+             }else
+            
+                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+             
 
-            [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
          }
          else
          {
@@ -417,7 +446,13 @@ numberOfRowsInComponent:(NSInteger)component
      }
      ];
 
+           
+    [txtDOB resignFirstResponder];
+    [txtGender resignFirstResponder];
+    [txtLookingto resignFirstResponder];
+    [txtOrientation resignFirstResponder];
     
+
 }
 
 -(IBAction)PickerView:(id)sender
