@@ -96,7 +96,7 @@
         
     }else if (appDelegate.isComingForPeople==YES){
         
-        appDelegate.isComingForPeople=NO;
+        //appDelegate.isComingForPeople=NO;
         [segmentControl setSelectedSegmentIndex:1];
         [self segmentControl_ValueChanged:segmentControl];
         return;
@@ -165,15 +165,6 @@
     lblVenueName.textAlignment=NSTextAlignmentCenter;
     [self.view addSubview:lblVenueName];
     
-    
-    UIBarButtonItem *btnLogOut=[[UIBarButtonItem alloc]initWithTitle:@"Check out" style:UIBarButtonItemStylePlain target:self action:@selector(backLogOut_TouchUpInside)];
-    self.navigationItem.rightBarButtonItem=btnLogOut;
-    
-   
-   /* UIButton *btnCheckOut=[self createUIButtonWithTitle:@"Checkout" image:nil frame:CGRectMake(250, 5, 65, 35) tag:0 selector:@selector(backLogOut_TouchUpInside) target:self];
-    btnCheckOut.titleLabel.font=[UIFont systemFontOfSize:14];
-    [btnCheckOut setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.view addSubview:btnCheckOut];*/
     
     
     UIButton *checkinBtn=[self createUIButtonWithTitle:@"" image:nil frame:CGRectMake(276, 1, 44, 44) tag:3333 selector:@selector(CheckinButton_Action:) target:self];
@@ -367,33 +358,7 @@
     
    // NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"",@"picture", @"",@"message", nil];
     
-    NSMutableDictionary* fbPost = [[NSMutableDictionary alloc] initWithObjectsAndKeys:[UIImage imageNamed:@"icon.png"],@"picture",@"You have liked a drink ", @"message", nil];
-    [FBRequestConnection
-     startWithGraphPath:@"me/feed"
-     parameters:fbPost
-     HTTPMethod:@"POST"
-     completionHandler:^(FBRequestConnection *connection,
-                         id result,
-                         NSError *error) {
-         NSString *alertText;
-         if (error) {
-             alertText = [NSString stringWithFormat:
-                          @"error: domain = %@, code = %d",
-                          error.domain, error.code];
-         } else {
-             alertText = [NSString stringWithFormat:
-                          @"Posted action, id: %@",
-                          result[@"id"]];
-         }
-         // Show the result in an alert
-         [[[UIAlertView alloc] initWithTitle:@"Result"
-                                     message:alertText
-                                    delegate:self
-                           cancelButtonTitle:@"OK!"
-                           otherButtonTitles:nil]
-          show];
-     }];
-    
+        
 }
 
 -(void)ButtonHighlight:(UIButton*)sender{
@@ -646,6 +611,7 @@
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"name"];
+                [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
                 [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"order_price"];
                 if ([dicttemp valueForKey:@"price"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
@@ -713,6 +679,7 @@
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"name"];
+                 [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
                 if ([dicttemp valueForKey:@"price"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
                     
@@ -729,7 +696,7 @@
                 }
                 [arritemlist addObject:dictitem];
                 
-            }else if([[dicttemp valueForKey:@"Viewtype"] integerValue]==4){
+            }else if([[dicttemp valueForKey:@"Viewtype"] integerValue]==4 ||[[dicttemp valueForKey:@"Viewtype"] integerValue]==5){
                 NSArray *arr1Temp=[dicttemp valueForKey:@"ArrayInfo"];
                 NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
                 NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
@@ -772,6 +739,7 @@
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"itemName"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"title"];
                 [dictitem setObject:[dicttemp valueForKey:@"name"] forKey:@"name"];
+                [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
                 if ([dicttemp valueForKey:@"price"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"price"] forKey:@"price"];
                     
@@ -779,6 +747,7 @@
                     [dictitem setObject:@"0" forKey:@"price"];
                     
                 }
+                [dictitem setObject:[dicttemp valueForKey:@"type"] forKey:@"type"];
                 [dictitem setObject:[dicttemp valueForKey:@"options_description"] forKey:@"options_description"];
                 if ([dicttemp valueForKey:@"special_Instructions"]) {
                     [dictitem setObject:[dicttemp valueForKey:@"special_Instructions"] forKey:@"special_Instructions"];
@@ -2521,7 +2490,6 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
         }
     }
     
-    NSLog(@"arrfav %@",arrFavorites);
 }
 
 -(void)ParsingRecentOrders:(id)result{
@@ -4581,8 +4549,22 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
                 
                 cell.lblMessage.font=[UIFont fontWithName:@"Museo Sans" size:12.0];
                 cell.lblMessage.textColor = [UIColor colorWithRed:204.0/225.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0] ;
-              
-                
+                if (appDelegate.isComingForPeople) {
+                    appDelegate.isComingForPeople=NO;
+                    
+                    [tableView
+                     selectRowAtIndexPath:indexPath
+                     animated:TRUE
+                     scrollPosition:UITableViewScrollPositionNone
+                     ];
+                    
+                    [[tableView delegate]
+                     tableView:tableView
+                     didSelectRowAtIndexPath:indexPath
+                     ];
+
+                }
+                                
             }else if([[dictPeople objectForKey:@"hasMessages"] isEqualToString:@"Old"]){
                 //UIButton *btnChat=[self createUIButtonWithTitle:nil image:[UIImage imageNamed:@"mail_gray.png"] frame:CGRectMake(75, 58, 18, 12) tag:indexPath.row selector:@selector(btnChat_TouchUpInside:) target:self];
                 cell.imgMsg.image=[UIImage imageNamed:@"mail_gray.png"];
