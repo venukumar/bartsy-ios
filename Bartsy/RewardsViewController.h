@@ -10,6 +10,7 @@
 #import "BaseViewController.h"
 #import "RewardsTableCell.h"
 #import "UIImageView+WebCache.h"
+#import "VenueRewardsView.h"
 @interface RewardsViewController : BaseViewController<UITableViewDataSource,UITableViewDelegate>{
     
     

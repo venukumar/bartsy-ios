@@ -147,6 +147,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([rewardsArray count]) {
+        
+        NSDictionary *dictForrewards=[rewardsArray objectAtIndex:indexPath.row];
+        
+        VenueRewardsView *venueview=[[VenueRewardsView alloc]initWithNibName:@"VenueRewardsView" bundle:nil];
+        venueview.dictVenueInfo=[NSDictionary dictionaryWithDictionary:dictForrewards];
+        [self.navigationController pushViewController:venueview animated:YES];
+    }
+    
 }
 
 #pragma mark-----------Sharedcontroller Delegate
