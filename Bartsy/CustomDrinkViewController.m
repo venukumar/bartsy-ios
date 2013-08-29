@@ -42,18 +42,6 @@
     self.view.backgroundColor=[UIColor colorWithRed:17.0/255.0 green:17.0/255.0 blue:18.0/255.0 alpha:1.0];
     
     
-    /*UIImageView *imgViewForTop = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    imgViewForTop.image=[UIImage imageNamed:@"top_header_bar.png"];
-    [self.view addSubview:imgViewForTop];
-    [imgViewForTop release];*/
-    
-    /*UIImageView *imgLogo = [[UIImageView alloc] initWithFrame:CGRectMake(100.25, 13.25, 119.5, 23.5)];
-    imgLogo.image=[UIImage imageNamed:@"logo_Header.png"];
-    [self.view addSubview:imgLogo];
-    [imgLogo release];*/
-   
-    
-    
     /*UILabel *lblMsg=[[UILabel alloc]initWithFrame:CGRectMake(40, 0, 240, 44)];
     lblMsg.textColor=[UIColor blackColor];
     
@@ -66,14 +54,6 @@
         titleName.text=[dictitemdetails valueForKey:@"name"];
     }
     
-    /*UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnBack.frame = CGRectMake(5, 0, 50, 40);
-    [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btnBack];
-    UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
-    imgViewBack.image = [UIImage imageNamed:@"arrow-left.png"];
-    [btnBack addSubview:imgViewBack];
-    [imgViewBack release];*/
     
     arrCustomDrinks=[[NSMutableArray alloc]init];
 
@@ -229,9 +209,10 @@
         [lblinstruction release];
         
         UIView *lineview2=[[UIView alloc]initWithFrame:CGRectMake(0,220,320, 1.5)];
+        
         lineview2.backgroundColor=[UIColor colorWithRed:(0.0f/255.0f) green:(175.0f/255.0f) blue:(222.0f/255.0f) alpha:1.0f];
         [mainScroll addSubview:lineview2];
-        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,208, 320, 30)] autorelease];
+        instructionfield = [[[UITextField alloc] initWithFrame:CGRectMake(0,223, 320, 30)] autorelease];
         if (IS_IPHONE_5) {
             instructionfield.frame=CGRectMake(0,232, 320, 30);
         }
@@ -1080,6 +1061,36 @@
    //  [orderBtn setTitle:[NSString stringWithFormat:@"%@-$%.2f",@"Add to order",floatTotalPrice] forState:UIControlStateNormal];
 }
 
+#pragma mark--------------FBsharing
+-(IBAction)FB_Like:(id)sender{
+    
+    NSDictionary *dicttemp= [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"VenueDetails"];
+    
+   NSString *urlstring= [NSString stringWithFormat:@"%@/%@",KServerURL,[dicttemp objectForKey:@"venueImagePath"]];
+    NSMutableDictionary* fbPost = [[NSMutableDictionary alloc] initWithObjectsAndKeys:urlstring,@"picture",[NSString stringWithFormat:@"I liked %@ drink",[dictitemdetails valueForKey:@"name"]], @"message", nil];
+    [FBRequestConnection
+     startWithGraphPath:@"me/feed"
+     parameters:fbPost
+     HTTPMethod:@"POST"
+     completionHandler:^(FBRequestConnection *connection,
+                         id result,
+                         NSError *error) {
+         NSString *alertText;
+         if (error) {
+             alertText = [NSString stringWithFormat:
+                          @"error: domain = %@, code = %d",
+                          error.domain, error.code];
+         } else {
+             alertText = [NSString stringWithFormat:
+                          @"Posted action, id: %@",
+                          result[@"id"]];
+         }
+         // Show the result in an alert
+         NSLog(@"alert %@",alertText);
+     }];
+
+}
+
 #pragma mark--------------Saving the Order Details
 //Saving the Order details
 -(void)Saving_Orderitems{
@@ -1098,7 +1109,7 @@
         }else{
             [dictItem setObject:@"" forKey:@"special_Instructions"];
         }
-        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [dictItem setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
         [arrMultiItemOrders replaceObjectAtIndex:arrIndex withObject:dictItem];
         
         [[NSUserDefaults standardUserDefaults]setObject:arrMultiItemOrders forKey:@"multiitemorders"];
@@ -1158,7 +1169,7 @@
         }else{
             [dictItem setObject:@"" forKey:@"special_Instructions"];
         }
-        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [dictItem setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
         if (!isEdit) {
             [arrMultiItemOrders addObject:dictItem];
 
@@ -1239,7 +1250,7 @@
             [dictItem setObject:@"" forKey:@"special_Instructions"];
             
         }
-        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [dictItem setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
     //Checking for edit oder or new order
         if (!isEdit) {
             [arrMultiItemOrders addObject:dictItem];
@@ -1306,7 +1317,7 @@
             [dictItem setObject:@"" forKey:@"special_Instructions"];
             
         }
-        [dictItem setObject:@"Menu" forKey:@"ItemType"];
+        [dictItem setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
         
         if (!isEdit)
             [arrMultiItemOrders addObject:dictItem];
@@ -1371,8 +1382,8 @@
             if ([dictTemp valueForKey:@"ingredients"]) {
                 [dictitemlist setObject:[dictTemp valueForKey:@"ingredients"] forKey:@"ingredients"];
             }
-              if ([dictTemp valueForKey:@"type"]) {
-                  [dictitemlist setObject:[dictTemp valueForKey:@"type"] forKey:@"type"];
+              if ([dictitemdetails valueForKey:@"type"]) {
+                  [dictitemlist setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
                   
               }
             [dictitemlist setObject:[NSString stringWithFormat:@"%@",[dictTemp valueForKey:@"price"]] forKey:@"order_price"];
@@ -1395,26 +1406,12 @@
             float order_Price=0.0;
             for (int i=0;i<arrCustomDrinks.count;i++) {
                 NSDictionary *dictTemp =[arrCustomDrinks objectAtIndex:i];
-           /* NSMutableArray *arrTemp;NSArray *filterarr;
-            if ([dictTemp objectForKey:@"option_groups"]) {
-                //arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"option_groups"]];
-               // NSArray *array2temp=[arrTemp objectAtIndex:0];
-                //arrTemp=[[NSMutableArray alloc]initWithArray:[array2temp valueForKey:@"options"]];
-                //filterarr=[[array2temp valueForKey:@"options"] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
-            }else{
-            //arrTemp=[[NSMutableArray alloc]initWithArray:[dictTemp objectForKey:@"options"]];
-            //filterarr=[arrTemp filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(Selected == %@)",@"1"]];
-            }*/
-                //NSMutableDictionary *dictitem=[[NSMutableDictionary alloc]init];
            
     
                 if ([dictTemp valueForKey:@"option_groups"]) {
                     
                     [dictItemList setObject:[dictTemp valueForKey:@"name"] forKey:@"name"];
 
-                    
-                   // [dictitem setObject:[dictTemp valueForKey:@"name"] forKey:@"title"];
-                  //  [dictitem setObject:[dictTemp valueForKey:@"name"] forKey:@"itemName"];
                     if ([dictTemp valueForKey:@"price"]) {
                        // [dictitem setObject:[dictTemp valueForKey:@"price"] forKey:@"price"];
                         
@@ -1503,7 +1500,13 @@
             [dictItemList setObject:strsplInst forKey:@"special_instructions"];
             [dictItemList setObject:str_opt_description forKey:@"options_description"];
             [dictItemList setObject:arrOptionGroup forKey:@"option_groups"];
-            [dictItemList setObject:@"ITEM" forKey:@"type"];
+            if ([dictitemdetails valueForKey:@"type"]) {
+                [dictItemList setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
+                
+            }
+
+            //[dictItemList setObject:@"ITEM" forKey:@"type"];
+            [dictItemList setObject:[dictitemdetails valueForKey:@"name"] forKey:@"itemName"];
             [dictItemList setObject:@"1" forKey:@"quantity"];
             [dictItemList setObject:[NSString stringWithFormat:@"%.2f",order_Price] forKey:@"order_price"];
             [arritemlist addObject:dictItemList];
@@ -1564,14 +1567,19 @@
             [dictItemList setObject:strsplInst forKey:@"special_instructions"];
             [dictItemList setObject:str_opt_description forKey:@"options_description"];
             [dictItemList setObject:arrOptionGroup forKey:@"option_groups"];
-            [dictItemList setObject:@"ITEM" forKey:@"type"];
+            if ([dictitemdetails valueForKey:@"type"]) {
+                [dictItemList setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
+                
+            }
+            //[dictItemList setObject:@"ITEM" forKey:@"type"];
+            [dictItemList setObject:[dictitemdetails valueForKey:@"name"] forKey:@"itemName"];
             [dictItemList setObject:@"1" forKey:@"quantity"];
             [dictItemList setObject:[NSString stringWithFormat:@"%.2f",order_Price] forKey:@"order_price"];
             [arritemlist addObject:dictItemList];
             [arrOptionGroup release];
             [dictItemList release];
             NSLog(@"%@",arritemlist);
-        }else if (viewtype==4){
+        }else if (viewtype==4 || viewtype==5){
             NSMutableArray *arrOptionGroup=[[NSMutableArray alloc]init];
             NSMutableDictionary *dictItemList=[[NSMutableDictionary alloc]init];
             NSMutableString *str_opt_description =[[NSMutableString alloc]init];
@@ -1609,6 +1617,7 @@
                 }
                 
                 [dictOptionItems setObject:[dictTemp valueForKey:@"type"] forKey:@"type"];
+                
                 [dictOptionItems setObject:[dictTemp valueForKey:@"text"] forKey:@"text"];
                 [dictOptionItems setObject:arrOptions forKey:@"options"];
                 [arrOptionGroup addObject:dictOptionItems];
@@ -1628,8 +1637,14 @@
             [dictItemList setObject:strsplInst forKey:@"special_instructions"];
             [dictItemList setObject:str_opt_description forKey:@"options_description"];
             [dictItemList setObject:arrOptionGroup forKey:@"option_groups"];
-            [dictItemList setObject:@"ITEM" forKey:@"type"];
+            if ([dictitemdetails valueForKey:@"type"]) {
+                [dictItemList setObject:[dictitemdetails valueForKey:@"type"] forKey:@"type"];
+                
+            }
+            //[dictItemList setObject:@"ITEM" forKey:@"type"];
+            [dictItemList setObject:[dictitemdetails valueForKey:@"name"] forKey:@"itemName"];
             [dictItemList setObject:@"1" forKey:@"quantity"];
+            [dictItemList setObject:[dictitemdetails valueForKey:@"name"] forKey:@"itemName"];
             [dictItemList setObject:[NSString stringWithFormat:@"%.2f",order_Price] forKey:@"order_price"];
             [arritemlist addObject:dictItemList];
             [arrOptionGroup release];

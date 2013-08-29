@@ -49,4 +49,5 @@ typedef NSInteger viewtype;
 -(IBAction)btnBack_TouchUpInside;
 -(IBAction)Button_Action:(UIButton*)sender;
 -(IBAction)Button_Order:(UIButton*)button;
+-(IBAction)FB_Like:(id)sender;
 @end
