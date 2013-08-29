@@ -69,4 +69,5 @@
 -(void)getFavoriteDrinksbybartsyID:(NSString*)strbartsyID venueID:(NSString*)venueID delegate:(id)aDelegate;
 -(void)SaveOrderWithOrderStatus:(NSString*)strStatus basePrice:(NSString*)strBasePrice totalPrice:(NSString*)strTotalPrice tipPercentage:(NSString*)strPercentage itemName:(NSString*)strName splcomments:(NSString*)splcomments description:(NSString*)strDescription itemlist:(NSArray*)arritemlist receiverBartsyId:(NSString*)strReceiverId delegate:(id)aDelegate;
 -(void)DeleteFavoritebyfavoriteID:(NSString*)favoriteID venueID:(NSString*)venueID bydelegate:(id)aDelegate;
+-(void)GetVenueRewards:(NSString*)venueID bydelegate:(id)aDelegate;
 @end

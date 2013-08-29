@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "MessageListViewController.h"
+enum{
+    
+    TabbarView=1,
+    SettingView=2,
+    
+};
+typedef NSInteger NotifViewType;
 @interface NotificationsViewController : BaseViewController<SharedControllerDelegate,UITableViewDataSource,UITableViewDelegate>{
     
 

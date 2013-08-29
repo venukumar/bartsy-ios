@@ -1235,7 +1235,36 @@ static SharedController *sharedController;
 
     
 }
-
+-(void)GetVenueRewards:(NSString*)venueID bydelegate:(id)aDelegate{
+    
+    self.delegate=aDelegate;
+    NSString *strURL=[NSString stringWithFormat:@"%@/Bartsy/userRewards/getVenueRewards",KServerURL];
+    
+    NSMutableDictionary *dictCheckIn=[[NSMutableDictionary alloc] init ];
+    [dictCheckIn setValue:KAPIVersionNumber forKey:@"apiVersion"];
+    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"bartsyId"] forKey:@"bartsyId"];
+    [dictCheckIn setObject:venueID forKey:@"venueId"];
+    
+    [dictCheckIn setObject:[[NSUserDefaults standardUserDefaults]objectForKey:@"oauthCode"] forKey:@"oauthCode"];
+    
+    SBJSON *jsonObj=[SBJSON new];
+    NSString *strJson=[jsonObj stringWithObject:dictCheckIn];
+    NSData *dataCheckIn=[strJson dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURL *url=[[NSURL alloc]initWithString:strURL];
+    NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:dataCheckIn];
+    [request setValue:@"application/json" forHTTPHeaderField:@"content-type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [self sendRequest:request];
+    [url release];
+    [request release];
+    [dictCheckIn release];
+    [jsonObj release];
+    
+}
 - (void)sendRequest:(NSMutableURLRequest *)urlRequest
 {
 	[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;

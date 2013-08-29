@@ -8,7 +8,10 @@
 
 #import "PlaceOrderView.h"
 
-@interface PlaceOrderView ()
+@interface PlaceOrderView (){
+    
+    NSMutableDictionary *dictPeopleSelectedForDrink;
+}
 
 @end
 
@@ -27,6 +30,10 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    dictPeopleSelectedForDrink=[[NSMutableDictionary alloc]init];
+    
+    NSMutableArray *arrMultiItems=[[NSMutableArray alloc]initWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"multiitemorders"]];
+    NSMutableDictionary *dictuserInfo;
 }
 
 - (void)didReceiveMemoryWarning

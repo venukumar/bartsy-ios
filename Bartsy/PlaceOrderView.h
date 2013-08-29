@@ -10,8 +10,14 @@
 
 @interface PlaceOrderView : UIViewController{
     
+    IBOutlet UIImageView *imgReciepent;
+    IBOutlet UILabel *lblReciepName;
+    IBOutlet UILabel *lblTotalPrice;
+    IBOutlet UILabel *lblTip;
+    IBOutlet UILabel *lblTax;
+    IBOutlet UILabel *lblOrderCount;
     
-    
+    IBOutlet UIView *OrdersCell;
 }
 
 @end

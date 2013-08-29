@@ -91,6 +91,12 @@
 		CB9C277A17CB3E1900B55355 /* PeopleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9C277917CB3E1900B55355 /* PeopleCell.m */; };
 		CB9C277C17CB3E3000B55355 /* PeopleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277B17CB3E3000B55355 /* PeopleCell.xib */; };
 		CB9C277E17CB92C700B55355 /* add-order.png in Resources */ = {isa = PBXBuildFile; fileRef = CB9C277D17CB92C300B55355 /* add-order.png */; };
+		CB9F69C817CF34370008B636 /* VenueRewardsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9F69C617CF34370008B636 /* VenueRewardsView.m */; };
+		CB9F69C917CF34370008B636 /* VenueRewardsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9F69C717CF34370008B636 /* VenueRewardsView.xib */; };
+		CB9F69CC17CF57520008B636 /* VenueRewardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9F69CB17CF57520008B636 /* VenueRewardCell.m */; };
+		CB9F69CE17CF576D0008B636 /* VenueRewardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9F69CD17CF576D0008B636 /* VenueRewardCell.xib */; };
+		CB9F69D317CF72990008B636 /* PaymentEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9F69D117CF72990008B636 /* PaymentEditView.m */; };
+		CB9F69D417CF72990008B636 /* PaymentEditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB9F69D217CF72990008B636 /* PaymentEditView.xib */; };
 		CBAC59FC17C36F950047BDBB /* cancel-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = CBAC59FB17C36F950047BDBB /* cancel-btn.png */; };
 		CBE6E2A917CCA55200BB4BE5 /* submit.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2A817CCA55200BB4BE5 /* submit.png */; };
 		CBE6E2AC17CCA97000BB4BE5 /* accept.png in Resources */ = {isa = PBXBuildFile; fileRef = CBE6E2AA17CCA97000BB4BE5 /* accept.png */; };
@@ -449,6 +455,15 @@
 		CB9C277917CB3E1900B55355 /* PeopleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeopleCell.m; sourceTree = "<group>"; };
 		CB9C277B17CB3E3000B55355 /* PeopleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PeopleCell.xib; sourceTree = "<group>"; };
 		CB9C277D17CB92C300B55355 /* add-order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-order.png"; sourceTree = "<group>"; };
+		CB9F69C517CF34370008B636 /* VenueRewardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenueRewardsView.h; sourceTree = "<group>"; };
+		CB9F69C617CF34370008B636 /* VenueRewardsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueRewardsView.m; sourceTree = "<group>"; };
+		CB9F69C717CF34370008B636 /* VenueRewardsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VenueRewardsView.xib; sourceTree = "<group>"; };
+		CB9F69CA17CF57520008B636 /* VenueRewardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VenueRewardCell.h; sourceTree = "<group>"; };
+		CB9F69CB17CF57520008B636 /* VenueRewardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VenueRewardCell.m; sourceTree = "<group>"; };
+		CB9F69CD17CF576D0008B636 /* VenueRewardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VenueRewardCell.xib; sourceTree = "<group>"; };
+		CB9F69D017CF72990008B636 /* PaymentEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentEditView.h; sourceTree = "<group>"; };
+		CB9F69D117CF72990008B636 /* PaymentEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentEditView.m; sourceTree = "<group>"; };
+		CB9F69D217CF72990008B636 /* PaymentEditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PaymentEditView.xib; sourceTree = "<group>"; };
 		CBAC59FB17C36F950047BDBB /* cancel-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel-btn.png"; sourceTree = "<group>"; };
 		CBE6E2A817CCA55200BB4BE5 /* submit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = submit.png; sourceTree = "<group>"; };
 		CBE6E2AA17CCA97000BB4BE5 /* accept.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accept.png; sourceTree = "<group>"; };
@@ -1020,8 +1035,21 @@
 				CB9C277B17CB3E3000B55355 /* PeopleCell.xib */,
 				E0FD62B01794292800776EE0 /* PastOrdersCell.h */,
 				E0FD62B11794292800776EE0 /* PastOrdersCell.m */,
+				CB9F69CA17CF57520008B636 /* VenueRewardCell.h */,
+				CB9F69CB17CF57520008B636 /* VenueRewardCell.m */,
+				CB9F69CD17CF576D0008B636 /* VenueRewardCell.xib */,
 			);
 			name = CustomCells;
+			sourceTree = "<group>";
+		};
+		CB9F69CF17CF723C0008B636 /* EditPaymentView */ = {
+			isa = PBXGroup;
+			children = (
+				CB9F69D017CF72990008B636 /* PaymentEditView.h */,
+				CB9F69D117CF72990008B636 /* PaymentEditView.m */,
+				CB9F69D217CF72990008B636 /* PaymentEditView.xib */,
+			);
+			name = EditPaymentView;
 			sourceTree = "<group>";
 		};
 		CBE6E2A317CC7BB400BB4BE5 /* PeopleDetailsView */ = {
@@ -1041,6 +1069,9 @@
 				E0C446D7178EBCC200261B74 /* RewardsViewController.m */,
 				CBFAF1121797B3E600E953AC /* RewardsTableCell.h */,
 				CBFAF1131797B3E600E953AC /* RewardsTableCell.m */,
+				CB9F69C517CF34370008B636 /* VenueRewardsView.h */,
+				CB9F69C617CF34370008B636 /* VenueRewardsView.m */,
+				CB9F69C717CF34370008B636 /* VenueRewardsView.xib */,
 			);
 			name = RewardsView;
 			sourceTree = "<group>";
@@ -1682,6 +1713,7 @@
 				CBF8F3411793C0D8008EBBB8 /* AccountSettingsViewController.h */,
 				CBF8F3421793C0D8008EBBB8 /* AccountSettingsViewController.m */,
 				CBE6E2B317CD095100BB4BE5 /* EditProfile View */,
+				CB9F69CF17CF723C0008B636 /* EditPaymentView */,
 				CB9C277717CB3DF000B55355 /* CustomCells */,
 				CB3E90F317C624A200A5B83A /* NewViews */,
 			);
@@ -2047,6 +2079,9 @@
 				CB055FC717CE3C5700912B84 /* like-gray.png in Resources */,
 				CB055FC817CE3C5700912B84 /* like.png in Resources */,
 				CB055FC917CE3C5700912B84 /* share_new.png in Resources */,
+				CB9F69C917CF34370008B636 /* VenueRewardsView.xib in Resources */,
+				CB9F69CE17CF576D0008B636 /* VenueRewardCell.xib in Resources */,
+				CB9F69D417CF72990008B636 /* PaymentEditView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2182,6 +2217,9 @@
 				CB9C277417CB27C800B55355 /* VenueCell.m in Sources */,
 				CB9C277A17CB3E1900B55355 /* PeopleCell.m in Sources */,
 				CB055FCF17CE3E2A00912B84 /* PlaceOrderView.m in Sources */,
+				CB9F69C817CF34370008B636 /* VenueRewardsView.m in Sources */,
+				CB9F69CC17CF57520008B636 /* VenueRewardCell.m in Sources */,
+				CB9F69D317CF72990008B636 /* PaymentEditView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
