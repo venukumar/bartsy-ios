@@ -10,6 +10,8 @@
 #import "BaseViewController.h"
 #import "UserProfileViewController.h"
 #import "AccountInfoViewController.h"
+#import "PaymentEditView.h"
+#import "NotificationsViewController.h"
 @interface UserSettingsView : BaseViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableview;

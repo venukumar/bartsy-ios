@@ -65,10 +65,9 @@
         // Load the top-level objects from the custom cell XIB.
 
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-
+        
         UIView *bg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)];
-        bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"fathers_office-bg.png"]];
+        bg.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"sectionBg.png"]];
         cell.backgroundView = bg;
         [bg release];
         UIImageView *imgViewArrow=[[UIImageView alloc] initWithFrame:CGRectMake(268, 15, 13, 20)];
@@ -76,12 +75,14 @@
         imgViewArrow.image=imgArrow;
         cell.accessoryView=imgViewArrow;
         [imgViewArrow release];
-        //UIView *bgColorView = [[UIView alloc] init];
-        //bgColorView.backgroundColor = [UIColor redColor];
-       // bgColorView.layer.masksToBounds = YES;
-       // [cell setSelectedBackgroundView:bgColorView];
-        //[bgColorView release];
+        cell.selectionStyle=UITableViewCellSelectionStyleGray;
+
     }
+
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor darkGrayColor];
+    cell.selectedBackgroundView = bgColorView;
+    [bgColorView release];
     cell.textLabel.text=[[tblArray_Obj objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     cell.textLabel.backgroundColor=[UIColor clearColor];
     cell.textLabel.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
@@ -110,6 +111,22 @@
             UserProfileViewController *pview=[[UserProfileViewController alloc]initWithNibName:@"UserProfileViewController" bundle:nil];
             [self.navigationController pushViewController:pview animated:NO];
         
+        }else if (indexPath.row==2){
+            
+            PaymentEditView *pView=[[PaymentEditView alloc]initWithNibName:@"PaymentEditView" bundle:nil];
+            [self.navigationController pushViewController:pView animated:YES];
+        }
+    }else if(indexPath.section==1){
+        
+        if (indexPath.row==0) {
+            
+        }else if (indexPath.row==1){
+            
+        }else if (indexPath.row==2){
+            
+           /* NotificationsViewController *nview = [[NotificationsViewController alloc] init];
+            
+            [self.navigationController pushViewController:nview animated:YES];*/
         }
     }else if(indexPath.section==2){
         
@@ -154,6 +171,10 @@
         }
 
     }
+    
+    UITableViewCell *filterCell = (UITableViewCell *)[tableView1 cellForRowAtIndexPath:indexPath];
+    filterCell.selectedBackgroundView=nil;
+    filterCell.selectionStyle=UITableViewCellSelectionStyleNone;
 }
 
 #pragma mark---------------AlertView Delegate
