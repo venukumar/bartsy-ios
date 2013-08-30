@@ -23,6 +23,11 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:YES];
+    [tableview reloadData];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -75,9 +80,9 @@
         imgViewArrow.image=imgArrow;
         cell.accessoryView=imgViewArrow;
         [imgViewArrow release];
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        //cell.selectionStyle=UITableViewCellSelectionStyleNone;
         UIView *bgColorView = [[UIView alloc] init];
-        bgColorView.backgroundColor = [UIColor redColor];
+        bgColorView.backgroundColor = [UIColor darkGrayColor];
         cell.selectedBackgroundView = bgColorView;
         [bgColorView release];
     }
@@ -175,9 +180,6 @@
 
     }
     
-    UITableViewCell *filterCell = (UITableViewCell *)[tableView1 cellForRowAtIndexPath:indexPath];
-    filterCell.selectedBackgroundView=nil;
-    filterCell.selectionStyle=UITableViewCellSelectionStyleNone;
 }
 
 #pragma mark---------------AlertView Delegate
