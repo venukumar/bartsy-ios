@@ -14,7 +14,7 @@
 @end
 
 @implementation NotificationsViewController
-@synthesize arrayForNotifications;
+@synthesize arrayForNotifications,NotifViewType;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -51,6 +51,19 @@
    /* UIButton *btnSearch = [self createUIButtonWithTitle:@"" image:[UIImage imageNamed:@"search_icon.png"] frame:CGRectMake(10, 14.5, 22, 21) tag:0 selector:@selector(btnSearch_TouchUpInside:) target:self];
     [self.view addSubview:btnSearch];*/
 
+    if (NotifViewType==2) {
+        
+        UIButton *btnBack = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnBack.frame = CGRectMake(2, 0, 50, 44);
+        [btnBack addTarget:self action:@selector(btnBack_TouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:btnBack];
+        
+        UIImageView *imgViewBack = [[UIImageView alloc] initWithFrame:CGRectMake(10, 12, 12, 20)];
+        imgViewBack.image = [UIImage imageNamed:@"arrow-left"];
+        [btnBack addSubview:imgViewBack];
+        [imgViewBack release];
+
+    }
     UITableView *tblView=[[UITableView alloc]initWithFrame:CGRectMake(0, 44, 320, 367)];
     if (IS_IPHONE_5)
     {
@@ -73,6 +86,11 @@
         [self.sharedController getNotificationsWithDelegate:self];
     
 }
+-(void)btnBack_TouchUpInside
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 -(void)btnSearch_TouchUpInside:(UIButton*)sender
 {
     

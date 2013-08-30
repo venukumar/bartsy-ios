@@ -21,5 +21,5 @@ typedef NSInteger NotifViewType;
 
 }
 @property(nonatomic,retain)NSMutableArray *arrayForNotifications;
-
+@property(nonatomic,assign)NSInteger NotifViewType;
 @end
