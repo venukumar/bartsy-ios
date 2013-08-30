@@ -12,6 +12,8 @@
 #import "AccountInfoViewController.h"
 #import "PaymentEditView.h"
 #import "NotificationsViewController.h"
+#import "PastOrderView.h"
+#import "FavouriteViewController.h"
 @interface UserSettingsView : BaseViewController<UITableViewDelegate,UITableViewDataSource>{
     
     IBOutlet UITableView *tableview;

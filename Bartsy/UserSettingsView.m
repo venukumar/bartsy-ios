@@ -75,14 +75,14 @@
         imgViewArrow.image=imgArrow;
         cell.accessoryView=imgViewArrow;
         [imgViewArrow release];
-        cell.selectionStyle=UITableViewCellSelectionStyleGray;
-
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+        UIView *bgColorView = [[UIView alloc] init];
+        bgColorView.backgroundColor = [UIColor redColor];
+        cell.selectedBackgroundView = bgColorView;
+        [bgColorView release];
     }
 
-    UIView *bgColorView = [[UIView alloc] init];
-    bgColorView.backgroundColor = [UIColor darkGrayColor];
-    cell.selectedBackgroundView = bgColorView;
-    [bgColorView release];
+   
     cell.textLabel.text=[[tblArray_Obj objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     cell.textLabel.backgroundColor=[UIColor clearColor];
     cell.textLabel.textColor=[UIColor colorWithRed:142.0/255.0 green:142.0/255.0 blue:145.0/255.0 alpha:1.0];
@@ -119,14 +119,17 @@
     }else if(indexPath.section==1){
         
         if (indexPath.row==0) {
-            
+            PastOrderView *pview = [[PastOrderView alloc] init];
+            [self.navigationController pushViewController:pview animated:YES];
         }else if (indexPath.row==1){
-            
+            FavouriteViewController *fview = [[FavouriteViewController alloc] init];
+           
+            [self.navigationController pushViewController:fview animated:YES];
         }else if (indexPath.row==2){
             
-           /* NotificationsViewController *nview = [[NotificationsViewController alloc] init];
-            
-            [self.navigationController pushViewController:nview animated:YES];*/
+            NotificationsViewController *nview = [[NotificationsViewController alloc] init];
+            nview.NotifViewType=2;
+            [self.navigationController pushViewController:nview animated:YES];
         }
     }else if(indexPath.section==2){
         
