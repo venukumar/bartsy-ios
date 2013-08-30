@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface FavouriteViewController : UIViewController
+#import "BaseViewController.h"
+@interface FavouriteViewController : UIViewController{
+    
+    
+    
+}
 -(IBAction)btnBack_TouchUpInside;
 @end
