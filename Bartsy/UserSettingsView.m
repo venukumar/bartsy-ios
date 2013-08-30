@@ -34,6 +34,8 @@
     // Do any additional setup after loading the view from its nib.
     
     self.navigationController.navigationBarHidden=YES;
+    
+    
     tblArray_Obj = [[NSMutableArray alloc] init];
     
     [tblArray_Obj insertObject:[NSMutableArray arrayWithObjects:@"View Profile",@"Edit Profile",@"Payment Information",nil] atIndex:0];

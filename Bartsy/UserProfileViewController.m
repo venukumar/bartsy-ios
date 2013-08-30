@@ -130,7 +130,7 @@
             if ([[result valueForKey:@"errorCode"] integerValue]==0) {
                 
                 NSLog(@"Dictionary %@  \n URL is %@",result,[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]);
-                dictProfileInfo=[NSMutableDictionary dictionaryWithDictionary:result];
+                dictProfileInfo=[[NSMutableDictionary alloc]initWithDictionary:result];
                 
                 [self LoadProfile];
 
@@ -369,8 +369,8 @@ numberOfRowsInComponent:(NSInteger)component
     }else
        [dictProfile setObject:txtdescription.text forKey:@"description"];
     
-    
-    
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"firstname"] forKey:@"firstname"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"lastname"] forKey:@"lastname"];
     [dictProfile setObject:txtLookingto.text forKey:@"status"];
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];

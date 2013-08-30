@@ -90,7 +90,7 @@
         if ([[result valueForKey:@"errorCode"] integerValue]==0) {
             
             NSLog(@"Dictionary %@  \n URL is %@",result,[NSString stringWithFormat:@"%@/%@",KServerURL,[result valueForKey:@"userImage"]]);
-            dictProfileInfo=[NSMutableDictionary dictionaryWithDictionary:result];
+            dictProfileInfo=[[NSMutableDictionary alloc]initWithDictionary:result];
              if ([[result valueForKey:@"errorCode"] integerValue]==0) {
                  
                  if([[result objectForKey:@"creditCardNumber"]length]>=16)
@@ -173,7 +173,7 @@
 #pragma mark------------Update User Profile
 -(IBAction)UpdateProfile{
     
-  /*  NSString *strEncryptedCreditCardNumber=[Crypto encryptRSA:creditCardInfo.cardNumber key:strServerPublicKey];
+    NSString *strEncryptedCreditCardNumber=[Crypto encryptRSA:creditCardInfo.cardNumber key:strServerPublicKey];
     [self createProgressViewToParentView:self.view withTitle:@"Updating profile..."];
        
     NSMutableDictionary *dictProfile=[[NSMutableDictionary alloc] init];
@@ -186,7 +186,8 @@
         return;
     }
     
-    
+    NSData *imageData=[[NSData alloc]initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dictProfileInfo valueForKey:@"userImage"]]]];
+
     if(strEncryptedCreditCardNumber!=nil&&[strEncryptedCreditCardNumber length])
     {
         NSLog(@"strcredit %@",strEncryptedCreditCardNumber);
@@ -199,9 +200,22 @@
     [dictProfile setObject:[NSString stringWithFormat:@"%i",creditCardInfo.expiryMonth] forKey:@"expMonth"];
     
      [dictProfile setObject:[NSString stringWithFormat:@"%i",creditCardInfo.expiryYear] forKey:@"expYear"];
+    
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"bartsyLogin"] forKey:@"bartsyLogin"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"email"] forKey:@"email"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"bartsyPassword"] forKey:@"bartsyPassword"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"gender"] forKey:@"gender"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"nickname"] forKey:@"nickname"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"orientation"] forKey:@"orientation"];
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"dateofbirth"] forKey:@"dateofbirth"];
+            
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"description"] forKey:@"description"];
+    
+    [dictProfile setObject:[dictProfileInfo valueForKey:@"status"] forKey:@"status"];
+    
+    
     [dictProfile setObject:@"1" forKey:@"deviceType"];
     [dictProfile setObject:appDelegate.deviceToken forKey:@"deviceToken"];
-    
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
     
@@ -231,8 +245,6 @@
         [body appendData:[[NSString stringWithFormat:@"%@\r\n", [dictUserProfile objectForKey:param]] dataUsingEncoding:NSUTF8StringEncoding]];
     }
     
-   // NSData *imageData=[NSData alloc]initWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",KServerURL,[dictProfileInfo valueForKey:@"userImage"]]];
-    
     NSString* FileParamConstant = [NSString stringWithFormat:@"userImage"];
     
     // add image data
@@ -261,7 +273,12 @@
              NSString *jsonString = [[[NSString alloc] initWithData:dataOrder encoding:NSUTF8StringEncoding] autorelease];
              id result = [jsonParser objectWithString:jsonString error:nil];
              
-             [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+             if ([[result valueForKey:@"errorCode"] integerValue]==0) {
+                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
+                 [self.navigationController popViewControllerAnimated:YES];
+             }else
+                 
+                 [self createAlertViewWithTitle:@"" message:[result objectForKey:@"errorMessage"] cancelBtnTitle:@"OK" otherBtnTitle:nil delegate:self tag:0];
              
              
          }
@@ -272,8 +289,7 @@
          }
          
      }
-     ];*/
-    
+     ];
     
 }
 
