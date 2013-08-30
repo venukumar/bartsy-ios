@@ -4268,7 +4268,7 @@ lblttlprice.text=[NSString stringWithFormat:@"+ %.2f",tiptotal+[lbltaxprice.text
     if(isSelectedForDrinks){
         return 86;
     }else if(isSelectedForPeople)
-        return 90;
+        return 110;
     else if(isSelectedForPastOrders == YES)
     {
         return 90;
