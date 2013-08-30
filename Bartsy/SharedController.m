@@ -308,8 +308,7 @@ static SharedController *sharedController;
     
     [dictProfile setObject:strDescription forKey:@"description"];
     
-    
-    
+
     [dictProfile setObject:strStatus forKey:@"status"];
     
     [dictProfile setValue:KAPIVersionNumber forKey:@"apiVersion"];
@@ -320,10 +319,11 @@ static SharedController *sharedController;
     if(strLastName!=nil&&[strLastName length])
         [dictProfile setObject:strLastName forKey:@"lastname"];*/
 
-   /* [dictProfile setObject:strethnicity forKey:@"ethnicity"];
+    [dictProfile setObject:strethnicity forKey:@"ethnicity"];
     [dictProfile setObject:strcity forKey:@"homeCity"];
     [dictProfile setObject:strstate forKey:@"state"];
-    [dictProfile setObject:[NSString stringWithFormat:@"%@",strZipcode ] forKey:@"zipCode"];*/
+    [dictProfile setObject:[NSString stringWithFormat:@"%@",strZipcode ] forKey:@"zipCode"];
+    
     NSMutableDictionary *dictUserProfile=[[NSMutableDictionary alloc]initWithObjectsAndKeys:dictProfile,@"details", nil];
     
     NSLog(@"dictprofile %@",dictUserProfile);

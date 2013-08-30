@@ -38,6 +38,8 @@
 		CB32F30717D05FBC007BF7B9 /* FavouriteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB32F30517D05FBC007BF7B9 /* FavouriteViewController.xib */; };
 		CB32F30C17D0631D007BF7B9 /* PastOrderView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB32F30A17D0631D007BF7B9 /* PastOrderView.m */; };
 		CB32F30D17D0631D007BF7B9 /* PastOrderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB32F30B17D0631D007BF7B9 /* PastOrderView.xib */; };
+		CB32F31017D0CC3A007BF7B9 /* PastOrderCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB32F30F17D0CC39007BF7B9 /* PastOrderCellView.m */; };
+		CB32F31217D0CC92007BF7B9 /* PastOrderCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB32F31117D0CC92007BF7B9 /* PastOrderCellView.xib */; };
 		CB3E90EB17C60AEE00A5B83A /* UserSettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */; };
 		CB3E90EC17C60AEE00A5B83A /* UserSettingsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */; };
 		CB3E90F717C624DA00A5B83A /* UserProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CB3E90F517C624DA00A5B83A /* UserProfileViewController.m */; };
@@ -395,6 +397,9 @@
 		CB32F30917D0631D007BF7B9 /* PastOrderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrderView.h; sourceTree = "<group>"; };
 		CB32F30A17D0631D007BF7B9 /* PastOrderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrderView.m; sourceTree = "<group>"; };
 		CB32F30B17D0631D007BF7B9 /* PastOrderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PastOrderView.xib; sourceTree = "<group>"; };
+		CB32F30E17D0CC39007BF7B9 /* PastOrderCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PastOrderCellView.h; sourceTree = "<group>"; };
+		CB32F30F17D0CC39007BF7B9 /* PastOrderCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PastOrderCellView.m; sourceTree = "<group>"; };
+		CB32F31117D0CC92007BF7B9 /* PastOrderCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PastOrderCellView.xib; sourceTree = "<group>"; };
 		CB3E90E817C60AEE00A5B83A /* UserSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingsView.h; sourceTree = "<group>"; };
 		CB3E90E917C60AEE00A5B83A /* UserSettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingsView.m; sourceTree = "<group>"; };
 		CB3E90EA17C60AEE00A5B83A /* UserSettingsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingsView.xib; sourceTree = "<group>"; };
@@ -975,6 +980,9 @@
 				CB32F30917D0631D007BF7B9 /* PastOrderView.h */,
 				CB32F30A17D0631D007BF7B9 /* PastOrderView.m */,
 				CB32F30B17D0631D007BF7B9 /* PastOrderView.xib */,
+				CB32F30E17D0CC39007BF7B9 /* PastOrderCellView.h */,
+				CB32F30F17D0CC39007BF7B9 /* PastOrderCellView.m */,
+				CB32F31117D0CC92007BF7B9 /* PastOrderCellView.xib */,
 			);
 			name = "PastOrders ";
 			sourceTree = "<group>";
@@ -2116,6 +2124,7 @@
 				CB9F69D417CF72990008B636 /* PaymentEditView.xib in Resources */,
 				CB32F30717D05FBC007BF7B9 /* FavouriteViewController.xib in Resources */,
 				CB32F30D17D0631D007BF7B9 /* PastOrderView.xib in Resources */,
+				CB32F31217D0CC92007BF7B9 /* PastOrderCellView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2256,6 +2265,7 @@
 				CB9F69D317CF72990008B636 /* PaymentEditView.m in Sources */,
 				CB32F30617D05FBC007BF7B9 /* FavouriteViewController.m in Sources */,
 				CB32F30C17D0631D007BF7B9 /* PastOrderView.m in Sources */,
+				CB32F31017D0CC3A007BF7B9 /* PastOrderCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

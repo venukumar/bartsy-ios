@@ -352,7 +352,7 @@
     else if(indexPath.section==2)
     {
         if([creditCardInfo.redactedCardNumber length])
-        return 120;
+        return 120+150;
         else
         return 50;
     }
@@ -582,7 +582,7 @@
             btnDelete.titleLabel.textColor=[UIColor blackColor];
             [cell.contentView addSubview:btnDelete];
             
-        /*    UILabel *lblEthnicity=[self createLabelWithTitle:@"Ethnicity" frame:CGRectMake(10, 125, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
+            UILabel *lblEthnicity=[self createLabelWithTitle:@"Ethnicity" frame:CGRectMake(10, 125, 100, 30) tag:0 font:[UIFont systemFontOfSize:15] color:[UIColor blackColor] numberOfLines:1];
             lblEthnicity.textAlignment=NSTextAlignmentLeft;
             [cell.contentView addSubview:lblEthnicity];
             
@@ -632,7 +632,7 @@
             if (strZipcode.length>0) {
                 txtFldzipcode.text=strZipcode;
             }
-            [cell.contentView addSubview:txtFldzipcode];*/
+            [cell.contentView addSubview:txtFldzipcode];
         }
         
         
